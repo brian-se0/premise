@@ -6,7 +6,8 @@
 
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { CONTENT_DIR, LEDGER_FILE, readContentFiles, validateContent } from './content.ts';
+import { fileURLToPath } from 'node:url';
+import { bundleExercises, CONTENT_DIR, LEDGER_FILE, readContentFiles, validateContent } from './content.ts';
 
 const args = new Set(process.argv.slice(2));
 const production = args.has('--production');
@@ -15,10 +16,12 @@ const lock = args.has('--lock');
 const result = await validateContent(readContentFiles());
 
 for (const w of result.warnings) console.warn(`warning: ${w}`);
-const blocking = lock ? result.errors.filter((e) => !e.includes('npm run content -- --lock')) : result.errors;
-if (blocking.length > 0) {
-  for (const e of blocking) console.error(`error: ${e}`);
-  console.error(`\n${blocking.length} content error(s).`);
+for (const e of result.errors) console.error(`error: ${e}`);
+if (!lock)
+  for (const e of result.unrecorded) console.error(`error: ${e}; run \`npm run content -- --lock\` to record it`);
+const blocking = result.errors.length + (lock ? 0 : result.unrecorded.length);
+if (blocking > 0) {
+  console.error(`\n${blocking} content error(s).`);
   process.exit(1);
 }
 
@@ -27,8 +30,8 @@ if (lock) {
   console.log(`Recorded ${Object.keys(result.ledger.tasks).length} published task(s) in content/${LEDGER_FILE}.`);
 }
 
-const exercises = result.exercises.filter((e) => !production || e.status !== 'draft');
-const outDir = new URL('../src/generated/', import.meta.url).pathname;
+const exercises = bundleExercises(result.exercises, production);
+const outDir = fileURLToPath(new URL('../src/generated/', import.meta.url));
 mkdirSync(outDir, { recursive: true });
 writeFileSync(join(outDir, 'content.json'), JSON.stringify({ exercises, taxonomy: result.taxonomy }, null, 2) + '\n');
 

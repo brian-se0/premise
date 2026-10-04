@@ -1,10 +1,10 @@
 // The M2 vertical slice end to end: answer → autosave → submit → copy → paste → confirm once →
 // results → export → replace-import, plus the concurrency and failure cases in ROADMAP.md M2.
-// Needs draft content, so it runs only against the local build, not the deployed site.
+// Needs draft content, so it runs only against a local build made with E2E_DRAFTS=1.
 
 import { expect, test, type Page } from '@playwright/test';
 
-test.skip(!!process.env.E2E_BASE_URL, 'needs draft exercises, which the deployed site excludes');
+test.skip(!process.env.E2E_DRAFTS, 'needs a build with draft exercises (E2E_DRAFTS=1)');
 
 async function practice(page: Page, exerciseId: string, answers: string[]) {
   await page.goto(`#/library/${exerciseId}`);
@@ -98,9 +98,15 @@ test('double confirm and confirm from two tabs schedule once', async ({ page, co
   await other.goto(url);
   await paste(page, text);
   await paste(other, text);
-  await confirmButton(page).dblclick();
-  await confirmButton(other).click();
-  await expect(other.getByRole('alert')).toContainText(/already accepted|changed in another tab/);
+  // Both tabs confirm at once; whichever loses either sees the error or finds nothing left to confirm.
+  await Promise.all([
+    confirmButton(page).dblclick(),
+    confirmButton(other)
+      .click({ timeout: 3000 })
+      .catch(() => undefined),
+  ]);
+  await expect(page.getByText(/0 waiting · closed/)).toBeVisible();
+  await expect(other.getByText(/0 waiting · closed/)).toBeVisible();
 
   await page.goto('#/settings');
   const download = page.waitForEvent('download');

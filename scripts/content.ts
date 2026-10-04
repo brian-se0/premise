@@ -4,6 +4,7 @@
 
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { parse } from 'yaml';
 import { MAX_ANSWER_LENGTH, PROMPT_BUDGET, renderPrompt } from '../src/domain/prompt.ts';
 import { UNIVERSAL_TAGS, buildSnapshot, canonicalJson, sha256Hex, taskId } from '../src/domain/snapshot.ts';
@@ -19,7 +20,7 @@ import {
 
 export type { BuiltExercise };
 
-export const CONTENT_DIR = new URL('../content/', import.meta.url).pathname;
+export const CONTENT_DIR = fileURLToPath(new URL('../content/', import.meta.url));
 export const LEDGER_FILE = 'published-tasks.json';
 
 export const BLOCKED_STRINGS = ['LSAT', 'LSAC', 'PrepTest', 'Law School Admission'];
@@ -40,7 +41,10 @@ export interface ContentFiles {
 export interface ContentResult {
   exercises: BuiltExercise[];
   taxonomy: Taxonomy | null;
+  /** Content errors. Always block the build. */
   errors: string[];
+  /** Published-task changes not yet in the ledger. Block the build; `--lock` records them. */
+  unrecorded: string[];
   warnings: string[];
   /** The ledger updated with the current published tasks; written only by `--lock`. */
   ledger: Ledger;
@@ -55,6 +59,20 @@ function splitFrontMatter(text: string): Split | null {
   const match = /^---\n([\s\S]*?)\n---\n([\s\S]*)$/.exec(text.replace(/\r\n/g, '\n'));
   if (!match) return null;
   return { data: parse(match[1]!) as unknown, body: match[2]! };
+}
+
+/** Parses a file, turning syntax errors into diagnostics. */
+function tryParse<T>(name: string, errors: string[], f: () => T): T | undefined {
+  try {
+    return f();
+  } catch (e) {
+    errors.push(`${name}: cannot be parsed: ${e instanceof Error ? e.message.split('\n')[0] : String(e)}`);
+    return undefined;
+  }
+}
+
+function has(record: Record<string, unknown>, key: string): boolean {
+  return Object.hasOwn(record, key);
 }
 
 /** Joins hard-wrapped lines into paragraphs, separated by one blank line (§1). */
@@ -103,21 +121,26 @@ function issuesOf(error: { issues: { path: PropertyKey[]; message: string }[] })
 
 export async function validateContent(files: ContentFiles): Promise<ContentResult> {
   const errors: string[] = [];
+  const unrecorded: string[] = [];
   const warnings: string[] = [];
 
-  const taxonomyParsed = taxonomySchema.safeParse(parse(files.taxonomy));
+  const taxonomyParsed = taxonomySchema.safeParse(tryParse('taxonomy.yaml', errors, () => parse(files.taxonomy)));
   if (!taxonomyParsed.success) errors.push(...issuesOf(taxonomyParsed.error).map((m) => `taxonomy.yaml: ${m}`));
   const taxonomy = taxonomyParsed.success ? taxonomyParsed.data : null;
 
-  const maintainersParsed = maintainersSchema.safeParse(parse(files.maintainers));
+  const maintainersParsed = maintainersSchema.safeParse(
+    tryParse('maintainers.yaml', errors, () => parse(files.maintainers)),
+  );
   if (!maintainersParsed.success) {
     errors.push(...issuesOf(maintainersParsed.error).map((m) => `maintainers.yaml: ${m}`));
   }
   const maintainers = new Set(maintainersParsed.success ? maintainersParsed.data.maintainers : []);
 
+  // A malformed ledger is a blocking error, never treated as missing (so --lock cannot recreate it).
   let ledger: Ledger = { tasks: {} };
   if (files.ledger !== null) {
-    const ledgerParsed = ledgerSchema.safeParse(JSON.parse(files.ledger));
+    const ledgerText = files.ledger;
+    const ledgerParsed = ledgerSchema.safeParse(tryParse(LEDGER_FILE, errors, () => JSON.parse(ledgerText) as unknown));
     if (ledgerParsed.success) ledger = ledgerParsed.data;
     else errors.push(...issuesOf(ledgerParsed.error).map((m) => `${LEDGER_FILE}: ${m}`));
   }
@@ -125,7 +148,7 @@ export async function validateContent(files: ContentFiles): Promise<ContentResul
 
   if (taxonomy) {
     for (const tag of UNIVERSAL_TAGS) {
-      if (!(tag in taxonomy.error_tags)) errors.push(`taxonomy.yaml: universal tag ${tag} is missing`);
+      if (!has(taxonomy.error_tags, tag)) errors.push(`taxonomy.yaml: universal tag ${tag} is missing`);
     }
   }
 
@@ -134,8 +157,9 @@ export async function validateContent(files: ContentFiles): Promise<ContentResul
 
   for (const file of [...files.exercises].sort((a, b) => a.name.localeCompare(b.name))) {
     const fail = (msg: string) => errors.push(`${file.name}: ${msg}`);
-    const split = splitFrontMatter(file.text);
-    if (!split) {
+    const split = tryParse(file.name, errors, () => splitFrontMatter(file.text));
+    if (split === undefined) continue;
+    if (split === null) {
       fail('missing front matter');
       continue;
     }
@@ -164,10 +188,10 @@ export async function validateContent(files: ContentFiles): Promise<ContentResul
       keys.add(t.key);
 
       // Rules 3 and 6: taxonomy.
-      const skill = taxonomy?.skills[t.skill];
+      const skill = taxonomy && has(taxonomy.skills, t.skill) ? taxonomy.skills[t.skill] : undefined;
       if (taxonomy && !skill) tfail(`unknown skill ${t.skill}`);
       for (const tag of t.likely_errors) {
-        if (taxonomy && !(tag in taxonomy.error_tags)) tfail(`unknown error tag ${tag}`);
+        if (taxonomy && !has(taxonomy.error_tags, tag)) tfail(`unknown error tag ${tag}`);
       }
       if (skill?.open_ended && !t.accept) tfail(`accept is required for the open-ended skill ${t.skill}`);
 
@@ -189,7 +213,8 @@ export async function validateContent(files: ContentFiles): Promise<ContentResul
           `the grading prompt with a full-length answer is ${longest} characters, over the ${PROMPT_BUDGET} budget`,
         );
 
-      // Rule 12: published task keys keep their meaning, and retired tasks stay retired.
+      // Rule 12: published task keys keep their skill and max, every published revision is
+      // recorded, and retirement is recorded and permanent. Only published content can retire.
       if (fm.status !== 'draft') {
         const id = taskId(exercise, t);
         const status = fm.status === 'retired' ? 'retired' : t.status;
@@ -200,34 +225,42 @@ export async function validateContent(files: ContentFiles): Promise<ContentResul
               `${id} was published as ${entry.skill} out of ${entry.max}; a task that tests something else needs a new key`,
             );
           }
-          if (entry.status === 'retired' && status === 'active')
+          if (entry.status === 'retired' && status === 'active') {
             tfail(`${id} was retired and cannot become active again`);
-          if (!entry.revisions.includes(snapshot.hash)) {
-            tfail(`${id} changed since it was recorded; run \`npm run content -- --lock\` to record the new revision`);
           }
+          if (!entry.revisions.includes(snapshot.hash)) {
+            unrecorded.push(`${file.name}: task ${t.key}: ${id} changed since it was recorded`);
+          }
+          if (entry.status === 'active' && status === 'retired') {
+            unrecorded.push(`${file.name}: task ${t.key}: ${id} was retired but the ledger still lists it as active`);
+          }
+        } else if (status === 'retired') {
+          tfail(`${id} was never published, so it cannot be retired; remove it or publish it first`);
         } else {
-          tfail(`${id} is not recorded as published; run \`npm run content -- --lock\``);
+          unrecorded.push(`${file.name}: task ${t.key}: ${id} is not recorded as published`);
         }
         const next = nextLedger.tasks[id];
         if (next) {
           if (!next.revisions.includes(snapshot.hash)) next.revisions.push(snapshot.hash);
           if (status === 'retired') next.status = 'retired';
-        } else {
+        } else if (status === 'active') {
           nextLedger.tasks[id] = { skill: t.skill, max: t.max, status, revisions: [snapshot.hash] };
         }
       }
     }
 
-    // Rule 7: approval bound to the content revision.
-    if (fm.status === 'published') {
+    // Rule 7: approval bound to the content revision. Retired exercises were published, so any
+    // edit to them needs re-approval too.
+    if (fm.status !== 'draft') {
       if (!fm.approved_by || !fm.approved_at || !fm.approved_revision) {
-        fail('published exercises need approved_by, approved_at and approved_revision');
+        fail(`${fm.status} exercises need approved_by, approved_at and approved_revision`);
       } else if (fm.approved_revision !== revision) {
         fail(
           `approved_revision does not match the current content revision ${revision}; the exercise needs re-approval`,
         );
       }
-      if (!fm.tasks.some((t) => t.status === 'active')) warnings.push(`${file.name}: published with no active task`);
+      if (fm.status === 'published' && !fm.tasks.some((t) => t.status === 'active'))
+        warnings.push(`${file.name}: published with no active task`);
     }
 
     // Rule 8: approvers.
@@ -274,7 +307,12 @@ export async function validateContent(files: ContentFiles): Promise<ContentResul
     exercises.push({ ...exercise, revision });
   }
 
-  return { exercises, taxonomy, errors, warnings, ledger: nextLedger };
+  return { exercises, taxonomy, errors, unrecorded, warnings, ledger: nextLedger };
+}
+
+/** The exercises a bundle ships: production excludes drafts (§6). */
+export function bundleExercises(exercises: BuiltExercise[], production: boolean): BuiltExercise[] {
+  return exercises.filter((e) => !production || e.status !== 'draft');
 }
 
 export function readContentFiles(dir = CONTENT_DIR): ContentFiles {
@@ -294,6 +332,7 @@ export function readContentFiles(dir = CONTENT_DIR): ContentFiles {
 /** Validated exercises for scripts and tests; throws on any content error. */
 export async function loadExercises(dir = CONTENT_DIR): Promise<BuiltExercise[]> {
   const result = await validateContent(readContentFiles(dir));
-  if (result.errors.length > 0) throw new Error(`Content errors:\n${result.errors.join('\n')}`);
+  const all = [...result.errors, ...result.unrecorded];
+  if (all.length > 0) throw new Error(`Content errors:\n${all.join('\n')}`);
   return result.exercises;
 }

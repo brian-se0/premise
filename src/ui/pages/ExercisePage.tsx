@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { findExercise } from '../../content.ts';
+import { studyableTasks } from '../../domain/availability.ts';
 import { formatCredit } from '../../domain/credit.ts';
 import { planExercise } from '../../domain/planner.ts';
 import { beginSession } from '../actions.ts';
@@ -14,7 +15,7 @@ export function ExercisePage() {
   const [message, setMessage] = useState('');
   if (!exercise) return <NotFoundPage />;
   const credit = formatCredit(exercise.source);
-  const active = exercise.tasks.filter((t) => t.status === 'active');
+  const active = studyableTasks(exercise);
 
   const practice = async () => {
     const entries = planExercise(await loadPlannerState(), exercise.id);
@@ -30,13 +31,16 @@ export function ExercisePage() {
       </p>
       <h1>{exercise.topics.join(', ') || exercise.id}</h1>
       {exercise.status === 'draft' && <p className="notice">Draft: not yet reviewed for publication.</p>}
+      {exercise.status === 'retired' && <p className="notice">Retired: kept for your history, no longer practised.</p>}
       <p className="meta">
         {active.length} {active.length === 1 ? 'task' : 'tasks'} · difficulty {exercise.difficulty} of 5. The argument
         appears when you start, so you meet it fresh.
       </p>
-      <button className="primary" onClick={() => void practice()}>
-        Practice this exercise
-      </button>
+      {active.length > 0 && (
+        <button className="primary" onClick={() => void practice()}>
+          Practice this exercise
+        </button>
+      )}
       {message && <p role="status">{message}</p>}
       {credit && <p className="meta">Source: {credit}</p>}
       <details>

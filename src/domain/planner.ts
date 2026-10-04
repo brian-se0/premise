@@ -1,6 +1,7 @@
 // Session planner (SPEC.md §5.1, ARCHITECTURE.md §6.4), in its simplest form for M2.
 // Pure: the caller passes in content, stored state and today's local date.
 
+import { studyableTasks } from './availability.ts';
 import { isDueOn, localDateOf, type LocalDate } from './dates.ts';
 import type { AttemptRecord, CardRecord, GradingRecord, Settings, TaskStateRecord } from './records.ts';
 import { taskId as idOf } from './snapshot.ts';
@@ -35,21 +36,17 @@ export const FINAL_WEEKS_MIN_DIFFICULTY = 3;
 const WRONG_CLAIM_TAGS = ['premise-as-conclusion', 'counterpoint-as-conclusion'];
 const REPAIR_WINDOW_DAYS = 30;
 
-/** Tasks that can be studied: active tasks of exercises in the bundle that are not retired. */
+/** Tasks that can be studied (availability.ts), with what the planner needs. */
 export function availableTasks(exercises: BuiltExercise[]): PlannerTask[] {
-  return exercises
-    .filter((e) => e.status !== 'retired')
-    .flatMap((e) =>
-      e.tasks
-        .filter((t) => t.status === 'active')
-        .map((t: Task) => ({
-          taskId: idOf(e, t),
-          exerciseId: e.id,
-          skill: t.skill,
-          difficulty: t.difficulty ?? e.difficulty,
-          likelyErrors: t.likely_errors,
-        })),
-    );
+  return exercises.flatMap((e) =>
+    studyableTasks(e).map((t: Task) => ({
+      taskId: idOf(e, t),
+      exerciseId: e.id,
+      skill: t.skill,
+      difficulty: t.difficulty ?? e.difficulty,
+      likelyErrors: t.likely_errors,
+    })),
+  );
 }
 
 function exerciseOf(taskId: string): string {
