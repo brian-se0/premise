@@ -82,12 +82,12 @@ Stimulus text. Arguments: 60–180 words. Passages: 350–550 words, 3–5 parag
 4. `max` equals the number of rubric criteria.
 5. `anchors` has exactly one entry for each score from 0 to `max`.
 6. `accept` is present and non-empty for skills marked `open_ended` in the taxonomy.
-7. `status: published` requires `approved_by`, `approved_at` and `approved_revision`, and `approved_revision` must equal the exercise's current **content revision**: a SHA-256, computed by the build and printed for each exercise, over the stimulus body and every front-matter field except `status`, `approved_by`, `approved_at` and `approved_revision` (serialized as in `ARCHITECTURE.md` §4.1). Any other edit, including difficulty, contributors, adding a task or retiring one, therefore requires re-approval.
+7. `status: published` or `retired` requires `approved_by`, `approved_at` and `approved_revision`, and `approved_revision` must equal the exercise's current **content revision**: a SHA-256, computed by the build and printed for each exercise, over the stimulus body and every front-matter field except `status`, `approved_by`, `approved_at` and `approved_revision` (serialized as in `ARCHITECTURE.md` §4.1). Any other edit, including difficulty, contributors, adding a task or retiring one, therefore requires re-approval.
 8. `approved_by` must be listed in `content/maintainers.yaml`. If any contributor is not a maintainer, `approved_by` must be a maintainer who is not among the contributors.
 9. `source.type` other than `original` requires `title`, `creator`, `locator`, `attribution` and `rights_basis`; `public-domain` also requires `year`; `cc-by` also requires `license_uri`.
 10. Rubric criteria test only what the task prompt asks for (checked by the author, `CONTENT_GUIDELINES.md` §7; not machine-checkable).
 11. The grading prompt for any single task, with a 2,000-character answer, fits the prompt budget in `GRADING_PROTOCOL.md` §2.
-12. A task key that was ever published is never reused for different content, and a retired task cannot become active again. Enforced against `content/published-tasks.json` (`DECISIONS.md`, Published-task ledger): same skill and max under a key, every published revision recorded, no return from retired.
+12. A task key that was ever published is never reused for different content, and a retired task cannot become active again. The build enforces the mechanical part against `content/published-tasks.json` (`DECISIONS.md`, Published-task ledger): same skill and max under a key, every published revision and every retirement recorded, no return from retired, and nothing retired that was never published. Whether reworded content still tests the same thing is checked at approval.
 13. Word counts are within the ranges above (warning, not error).
 14. Body and all task text contain no blocked strings: `LSAT`, `LSAC`, `PrepTest`, `Law School Admission` (case-insensitive). This is a screen, not proof of clean provenance.
 
