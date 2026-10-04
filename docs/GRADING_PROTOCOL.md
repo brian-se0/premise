@@ -90,7 +90,13 @@ ANSWER-{{fence}}>>>
 === END OF ITEMS ===
 ```
 
-`allowedTags` = the task's `likely_errors` plus `incomplete`, `misread-stimulus`, `irrelevant`, `no-reasoning`.
+`allowedTags` = the task's `likely_errors` plus `incomplete`, `misread-stimulus`, `irrelevant`, `no-reasoning`, without duplicates, joined with `, `.
+
+Rendering details (`src/domain/prompt.ts` is the reference implementation):
+- The fixed text is used exactly as shown, including its line breaks. Lines end with LF; the prompt ends with one LF after `=== END OF ITEMS ===`.
+- One blank line separates the skeleton's `END SCORES` from the first item, and one blank line separates items.
+- Rows share a stimulus when they come from the same exercise. Only the first such row prints the stimulus and its `Source:` line (omitted when the credit is null); later rows print `same as I0n` and no `Source:` line.
+- Several disqualifiers are joined with `; `. An answer that is empty or only whitespace is shown as `(blank)`; otherwise it is inserted unchanged.
 
 ## 4. Score block grammar
 

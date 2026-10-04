@@ -8,6 +8,8 @@ One exercise per file: `content/exercises/<id>.md`. YAML front matter holds meta
 
 The stimulus is rendered with a safe Markdown subset: paragraphs, emphasis, and ordered or unordered lists. No raw HTML, links, images or embeds.
 
+The stimulus **text** used in snapshots and grading prompts is the body trimmed, with paragraphs separated by one blank line and the line breaks inside a paragraph replaced by single spaces. (Lists inside passages will need their own rule when passage skills arrive in M5.)
+
 ## 2. Ids
 
 - Exercise id: `arg-0001` for arguments, `psg-0001` for passages. Four digits, zero-padded, never reused.
