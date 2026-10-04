@@ -1039,3 +1039,167 @@ Answer → autosave → submit → copy → paste → validate → confirm once 
 ## Later (not scheduled)
 Transfer checks on held-out tasks, merge import or sync, optional hosted one-click grading, writing practice, contributor tooling, opening to other users.
 ````
+
+## Reviewer response
+
+GPT-6 Pro (thinking effort 5 of 5), 2026-10-04. Conversation: https://chatgpt.com/c/6ac292c7-e224-83e9-ad1c-8999ccd156ee. Worked for 9m 18s.
+
+## 1. Is “final weeks before the exam” a sound niche?
+
+**Verdict: It is a plausible use case for a short, targeted supplement—not yet a sound exclusive positioning, and not a reason to make everything hard.**
+
+I would position Premise around a learner’s problem rather than their calendar:
+
+> **“I understand explanations after reading them, but I still miss the reasoning move on the next unfamiliar argument.”**
+
+That problem fits the product better than “I need difficult questions because the exam is close.” The owner’s reaction establishes that `arg-0001.conclusion` was insufficiently demanding for that person. It does not establish what prepared students need in their final weeks: the owner has not started studying, and this was one task. Pasted text
+
+Free response has a plausible role late in preparation, but the relevant benefit is **exposing and repairing a specific reasoning failure**, not writing for its own sake. A student who cannot articulate why evidence supports a conclusion may benefit from doing so. A student who can already articulate it but repeatedly chooses the wrong option among close alternatives has a different bottleneck—one Premise’s current format does not directly reproduce.
+
+Research provides a reason to test the approach, not a reason to assume it works. Butler’s experiments found that retrieval practice improved performance on new inference questions one week later compared with restudying. They did **not** establish that writing analyses of original arguments outperforms official multiple-choice practice during the final weeks. The comparison condition and learning task matter. [Andy Matuschak](https://andymatuschak.org/files/papers/Butler%20-%202010%20-%20Repeated%20Testing%20Produces%20Superior%20Transfer%20of%20Learning%20Relative%20to%20Repeated.pdf) Official practice should remain the main environment for testing transfer and practicing the actual interface; LSAC explicitly recommends official practice tests and practice under timed conditions. [LSAC](https://www.lsac.org/lsat/prepare)
+
+For a final-weeks version, I would make these changes. The numerical defaults below are proposed pilot settings, not established optima.
+
+**Task mix: follow recurring misses, not an asserted frequency ranking.** Start with `flaw`, `assumption`, `strengthen`, and `weaken`, with conclusion work available when indicated. But do not encode “flaw first, necessary assumption second” as a universal hierarchy. LSAC describes a broader range of reasoning skills, including inference, argument relationships, disagreement, analogy, and explanations; that description does not establish the proposed frequency ranking. [LSAC](https://www.lsac.org/lsat/taking-lsat/test-format/logical-reasoning) Within Premise’s narrower remit, prioritize the student’s repeatable, fixable errors. Bring strengthen and weaken forward rather than postponing them until after the app is substantially built.
+
+**Difficulty floor: skip demonstrated mastery, not all easy material.** Use mostly medium and hard tasks relevant to the selected weakness. Retain a small amount of easier work for diagnosis, rebuilding a failed distinction, or checking that the student can recognize a straightforward answer and move on. A late-stage student with a basic conditional-reasoning error needs that error repaired, not concealed inside a denser passage.
+
+**Free-response length: compress the answer, not the reasoning standard.** Ask for one precise sentence or a short structured response. For example: “The evidence concerns ___; the conclusion concerns ___; the missing link is ___.” Treat prephrasing as a provisional account of the reasoning gap—not a requirement to predict the particular fact that an author had in mind.
+
+**Timing: distinguish learning from checking.** Offer an untimed repair attempt and a timed check on a fresh argument. For the pilot, test a 90–120-second budget for reading a new stimulus and writing a brief analysis, with an explicit overtime option. Record correctness and overtime separately. Do not call that exam-equivalent pacing, and do not mistake phone typing speed for reasoning speed.
+
+**Session length: make the whole loop short.** Start with three or four tasks in a 10–15-minute session, including grading and review. Count chatbot switching, waiting, pasting, and resolving disputed grades in that budget. A difficult task is not valuable merely because it consumes time.
+
+**Feedback: give one usable correction.** Identify the exact mismatch, explain why it matters, and show the smallest repair. Then check the same distinction on a fresh stimulus later. Do not make a student read a general lesson on sampling after every sampling mistake.
+
+My preferred initial niche is therefore **post-basics, targeted reasoning repair**, usable in the final weeks but not restricted to them. Final-weeks positioning should become stronger only after prepared students demonstrate that the loop earns its time.
+
+## 2. Should the conclusion task stay?
+
+**Verdict: Yes—as a diagnostic and a selective argument-structure drill, not as a compulsory first task or a recurring quota.**
+
+Copying a sentence is not inherently a defective response. When the author explicitly states the main conclusion, selecting that sentence is exactly the skill being tested. Requiring a paraphrase would add a writing demand without necessarily adding reasoning.
+
+I disagree with the premise that real exam arguments characteristically make the conclusion difficult to locate. Some do; others put the challenge elsewhere. LSAC’s published samples include a question classified as difficult even though the argument ends with an explicitly signposted conclusion. **A plainly stated conclusion and a difficult question can coexist.** [LSAC](https://www.lsac.org/lsat/taking-lsat/test-format/logical-reasoning/logical-reasoning-sample-questions)
+
+I would keep three uses of the task.
+
+**An occasional quick check.** Give a new user a small variety: direct conclusion, intermediate conclusion, concession, and opposing viewpoint. Stop routinely assigning the forms they handle accurately and promptly. Do not send a trivial sentence-selection task through an elaborate chatbot grading loop when self-checking will do.
+
+**A genuine main-versus-intermediate conclusion task.** The stronger version has an argument structure such as:
+
+> Evidence supports an intermediate claim; that claim supports the author’s ultimate recommendation.
+
+Ask for the main conclusion and, on selected tasks, one short explanation of why another plausible claim is subordinate. This tests the direction of support rather than whether the student notices “should” or “therefore.”
+
+**A targeted diagnostic after another mistake.** When a flaw answer attacks the wrong inference, a conclusion check can reveal whether the student misunderstood the argument’s target. But do not make every student type a conclusion before every other task. That would impose a procedure even when it supplies no useful information.
+
+For the hard variants, a conclusion’s middle position is insufficient. It should be genuinely confusable with a supported intermediate claim or a clearly attributed competing position. Conversely, a signposted conclusion should not disqualify an otherwise valuable assumption or weaken task.
+
+I would also change the scoring emphasis. `arg-0001` currently gives half credit to an answer that correctly states the recommendation but adds its supporting reason. That follows the current instruction, but it mixes reasoning competence with response-format compliance. For this niche, I would usually mark the conclusion identification correct and give a separate brevity note, unless the extra material actually makes the intended conclusion ambiguous. Pasted text
+
+**Keep the skill; remove unnecessary repetitions of an already-mastered operation.**
+
+## 3. What makes an original argument genuinely hard?
+
+**Verdict: Difficulty should come from precise logical discrimination—not merely from hiding the conclusion, adding clauses, or making the rubric unforgiving.**
+
+First distinguish **stimulus difficulty**, **task difficulty**, and **grading ambiguity**. The same passage may support an easy conclusion task and a demanding assumption task. An exercise-level difficulty label cannot adequately describe both. I would add provisional task-level difficulty and a short author note explaining the intended difficulty mechanism.
+
+These would be my checkable authoring rules:
+
+| Design target | Authoring requirement and check |
+|---|---|
+| **Argument structure** | Write an answer-key map identifying the main conclusion, intermediate conclusions, premises, concessions, and opposing views. For a hard conclusion task, identify at least one plausible rival conclusion and explain the direction of support that rules it out. Merely moving the recommendation to sentence three does not qualify. |
+| **Scope precision** | Mark the population, time period, measured quantity, and claim strength in both evidence and conclusion. A scope-based task must hinge on a specific mismatch—for example, recorded contact information versus actual reachability—not a vague assertion that “the groups might differ.” |
+| **Quantifier boundaries** | State the relevant boundary explicitly in the key: some, most, all, a proportion, an absolute number, or a threshold. Construct a counterexample to the tempting stronger answer. If the reference itself fails that test, repair the reference before increasing difficulty. |
+| **Conditional direction** | Translate the relevant relationship into its direction of implication. Distinguish a condition shared by past winners from a formal requirement for all future winners. The explanation must address the conclusion’s actual strength: failing to guarantee an outcome is not, by itself, enough to refute a claim that the outcome is likely. |
+| **Causal discrimination** | Include evidence that addresses one plausible alternative while leaving another consequential alternative unresolved. The student should have to identify what remains uncontrolled, rather than succeed with “correlation is not causation” on every item. Do not treat every non-deductive inference as defective merely because certainty is unavailable. |
+| **Plausible competing claims** | Every potentially distracting claim must have an identifiable role: someone else’s position, an accepted concession, a background fact, or an intermediate conclusion. Reviewers must agree about its role. Ambiguous attribution is an editing problem, not an advanced difficulty feature. |
+| **Response discrimination** | Write at least two plausible near-miss answers, not merely a generic label and an obviously irrelevant answer. Explain exactly why each fails: too strong, wrong population, helpful but unnecessary, or premise-denying. Use those contrasts in feedback or in a short “explain the difference” task. |
+| **Controlled complexity** | For an intended hard task, identify two interacting demands—for example, tracking an intermediate conclusion **and** preserving a quantifier. Remove extra complications that do not contribute to those demands. No specialist factual knowledge should be needed unless the stimulus supplies it. |
+
+For `strengthen` and `weaken`, unrestricted invention introduces another problem: a student may produce a decisive but uninteresting fact that sidesteps the intended reasoning. Constrain selected advanced tasks—for example, require a fact about the comparison group or measurement procedure—and require an explanation of its effect. Make the constraint explicit, and accept every answer that actually satisfies it, not only the reference.
+
+### The necessary-assumption standard needs particular care
+
+“Negating this would weaken the argument” is too permissive as the sole acceptance test. A necessary assumption must be something the reasoning **depends on**, not simply something that makes the conclusion more plausible. LSAC’s explanation likewise defines the required assumption in terms of what must be true for the argument to succeed in demonstrating its conclusion. [LSAC](https://www.lsac.org/lsat/taking-lsat/test-format/logical-reasoning/logical-reasoning-sample-questions)
+
+For each proposed assumption, require the author to:
+
+> Negate it accurately, retain the stated premises, identify the particular inference being evaluated, and explain why that inferential route fails—not merely why confidence decreases.
+
+This does **not** require the negation to prove the conclusion false. The conclusion could happen to be true for unrelated reasons. Nor should the assumption be required to make the entire argument airtight; that would confuse necessary and sufficient assumptions.
+
+Finally, call these **author-predicted** difficulty levels until tested. LSAC’s sample explanations describe difficulty in terms of test-taker performance, not sentence placement. Have prepared readers attempt unfamiliar items under consistent conditions, and inspect accuracy, time, and disagreement. A task that produces disagreement because the key is defective has not earned a “hard” label. [LSAC](https://www.lsac.org/lsat/taking-lsat/test-format/logical-reasoning/logical-reasoning-sample-questions)
+
+## 4. How difficult are the eight exercises, and which should stay?
+
+**Verdict: None is convincingly hard as written. I would rate `arg-0008` medium and the others easy overall; several assumption tasks need repair before they should be graded at all.**
+
+These are qualitative judgments about the supplied stimuli and intended operations, not calibrated equivalences to complete official questions. Where a rubric is questionable, I have not counted that uncertainty as difficulty.
+
+| Exercise | Difficulty and reason | One change that would make it harder | Disposition |
+|---|---|---|---|
+| **`arg-0001` — school week** | **Easy.** Direct recommendation; an exposed before/after causal gap. Pasted text | Add comparison-district evidence that addresses a region-wide decline but leaves a consequential difference in which districts switched. | Keep as a baseline or repair task; remove the conclusion task from routine practice once mastered. |
+| **`arg-0002` — trout** | **Easy.** The recommendation is explicit in sentence two, and the intended food-to-survival link is prominent. Pasted text | Specify release cohorts and survey timing so the missing link concerns food available to the relevant fish, not a generic shortage. | Keep only after rewriting the assumption task. |
+| **`arg-0003` — bakery** | **Easy.** Weekday-morning sampling makes the selection problem conspicuous. Pasted text | Make selection depend on a less obvious mechanism, and supply subgroup sizes so the student must connect the bias to the one-third threshold. | Keep the flaw task; repair the assumption standard. |
+| **`arg-0004` — council spending** | **Easy.** “Each modest expenditure” to “prudent overall” advertises the aggregation issue. Pasted text | Make the problem arise from overlapping obligations within one budget year rather than simply numerous small payments. | Keep the flaw as a baseline; drop the current assumption task. |
+| **`arg-0005` — theater prize** | **Easy.** A conspicuous reversal from a shared winner characteristic to expected victory. Pasted text | First clarify completed versus booked performance; then embed the directional error in a two-step eligibility relationship. | Keep after that cleanup; useful as a conditional-reasoning benchmark. |
+| **`arg-0006` — parking** | **Easy.** Explicit final recommendation; an accessible “empty spaces versus usable substitute” gap. Pasted text | Distinguish raw vacancy, public access, and the needs of a specified shopper group, leaving one decisive accessibility constraint unresolved. | Not worth recurring placement in a clutch pack as written; retain for diagnosis or rebuilding basics. |
+| **`arg-0007` — columnist** | **Easy.** The source attack and dismissal of the argument are overt. Pasted text | Mix independently supported reasons with an unverified report and ask exactly which inference the source’s bias can affect. | Keep only as a baseline or contrast exercise; drop the current assumption task. |
+| **`arg-0008` — reminders** | **Medium.** The concession requires some viewpoint tracking, but “Even so” and the recommendation still clearly mark the conclusion. Pasted text | Make rejecting text-only replacement support a further main recommendation, so students must distinguish the intermediate policy claim from the ultimate conclusion. | Keep as a medium structural seed; revise the assumption rubric. |
+
+The more urgent issue is **answer-key validity**. These are the repairs I would make before the grading pilot:
+
+**`arg-0002`: the temporal anchor is poorly matched to the wording.** A full-credit answer says the shortage will persist until release, but the stimulus describes trout released “now” and already says they would face the shortage. That is not a clean test of an unstated temporal assumption. Clarify the inference being tested and either rewrite the release timeline or use a different required bridge. Pasted text Pasted text
+
+**`arg-0003`: “not much more willing” is not a sufficiently precise necessary-assumption reference.** The reference requires other shoppers not to be much more willing to come on Sundays, while the argument only needs overall demand to remain below one-third. Pasted text As a hypothetical boundary check, suppose the surveyed shopper category represents 80% of regulars, with 12% willing to attend, while the remaining 20% are *all* willing. Overall demand would still be only \(0.8(12\%)+0.2(100\%)=29.6\%\). A very large subgroup difference need not erase the margin. The key needs a threshold-sensitive bridge, not an undefined similarity requirement.
+
+**`arg-0004`: the assumption reference largely restates the verdict.** “The decisions collectively did not amount to imprudent spending” is barely distinguishable from the conclusion that the council handled money prudently. This risks rewarding the same copying behavior that prompted the consultation, but under a more advanced label. I would retain the flaw and replace its companion with a tightly specified weaken or strengthen task. Pasted text Pasted text
+
+**`arg-0007`: independent checkability is not a reliable necessary-assumption anchor.** The full-credit alternative says readers cannot independently check the column’s claims. But checkable claims can be unsupported or false, and uncheckable claims need not be worthless. The anchor does not cleanly isolate a required bridge from the columnist’s bias to the argument’s lack of merit. Its reference also approaches a restatement of the dismissal. Drop this task rather than force every flaw stimulus to support an assumption exercise. Pasted text
+
+**`arg-0008`: the rubric strengthens both the evidence and the required assumption.** The acceptance notes describe older patients as rarely having mobile numbers on file, while the stimulus only gives a comparison with younger patients. Those are not equivalent. Moreover, being able to obtain numbers for *most* older patients would not eliminate a reason to retain paper reminders for a consequential minority. Clarify whether the conclusion concerns retaining some paper service, preserving universal paper reminders, or rejecting the proposed complete replacement. Pasted text Pasted text
+
+These are not reasons to abandon the product. They are reasons to establish sound reference judgments **before** measuring chatbot agreement. Agreement with a defective key would make the grading pilot look successful while preserving the wrong lesson.
+
+## 5. What else would make the product maximally helpful in the clutch period?
+
+**Verdict: Prioritize a trustworthy correction, a fresh transfer check, and low total time cost. More difficulty and more scheduling machinery come afterward.**
+
+### Make the unit of value a corrected recurring mistake
+
+The useful loop is:
+
+> A recurring miss identified during official practice → a short original drill targeting that distinction → precise feedback → a fresh argument testing the same distinction → a later check in official practice.
+
+The student can select an abstract error category or enter a short personal note without importing official questions, explanations, or paraphrases. Keep official content outside Premise. The app’s role is the targeted intervention between practice sessions, not replacing them.
+
+Include contrasting feedback when it is useful: “Your answer supplies something helpful; the task asks for something required.” That is more actionable than an isolated `overstated` tag. But preserve the spec’s caution that tags are observations about answers, not diagnoses of the learner. Pasted text
+
+### Test usefulness before investing heavily in the scheduler
+
+M0 currently tests grading feasibility and copy-paste tolerance; transfer checks are explicitly deferred to “Later.” Those are different risks. A perfectly functioning grading loop can still be an inefficient study intervention. Pasted text Pasted text
+
+Add an early usefulness pilot with a few genuinely prepared students. The owner’s use can establish personal feasibility, but it cannot alone establish fit for a learner state the owner has not yet reached.
+
+Compare the complete Premise loop with equal-time ordinary review. Record first-attempt performance on fresh material, elapsed time, disputed grades, and whether the targeted mistake recurs. Keep grading holdouts separate from learning-transfer holdouts. Also exclude author-exposed material from claims about cold performance: someone who approved an answer key is not encountering that task fresh.
+
+A small pilot will not establish a causal score gain. It can still reveal whether people obtain a usable correction, whether the same error immediately recurs, and whether they consider the time worthwhile.
+
+### Build enough unseen content to support the experiment
+
+The current roadmap delays growth to 50 exercises and the addition of strengthen/weaken until M5. Pasted text That order is poorly matched to a final-weeks hypothesis.
+
+At four fresh stimuli per day, a seven-day pilot needs 28 unseen exercises, plus development material and holdouts. Multiple tasks on one familiar stimulus do not replace that supply. The existing spec already distinguishes new and familiar stimuli; preserve that distinction rather than letting a small bank create apparent mastery through repeated exposure. Pasted text
+
+### Make progress and scheduling fit the deadline
+
+Keep first attempts, familiar-stimulus work, coached retries, and reviews separate. Add confidence and time, but avoid converting those into an unsupported readiness score. The existing separation of first attempts and reviews is a good foundation. Pasted text
+
+For final-weeks use, cap the daily workload and prioritize unresolved, consequential distinctions. A card reaching a 21-day interval is not the relevant success criterion when the exam is nearer than that. Do not create a backlog that competes with official practice, or compress everything into repeated exposure to answers the student has just read. Let users finish a useful short session without being told they are behind.
+
+## What I would change in the spec and roadmap first
+
+I would revise the purpose to **“targeted reasoning repair for students who know the basics, including a time-capped final-weeks mode,”** while retaining the explicit statement that score transfer is a hypothesis. Pasted text Then I would add task-level difficulty, precise short-response expectations, and a necessary-assumption validity check; make conclusion tasks selective rather than obligatory; and bring strengthen/weaken into the early content pilot. Split M0 into content validity, grading feasibility, and learner usefulness, using corrected expert-reviewed keys and genuinely fresh transfer material. Move sufficient content creation and a small prepared-student pilot ahead of scheduler refinement and polish. Keep the static, local, copy-paste architecture. The first milestone should demonstrate **a correct, useful repair at an acceptable time cost—not merely reliable grading of eight mostly easy exercises.**
