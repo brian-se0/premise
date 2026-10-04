@@ -1,0 +1,58 @@
+# Controlled vocabulary for skills and error tags. Schema version 2.
+# Adding or renaming an entry is a content-contract change: record it in docs/DECISIONS.md.
+# Ids are kebab-case and never reused with a different meaning.
+# Error tags describe errors observed in an answer; they are navigation aids, not measurements.
+
+skills:
+  conclusion:
+    label: Identify the main conclusion
+    open_ended: false
+  assumption:
+    label: State a necessary assumption (one the argument needs; it need not make the argument airtight)
+    open_ended: true
+  flaw:
+    label: Describe the reasoning error
+    open_ended: false
+  weaken:
+    label: Give a fact that materially weakens the argument, premises taken as true
+    open_ended: true
+  strengthen:
+    label: Give a fact that materially strengthens the argument, premises taken as true
+    open_ended: true
+  principle:
+    label: State a general rule linking the stated facts to the conclusion (not a restatement of it)
+    open_ended: true
+  main-point:
+    label: State a passage's main point
+    open_ended: false
+  structure:
+    label: Describe the role of each paragraph
+    open_ended: false
+  attitude:
+    label: Describe the author's attitude
+    open_ended: false
+
+error_tags:
+  # Reading the stimulus
+  premise-as-conclusion: Gave a premise or sub-conclusion instead of the main conclusion
+  counterpoint-as-conclusion: Gave the view the author argues against
+  misread-stimulus: Misstated what the text says
+  # Precision
+  overstated: Answer claims more than the text supports (too strong)
+  understated: Answer is too weak or vague to do the job
+  scope-shift: Answer is about a different group, term or claim than the argument
+  # Logic
+  reversed-logic: Confused sufficient and necessary, or reversed the direction
+  correlation-causation: Treated correlation or sequence as causation, or missed that flaw
+  missed-alternative: Missed an alternative explanation or possibility
+  wrong-gap: Identified a gap the argument does not rely on
+  irrelevant: Answer does not bear on the argument's support
+  contradicts-premise: Answer depends on denying a stated premise
+  restates-conclusion: Answer restates the conclusion instead of linking facts to it
+  # Passages
+  detail-as-main-point: Gave a detail instead of the main point
+  wrong-role: Misdescribed what a paragraph or claim does
+  wrong-tone: Misjudged the author's attitude or its strength
+  # Form
+  incomplete: Did not answer every part of the task
+  no-reasoning: Gave an answer without the requested explanation
