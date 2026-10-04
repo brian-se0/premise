@@ -49,7 +49,7 @@ tasks:
     skill: conclusion        # from taxonomy.yaml
     difficulty: 2            # optional: this task's difficulty if it differs from the exercise's (author-predicted until tested)
     difficulty_note: null    # optional: what makes it hard, e.g. "intermediate conclusion confusable with the main one"
-    prompt: State the argument's main conclusion in one sentence. Give the conclusion only, not the reasons for it.
+    prompt: State the argument's main conclusion in one sentence.
     max: 2                   # = number of rubric criteria (each worth 1 point); 1–4
     reference: >-
       Harlow's school board should not adopt the four-day school week.
@@ -95,7 +95,7 @@ Stimulus text. Arguments: 60–180 words. Passages: 350–550 words, 3–5 parag
 
 | Skill | Kind | Open-ended | Prompt wording |
 | --- | --- | --- | --- |
-| `conclusion` | argument | no | State the argument's main conclusion in one sentence. Give the conclusion only, not the reasons for it. |
+| `conclusion` | argument | no | State the argument's main conclusion in one sentence. |
 | `assumption` | argument | yes | State an assumption the argument needs: a claim that, if false, would make the argument fall apart. (A necessary assumption; it need not make the argument airtight.) |
 | `flaw` | argument | no | Describe the main reasoning error in one or two sentences. |
 | `weaken` | argument | yes | Give a new fact that, if true, would materially weaken the argument, and explain how. Treat the stated premises as true. |
