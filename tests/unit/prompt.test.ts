@@ -8,10 +8,11 @@ import type { Snapshot } from '../../src/domain/types.ts';
 
 async function allSnapshots(): Promise<Map<string, Snapshot>> {
   const map = new Map<string, Snapshot>();
-  for (const e of loadExercises()) for (const t of e.tasks) {
-    const s = await buildSnapshot(e, t);
-    map.set(s.taskId, s);
-  }
+  for (const e of await loadExercises())
+    for (const t of e.tasks) {
+      const s = await buildSnapshot(e, t);
+      map.set(s.taskId, s);
+    }
   return map;
 }
 
@@ -45,7 +46,12 @@ describe('prompt builder', () => {
   it('renders the skeleton, shared stimulus and fenced answers', async () => {
     const snaps = await allSnapshots();
     const rows = [
-      { rowId: 'I01', attemptId: 'a1', snapshot: snaps.get('arg-0001.conclusion')!, answer: 'Harlow should not switch.' },
+      {
+        rowId: 'I01',
+        attemptId: 'a1',
+        snapshot: snaps.get('arg-0001.conclusion')!,
+        answer: 'Harlow should not switch.',
+      },
       { rowId: 'I02', attemptId: 'a2', snapshot: snaps.get('arg-0001.flaw')!, answer: '   ' },
     ];
     const text = renderPrompt(ID, 'ABC123', rows);
@@ -70,7 +76,11 @@ describe('prompt builder', () => {
   it('splits by batch size in session order', async () => {
     const snaps = await allSnapshots();
     const s = snaps.get('arg-0001.flaw')!;
-    const items: GradingItem[] = Array.from({ length: 5 }, (_, i) => ({ attemptId: `a${i}`, snapshot: s, answer: `answer ${i}` }));
+    const items: GradingItem[] = Array.from({ length: 5 }, (_, i) => ({
+      attemptId: `a${i}`,
+      snapshot: s,
+      answer: `answer ${i}`,
+    }));
     let n = 0;
     const reqs = planRequests(items, { batchSize: 4, newId: () => `req-${n++}`, random: seeded(2) });
     expect(reqs.map((r) => r.rows.map((x) => x.attemptId))).toEqual([['a0', 'a1', 'a2', 'a3'], ['a4']]);
@@ -92,7 +102,9 @@ describe('prompt builder', () => {
 
   it('rejects answers over the length limit', async () => {
     const s = (await allSnapshots()).get('arg-0001.flaw')!;
-    expect(() => planRequests([{ attemptId: 'a', snapshot: s, answer: 'x'.repeat(2001) }], { newId: () => ID, random: seeded(4) })).toThrow();
+    expect(() =>
+      planRequests([{ attemptId: 'a', snapshot: s, answer: 'x'.repeat(2001) }], { newId: () => ID, random: seeded(4) }),
+    ).toThrow();
   });
 });
 

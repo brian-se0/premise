@@ -87,7 +87,7 @@ Stimulus text. Arguments: 60–180 words. Passages: 350–550 words, 3–5 parag
 9. `source.type` other than `original` requires `title`, `creator`, `locator`, `attribution` and `rights_basis`; `public-domain` also requires `year`; `cc-by` also requires `license_uri`.
 10. Rubric criteria test only what the task prompt asks for (checked by the author, `CONTENT_GUIDELINES.md` §7; not machine-checkable).
 11. The grading prompt for any single task, with a 2,000-character answer, fits the prompt budget in `GRADING_PROTOCOL.md` §2.
-12. A task key that was ever published is never reused for different content, and a retired task cannot become active again.
+12. A task key that was ever published is never reused for different content, and a retired task cannot become active again. Enforced against `content/published-tasks.json` (`DECISIONS.md`, Published-task ledger): same skill and max under a key, every published revision recorded, no return from retired.
 13. Word counts are within the ranges above (warning, not error).
 14. Body and all task text contain no blocked strings: `LSAT`, `LSAC`, `PrepTest`, `Law School Admission` (case-insensitive). This is a screen, not proof of clean provenance.
 

@@ -33,7 +33,7 @@ if (!runPath) {
 const runFile = parse(readFileSync(runPath, 'utf8')) as RunFile;
 
 const snapshots = new Map<string, Snapshot>();
-for (const exercise of loadExercises()) {
+for (const exercise of await loadExercises()) {
   for (const task of exercise.tasks) {
     const snap = await buildSnapshot(exercise, task);
     snapshots.set(snap.taskId, snap);

@@ -1,0 +1,9 @@
+src/generated
+dist
+package-lock.json
+content
+reviews
+docs
+pilot
+tests/fixtures
+*.md
