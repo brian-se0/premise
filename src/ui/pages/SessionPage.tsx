@@ -77,14 +77,23 @@ function EntryView({
   const [elapsed, setElapsed] = useState(0);
   const [leaving, setLeaving] = useState(false);
   const timer = useRef<number | undefined>(undefined);
+  // The draft revision this editor last read or wrote (saveDraft and submitAttempt check it).
+  const revision = useRef(0);
   const entry = session.entries[index]!;
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
       try {
-        const existing = attempts[index];
-        const a = existing ?? (await openEntry(db, ctx(), session.id, index, await currentSnapshot(entry.taskId)));
+        let a = attempts[index];
+        if (!a) {
+          const opened = await openEntry(db, ctx(), session.id, index, await currentSnapshot(entry.taskId));
+          if (opened.status === 'draft-elsewhere')
+            throw new Error('This task has an unfinished answer in another session.');
+          if (opened.status === 'ineligible') throw new Error(`This task cannot be practised now (${opened.reason}).`);
+          a = opened.attempt;
+        }
+        revision.current = a.revision;
         const snap = await db.snapshots.get(a.snapshotHash);
         if (cancelled) return;
         setAttempt(a);
@@ -116,8 +125,11 @@ function EntryView({
     setSaved('saving');
     window.clearTimeout(timer.current);
     timer.current = window.setTimeout(() => {
-      saveDraft(db, ctx(), attempt.id, value)
-        .then(() => setSaved('saved'))
+      saveDraft(db, ctx(), attempt.id, revision.current, value)
+        .then((r) => {
+          revision.current = r.revision;
+          setSaved('saved');
+        })
         .catch((e: unknown) => {
           setSaved('error');
           setError(`Could not save: ${e instanceof Error ? e.message : String(e)}. Your text is still here.`);
@@ -130,7 +142,7 @@ function EntryView({
     window.clearTimeout(timer.current);
     setLeaving(true);
     try {
-      await submitAttempt(db, ctx(), attempt.id, text, elapsed);
+      await submitAttempt(db, ctx(), attempt.id, revision.current, text, elapsed);
     } catch (e) {
       setLeaving(false);
       setError(e instanceof Error ? e.message : String(e));
@@ -146,7 +158,7 @@ function EntryView({
 
   const stop = async () => {
     window.clearTimeout(timer.current);
-    if (attempt) await saveDraft(db, ctx(), attempt.id, answer).catch(() => undefined);
+    if (attempt) await saveDraft(db, ctx(), attempt.id, revision.current, answer).catch(() => undefined);
     navigate('/');
   };
 

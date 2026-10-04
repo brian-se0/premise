@@ -1,4 +1,5 @@
-// IndexedDB schema v1 (ARCHITECTURE.md §5) via Dexie.
+// IndexedDB schema v1 (ARCHITECTURE.md §5) via Dexie. v1 is not frozen yet and holds no user
+// data, so it is still edited in place without a version bump.
 
 import Dexie, { type EntityTable } from 'dexie';
 import type {
@@ -11,6 +12,7 @@ import type {
   RequestRecord,
   ReviewLogRecord,
   SessionRecord,
+  SchedulerConfigRecord,
   SettingRecord,
   SnapshotRecord,
   TaskStateRecord,
@@ -28,6 +30,7 @@ export type PremiseDb = Dexie & {
   taskStates: EntityTable<TaskStateRecord, 'taskId'>;
   flags: EntityTable<FlagRecord, 'id'>;
   operations: EntityTable<OperationRecord, 'opId'>;
+  schedulerConfigs: EntityTable<SchedulerConfigRecord, 'version'>;
   settings: EntityTable<SettingRecord, 'key'>;
 };
 
@@ -43,6 +46,7 @@ export const TABLES = [
   'taskStates',
   'flags',
   'operations',
+  'schedulerConfigs',
   'settings',
 ] as const;
 
@@ -57,11 +61,12 @@ export function openDb(name = 'premise'): PremiseDb {
     requests: 'id, status, createdAt',
     replies: 'id, requestId',
     gradings: 'id, attemptId, requestId',
-    reviewLogs: 'id, taskId, attemptId, gradingId',
+    reviewLogs: 'id, taskId, attemptId, gradingId, &seq',
     cards: 'taskId',
     taskStates: 'taskId',
     flags: 'id, attemptId',
     operations: 'opId',
+    schedulerConfigs: 'version',
     settings: 'key',
   });
   return db;

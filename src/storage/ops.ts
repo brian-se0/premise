@@ -3,12 +3,11 @@
 // returns the stored receipt's result without writing; a stale revision writes nothing.
 
 import { addDays, localDate } from '../domain/dates.ts';
-import { validateGrade } from '../domain/gradeValidator.ts';
+import { validateGrade, validateRange } from '../domain/gradeValidator.ts';
 import { MAX_ANSWER_LENGTH, planRequests, type GradingItem } from '../domain/prompt.ts';
 import type {
   AttemptKind,
   AttemptRecord,
-  CardFields,
   FlagCategory,
   GradingRecord,
   GradingSource,
@@ -19,6 +18,7 @@ import type {
   ReviewLogRecord,
   SessionRecord,
   SnapshotRecord,
+  VersionedCard,
 } from '../domain/records.ts';
 import { ratingFor, review } from '../domain/scheduler.ts';
 import { CURRENT_SCHEDULER, RATING_POLICY, SCHEDULER_CONFIGS } from '../domain/schedulerConfig.ts';
@@ -42,6 +42,17 @@ export class StaleError extends Error {
   }
 }
 
+/**
+ * submitAttempt found the attempt already submitted with a different answer (another tab won).
+ * The stored attempt is attached so the UI can show both texts; nothing was written.
+ */
+export class AlreadySubmittedError extends StaleError {
+  constructor(public readonly attempt: AttemptRecord) {
+    super([attempt.id], 'This answer was already submitted with different text, probably in another tab.');
+    this.name = 'AlreadySubmittedError';
+  }
+}
+
 export class OpError extends Error {
   constructor(message: string) {
     super(message);
@@ -58,6 +69,13 @@ function label(random: () => number): string {
   let s = '';
   for (let i = 0; i < 4; i++) s += LABEL_ALPHABET[Math.floor(random() * LABEL_ALPHABET.length)];
   return s;
+}
+
+type Tx = PremiseDb;
+
+export interface AttemptOpResult {
+  attemptId: string;
+  revision: number;
 }
 
 // ---------- Sessions and attempts ----------
@@ -80,9 +98,23 @@ export async function startSession(
   return session;
 }
 
+export type OpenEntryResult =
+  /** This entry's attempt: created now (freezing the snapshot), or the one it already had. */
+  | { status: 'opened'; attempt: AttemptRecord }
+  /**
+   * Another uncoached draft of this task exists (another session or tab). Nothing was created;
+   * the existing draft is returned so its text is not lost (resume its session instead).
+   */
+  | { status: 'draft-elsewhere'; attempt: AttemptRecord }
+  /** The task may not be practised now; nothing was created. */
+  | { status: 'ineligible'; reason: 'suspended' | 'awaiting-grade' | 'not-before'; notBefore: string | null };
+
 /**
- * Opens a session entry: creates its draft attempt the first time (freezing the snapshot) and
- * moves the cursor. Returns the attempt.
+ * Opens a session entry. The first time, it rechecks eligibility in the same transaction that
+ * creates the draft attempt (§6.4): no other uncoached draft of the task, not suspended, no
+ * submitted attempt still waiting for a grade, and today on or after `notBefore`. A `retry`
+ * session (coached attempts) is the explicit exception and skips these checks. Moves the cursor
+ * when it opens.
  */
 export async function openEntry(
   db: PremiseDb,
@@ -90,66 +122,110 @@ export async function openEntry(
   sessionId: string,
   index: number,
   snapshot: Snapshot,
-): Promise<AttemptRecord> {
-  return db.transaction('rw', [db.sessions, db.attempts, db.snapshots, db.cards], async () => {
-    const session = await db.sessions.get(sessionId);
-    if (!session) throw new OpError('Session not found.');
-    const entry = session.entries[index];
-    if (!entry) throw new OpError('No such task in this session.');
-    if (entry.taskId !== snapshot.taskId) throw new OpError('Snapshot does not match the session entry.');
-    session.cursor = index;
-    if (entry.attemptId) {
-      await db.sessions.put(session);
-      const existing = await db.attempts.get(entry.attemptId);
-      if (!existing) throw new OpError('Attempt missing.');
-      return existing;
-    }
-    if (!(await db.snapshots.get(snapshot.hash))) {
-      await db.snapshots.add({ ...snapshot, firstSeenAt: ctx.now } satisfies SnapshotRecord);
-    }
-    const exercisePrefix = `${snapshot.exerciseId}.`;
-    const seenBefore = (await db.attempts.where('taskId').startsWith(exercisePrefix).count()) > 0;
-    const kind: AttemptKind =
-      session.mode === 'retry' ? 'coached' : (await db.cards.get(snapshot.taskId)) ? 'review' : 'new';
-    const attempt: AttemptRecord = {
-      id: ctx.newId(),
-      sessionId,
-      taskId: snapshot.taskId,
-      snapshotHash: snapshot.hash,
-      answer: '',
-      state: 'draft',
-      kind,
-      stimulusSeenBefore: seenBefore,
-      ratingChoice: 'good',
-      requestId: null,
-      currentGradingId: null,
-      revision: 0,
-      startedAt: ctx.now,
-      submittedAt: null,
-      updatedAt: ctx.now,
-      elapsedSeconds: null,
-    };
-    await db.attempts.add(attempt);
-    entry.attemptId = attempt.id;
-    await db.sessions.put(session);
-    return attempt;
-  });
+): Promise<OpenEntryResult> {
+  return db.transaction(
+    'rw',
+    [db.sessions, db.attempts, db.snapshots, db.cards, db.taskStates, db.gradings],
+    async (): Promise<OpenEntryResult> => {
+      const session = await db.sessions.get(sessionId);
+      if (!session) throw new OpError('Session not found.');
+      const entry = session.entries[index];
+      if (!entry) throw new OpError('No such task in this session.');
+      if (entry.taskId !== snapshot.taskId) throw new OpError('Snapshot does not match the session entry.');
+      if (entry.attemptId) {
+        const existing = await db.attempts.get(entry.attemptId);
+        if (!existing) throw new OpError('Attempt missing.');
+        await db.sessions.put({ ...session, cursor: index });
+        return { status: 'opened', attempt: existing };
+      }
+      if (session.mode !== 'retry') {
+        const blocked = await eligibility(db, snapshot.taskId, localDate(new Date(ctx.now)));
+        if (blocked) return blocked;
+      }
+      if (!(await db.snapshots.get(snapshot.hash))) {
+        await db.snapshots.add({ ...snapshot, firstSeenAt: ctx.now } satisfies SnapshotRecord);
+      }
+      const exercisePrefix = `${snapshot.exerciseId}.`;
+      const seenBefore = (await db.attempts.where('taskId').startsWith(exercisePrefix).count()) > 0;
+      const kind: AttemptKind =
+        session.mode === 'retry' ? 'coached' : (await db.cards.get(snapshot.taskId)) ? 'review' : 'new';
+      const attempt: AttemptRecord = {
+        id: ctx.newId(),
+        sessionId,
+        taskId: snapshot.taskId,
+        snapshotHash: snapshot.hash,
+        answer: '',
+        state: 'draft',
+        kind,
+        stimulusSeenBefore: seenBefore,
+        ratingChoice: 'good',
+        requestId: null,
+        currentGradingId: null,
+        revision: 0,
+        startedAt: ctx.now,
+        submittedAt: null,
+        updatedAt: ctx.now,
+        elapsedSeconds: null,
+      };
+      await db.attempts.add(attempt);
+      const entries = session.entries.map((e, i) => (i === index ? { ...e, attemptId: attempt.id } : e));
+      await db.sessions.put({ ...session, entries, cursor: index });
+      return { status: 'opened', attempt };
+    },
+  );
 }
 
-export async function saveDraft(db: PremiseDb, ctx: OpContext, attemptId: string, answer: string): Promise<void> {
-  await db.transaction('rw', [db.attempts], async () => {
+/** Why a new uncoached attempt of this task may not be created now, or null if it may. */
+async function eligibility(db: Tx, taskId: string, today: string): Promise<OpenEntryResult | null> {
+  const attempts = await db.attempts.where('taskId').equals(taskId).toArray();
+  const draft = attempts.find((a) => a.state === 'draft' && a.kind !== 'coached');
+  if (draft) return { status: 'draft-elsewhere', attempt: draft };
+  const state = await db.taskStates.get(taskId);
+  const notBefore = state?.notBefore ?? null;
+  if (state?.suspended) return { status: 'ineligible', reason: 'suspended', notBefore };
+  for (const a of attempts) {
+    if (a.state !== 'submitted') continue;
+    const g = a.currentGradingId ? await db.gradings.get(a.currentGradingId) : undefined;
+    if (g?.status !== 'accepted') return { status: 'ineligible', reason: 'awaiting-grade', notBefore };
+  }
+  if (notBefore !== null && today < notBefore) return { status: 'ineligible', reason: 'not-before', notBefore };
+  return null;
+}
+
+/**
+ * Saves a draft answer if the attempt is still at `revision` (the revision this editor last read
+ * or wrote) and increments it. A stale revision, or an attempt that is no longer a draft, throws
+ * StaleError and writes nothing, so one tab never silently overwrites another.
+ */
+export async function saveDraft(
+  db: PremiseDb,
+  ctx: OpContext,
+  attemptId: string,
+  revision: number,
+  answer: string,
+): Promise<AttemptOpResult> {
+  return db.transaction('rw', [db.attempts], async () => {
     const a = await db.attempts.get(attemptId);
     if (!a) throw new OpError('Attempt not found.');
-    if (a.state !== 'draft') throw new OpError('This answer was already submitted.');
-    await db.attempts.update(attemptId, { answer, updatedAt: ctx.now });
+    if (a.state !== 'draft') throw new StaleError([a.id], 'This answer was already submitted or skipped.');
+    if (a.revision !== revision) throw new StaleError([a.id], 'This answer was changed in another tab.');
+    const next = a.revision + 1;
+    await db.attempts.update(attemptId, { answer, updatedAt: ctx.now, revision: next });
+    return { attemptId, revision: next };
   });
 }
 
-/** Freezes the attempt (invariant 1). An empty answer is a deliberate blank submission. */
+/**
+ * Freezes the attempt (invariant 1). An empty answer is a deliberate blank submission. The draft
+ * must still be at `revision`. Retrying a submission that already happened returns the stored
+ * attempt only if `answer` equals the submitted answer; otherwise it throws
+ * AlreadySubmittedError and writes nothing.
+ */
 export async function submitAttempt(
   db: PremiseDb,
   ctx: OpContext,
   attemptId: string,
+  revision: number,
   answer: string,
   elapsedSeconds: number | null,
 ): Promise<AttemptRecord> {
@@ -159,8 +235,12 @@ export async function submitAttempt(
   return db.transaction('rw', [db.attempts], async () => {
     const a = await db.attempts.get(attemptId);
     if (!a) throw new OpError('Attempt not found.');
-    if (a.state === 'submitted') return a;
-    if (a.state !== 'draft') throw new OpError('This task was skipped.');
+    if (a.state === 'submitted' || a.state === 'discarded') {
+      if (a.answer === answer) return a;
+      throw new AlreadySubmittedError(a);
+    }
+    if (a.state !== 'draft') throw new StaleError([a.id], 'This task was skipped.');
+    if (a.revision !== revision) throw new StaleError([a.id], 'This answer was changed in another tab.');
     const next: AttemptRecord = {
       ...a,
       answer,
@@ -189,8 +269,6 @@ export async function endSession(db: PremiseDb, ctx: OpContext, sessionId: strin
 
 // ---------- Receipts ----------
 
-type Tx = PremiseDb;
-
 async function receipt<T>(db: Tx, opId: string): Promise<T | undefined> {
   const r = await db.operations.get(opId);
   return r ? (r.result as T) : undefined;
@@ -203,12 +281,13 @@ async function writeReceipt(
   name: string,
   attempts: AttemptRecord[],
   result: unknown,
+  otherIds: string[] = [],
 ): Promise<void> {
   faults.beforeReceipt?.(name);
   await db.operations.add({
     opId,
     name,
-    affectedIds: attempts.map((a) => a.id),
+    affectedIds: [...attempts.map((a) => a.id), ...otherIds],
     resultingRevisions: Object.fromEntries(attempts.map((a) => [a.id, a.revision])),
     result,
     createdAt: ctx.now,
@@ -226,6 +305,13 @@ const GRADING_TABLES = (db: PremiseDb) => [
   db.snapshots,
   db.operations,
 ];
+
+/** Rejects a row set that repeats an attempt or names one outside the request's rows. */
+function checkRowSet(request: RequestRecord, attemptIds: string[]): void {
+  if (new Set(attemptIds).size !== attemptIds.length) throw new OpError('The same answer appears twice.');
+  const owned = new Set(Object.values(request.rows));
+  if (attemptIds.some((id) => !owned.has(id))) throw new OpError('An answer does not belong to this request.');
+}
 
 // ---------- prepareGrading ----------
 
@@ -247,6 +333,7 @@ export async function prepareGrading(
   return db.transaction('rw', GRADING_TABLES(db), async () => {
     const done = await receipt<PrepareResult>(db, opId);
     if (done) return done;
+    if (new Set(attemptIds).size !== attemptIds.length) throw new OpError('The same answer appears twice.');
     const attempts = await db.attempts.bulkGet(attemptIds);
     const requestIds: string[] = [];
     const items: GradingItem[] = [];
@@ -315,6 +402,35 @@ async function refreshRequestStatus(db: Tx, requestId: string): Promise<void> {
   if (status !== request.status) await db.requests.update(requestId, { status });
 }
 
+// ---------- Replies ----------
+
+export type NewReply = Omit<ReplyRecord, 'id' | 'requestId' | 'pastedAt'>;
+
+/**
+ * Stores a reply the student explicitly read, even when it gave no usable scores, so the raw
+ * text is kept before manual or self grading. Link gradings to it with GradeRow.replyId.
+ */
+export async function saveReply(
+  db: PremiseDb,
+  ctx: OpContext,
+  opId: string,
+  requestId: string,
+  reply: NewReply,
+): Promise<{ replyId: string }> {
+  return db.transaction('rw', [db.requests, db.replies, db.operations], async () => {
+    const done = await receipt<{ replyId: string }>(db, opId);
+    if (done) return done;
+    if (!(await db.requests.get(requestId))) throw new OpError('Grading request not found.');
+    const problems = validateRange(reply.selectedBlock, reply.raw.length);
+    if (problems.length) throw new OpError(problems.join(' '));
+    const replyId = ctx.newId();
+    await db.replies.add({ ...reply, id: replyId, requestId, pastedAt: ctx.now });
+    const result = { replyId };
+    await writeReceipt(db, ctx, opId, 'saveReply', [], result, [replyId]);
+    return result;
+  });
+}
+
 // ---------- Applying grades ----------
 
 export interface GradeRow {
@@ -325,44 +441,96 @@ export interface GradeRow {
   tags: string[];
   source: GradingSource;
   disqualified: boolean;
+  /** Offsets into the linked reply's raw text; needs a reply. */
   feedbackRange: Range | null;
   ratingChoice: RatingChoice;
+  /**
+   * confirmRows only, when it creates no reply: an already stored reply of this request (from
+   * saveReply) that this grade came from. Omit it to keep the provenance of the row's current
+   * needs-review grading, if any.
+   */
+  replyId?: string | null;
 }
 
+interface Provenance {
+  replyId: string | null;
+  feedbackRange: Range | null;
+}
+
+/** The highest stored review-log seq plus one; called inside the applying transaction. */
+async function nextSeq(db: Tx): Promise<number> {
+  const last = await db.reviewLogs.orderBy('seq').last();
+  return (last?.seq ?? 0) + 1;
+}
+
+/** The task's latest active review, by application sequence (never by timestamp or id). */
 async function latestActiveLog(db: Tx, taskId: string): Promise<ReviewLogRecord | undefined> {
   const logs = (await db.reviewLogs.where('taskId').equals(taskId).toArray()).filter((l) => !l.undone);
-  return logs.sort((a, b) => (a.appliedAt < b.appliedAt ? -1 : a.appliedAt > b.appliedAt ? 1 : 0)).at(-1);
+  return logs.sort((a, b) => a.seq - b.seq).at(-1);
 }
 
 async function activeLogFor(db: Tx, attemptId: string): Promise<ReviewLogRecord | undefined> {
   return (await db.reviewLogs.where('attemptId').equals(attemptId).toArray()).find((l) => !l.undone);
 }
 
-/** Undoes an attempt's active review: restores the card from cardBefore (§6.3). taskStates is untouched. */
+/**
+ * Undoes an attempt's active review: restores the card exactly from cardBefore, scheduler version
+ * included (§6.3). taskStates is untouched.
+ */
 async function undoReview(db: Tx, log: ReviewLogRecord): Promise<void> {
   await db.reviewLogs.update(log.id, { undone: true });
   if (log.cardBefore) {
-    await db.cards.put({ ...log.cardBefore, taskId: log.taskId, schedulerVersion: log.schedulerVersion });
+    await db.cards.put({ ...log.cardBefore, taskId: log.taskId });
   } else {
     await db.cards.delete(log.taskId);
   }
 }
 
-/** Writes one grading revision for an attempt and schedules it when accepted and uncoached. */
+function versionedCard(card: VersionedCard): VersionedCard {
+  return {
+    due: card.due,
+    stability: card.stability,
+    difficulty: card.difficulty,
+    elapsed_days: card.elapsed_days,
+    scheduled_days: card.scheduled_days,
+    learning_steps: card.learning_steps,
+    reps: card.reps,
+    lapses: card.lapses,
+    state: card.state,
+    last_review: card.last_review,
+    schedulerVersion: card.schedulerVersion,
+  };
+}
+
+/**
+ * Writes one grading revision for an attempt and, when it is accepted and uncoached, a review
+ * under the current scheduler. `confirmation` also sets the next-day eligibility restriction
+ * (§6.4); correction passes false and leaves taskStates untouched.
+ */
 async function applyGrade(
   db: Tx,
   ctx: OpContext,
   opId: string,
   attempt: AttemptRecord,
   row: GradeRow,
-  replyId: string | null,
+  provenance: Provenance,
+  confirmation: boolean,
 ): Promise<AttemptRecord> {
   const snapshot = await db.snapshots.get(attempt.snapshotHash);
   if (!snapshot) throw new OpError('Snapshot missing.');
   const problems = validateGrade(
     { score: row.score, max: snapshot.max, tags: row.tags, source: row.source, disqualified: row.disqualified },
-    { snapshotMax: snapshot.max, allowedTags: snapshot.allowedTags, ownedByRequest: attempt.requestId !== null },
+    {
+      snapshotMax: snapshot.max,
+      allowedTags: snapshot.allowedTags,
+      ownedByRequest: attempt.requestId !== null && attempt.state === 'submitted',
+    },
   );
+  const reply = provenance.replyId ? await db.replies.get(provenance.replyId) : undefined;
+  if (provenance.replyId && reply?.requestId !== attempt.requestId) {
+    problems.push('The reply does not belong to this grading request.');
+  }
+  problems.push(...validateRange(provenance.feedbackRange, reply ? reply.raw.length : null));
   if (problems.length) throw new OpError(problems.join(' '));
 
   if (attempt.currentGradingId) await db.gradings.update(attempt.currentGradingId, { status: 'superseded' });
@@ -370,7 +538,7 @@ async function applyGrade(
     id: ctx.newId(),
     attemptId: attempt.id,
     requestId: attempt.requestId!,
-    replyId,
+    replyId: provenance.replyId,
     opId,
     score: row.score,
     max: snapshot.max,
@@ -378,7 +546,7 @@ async function applyGrade(
     status: row.score === null ? 'needs-review' : 'accepted',
     source: row.source,
     disqualified: row.disqualified,
-    feedbackRange: row.feedbackRange,
+    feedbackRange: provenance.feedbackRange,
     createdAt: ctx.now,
   };
   await db.gradings.add(grading);
@@ -386,12 +554,12 @@ async function applyGrade(
   if (grading.status === 'accepted') {
     const rating = ratingFor(grading.score!, grading.max, attempt.kind, row.ratingChoice);
     if (rating !== null) {
+      // New reviews always use the current scheduler, whatever version produced the card (§7).
       const existing = await db.cards.get(attempt.taskId);
-      const version = existing?.schedulerVersion ?? CURRENT_SCHEDULER;
-      if (!SCHEDULER_CONFIGS[version]) throw new OpError('This card uses a scheduler this app does not know.');
-      const cardBefore: CardFields | null = existing ? stripCard(existing) : null;
-      const { after, reviewedAt } = review(version, cardBefore, rating, attempt.submittedAt!);
-      await db.cards.put({ ...after, taskId: attempt.taskId, schedulerVersion: version });
+      const cardBefore = existing ? versionedCard(existing) : null;
+      const reviewedAt = attempt.submittedAt!;
+      const { after } = review(CURRENT_SCHEDULER, cardBefore, rating, reviewedAt);
+      await db.cards.put({ ...after, taskId: attempt.taskId, schedulerVersion: CURRENT_SCHEDULER });
       await db.reviewLogs.add({
         id: ctx.newId(),
         taskId: attempt.taskId,
@@ -400,19 +568,22 @@ async function applyGrade(
         opId,
         rating,
         ratingPolicy: RATING_POLICY,
-        schedulerVersion: version,
+        schedulerVersion: CURRENT_SCHEDULER,
         reviewedAt,
         cardBefore,
         cardAfter: after,
         appliedAt: ctx.now,
+        seq: await nextSeq(db),
         undone: false,
       });
     }
-    // Not offered again before the next local day (§6.4); never cleared by undo or correction.
-    const notBefore = addDays(localDate(new Date(ctx.now)), 1);
-    const state = await db.taskStates.get(attempt.taskId);
-    if (!state?.notBefore || state.notBefore < notBefore) {
-      await db.taskStates.put({ taskId: attempt.taskId, suspended: state?.suspended ?? false, notBefore });
+    if (confirmation) {
+      // Not offered again before the next local day (§6.4); never cleared by undo or correction.
+      const notBefore = addDays(localDate(new Date(ctx.now)), 1);
+      const state = await db.taskStates.get(attempt.taskId);
+      if (!state?.notBefore || state.notBefore < notBefore) {
+        await db.taskStates.put({ taskId: attempt.taskId, suspended: state?.suspended ?? false, notBefore });
+      }
     }
   }
 
@@ -427,26 +598,15 @@ async function applyGrade(
   return next;
 }
 
-function stripCard(card: CardFields & { taskId?: string; schedulerVersion?: string }): CardFields {
-  return {
-    due: card.due,
-    stability: card.stability,
-    difficulty: card.difficulty,
-    elapsed_days: card.elapsed_days,
-    scheduled_days: card.scheduled_days,
-    learning_steps: card.learning_steps,
-    reps: card.reps,
-    lapses: card.lapses,
-    state: card.state,
-    last_review: card.last_review,
-  };
-}
-
 async function loadFresh(db: Tx, rows: { attemptId: string; revision: number }[]): Promise<AttemptRecord[]> {
   const attempts = await db.attempts.bulkGet(rows.map((r) => r.attemptId));
   const stale = rows.filter((r, i) => attempts[i]?.revision !== r.revision).map((r) => r.attemptId);
   if (stale.length) throw new StaleError(stale);
   return attempts as AttemptRecord[];
+}
+
+async function currentGrading(db: Tx, attempt: AttemptRecord): Promise<GradingRecord | undefined> {
+  return attempt.currentGradingId ? db.gradings.get(attempt.currentGradingId) : undefined;
 }
 
 export interface ConfirmResult {
@@ -457,7 +617,12 @@ export interface ConfirmResult {
 
 /**
  * Saves grades for rows of one request exactly once: one grading revision per row; accepted,
- * uncoached rows get a review log and card update. Rows must be pending or needs-review.
+ * uncoached rows get a review log and card update. Rows must be pending or needs-review, each
+ * attempt at most once and owned by this request; otherwise nothing is written.
+ *
+ * `reply` stores a new reply that every row links to. With `reply` null, a row may name an
+ * already stored reply (GradeRow.replyId); otherwise it keeps its current needs-review grading's
+ * reply and feedback range, if any.
  */
 export async function confirmRows(
   db: PremiseDb,
@@ -465,30 +630,49 @@ export async function confirmRows(
   opId: string,
   requestId: string,
   rows: GradeRow[],
-  reply: Omit<ReplyRecord, 'id' | 'requestId' | 'pastedAt'> | null,
+  reply: NewReply | null,
 ): Promise<ConfirmResult> {
   return db.transaction('rw', GRADING_TABLES(db), async () => {
     const done = await receipt<ConfirmResult>(db, opId);
     if (done) return done;
     const request = await db.requests.get(requestId);
     if (!request) throw new OpError('Grading request not found.');
+    checkRowSet(
+      request,
+      rows.map((r) => r.attemptId),
+    );
+    if (reply && rows.some((r) => r.replyId !== undefined)) {
+      throw new OpError('Rows cannot name another reply when a new one is saved.');
+    }
     const attempts = await loadFresh(db, rows);
+    const currents: (GradingRecord | undefined)[] = [];
     for (const a of attempts) {
       if (a.requestId !== requestId) throw new OpError('An answer does not belong to this request.');
-      const g = a.currentGradingId ? await db.gradings.get(a.currentGradingId) : undefined;
+      const g = await currentGrading(db, a);
       const state = rowState(a, g);
       if (state === 'accepted' || state === 'discarded')
         throw new StaleError([a.id], `This answer is already ${state}.`);
+      currents.push(g);
     }
     let replyId: string | null = null;
     if (reply) {
+      const problems = validateRange(reply.selectedBlock, reply.raw.length);
+      if (problems.length) throw new OpError(problems.join(' '));
       replyId = ctx.newId();
       await db.replies.add({ ...reply, id: replyId, requestId, pastedAt: ctx.now });
     }
     const changed: AttemptRecord[] = [];
     const gradingIds: Record<string, string> = {};
     for (const [i, row] of rows.entries()) {
-      const next = await applyGrade(db, ctx, opId, attempts[i]!, row, replyId);
+      const current = currents[i];
+      const provenance: Provenance = replyId
+        ? { replyId, feedbackRange: row.feedbackRange }
+        : row.replyId !== undefined
+          ? { replyId: row.replyId, feedbackRange: row.feedbackRange }
+          : current?.replyId
+            ? { replyId: current.replyId, feedbackRange: row.feedbackRange ?? current.feedbackRange }
+            : { replyId: null, feedbackRange: row.feedbackRange };
+      const next = await applyGrade(db, ctx, opId, attempts[i]!, row, provenance, true);
       changed.push(next);
       gradingIds[next.id] = next.currentGradingId!;
     }
@@ -499,16 +683,11 @@ export async function confirmRows(
   });
 }
 
-export interface AttemptOpResult {
-  attemptId: string;
-  revision: number;
-}
-
 /** Can this attempt's grade be corrected or undone? Only if its review is the card's latest. */
 export async function canChangeGrade(db: PremiseDb, attemptId: string): Promise<boolean> {
   return db.transaction('r', [db.attempts, db.reviewLogs], async () => {
     const a = await db.attempts.get(attemptId);
-    if (!a) return false;
+    if (!a || a.state === 'discarded') return false;
     const log = await activeLogFor(db, attemptId);
     if (!log) return true;
     return (await latestActiveLog(db, a.taskId))?.id === log.id;
@@ -526,7 +705,12 @@ async function unwindForChange(db: Tx, attempt: AttemptRecord): Promise<void> {
   }
 }
 
-/** Replaces the current grading with a new accepted revision (§6.3). */
+/**
+ * Replaces an accepted grading with a new accepted revision (§6.3). The replacement needs a
+ * valid score; discarded rows and rows without an accepted grade are refused. The new revision
+ * keeps the corrected grading's reply and feedback range (its source labels who set the score).
+ * Correction never touches taskStates.
+ */
 export async function correctGrade(
   db: PremiseDb,
   ctx: OpContext,
@@ -537,14 +721,28 @@ export async function correctGrade(
     const done = await receipt<AttemptOpResult>(db, opId);
     if (done) return done;
     const [attempt] = await loadFresh(db, [row]);
-    if (!attempt!.currentGradingId) throw new OpError('There is no grade to correct.');
+    if (attempt!.state === 'discarded') throw new OpError('A discarded answer cannot be graded.');
+    const current = await currentGrading(db, attempt!);
+    if (current?.status !== 'accepted') throw new OpError('Only an accepted grade can be corrected.');
+    if (row.score === null) throw new OpError('A correction needs a score.');
+    if (row.replyId !== undefined && row.replyId !== current.replyId) {
+      throw new OpError('A correction keeps the reply of the grade it corrects.');
+    }
+    if (row.feedbackRange !== null && !sameRange(row.feedbackRange, current.feedbackRange)) {
+      throw new OpError('A correction keeps the feedback of the grade it corrects.');
+    }
     await unwindForChange(db, attempt!);
-    const next = await applyGrade(db, ctx, opId, attempt!, row, null);
+    const provenance = { replyId: current.replyId, feedbackRange: current.feedbackRange };
+    const next = await applyGrade(db, ctx, opId, attempt!, row, provenance, false);
     await refreshRequestStatus(db, attempt!.requestId!);
     const result = { attemptId: next.id, revision: next.revision };
     await writeReceipt(db, ctx, opId, 'correctGrade', [next], result);
     return result;
   });
+}
+
+function sameRange(a: Range | null, b: Range | null): boolean {
+  return a === b || (a !== null && b !== null && a.start === b.start && a.end === b.end);
 }
 
 /** Undoes the latest grade: the grading is superseded and the row returns to pending. */
@@ -559,6 +757,7 @@ export async function undoLatest(
     const done = await receipt<AttemptOpResult>(db, opId);
     if (done) return done;
     const [attempt] = await loadFresh(db, [{ attemptId, revision }]);
+    if (attempt!.state === 'discarded') throw new OpError('A discarded answer has no grade to undo.');
     if (!attempt!.currentGradingId) throw new OpError('There is no grade to undo.');
     await unwindForChange(db, attempt!);
     await db.gradings.update(attempt!.currentGradingId, { status: 'superseded' });
@@ -582,12 +781,17 @@ export async function discardRows(
   return db.transaction('rw', GRADING_TABLES(db), async () => {
     const done = await receipt<{ discarded: string[] }>(db, opId);
     if (done) return done;
+    const request = await db.requests.get(requestId);
+    if (!request) throw new OpError('Grading request not found.');
+    checkRowSet(
+      request,
+      rows.map((r) => r.attemptId),
+    );
     const attempts = await loadFresh(db, rows);
     const changed: AttemptRecord[] = [];
     for (const a of attempts) {
       if (a.requestId !== requestId) throw new OpError('An answer does not belong to this request.');
-      const g = a.currentGradingId ? await db.gradings.get(a.currentGradingId) : undefined;
-      const state = rowState(a, g);
+      const state = rowState(a, await currentGrading(db, a));
       if (state !== 'pending' && state !== 'needs-review')
         throw new StaleError([a.id], `This answer is already ${state}.`);
       const next = { ...a, state: 'discarded' as const, revision: a.revision + 1, updatedAt: ctx.now };
@@ -601,23 +805,32 @@ export async function discardRows(
   });
 }
 
-/** Discards every waiting row of a request and marks it abandoned. */
+/**
+ * Discards every waiting row of a request and marks it abandoned. `revisions` maps every row's
+ * attempt id to the revision the student was shown; if any differs (or a row is missing) the
+ * operation throws StaleError and writes nothing.
+ */
 export async function abandonRequest(
   db: PremiseDb,
   ctx: OpContext,
   opId: string,
   requestId: string,
+  revisions: Record<string, number>,
 ): Promise<{ discarded: string[] }> {
   return db.transaction('rw', GRADING_TABLES(db), async () => {
     const done = await receipt<{ discarded: string[] }>(db, opId);
     if (done) return done;
     const request = await db.requests.get(requestId);
     if (!request) throw new OpError('Grading request not found.');
-    const attempts = (await db.attempts.bulkGet(Object.values(request.rows))) as AttemptRecord[];
+    checkRowSet(request, Object.keys(revisions));
+    const ids = Object.values(request.rows);
+    const attempts = await loadFresh(
+      db,
+      ids.map((attemptId) => ({ attemptId, revision: revisions[attemptId] ?? -1 })),
+    );
     const changed: AttemptRecord[] = [];
     for (const a of attempts) {
-      const g = a.currentGradingId ? await db.gradings.get(a.currentGradingId) : undefined;
-      const state = rowState(a, g);
+      const state = rowState(a, await currentGrading(db, a));
       if (state !== 'pending' && state !== 'needs-review') continue;
       const next = { ...a, state: 'discarded' as const, revision: a.revision + 1, updatedAt: ctx.now };
       await db.attempts.put(next);
@@ -643,7 +856,8 @@ export async function setTags(
     const done = await receipt<AttemptOpResult>(db, opId);
     if (done) return done;
     const [attempt] = await loadFresh(db, [{ attemptId, revision }]);
-    const current = attempt!.currentGradingId ? await db.gradings.get(attempt!.currentGradingId) : undefined;
+    if (attempt!.state === 'discarded') throw new OpError('A discarded answer cannot be tagged.');
+    const current = await currentGrading(db, attempt!);
     if (!current || current.status === 'superseded') throw new OpError('There is no grade to tag.');
     const snapshot = await db.snapshots.get(attempt!.snapshotHash);
     const problems = validateGrade(

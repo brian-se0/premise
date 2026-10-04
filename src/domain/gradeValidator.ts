@@ -1,7 +1,7 @@
 // The shared grade validator (ARCHITECTURE.md §5.1 invariants 5 and 8; GRADING_PROTOCOL.md §8).
 // One rule set for parsed, manual, self and imported grades.
 
-import type { GradingSource } from './records.ts';
+import type { GradingSource, GradingStatus, Range } from './records.ts';
 
 export interface GradeInput {
   /** Integer score, or null for "needs review" ("?" from a chatbot). */
@@ -35,6 +35,35 @@ export function validateGrade(g: GradeInput, ctx: GradeContext): string[] {
     problems.push('Only a self-grade can be disqualified, and it scores 0.');
   }
   return problems;
+}
+
+/**
+ * A grading's stored status against its score (§5.1 invariant 5): accepted has a score,
+ * needs-review has none and comes only from a parsed reply. Superseded revisions keep whatever
+ * was valid when they were written, which validateGrade already covers.
+ */
+export function validateStatus(status: GradingStatus, score: number | null, source: GradingSource): string[] {
+  if (status === 'accepted' && score === null) return ['An accepted grade needs a score.'];
+  if (status === 'needs-review' && (score !== null || source !== 'parsed')) {
+    return ['Only a parsed grade with no score can wait for review.'];
+  }
+  return [];
+}
+
+/**
+ * A range into a reply's raw text: start <= end <= the text's length. A range needs its reply
+ * (`textLength` null means there is none).
+ */
+export function validateRange(range: Range | null, textLength: number | null): string[] {
+  if (range === null) return [];
+  if (textLength === null) return ['A feedback range needs the reply it points into.'];
+  const ok =
+    Number.isInteger(range.start) &&
+    Number.isInteger(range.end) &&
+    range.start >= 0 &&
+    range.start <= range.end &&
+    range.end <= textLength;
+  return ok ? [] : [`The range ${range.start}–${range.end} is outside the reply.`];
 }
 
 /** Self-grading: one point per ticked criterion, or 0 when a disqualifier applies. */
