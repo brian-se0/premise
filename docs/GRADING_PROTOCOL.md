@@ -202,8 +202,9 @@ Where §§4–7 left a choice, parser version 1 (`src/domain/scoreParser.ts`) do
 - Unknown row ids are reported and add a warning, so the outcome is at best `recoverable`.
 - A candidate with no row lines is dropped like an echo. An echo is a block with at least one row in which every row has score `__` and tags `--`.
 - A `BEGIN SCORES` line that does not match the header grammar is set aside; it still ends a feedback region.
+- "Trimmed" means removing leading and trailing whitespace as JavaScript defines it (spaces, tabs, line terminators, no-break space and the other Unicode space separators) **except U+FEFF**. Zero-width characters (U+200B, U+200C, U+200D, U+2060, U+FEFF) are never trimmed or skipped, in line clean-up, field splitting or tag splitting, so `2\u200B/2` or `2\uFEFF/2` is an invalid score and a row line starting with one is not a row line.
 - Line clean-up strips a leading `>` once, a bullet only when followed by whitespace, leading and trailing `**`/`__` independently, and outer pipes only when both are present. Fence-only lines are three backticks or tildes with an optional language word.
-- An incomplete block collects row lines up to the next `BEGIN` or the end of the reply.
+- An incomplete block collects row lines up to the next `BEGIN`, an echoed `=== END OF ITEMS ===` line, or the end of the reply. Its displayed range still ends at its last row line, but it **consumes** all text up to that terminator: text between its last row and the next `BEGIN` belongs to the incomplete candidate (whatever its header), never to a later block's feedback. A feedback region (§7) therefore starts where the nearest earlier candidate stops consuming text: its `END SCORES` line, the next `BEGIN` line (so a block directly after an unterminated candidate has an empty region and every row's feedback is unmatched), or the `=== END OF ITEMS ===` line.
 - Any `Ixx:` heading ends the previous row's feedback, even for ids not in the request. Trailing blank and fence-only lines are dropped from a feedback range.
 - Repeated allowed tags are kept once without a warning; an empty tag field means no tags, with a warning.
 - When a score has several problems, the reason names the first in this order: field count, `score/max` shape, max, `?`, `__`, negative, fraction, not a number, over max.
@@ -224,5 +225,6 @@ Where §§4–7 left a choice, parser version 1 (`src/domain/scoreParser.ts`) do
 - disallowed tags, bracketed tags, `--` left in the tag field, unknown row ids, missing rows, a one-row block for a four-row request
 - identical duplicates, conflicting duplicates, and a valid row followed by a malformed row with the same id
 - an answer containing `BEGIN SCORES`, `END SCORES` and the fence text
-- feedback: bold headings, a heading repeated in the region, two complete assessments with the second block chosen
+- feedback: bold headings, a heading repeated in the region, two complete assessments with the second block chosen; feedback after an incomplete candidate (another request, a malformed header, this request) left unmatched
+- U+200B and U+FEFF inside a score and a tag field
 - a 150,000-character reply
