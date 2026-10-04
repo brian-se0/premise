@@ -31,6 +31,7 @@ export default defineConfig({
   plugins: [react(), csp()],
   define: {
     __COMMIT__: JSON.stringify(commit()),
+    __PREVIEW__: JSON.stringify(process.env.PREMISE_PREVIEW === '1'),
   },
   test: {
     include: ['tests/unit/**/*.test.{ts,tsx}'],

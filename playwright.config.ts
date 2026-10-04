@@ -6,7 +6,12 @@ import { defineConfig, devices } from '@playwright/test';
 const chromium = process.env.PW_CHROMIUM;
 const base = process.env.PAGES_BASE ?? '/';
 const local = `http://localhost:4173${base}`;
-const build = process.env.E2E_PREBUILT ? '' : 'npm run build && ';
+// E2E_DRAFTS builds with draft exercises, which the grading tests need; the production artifact has none.
+const build = process.env.E2E_PREBUILT
+  ? ''
+  : process.env.E2E_DRAFTS
+    ? 'npx tsx scripts/build-content.ts && npx vite build && '
+    : 'npm run build && ';
 
 export default defineConfig({
   testDir: 'tests/e2e',
@@ -21,7 +26,12 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Pixel 7'], ...(chromium ? { launchOptions: { executablePath: chromium } } : {}) },
+      use: {
+        ...devices['Pixel 7'],
+        // Headless Chromium can leave a clipboard write waiting on a permission prompt nobody answers.
+        permissions: ['clipboard-read', 'clipboard-write'],
+        ...(chromium ? { launchOptions: { executablePath: chromium } } : {}),
+      },
     },
     ...(process.env.E2E_WEBKIT === '0' ? [] : [{ name: 'webkit', use: { ...devices['iPhone 15'] } }]),
   ],

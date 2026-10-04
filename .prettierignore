@@ -7,3 +7,4 @@ docs
 pilot
 tests/fixtures
 *.md
+.claude

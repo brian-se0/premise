@@ -24,6 +24,7 @@ jobs:
       - run: npm run test:e2e
         env:
           PAGES_BASE: /${{ github.event.repository.name }}/
+          E2E_DRAFTS: '1'
       - uses: actions/upload-artifact@v5
         if: failure()
         with:

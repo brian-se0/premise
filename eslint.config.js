@@ -7,7 +7,7 @@ const DOMAIN = ['src/domain/**'];
 const PASS_TIME_IN = 'The domain is pure: pass time, ids and randomness in (AGENTS.md).';
 
 export default tseslint.config(
-  { ignores: ['dist', 'src/generated', 'test-results', 'playwright-report'] },
+  { ignores: ['dist', 'src/generated', 'test-results', 'playwright-report', '.claude'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   reactHooks.configs.flat.recommended,

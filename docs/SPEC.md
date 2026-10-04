@@ -107,3 +107,4 @@ Accounts, sync, merge import, hosted AI grading, multiple-choice questions, time
 1. Final product name (must avoid "LSAT" and LSAC marks).
 2. May the README describe the target exam by name in one descriptive sentence with a trademark disclaimer? Default: no.
 3. Must public exercises have a reviewer other than their author once outside contributors exist? Default: per exercise, an exercise with any contributor who is not a maintainer must be approved by a maintainer who is not one of its contributors; exercises written only by maintainers may be approved by a maintainer. The content build enforces this (`EXERCISE_FORMAT.md` §4).
+4. Can the owner study draft exercises on the deployed site before approving them? Default: no; production builds exclude drafts (`EXERCISE_FORMAT.md` §6), so the owner approves exercises or studies on a local build.

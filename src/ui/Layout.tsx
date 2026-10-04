@@ -26,9 +26,16 @@ export function Layout() {
             Home
           </NavLink>
           <NavLink to="/library">Library</NavLink>
+          <NavLink to="/settings">Settings</NavLink>
           <NavLink to="/about">About</NavLink>
         </nav>
       </header>
+      {__PREVIEW__ && (
+        <p className="preview-banner" role="note">
+          Preview with unreviewed draft exercises. Answer keys may be wrong. Your data here is separate from the main
+          site.
+        </p>
+      )}
       <main id="main" tabIndex={-1} ref={main}>
         <Outlet />
       </main>
