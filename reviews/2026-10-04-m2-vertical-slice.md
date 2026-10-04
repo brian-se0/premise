@@ -6335,3 +6335,248 @@ END SCORES
   }
 }
 ````
+
+## Reviewer response
+
+GPT-6 Pro (thinking effort 5 of 5), 2026-10-04. Conversation: https://chatgpt.com/c/6ac2a6fb-41b4-83ea-8f9b-a1bf66ce2eba. Worked for 16m 40s. Packet sent as a file attachment.
+
+Reviewed the supplied specifications and diff. I ran focused checks against the extracted parser and integrity checker; I did not run the repository’s full test suite or the omitted reply fixtures.
+
+### M2-1 — blocker — Wall-clock timestamps cannot identify the latest applied review
+
+**File/section:** `src/storage/ops.ts`, `latestActiveLog`, `applyGrade`, and `undoReview`; `src/domain/records.ts`, `ReviewLogRecord.appliedAt`.
+
+`latestActiveLog` orders only by `appliedAt`, which comes from the caller’s clock. Equal timestamps have no application-order tie-breaker; a clock adjustment can positively reverse the order. Suppose review A is applied, then B is applied after the device clock moves backward. The code considers A latest and permits undoing it. If A’s `cardBefore` is null, this deletes the card even though B remains an active review. Correction has the same vulnerability. Transaction serialization does not make caller-supplied timestamps a serialization sequence. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Assign a strictly increasing application sequence inside the transaction and use it for latest-review checks. Keep timestamps for display. Test equal timestamps, reversed timestamps, and IDs whose lexical order differs from application order. This requires resolving the stored ordering representation before freezing schema v1; it does not require another lock or history replay.
+
+### M2-2 — blocker — A parsed preview can be confirmed against another request
+
+**File/section:** `src/ui/pages/RequestPage.tsx`, `RequestPage`, `Preview`, and `PasteSection`; `src/ui/runtime.ts`, `useLive`.
+
+The preview stores revisions by `I01`/`I02`, but not the request identity or frozen row-to-attempt mapping. `PasteSection` is not keyed by request ID. Change the hash directly from open request A to open request B: the component can retain A’s preview while `byRow` now resolves B’s attempts. If their revisions and score ranges match, Confirm submits A’s scores as B’s grades. The storage operation checks ownership of the destination attempts, not ownership of the preview that produced those scores. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+There is also a same-request variant: editing the reply textarea does not invalidate the previously parsed preview, so Confirm still saves the old text and scores. 2026-10-04-m2-vertical-slice
+
+**Fix:** Bind every preview to immutable request ID, attempt IDs, snapshot hashes, revisions, and raw text. Reset request-local state on navigation and invalidate the preview on text changes. Refuse confirmation when that identity no longer matches. Add a request-A-to-request-B navigation regression test.
+
+### M2-3 — major — Duplicate confirmation inputs schedule the same attempt twice
+
+**File/section:** `src/storage/ops.ts`, `confirmRows`, `loadFresh`, and `applyGrade`.
+
+`confirmRows` accepts duplicate `attemptId` entries. Both pass the initial revision/state checks because all attempts are loaded before any grading is applied. Calling it with `[row, row]` for one pending attempt then applies two grades using the same original attempt object. Both gradings remain accepted, two active review logs are created, and the attempt points only to the second grading. This directly violates invariants 3 and 4 despite the enclosing transaction. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Reject duplicate attempt identities inside the transaction before writing anything. Validate the operation’s row set against the request mapping, not only each attempt’s `requestId`. Add a duplicate-row test asserting that every table, including receipts, is unchanged after rejection.
+
+### M2-4 — major — “Stop for now” can silently discard an unsaved answer
+
+**File/section:** `src/ui/pages/SessionPage.tsx`, `EntryView.onChange`, `submit`, `skip`, and `stop`.
+
+`stop` catches a failed draft write and navigates away anyway, destroying the in-memory recovery copy. The autosave indicator also lacks a generation check: save A can complete after the student has typed B and display “Saved” while B is still waiting for its debounce. Reloading then loses text despite that assurance. Submission cancels the pending autosave; if submission fails, that pending draft save is not restarted. 2026-10-04-m2-vertical-slice
+
+**Fix:** Track the latest edit and acknowledged-save generations; display “Saved” only when they match. Await a successful flush before application navigation, retain the editor on failure, and restore autosave after failed submission. Handle skip failures visibly rather than leaving `leaving` true. Test quota/write failures, typing during an in-flight save, and navigation before the debounce expires.
+
+### M2-5 — major — Draft editing has no two-tab conflict protection
+
+**File/section:** `src/storage/ops.ts`, `saveDraft` and `submitAttempt`; `src/ui/pages/SessionPage.tsx`, `firstOpen` and `EntryView`.
+
+Draft saves neither check nor increment a revision. Two tabs can load the same draft, and a later save from the stale editor overwrites the other tab’s answer. If one tab submits, the other tab’s live session query can advance to the next entry and unmount its locally edited answer. Separately, `submitAttempt` returns success for an already-submitted attempt without checking whether the supplied answer is the answer that was submitted. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Give draft writes checked revisions and serialize/coalesce saves within each editor. A remote submission or conflicting save must retain the local text and show a conflict, not silently advance. Distinguish retrying the same submission from attempting to submit different text after another tab won.
+
+### M2-6 — major — Manual edits and abandonment bypass the intended stale-revision boundary
+
+**File/section:** `src/ui/pages/RequestPage.tsx`, `RowView` self/manual/correction handlers; `src/storage/ops.ts`, `abandonRequest`.
+
+A correction form retains its typed value while its save handler receives the latest live `attempt.revision`. Tab A can start a correction, tab B can correct the grade, and A’s still-open form then submits with B’s new revision. The stale edit is silently upgraded into a fresh operation instead of being rejected. Self/manual forms use the same live-revision pattern. 2026-10-04-m2-vertical-slice
+
+`abandonRequest` accepts no expected revisions at all. An old discard dialog can discard a row that another tab confirmed and subsequently undid while the dialog was open. 2026-10-04-m2-vertical-slice
+
+**Fix:** Capture attempt identity and revision when an editing action begins, and invalidate that action on intervening changes. Pass the displayed revision set into abandonment and check it transactionally. Do not silently substitute refreshed revisions for the student’s original decision.
+
+### M2-7 — major — Completed, ungraded sessions disappear from navigation
+
+**File/section:** `src/ui/pages/SessionPage.tsx`, `SessionDone`; `src/ui/actions.ts`, `unfinishedSessions` and `awaitingRequests`; `src/ui/pages/HomePage.tsx`.
+
+`SessionDone` ends the session before grading requests are prepared. Home excludes ended sessions and lists only already-created requests. Finish a session, then return Home or close the page before choosing a grading method: the submitted answers have no visible recovery entry. They also remain excluded from practice by the awaiting-grade eligibility rule. Closed requests/results likewise lack a durable navigation entry through these lists. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+Home’s empty-content early return additionally hides stored work when the current build has no exercises, despite snapshots making that history portable. 2026-10-04-m2-vertical-slice
+
+**Fix:** Add a small “Submitted, not yet prepared” recovery list and a recent/completed-session or request list. Keep recovery navigation available independently of current content. This is not the deferred progress dashboard.
+
+### M2-8 — major — An incomplete foreign block can donate feedback to the chosen block
+
+**File/section:** `src/domain/scoreParser.ts`, `findCandidates.close` and `attachFeedback`; `GRADING_PROTOCOL.md` §§5, 7, 9a.
+
+For an incomplete candidate, `range.end` is the last row’s end, rather than the following `BEGIN` that terminates the candidate. `attachFeedback` uses that shortened range as its provenance boundary. An unterminated other-request block containing a row, then `I01: foreign feedback`, followed by a valid current-request block causes the foreign heading to be attributed to the current score. I reproduced a `clean` result with that foreign feedback range. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+The last-row range can remain a display convention, but it cannot also establish that subsequent text is outside the previous candidate. The protocol says a second `BEGIN` ends the first candidate as incomplete. 2026-10-04-m2-vertical-slice
+
+**Fix:** Track candidate consumption boundaries separately from displayed/selected row ranges. After an unterminated earlier candidate, prefer unmatched feedback rather than attributing ambiguous intervening text. Add foreign, malformed-header, and same-request incomplete-candidate fixtures, and record the parser-contract change.
+
+### M2-9 — minor — U+FEFF is silently removed despite the zero-width rule
+
+**File/section:** `src/domain/scoreParser.ts`, `cleanLine`, `readRow`, and `readScore`.
+
+The protocol says zero-width characters remain untouched, but JavaScript `trim()` removes U+FEFF. A row with an actual U+FEFF between `2` and `/` is accepted as clean `2/2`; I reproduced this. That is an undocumented repair of a score token. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Use an explicitly defined trimming operation that preserves the characters the contract promises to preserve, consistently across line and field parsing. Add U+FEFF cases alongside U+200B cases so the zero-width guarantee is tested rather than inferred.
+
+### M2-10 — major — Correction permits forbidden transitions and changes task controls
+
+**File/section:** `src/storage/ops.ts`, `correctGrade`, `undoLatest`, and `applyGrade`.
+
+`correctGrade` requires only a current grading. Confirm `?`, discard the row, then call correction with a numeric score: it creates an accepted grading and schedules a review while the attempt remains discarded. It also accepts a parsed null score as a “correction,” although correction is specified to produce a new accepted revision. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+Correction also calls the normal confirmation eligibility update. Correcting a grade several days later advances `notBefore`, contrary to section 1’s explicit requirement that correction leave `taskStates` untouched. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Validate the allowed attempt/current-grading state and require a valid numeric replacement before unwinding. Reject changes to discarded rows. Separate review application from confirmation-only eligibility updates, and test that correction preserves the entire task-state record.
+
+### M2-11 — major — Out-of-order grading rewrites the historical review time
+
+**File/section:** `src/domain/scheduler.ts`, `review`; `src/storage/ops.ts`, `applyGrade`; `ARCHITECTURE.md` §6.4.
+
+The scheduler clamps its execution time to `card.last_review`, then returns that clamped time as `reviewedAt`; the operation stores it. An older attempt submitted on October 1 but confirmed after an October 5 review is consequently recorded as reviewed on October 5. This contradicts `reviewedAt = attempt.submittedAt` and loses the distinction between when the student answered and when scheduling could apply the event. The unit test currently endorses the substituted date. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Preserve the original submission time in `reviewedAt`. Explicitly decide and document the out-of-order scheduling policy, retaining any effective scheduler time separately—or documenting its representation in `cardAfter.last_review`. Test the stored operation result, not only the wrapper’s clamping behavior. No replay engine is necessary.
+
+### M2-12 — major — Unknown-scheduler import is not round-trippable or usable as specified
+
+**File/section:** `src/storage/backup.ts`, `exportData` and `replaceAll`; `src/storage/ops.ts`, `applyGrade` and `undoReview`; `src/domain/records.ts`, `ReviewLogRecord`.
+
+Imported `schedulerConfigs` are not persisted by `replaceAll`, and re-export includes only configurations known to the running bundle. Unknown configurations therefore disappear. New reviews also inherit the existing card’s scheduler version and reject an unknown version, whereas §7 promises that new reviews use the current scheduler. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+Simply switching new reviews to the current version exposes another schema gap: `cardBefore` does not preserve its scheduler version, and undo labels restored fields with the version of the review being undone. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Persist and re-export all referenced configurations, reject conflicting definitions of a known version, define current-version application to imported cards, and preserve the prior card’s version for exact restoration. Add unknown-version import → new review → undo → export tests before freezing v1.
+
+### M2-13 — major — Import accepts inconsistent provenance, lifecycle, and scheduler state
+
+**File/section:** `src/domain/integrity.ts`, `checkDataSet`; `src/storage/backup.ts`, export schemas.
+
+The checker accepts, among other cases: a grading linked to another request’s reply; a flag with a nonexistent snapshot; reversed feedback ranges; an accepted discarded attempt with an active review; a coached attempt with an active review; and an active review whose card has been deleted. I exercised these mutations against the extracted checker; each returned no problems. The corresponding shape schemas do not reject them either. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+Import also duplicates only part of the shared validator: duplicate allowed tags pass, and needs-review grades bypass checks such as source/null-score consistency and snapshot maximum agreement. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Reuse the grade rules with explicit historical-status handling. Add reply/request ownership, flag/snapshot agreement, range bounds, legal lifecycle combinations, and card/latest-active-log consistency checks. Validate submission/review time relationships after resolving M2-11. These are local integrity checks, not history replay.
+
+### M2-14 — major — Import’s shape validation does not protect runtime assumptions
+
+**File/section:** `src/storage/backup.ts`, `iso`, `settings`, and `checkImport`; `src/ui/runtime.ts`, `loadSettings`; `src/ui/pages/SettingsPage.tsx`, `Backup.onFile`.
+
+A settings record such as `{ key: "focus", value: null }` passes validation and is cast to `Settings`; planner and UI code then dereference `focus.tag`. Import can therefore successfully replace usable data with a dataset that crashes normal screens. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+Timestamps also allow non-UTC offsets despite several algorithms comparing strings chronologically. For example, `10:00-04:00` sorts before `13:30Z` although it is later. Finally, the 50 MB limit measures characters after the file has already been read, not file bytes. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Validate known settings by key, enforce the stated canonical timestamp representation or compare parsed instants consistently, and check `File.size` before reading. Keep a byte-length check for non-File callers.
+
+### M2-15 — major — “Export current data first” can race with replacement
+
+**File/section:** `src/ui/pages/SettingsPage.tsx`, `exportNow`, `Backup.onFile`, and `Backup.replace`.
+
+The export and replacement buttons remain independently active. Export first awaits a settings write; replacement can enter the transaction queue before export’s read transaction starts. Clicking Export and then Replace quickly can therefore produce a backup of the replacement data rather than the data about to be destroyed. `lastExportAt` is also updated before export succeeds. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+File validation has a related race: selecting file B while A is still being validated does not prevent A’s later completion from replacing B’s preview. 2026-10-04-m2-vertical-slice
+
+**Fix:** Serialize backup actions with a shared busy state. Prevent replacement until the requested export has been successfully produced; record export completion afterward. Bind validation results to the current file-selection token. Keep the existing single-transaction replacement structure.
+
+### M2-16 — major — The first-copy disclosure has a manual-copy bypass
+
+**File/section:** `src/ui/pages/RequestPage.tsx`, `CopySection`; import handling of device-local settings.
+
+“Show prompt” exposes a selectable, auto-selecting textarea without checking `disclosureSeen`. A first-time student can use that path and copy everything without ever receiving the required disclosure. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+Import also transfers `disclosureSeen` and `persistGranted` as ordinary settings. Disclosure seen on another device is not disclosure seen on this device, and another browser’s persistence grant does not establish this browser’s grant. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Gate both clipboard copying and first prompt exposure through disclosure. Preserve or re-establish device-local disclosure/persistence facts during replacement rather than trusting imported values. Test both copy paths with the disclosure initially unseen.
+
+### M2-17 — major — Raw replies and feedback are not reliably retained and accessible
+
+**File/section:** `src/ui/pages/RequestPage.tsx`, `PasteSection`, `RowView`, and correction/manual handlers; `src/storage/ops.ts`, `correctGrade`.
+
+Raw text is stored only when parsed grades are confirmed. An unparseable reply followed by manual/self grading is never saved, contrary to the pipeline’s “store raw reply” step. The preview does not display matched feedback, only scores, tags, and unmatched notices. Once a request closes, the preview’s Full reply control disappears; the persisted result says the full reply is kept but provides no access to it. Needs-review results similarly omit the retained feedback. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+Correction carries forward a feedback range but supplies `replyId: null`, making that range unusable. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Persist an explicitly read reply even when it has no usable scores. Expose saved replies and matched feedback independently of whether rows remain waiting. Preserve valid reply/range provenance across score-only corrections and resolution, while clearly labelling the new score source. Continue rendering all pasted content as text.
+
+### M2-18 — major — Due-first planning can eliminate the repair loop
+
+**File/section:** `src/domain/planner.ts`, `planToday`; `docs/DECISIONS.md`, “M2 vertical slice as built”; `tests/unit/planner.test.ts`.
+
+The implementation follows the recorded due-first decision, but that decision defeats repair-before-repeat under ordinary review load. The planner fills the session from due cards before considering repair. Four due cards leave no repair slot; with fewer, the missed task itself can appear before its fresh repair. This is a structural conflict with the pilot’s intended workflow, not a threshold-tuning concern. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+The test checks that repair precedes a *new* task, not that it precedes the missed task’s repeat; one branch explicitly asserts that no repair exists. 2026-10-04-m2-vertical-slice
+
+**Fix:** Amend the decision and reserve a simple fresh-repair opportunity when one exists, placing it before the corresponding repeat. Add a synthetic four-due-cards-plus-available-repair test. No adaptive weighting or planner tuning is needed before M3.
+
+### M2-19 — major — “Different exercise” is being treated as “fresh stimulus”
+
+**File/section:** `src/domain/planner.ts`, `newCandidates`, `planToday`, and `openMisses`.
+
+Repair candidates need only be different exercises; the candidate pool includes unseen tasks from previously seen exercises. More seriously, `openMisses` clears a miss after full credit on any different matching exercise without checking `stimulusSeenBefore`. A familiar-stimulus review can therefore be treated as successful fresh-stimulus transfer. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Distinguish generic new-task fallback from genuine repair candidates: the repair exercise must not previously have been seen, and repair completion must come from an uncoached, fresh-stimulus attempt. When no suitable exercise exists, report that limitation instead of always promising a fresh check. Test familiar success remaining unrepaired and fresh success clearing the miss.
+
+### M2-20 — major — Final-weeks restrictions do not apply to due reviews
+
+**File/section:** `src/domain/planner.ts`, `dueTaskIds`, `planToday`, and `newCandidates`; `tests/unit/planner.test.ts`, final-weeks test.
+
+The difficulty minimum is applied only to new candidates. An ordinary difficulty-1 due review remains eligible and can fill a final-weeks session, despite the decision and UI describing difficulty 3-and-up practice. The test checks difficulty for an empty-history session, then separately checks the count of due reviews; it does not exercise an easy due card. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Apply final-weeks difficulty eligibility to the due pool as well. Any easier-task repair exception should be explicit, not accidental. Test an easy due card, a medium due card, and the remaining daily cap together.
+
+### M2-21 — major — Conclusion tasks remain routine reviews after mastery
+
+**File/section:** `src/domain/planner.ts`, `conclusionStillUseful`, `newCandidates`, and `dueTaskIds`.
+
+Conclusion suppression affects only new candidates. After two qualifying successes, existing conclusion cards continue to be offered whenever due. The mastery calculation also includes coached attempts, so repeated immediately coached successes can switch off new diagnostics without independent evidence of mastery. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Apply the selective-conclusion policy to automatic due selection as well as new selection, without deleting the underlying cards. Exclude coached evidence from mastery. Keep explicit Library access available. Extend the existing test beyond New only to mastered-but-due conclusions and coached successes.
+
+### M2-22 — major — New only violates the same-day sibling-spacing rule
+
+**File/section:** `src/domain/planner.ts`, `planNewOnly` and `planToday`.
+
+`planNewOnly` initializes an empty `used` set for each call and never includes exercises already touched today. With a small pool containing multiple tasks per exercise, complete one New only session and start another on the same day: previously unselected sibling tasks can be offered even though neither task is a due review. The spacing guarantee is consequently per session, not per day. 2026-10-04-m2-vertical-slice
+
+`planToday` also inserts due entries before applying its touched-exercise set, so mixed new/due exposure needs an explicit check rather than treating all due entries as automatically exempt. 2026-10-04-m2-vertical-slice
+
+**Fix:** Share a daily exercise-exposure rule across automatic planners, allowing the exception only when both relevant tasks are due reviews. Preserve the explicit Library exception. Test two successive sessions rather than only uniqueness within one returned plan.
+
+### M2-23 — major — Eligibility is checked when planning, not when opening work
+
+**File/section:** `src/ui/actions.ts`, `beginSession`; `src/storage/ops.ts`, `startSession` and `openEntry`; `src/ui/runtime.ts`, planner loading.
+
+A saved session is just a task list. `openEntry` does not recheck suspension, pending grading, or `notBefore`. Two tabs can plan the same task, and an old session can open it after another tab has graded or suspended it. Draft attempts are also excluded from neither planner eligibility nor competing-attempt creation. These paths bypass the protections even if the planner itself is corrected. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Recheck eligibility and competing attempts transactionally before creating an uncoached attempt, with an explicit coached-retry exception. Handle conflicts with existing drafts without losing their text. Recompute date-sensitive plans on resume/start and day changes rather than relying solely on database-change notifications. Existing IndexedDB transactions are sufficient; no separate locking system is needed.
+
+### M2-24 — minor — Suspension exists only as a storage operation
+
+**File/section:** `src/storage/ops.ts`, `setTaskControls`; `src/ui/pages/SessionPage.tsx` and `RequestPage.tsx`, task actions.
+
+The operation and its tests exist, but the supplied task-action UIs expose no suspend or resume control. The student therefore cannot exercise the control required by the practice flow, and an imported suspended task has no visible recovery path through these screens. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Wire a small task action to the existing operation and provide a simple way to resume suspended tasks. This needs neither a generalized menu framework nor the deferred progress screen.
+
+### M2-25 — major — Storage tests do not establish exact restoration or import atomicity
+
+**File/section:** `tests/unit/storage.test.ts`, correction, round-trip, failure, and invariant tests.
+
+The correction test mostly checks grading/log counts and a lapse value; it never compares the corrected card with the expected result of applying the replacement to `cardBefore`. Round-trip checks compare table counts rather than records. Replace-import is tested only successfully, so removing its encompassing transaction could leave those tests green. The “frozen snapshot” breaker tests snapshot hashing, not submitted-answer immutability. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+**Fix:** Add exact whole-card restoration assertions after multiple reviews, full-record round-trip comparisons, and a deliberately late replacement failure proving every original table survives. Assert complete before/after dataset equality for stale and failed operations. Test submitted fields remaining immutable through the operations; do not add anti-tampering machinery to pretend a backup can prove its own entire edit history.
+
+### M2-26 — major — Several Playwright test names promise cases they never execute
+
+**File/section:** `tests/e2e/grading.spec.ts`, `promptText` and the undo, re-paste, concurrency, and failure tests.
+
+The “stale confirm after undo” test creates both previews **after** undo and only clicks Confirm in one tab; it does not submit a pre-undo preview. “Identical re-paste” never re-pastes—it checks that the textarea disappeared. `promptText` reads the fallback textarea, so a broken or wrong clipboard write can go undetected. The concurrent test permits the second click to time out, so it does not guarantee that both competing submissions were exercised. 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice 2026-10-04-m2-vertical-slice
+
+The save-failure test checks visible waiting state and eventual success, but not whether orphaned replies, gradings, cards, or receipts survived the failure. 2026-10-04-m2-vertical-slice
+
+**Fix:** Exercise an actual pre-undo stale decision, deterministically coordinate competing operations, inspect clipboard arguments/content and disclosure ordering, and inspect all persisted tables after injected failure. Add pasted markup asserted to remain literal text. Rename any remaining UI-availability checks so they do not claim storage/concurrency coverage they lack.
+
+**Verdict: merge after fixes.**  
+**Is storage schema v1 now safe to freeze? No — resolve durable review ordering, scheduler provenance/configuration persistence, and the import-validation contract first.**
