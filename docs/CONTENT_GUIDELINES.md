@@ -1,6 +1,6 @@
 # Content Guidelines
 
-Status: draft v0.2 (2026-10-04, revised after peer review round 1). Applies to everything under `content/`. Not legal advice; when unsure whether a source is usable, leave it out.
+Status: draft v0.3 (2026-10-04, revised after peer review round 2). Applies to everything under `content/`. Not legal advice; when unsure whether a source is usable, leave it out.
 
 ## 1. Allowed sources
 
@@ -40,7 +40,8 @@ U.S. public-domain status is not a worldwide determination. If a source's status
 
 - **Reference:** what a strong student would write in a minute or two. For open-ended skills it is one example among many.
 - **Counts as correct (`accept`):** the logical properties every correct answer shares, not a list of paraphrases. Required for open-ended skills.
-- **Rubric:** 1–4 criteria, each worth exactly one point, each observable in the answer ("names a cause other than the schedule"), never vague ("shows understanding").
+- **Rubric:** 1–4 criteria, each worth exactly one point, each observable in the answer ("names the switch and the fall in scores"), never vague ("shows understanding"). A criterion may only require what the task prompt asks for. If full credit needs something, such as leaving out the reasons, the prompt says so.
+- **Alternatives:** where a rubric credits an alternative explanation, it must be offered as a possibility, not invented evidence asserted as fact.
 - **Disqualifiers:** only for misunderstandings severe enough that partial credit would mislead, e.g. stating the opposite conclusion.
 - **Anchors:** one sample answer for every possible score, including at least one full-credit answer unlike the reference for open-ended skills. Reference, `accept`, rubric and anchors must agree: grade each anchor against the rubric and check you get its stated score.
 - **Likely errors:** the 2–4 tags a grader is most likely to need.
@@ -49,13 +50,16 @@ U.S. public-domain status is not a worldwide determination. If a source's status
 
 - `contributors` lists the humans who wrote or substantially rewrote the exercise. `ai_assistance` records whether and how AI drafted any part.
 - AI-drafted text that no human substantially rewrote may not be protectable by copyright; the project does not rely on the license to protect it.
-- Publishing is an explicit maintainer action: set `approved_by` and `approved_at` after completing the checklist below. Until outside contributors exist, the owner's approval is enough, even for exercises the owner wrote. (Open question in `SPEC.md` §9.)
+- Publishing is an explicit maintainer action: set `approved_by`, `approved_at` and `approved_revision` (printed by `npm run content`) after completing the checklist below. Any later edit changes the revision and requires approving again.
+- Until outside contributors exist, the owner's approval is enough, even for exercises the owner wrote. Once an exercise has a contributor who is not a maintainer, the build requires an approving maintainer who is not one of its contributors (`EXERCISE_FORMAT.md` §4).
 
 ## 7. Approval checklist
 
 - [ ] The source is allowed (§1), and its fields, credit and rights basis are complete and correct.
 - [ ] The text reads naturally and contains no blocked terms or familiar-looking material.
 - [ ] I answered every task myself before reading the reference, and my answer got full credit under the rubric.
-- [ ] Each anchor gets exactly its stated score under the rubric, and no criterion can be met by a wrong answer.
+- [ ] Each anchor gets exactly its stated score under the rubric.
+- [ ] Every rubric requirement is asked for in the task prompt.
+- [ ] Counterexamples, graded against the rubric: a correct concise answer gets full credit; an accurate answer with extra explanation gets the score the prompt implies; a self-contradictory answer using the expected keywords does not get full credit; a wholly wrong answer cannot get full credit; each disqualifier overrides any points earned.
 - [ ] For open-ended tasks, at least one full-credit anchor differs substantially from the reference.
 - [ ] Difficulty is plausible relative to existing exercises.

@@ -1,6 +1,6 @@
 # Exercise Format
 
-Status: draft v0.2 (2026-10-04, revised after peer review round 1). Schema version: `2`. This is a contract: the build script, the prompt builder and contributors all depend on it. Changing it requires a `DECISIONS.md` entry and a peer review.
+Status: draft v0.3 (2026-10-04, revised after peer review round 2). Schema version: `3`. This is a contract: the build script, the prompt builder and contributors all depend on it. Changing it requires a `DECISIONS.md` entry and a peer review.
 
 ## 1. Files
 
@@ -18,7 +18,7 @@ The stimulus is rendered with a safe Markdown subset: paragraphs, emphasis, and 
 
 ```yaml
 ---
-schema: 2
+schema: 3
 id: arg-0001
 status: draft                # draft | published | retired
 kind: argument               # argument | passage
@@ -34,16 +34,18 @@ source:
   attribution: null          # credit line exactly as it must be shown; required unless original
   rights_basis: null         # why it's usable, e.g. "17 U.S.C. §105, authored by a federal employee"
   modifications: null        # what was changed from the source, or null if unchanged
-contributors: [saint]        # humans who wrote or substantially rewrote this exercise
+contributors: [brian-se0]    # humans who wrote or substantially rewrote this exercise
 ai_assistance:               # disclose any AI drafting
   used: true
   notes: Stimulus and rubric drafted by Claude, then edited.
-approved_by: null            # maintainer handle; required to publish
+approved_by: null            # maintainer handle from content/maintainers.yaml; required to publish
 approved_at: null            # date of approval
+approved_revision: null      # content revision printed by `npm run content` at approval; required to publish
 tasks:
   - key: conclusion
+    status: active           # active | retired (default active)
     skill: conclusion        # from taxonomy.yaml
-    prompt: State the argument's main conclusion in one sentence.
+    prompt: State the argument's main conclusion in one sentence. Give the conclusion only, not the reasons for it.
     max: 2                   # = number of rubric criteria (each worth 1 point); 1–4
     reference: >-
       Harlow's school board should not adopt the four-day school week.
@@ -76,16 +78,20 @@ Stimulus text. Arguments: 60–180 words. Passages: 350–550 words, 3–5 parag
 4. `max` equals the number of rubric criteria.
 5. `anchors` has exactly one entry for each score from 0 to `max`.
 6. `accept` is present and non-empty for skills marked `open_ended` in the taxonomy.
-7. `status: published` requires `approved_by` and `approved_at`.
-8. `source.type` other than `original` requires `title`, `creator`, `attribution` and `rights_basis`; `public-domain` also requires `year`; `cc-by` also requires `license_uri`.
-9. Word counts are within the ranges above (warning, not error).
-10. Body and all task text contain no blocked strings: `LSAT`, `LSAC`, `PrepTest`, `Law School Admission` (case-insensitive). This is a screen, not proof of clean provenance.
+7. `status: published` requires `approved_by`, `approved_at` and `approved_revision`, and `approved_revision` must equal the exercise's current **content revision**: a SHA-256 over the stimulus, source fields and every task's fields, computed by the build and printed for each exercise. Any edit, including adding a task, therefore requires re-approval.
+8. `approved_by` must be listed in `content/maintainers.yaml`. If any contributor is not a maintainer, `approved_by` must be a maintainer who is not among the contributors.
+9. `source.type` other than `original` requires `title`, `creator`, `locator`, `attribution` and `rights_basis`; `public-domain` also requires `year`; `cc-by` also requires `license_uri`.
+10. Rubric criteria test only what the task prompt asks for (checked by the author, `CONTENT_GUIDELINES.md` §7; not machine-checkable).
+11. The grading prompt for any single task, with a 2,000-character answer, fits the prompt budget in `GRADING_PROTOCOL.md` §2.
+12. A task key that was ever published is never reused for different content, and a retired task cannot become active again.
+13. Word counts are within the ranges above (warning, not error).
+14. Body and all task text contain no blocked strings: `LSAT`, `LSAC`, `PrepTest`, `Law School Admission` (case-insensitive). This is a screen, not proof of clean provenance.
 
 ## 5. Skills (v1)
 
 | Skill | Kind | Open-ended | Prompt wording |
 | --- | --- | --- | --- |
-| `conclusion` | argument | no | State the argument's main conclusion in one sentence. |
+| `conclusion` | argument | no | State the argument's main conclusion in one sentence. Give the conclusion only, not the reasons for it. |
 | `assumption` | argument | yes | State an assumption the argument needs: a claim that, if false, would make the argument fall apart. (A necessary assumption; it need not make the argument airtight.) |
 | `flaw` | argument | no | Describe the main reasoning error in one or two sentences. |
 | `weaken` | argument | yes | Give a new fact that, if true, would materially weaken the argument, and explain how. Treat the stated premises as true. |
@@ -99,7 +105,19 @@ For open-ended skills, the reference is illustrative. `accept` describes the log
 
 ## 6. Changing published exercises
 
-- Wording fixes that do not change what a task tests: edit in place.
-- Any change to what a task tests, its max, rubric or anchors in a way that changes scores: create a new task key (e.g. `flaw-2`) and retire the old one. Old attempts keep their frozen snapshot, so history stays readable.
-- Retired tasks are never offered for new study but remain readable in history.
+- Wording fixes that do not change what a task tests: edit in place and re-approve (the content revision changes).
+- Any change to what a task tests, its max, rubric or anchors in a way that changes scores: add a new task key (e.g. `flaw-2`) and set the old task's `status: retired`. Old attempts keep their frozen snapshot, so history stays readable.
+- A task is **available** for study only when its exercise is `published` and the task is `active`.
+- Retired tasks, tasks of retired exercises, and tasks no longer present in the content are excluded from all new sessions and from due counts. Their cards and history are kept and shown in history. Cards are never transferred to a replacement task key; the replacement starts fresh.
 - Drafts are built only in development; production builds include `published` and `retired` exercises only.
+
+## 7. Credit line
+
+One shared function, `formatCredit(source)`, produces the credit shown in the app and placed in the grading prompt (`Source:` line). It returns null for `original`. Otherwise:
+
+`{attribution}. {license}. {changes}`
+
+- `license`: "Public domain in the United States" for `public-domain`; "CC BY 4.0, {license_uri}" for `cc-by`.
+- `changes`: "Adapted: {modifications}" when `modifications` is set, otherwise "Unmodified".
+
+The credit is part of the task snapshot (`ARCHITECTURE.md` §4.1).

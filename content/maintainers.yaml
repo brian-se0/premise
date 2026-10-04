@@ -1,0 +1,4 @@
+# Handles allowed to approve exercises for publication (EXERCISE_FORMAT.md §4).
+# Changing this list is recorded in docs/DECISIONS.md.
+maintainers:
+  - brian-se0

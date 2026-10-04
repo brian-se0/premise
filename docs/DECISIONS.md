@@ -2,6 +2,24 @@
 
 Newest first. Each entry: date, decision, why, and what it rules out. Reopening a decision needs a new entry, not an edit.
 
+## 2026-10-04 — Spec v0.3 after peer review round 2
+GPT-6 Pro reviewed spec v0.2 (verdict: not ready; 2 blockers, 14 major, 4 minor; of the 27 round-1 findings, 11 resolved and 16 partly). All 20 new findings were accepted; see `reviews/2026-10-04-specs-v0.2.md`. Exercise schema 3; prompt version stays v2; parser version 1.
+
+## 2026-10-04 — Grading state model
+Gradings are revisions with their own ids; each attempt has one current grading and at most one active review, and each review log stores the card state before it so the latest review can be undone exactly. "Needs review" is not terminal: a request stays open until every row is accepted or discarded. Every grading change is an operation with an id and an expected attempt revision, run in one IndexedDB transaction. Submitted attempts are frozen and belong to one request. **Why:** v0.2 could not store a correction's history, closed requests that still needed action, and treated "same score" as idempotency. **Rules out:** a history-replay engine, post-confirm rating changes in v1.
+
+## 2026-10-04 — Scheduler fsrs-1 and next-day eligibility
+ts-fsrs with retention 0.9, maximum interval 365 days, no fuzz, no short-term steps, default weights copied into the repo. A confirmed task is not offered again before the next local day. Review time stays the submission time. **Why:** delayed grading must not let a student be "reviewed" on an answer they just read. The rating policy is reassessed with M3 usage, not M0. **Supersedes:** "calibrated with pilot data" in Rating policy v1.
+
+## 2026-10-04 — M0 is a feasibility screen with four outcomes
+The pilot holds out whole exercises, reports counts with uncertainty, treats `?` and invalid rows as non-decisions, and ends in one of: proceed with a chatbot, proceed with self-grading only, revise and repeat on fresh exercises, or stop. The M0 pilot uses the app's own pure prompt builder, and its replies become golden fixtures. **Why:** nine held-out answers cannot establish a 10% error rate, and two prompt builders could drift.
+
+## 2026-10-04 — Approval bound to content revision
+Publishing requires `approved_revision` matching the exercise's current content hash; any edit needs re-approval. Approvers come from `content/maintainers.yaml`; once a non-maintainer contributes to an exercise, its approver must not be one of its contributors. Tasks can be retired individually. **Why:** v0.2 approval survived later edits.
+
+## 2026-10-04 — Privacy wording, revised
+"Premise does not upload your answers or progress; it only downloads its own app files." **Supersedes:** "sends nothing" in the earlier Privacy wording entry, which overstated it.
+
 ## 2026-10-04 — Spec v0.2 after peer review round 1
 GPT-6 Pro reviewed spec v0.1 (verdict: ready with changes; 4 blockers, 22 major, 1 minor). All 27 findings were accepted; see `reviews/2026-10-04-specs-v0.1.md`. The decisions below record the ones that change earlier entries or set new rules.
 
