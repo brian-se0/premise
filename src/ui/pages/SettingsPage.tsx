@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { content } from '../../content.ts';
 import { MAX_BATCH_SIZE } from '../../domain/prompt.ts';
-import { checkImport, exportData, replaceAll, type ImportSummary } from '../../storage/backup.ts';
+import { checkImport, exportData, MAX_IMPORT_BYTES, replaceAll, type ImportSummary } from '../../storage/backup.ts';
 import type { DataSet } from '../../domain/records.ts';
-import { db, saveSetting, useSettings } from '../runtime.ts';
+import { setTaskControls } from '../../storage/ops.ts';
+import { ctx, db, findTask, newOpId, saveSetting, useLive, useSettings } from '../runtime.ts';
 
 export function SettingsPage() {
   const settings = useSettings();
@@ -111,8 +112,39 @@ export function SettingsPage() {
         />
       </section>
 
+      <Suspended />
+
       <Backup lastExportAt={settings.lastExportAt} />
     </>
+  );
+}
+
+function Suspended() {
+  const suspended = useLive(() => db.taskStates.filter((t) => t.suspended).toArray(), []);
+  return (
+    <section aria-labelledby="suspended">
+      <h2 id="suspended">Hidden tasks</h2>
+      {!suspended || suspended.length === 0 ? (
+        <p className="meta">None. "Stop showing this task" on a graded answer hides a task from your sessions.</p>
+      ) : (
+        <ul className="list">
+          {suspended.map((t) => {
+            const found = findTask(t.taskId);
+            return (
+              <li key={t.taskId}>
+                {found ? found.task.prompt : t.taskId}{' '}
+                <button
+                  className="link"
+                  onClick={() => void setTaskControls(db, ctx(), newOpId(), t.taskId, { suspended: false })}
+                >
+                  Show again
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </section>
   );
 }
 
@@ -127,36 +159,70 @@ function download(name: string, text: string) {
 
 async function exportNow() {
   const now = new Date().toISOString();
-  await saveSetting('lastExportAt', now);
   const file = await exportData(db, now, __COMMIT__.slice(0, 7));
   download(`premise-backup-${now.slice(0, 10)}.json`, JSON.stringify(file));
+  // Recorded only once the file has been produced.
+  await saveSetting('lastExportAt', now);
 }
 
 function Backup({ lastExportAt }: { lastExportAt: string | null }) {
   const [pending, setPending] = useState<{ data: DataSet; summary: ImportSummary } | null>(null);
   const [problems, setProblems] = useState<string[]>([]);
   const [status, setStatus] = useState('');
+  // One backup action at a time, so "Export current data first" finishes before Replace can start.
+  const [busy, setBusy] = useState(false);
+  // Only the latest file selection may show a preview; an earlier, slower check is ignored.
+  const selection = useRef(0);
+
+  const running = useRef(false);
+  const run = async (action: () => Promise<void>) => {
+    if (running.current) return;
+    running.current = true;
+    setBusy(true);
+    try {
+      await action();
+    } finally {
+      running.current = false;
+      setBusy(false);
+    }
+  };
+
+  const onExport = () =>
+    run(async () => {
+      try {
+        await exportNow();
+      } catch (e) {
+        setStatus(`Export failed: ${e instanceof Error ? e.message : String(e)}`);
+      }
+    });
 
   const onFile = async (file: File | undefined) => {
+    const token = ++selection.current;
     setProblems([]);
     setPending(null);
     setStatus('');
     if (!file) return;
+    if (file.size > MAX_IMPORT_BYTES) {
+      setProblems([`The file is larger than ${MAX_IMPORT_BYTES / 1024 / 1024} MB.`]);
+      return;
+    }
     const check = await checkImport(await file.text());
+    if (token !== selection.current) return;
     if (check.ok) setPending({ data: check.data, summary: check.summary });
     else setProblems(check.problems);
   };
 
-  const replace = async () => {
-    if (!pending) return;
-    try {
-      await replaceAll(db, pending.data);
-      setPending(null);
-      setStatus('Imported. Your previous data was replaced.');
-    } catch (e) {
-      setStatus(`Import failed and nothing changed: ${e instanceof Error ? e.message : String(e)}`);
-    }
-  };
+  const replace = () =>
+    run(async () => {
+      if (!pending) return;
+      try {
+        await replaceAll(db, pending.data);
+        setPending(null);
+        setStatus('Imported. Your previous data was replaced.');
+      } catch (e) {
+        setStatus(`Import failed and nothing changed: ${e instanceof Error ? e.message : String(e)}`);
+      }
+    });
 
   return (
     <section aria-labelledby="backup">
@@ -165,7 +231,9 @@ function Backup({ lastExportAt }: { lastExportAt: string | null }) {
         Everything stays on this device.{' '}
         {lastExportAt ? `Last export: ${new Date(lastExportAt).toLocaleString()}.` : 'No export yet.'}
       </p>
-      <button onClick={() => void exportNow()}>Export a backup</button>
+      <button disabled={busy} onClick={() => void onExport()}>
+        Export a backup
+      </button>
       <h3>Import</h3>
       <p className="meta">Importing replaces all data on this device with the file's contents.</p>
       <label>
@@ -199,8 +267,10 @@ function Backup({ lastExportAt }: { lastExportAt: string | null }) {
             </p>
           )}
           <div className="row">
-            <button onClick={() => void exportNow()}>Export current data first</button>
-            <button className="danger" onClick={() => void replace()}>
+            <button disabled={busy} onClick={() => void onExport()}>
+              Export current data first
+            </button>
+            <button className="danger" disabled={busy} onClick={() => void replace()}>
               Replace everything
             </button>
             <button className="link" onClick={() => setPending(null)}>
