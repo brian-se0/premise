@@ -1,6 +1,6 @@
 # Exercise Format
 
-Status: draft v0.4 (2026-10-04, revised after peer review round 3). Schema version: `3`. This is a contract: the build script, the prompt builder and contributors all depend on it. Changing it requires a `DECISIONS.md` entry and a peer review.
+Status: draft v0.5 (2026-10-04, after the difficulty consultation). Schema version: `3`. This is a contract: the build script, the prompt builder and contributors all depend on it. Changing it requires a `DECISIONS.md` entry and a peer review.
 
 ## 1. Files
 
@@ -8,7 +8,7 @@ One exercise per file: `content/exercises/<id>.md`. YAML front matter holds meta
 
 The stimulus is rendered with a safe Markdown subset: paragraphs, emphasis, and ordered or unordered lists. No raw HTML, links, images or embeds.
 
-The stimulus **text** used in snapshots and grading prompts is the body trimmed, with paragraphs separated by one blank line and the line breaks inside a paragraph replaced by single spaces. (Lists inside passages will need their own rule when passage skills arrive in M5.)
+The stimulus **text** used in snapshots and grading prompts is the body trimmed, with paragraphs separated by one blank line and the line breaks inside a paragraph replaced by single spaces. (Lists inside passages will need their own rule when passage skills arrive in M6.)
 
 ## 2. Ids
 
@@ -24,7 +24,7 @@ schema: 3
 id: arg-0001
 status: draft                # draft | published | retired
 kind: argument               # argument | passage
-difficulty: 2                # 1 (easiest) … 5
+difficulty: 2                # 1 (easiest) … 5; the stimulus's difficulty, and the default for its tasks
 topics: [education]          # free-form, for browsing
 source:
   type: original             # original | public-domain | cc-by
@@ -47,6 +47,8 @@ tasks:
   - key: conclusion
     status: active           # active | retired (default active)
     skill: conclusion        # from taxonomy.yaml
+    difficulty: 2            # optional: this task's difficulty if it differs from the exercise's (author-predicted until tested)
+    difficulty_note: null    # optional: what makes it hard, e.g. "intermediate conclusion confusable with the main one"
     prompt: State the argument's main conclusion in one sentence. Give the conclusion only, not the reasons for it.
     max: 2                   # = number of rubric criteria (each worth 1 point); 1–4
     reference: >-

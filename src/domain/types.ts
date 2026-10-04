@@ -24,6 +24,9 @@ export interface Task {
   key: string;
   status: 'active' | 'retired';
   skill: string;
+  /** Overrides the exercise's difficulty for this task. */
+  difficulty?: number;
+  difficulty_note?: string | null;
   prompt: string;
   max: number;
   reference: string;

@@ -19,7 +19,7 @@ export function buildSnapshotPayload(exercise: Exercise, task: Task): SnapshotPa
     exerciseId: exercise.id,
     kind: exercise.kind,
     skill: task.skill,
-    difficulty: exercise.difficulty,
+    difficulty: task.difficulty ?? exercise.difficulty,
     stimulus: exercise.stimulus,
     credit: formatCredit(exercise.source),
     prompt: task.prompt,

@@ -1203,3 +1203,17 @@ For final-weeks use, cap the daily workload and prioritize unresolved, consequen
 ## What I would change in the spec and roadmap first
 
 I would revise the purpose to **“targeted reasoning repair for students who know the basics, including a time-capped final-weeks mode,”** while retaining the explicit statement that score transfer is a hypothesis. Pasted text Then I would add task-level difficulty, precise short-response expectations, and a necessary-assumption validity check; make conclusion tasks selective rather than obligatory; and bring strengthen/weaken into the early content pilot. Split M0 into content validity, grading feasibility, and learner usefulness, using corrected expert-reviewed keys and genuinely fresh transfer material. Move sufficient content creation and a small prepared-student pilot ahead of scheduler refinement and polish. Keep the static, local, copy-paste architecture. The first milestone should demonstrate **a correct, useful repair at an acceptable time cost—not merely reliable grading of eight mostly easy exercises.**
+
+## Triage
+
+Triaged by Claude on 2026-10-04 after the owner chose "targeted repair with a final-weeks mode" over "final weeks only". Changes land in spec v0.5.
+
+| Point | Decision | Where |
+| --- | --- | --- |
+| 1. Niche: targeted repair, final weeks as a mode | Accepted (owner's choice). Focus selection, repair loop with a fresh-stimulus check, final-weeks mode (3–4 tasks, 10–15 minutes, medium/hard, optional 90–120 s timed check, daily cap). | SPEC §§1–2, 5.1, 5.4 |
+| 1. Bring strengthen and weaken forward | Accepted. In M0a content and the M3 pilot, not M6. | ROADMAP M0, M3, M6 |
+| 2. Conclusion task: selective diagnostic | Accepted. Offered early and after misses that attacked the wrong claim; dropped once mastered. Scored on identifying the conclusion; extra reasons don't lose credit. | SPEC §5.1; exercises |
+| 3. Difficulty from logical discrimination | Accepted. Authoring rules, task-level difficulty and difficulty notes, near-miss anchors, necessary-assumption negation check. Labels are author-predicted until tested. | CONTENT_GUIDELINES §§3.1–3.2; EXERCISE_FORMAT §3 |
+| 4. Eight exercises easy; five keys defective | Accepted. Keys repaired, the assumption tasks on arg-0004 and arg-0007 dropped, conclusion tasks rescored. Harder exercises still to be written in M0a. | content/exercises |
+| 5. Usefulness pilot with prepared students; enough unseen content | Accepted. New M3 with 3–5 students past the basics, at least 40 exercises; approved exercises are not fresh for the owner. | ROADMAP M0, M3; SPEC §8 |
+| 5. Keep official content outside Premise | Already a hard constraint; focus notes say so where typed. | SPEC §§3, 5.1 |

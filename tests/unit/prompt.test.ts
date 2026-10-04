@@ -49,7 +49,9 @@ describe('prompt builder', () => {
       { rowId: 'I02', attemptId: 'a2', snapshot: snaps.get('arg-0001.flaw')!, answer: '   ' },
     ];
     const text = renderPrompt(ID, 'ABC123', rows);
-    expect(text).toContain(`BEGIN SCORES v2 request=${ID}\nI01 | __/2 | --\nI02 | __/2 | --\nEND SCORES`);
+    expect(text).toContain(
+      `BEGIN SCORES v2 request=${ID}\nI01 | __/${rows[0]!.snapshot.max} | --\nI02 | __/${rows[1]!.snapshot.max} | --\nEND SCORES`,
+    );
     expect(text).toContain('=== I02 ===\nStimulus:\nsame as I01\n\nTask:');
     expect(text).toContain('<<<ANSWER-ABC123\n(blank)\nANSWER-ABC123>>>');
     expect(text).toContain('Text between <<<ANSWER-ABC123 and ANSWER-ABC123>>>');
