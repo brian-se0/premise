@@ -57,11 +57,31 @@ const MESSAGES = {
   'unsupported-version': 'This reply uses an unsupported score format',
 } as const;
 
-const BEGIN_LINE = /^BEGIN SCORES(\s.*)?$/i;
+/**
+ * Whitespace for trimming and spacing: JavaScript's whitespace and line terminators minus U+FEFF.
+ * `String.prototype.trim` and `\s` also remove U+FEFF, which the protocol promises to leave alone
+ * (§5 step 2), so the parser never uses them. Zero-width characters (U+200B–U+200D, U+2060, U+FEFF)
+ * are not in this set.
+ */
+const WS = '[\\t\\n\\v\\f\\r \\u00a0\\u1680\\u2000-\\u200a\\u2028\\u2029\\u202f\\u205f\\u3000]';
+const IS_WS = new RegExp(`^${WS}$`);
+
+/** Trims protocol whitespace only (see WS). A loop, not a regex, so long runs stay linear. */
+function trimWs(s: string): string {
+  let start = 0;
+  let end = s.length;
+  while (start < end && IS_WS.test(s[start]!)) start++;
+  while (end > start && IS_WS.test(s[end - 1]!)) end--;
+  return s.slice(start, end);
+}
+
+const BEGIN_LINE = new RegExp(`^BEGIN SCORES(${WS}.*)?$`, 'i');
 const HEADER = /^BEGIN SCORES v(\d+) request=([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})$/i;
 const END_LINE = /^END SCORES$/i;
-const ROW_LINE = /^I\d{2}\s*\|/i;
+const ROW_LINE = new RegExp(`^I\\d{2}${WS}*\\|`, 'i');
 const HEADING_LINE = /^I\d{2}:/i;
+const BULLET = new RegExp(`^[-*•]${WS}+`);
+const UNFILLED_SCORE = new RegExp(`^__${WS}*/`);
 const FENCE_LINE = /^(`{3,}|~{3,})[\w+-]*$/;
 const END_OF_ITEMS = '=== END OF ITEMS ===';
 
@@ -75,18 +95,15 @@ interface Line {
 
 /** The §5 step 2 clean-up. Each step strips at most once, in this order. */
 export function cleanLine(line: string): string | null {
-  let s = line.trim();
-  s = s.replace(/^>/, '').trim();
+  let s = trimWs(line);
+  s = trimWs(s.replace(/^>/, ''));
   // A bullet needs a following space, so `**bold**` and a bare `-` tag field survive.
-  s = s.replace(/^[-*•]\s+/, '');
+  s = s.replace(BULLET, '');
   if (FENCE_LINE.test(s)) return null;
-  s = s.replace(/^`+/, '').replace(/`+$/, '').trim();
-  s = s
-    .replace(/^(\*\*|__)/, '')
-    .replace(/(\*\*|__)$/, '')
-    .trim();
+  s = trimWs(s.replace(/^`+/, '').replace(/`+$/, ''));
+  s = trimWs(s.replace(/^(\*\*|__)/, '').replace(/(\*\*|__)$/, ''));
   // Outer pipes only when both are present (a Markdown table row); `I01 | 2/2 | -` keeps its fields.
-  if (s.length >= 2 && s.startsWith('|') && s.endsWith('|')) s = s.slice(1, -1).trim();
+  if (s.length >= 2 && s.startsWith('|') && s.endsWith('|')) s = trimWs(s.slice(1, -1));
   return s;
 }
 
@@ -114,36 +131,52 @@ interface Candidate {
   header: Header;
   rowLines: Line[];
   complete: boolean;
+  /** Displayed range: BEGIN line to END line, or to the last row line when incomplete. */
   range: Range;
+  /**
+   * Raw offset where the text this candidate consumes ends: the END line's end when complete; when
+   * incomplete, the start of the BEGIN line or the end of the `=== END OF ITEMS ===` line that
+   * terminates it, or the end of the reply. Text after an incomplete candidate's last row belongs to
+   * that candidate, never to a later block's feedback.
+   */
+  consumedEnd: number;
 }
 
-/** §5 step 3: a candidate runs from a BEGIN line to the next END line; a second BEGIN ends it incomplete. */
-function findCandidates(lines: Line[], requestId: string): Candidate[] {
+/**
+ * §5 step 3: a candidate runs from a BEGIN line to the next END line; a second BEGIN ends it
+ * incomplete, and so does an echoed `=== END OF ITEMS ===` line (§9a), which marks the end of the
+ * echoed prompt. `terminator` is the END line, or the raw offset where an incomplete candidate stops.
+ */
+function findCandidates(lines: Line[], requestId: string, replyLength: number): Candidate[] {
   const out: Candidate[] = [];
   let open: { begin: Line; header: Header; rowLines: Line[] } | null = null;
-  const close = (endLine: Line | null) => {
+  const close = (terminator: Line | number) => {
     if (!open) return;
+    const endLine = typeof terminator === 'number' ? null : terminator;
     const last = endLine ?? open.rowLines.at(-1) ?? open.begin;
     out.push({
       header: open.header,
       rowLines: open.rowLines,
       complete: endLine !== null,
       range: { start: open.begin.start, end: last.end },
+      consumedEnd: typeof terminator === 'number' ? terminator : terminator.end,
     });
     open = null;
   };
   for (const line of lines) {
     if (line.text === null) continue;
     if (BEGIN_LINE.test(line.text)) {
-      close(null);
+      close(line.start);
       open = { begin: line, header: readHeader(line.text, requestId), rowLines: [] };
     } else if (open && END_LINE.test(line.text)) {
       close(line);
+    } else if (open && line.text === END_OF_ITEMS) {
+      close(line.end);
     } else if (open && ROW_LINE.test(line.text)) {
       open.rowLines.push(line);
     }
   }
-  close(null);
+  close(replyLength);
   return out;
 }
 
@@ -159,7 +192,7 @@ function readHeader(text: string, requestId: string): Header {
 function isEcho(c: Candidate): boolean {
   return c.rowLines.every((l) => {
     const fields = l.text!.split('|');
-    return fields.length === 3 && /^__\s*\//.test(fields[1]!.trim()) && fields[2]!.trim() === '--';
+    return fields.length === 3 && UNFILLED_SCORE.test(trimWs(fields[1]!)) && trimWs(fields[2]!) === '--';
   });
 }
 
@@ -175,7 +208,7 @@ function readTags(field: string, allowed: string[]): { tags: string[]; warnings:
   if (field === '') return { tags: [], warnings: ['Tag field is empty'] };
   const tags: string[] = [];
   const warnings: string[] = [];
-  for (const tag of field.split(',').map((t) => t.trim())) {
+  for (const tag of field.split(',').map(trimWs)) {
     if (!allowed.includes(tag)) warnings.push(`Tag "${tag}" is not allowed for this item and was dropped`);
     else if (!tags.includes(tag)) tags.push(tag);
   }
@@ -184,7 +217,7 @@ function readTags(field: string, allowed: string[]): { tags: string[]; warnings:
 
 /** §6 steps 2–3. */
 function readScore(field: string, expectedMax: number): { score: number | null } | { reason: string } {
-  const parts = field.split('/').map((p) => p.trim());
+  const parts = field.split('/').map(trimWs);
   if (parts.length !== 2) return { reason: `Score "${field}" is not written as score/max` };
   const [score, max] = parts as [string, string];
   if (!/^\d+$/.test(max)) return { reason: `Maximum "${max}" is not a whole number` };
@@ -199,7 +232,7 @@ function readScore(field: string, expectedMax: number): { score: number | null }
 }
 
 function readRow(text: string, row: ParserRequest['rows'][number]): LineResult {
-  const fields = text.split('|').map((f) => f.trim());
+  const fields = text.split('|').map(trimWs);
   if (fields.length !== 3) {
     return { status: 'invalid', reason: `Expected 3 fields separated by |, found ${fields.length}`, warnings: [] };
   }
@@ -265,7 +298,9 @@ function equivalenceKey(b: ParsedBlock): string {
 }
 
 /**
- * §7: the region runs from the end of the nearest earlier candidate (or a later echoed
+ * §7: the region runs from where the nearest earlier candidate stops consuming text (its END line, or
+ * for an incomplete candidate the next BEGIN line, so text after its last row is never attributed),
+ * or a later echoed
  * `=== END OF ITEMS ===` line, or the reply start) to the chosen block's BEGIN line. A row's
  * feedback runs from its `I01:` heading to the next heading or the region end, trailing
  * whitespace trimmed. A heading found twice or not at all leaves the row unmatched.
@@ -273,7 +308,7 @@ function equivalenceKey(b: ParsedBlock): string {
 function attachFeedback(block: ParsedBlock, raw: string, lines: Line[], candidates: Candidate[]): ParsedBlock {
   const regionEnd = block.range.start;
   let regionStart = 0;
-  for (const c of candidates) if (c.range.end <= regionEnd) regionStart = Math.max(regionStart, c.range.end);
+  for (const c of candidates) if (c.consumedEnd <= regionEnd) regionStart = Math.max(regionStart, c.consumedEnd);
   for (const l of lines) {
     if (l.end <= regionEnd && l.text === END_OF_ITEMS) regionStart = Math.max(regionStart, l.end);
   }
@@ -289,7 +324,7 @@ function attachFeedback(block: ParsedBlock, raw: string, lines: Line[], candidat
     // End at the last line with content: blank lines and fence-only lines before the boundary are not feedback.
     const content = lines.filter((l) => l.start >= start && l.start < boundary && l.text);
     let end = Math.min(content.at(-1)!.end, boundary);
-    while (end > start && /\s/.test(raw[end - 1]!)) end--;
+    while (end > start && IS_WS.test(raw[end - 1]!)) end--;
     return { ...r, feedback: { start, end } };
   });
   return { ...block, rows };
@@ -300,7 +335,7 @@ export function parseReply(raw: string, request: ParserRequest): ParseResult {
   if (raw.length > MAX_REPLY_LENGTH) return none('too-long');
 
   const lines = lineView(raw);
-  const candidates = findCandidates(lines, request.id);
+  const candidates = findCandidates(lines, request.id, raw.length);
   // Supported candidates for this request, minus echoed skeletons and blocks without any row line.
   const usable = candidates.filter(
     (c) => c.header.kind === 'this' && c.header.version === BLOCK_VERSION && c.rowLines.length > 0 && !isEcho(c),

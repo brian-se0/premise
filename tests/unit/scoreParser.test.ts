@@ -126,6 +126,45 @@ describe('score parser', () => {
     expect(result.block.outcome).toBe('manual');
   });
 
+  it('trims ordinary and no-break spaces but never zero-width characters', () => {
+    const spaced = `BEGIN SCORES v2 request=${ID}\n\u00a0I01 |\u20032/2\u00a0| -\t\nI02 | 1/3 | incomplete\nEND SCORES`;
+    const ok = parseReply(spaced, REQUEST);
+    if (ok.kind !== 'parsed') throw new Error(ok.kind);
+    expect(ok.block.outcome).toBe('clean');
+
+    for (const zw of ['\u200b', '\u200c', '\u200d', '\u2060', '\ufeff']) {
+      const raw = `BEGIN SCORES v2 request=${ID}\n${zw}I01 | 2/2 | -\nI02 | 1/${zw}3 | incomplete\nEND SCORES`;
+      const result = parseReply(raw, REQUEST);
+      if (result.kind !== 'parsed') throw new Error(result.kind);
+      expect(
+        result.block.rows.map((r) => r.status),
+        `U+${zw.codePointAt(0)!.toString(16)}`,
+      ).toEqual(['missing', 'invalid']);
+    }
+  });
+
+  it('ends an incomplete candidate at an echoed end-of-items line', () => {
+    const raw = `BEGIN SCORES\n=== END OF ITEMS ===\n\n${FEEDBACK}\n\n${BLOCK}\n`;
+    const result = parseReply(raw, REQUEST);
+    if (result.kind !== 'parsed') throw new Error(result.kind);
+    expect(feedbackText(raw, result.block, 'I01')).toBe('I01: 2/2\n- Criterion 1: met.\n- Tip: Keep it up.');
+  });
+
+  it('leaves feedback unmatched when an incomplete candidate runs up to the chosen block', () => {
+    const raw = `BEGIN SCORES v2 request=${OTHER_ID}\nI01 | 0/2 | -\n\n${FEEDBACK}\n\n${BLOCK}\n`;
+    const result = parseReply(raw, REQUEST);
+    if (result.kind !== 'parsed') throw new Error(result.kind);
+    expect(result.block.outcome).toBe('clean');
+    expect(result.block.rows.map((r) => r.feedback)).toEqual([null, null]);
+  });
+
+  it('trims a long whitespace run in linear time', () => {
+    const raw = `${' '.repeat(MAX_REPLY_LENGTH - 10)}x`;
+    const t = performance.now();
+    expect(parseReply(raw, REQUEST)).toMatchObject({ kind: 'none', reason: 'no-block' });
+    expect(performance.now() - t).toBeLessThan(2000);
+  });
+
   it('rejects replies over the length limit', () => {
     expect(parseReply('x'.repeat(MAX_REPLY_LENGTH + 1), REQUEST)).toEqual({
       kind: 'none',
