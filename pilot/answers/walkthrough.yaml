@@ -18,3 +18,17 @@
     the switch caused the drop, without ruling out confounding variables.
   gold: 2
   type: alternative-valid
+- id: w003
+  task: arg-0002.conclusion
+  answer: >-
+    The Marrow Lake association would be wasting money if the fish they add would die due to the same cause of
+    death (lack of food) of the original fish in the pond.
+  gold: 0
+  type: premise-as-conclusion
+  note: restates the author's general principle (last sentence), not the recommendation in sentence two
+- id: w004
+  task: arg-0002.assumption
+  answer: Mayfly larvae aren't the only food source available in the lake.
+  gold: 0
+  type: negated-assumption
+  note: right gap (could the trout live on other food?) but states its denial, which weakens the argument
