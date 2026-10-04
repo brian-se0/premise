@@ -1,0 +1,20 @@
+# Owner's first-pass answers from the exercise walkthrough (2026-10-04), written before seeing
+# each answer key. The owner had not yet studied for the exam. Brain dumps are kept verbatim;
+# `answer` is Claude's sorting of the brain dump into the task, confirmed with the owner.
+# Gold scores here are Claude's rubric grades, pending the owner's confirmation.
+- id: w001
+  task: arg-0001.conclusion
+  answer: ""
+  gold: 0
+  type: blank
+- id: w002
+  task: arg-0001.flaw
+  brain_dump: >-
+    there exists a possibility of the existence of one or more confounding variables. a correlation may exist
+    between lowering the amount of school days per week by 1 day and lower student grades, but causality is a
+    stronger statement than correlation and therefore needs more rigorous specifics in the given problem statement.
+  answer: >-
+    The argument treats the link between switching to a four-day week and lower reading scores as proof that
+    the switch caused the drop, without ruling out confounding variables.
+  gold: 2
+  type: alternative-valid
