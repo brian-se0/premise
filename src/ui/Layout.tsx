@@ -1,9 +1,20 @@
+import { useRef } from 'react';
 import { NavLink, Outlet } from 'react-router';
 
 export function Layout() {
+  const main = useRef<HTMLElement>(null);
   return (
     <>
-      <a className="skip" href="#main">
+      {/* The router owns the URL fragment, so the skip link moves focus instead of navigating. */}
+      <a
+        className="skip"
+        href="#main"
+        onClick={(e) => {
+          e.preventDefault();
+          main.current?.focus();
+          main.current?.scrollIntoView();
+        }}
+      >
         Skip to content
       </a>
       <header className="bar">
@@ -18,7 +29,7 @@ export function Layout() {
           <NavLink to="/about">About</NavLink>
         </nav>
       </header>
-      <main id="main" tabIndex={-1}>
+      <main id="main" tabIndex={-1} ref={main}>
         <Outlet />
       </main>
     </>

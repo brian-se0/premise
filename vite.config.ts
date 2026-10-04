@@ -11,16 +11,17 @@ function commit(): string {
   }
 }
 
+/** No runtime networking: the app loads its own files and connects nowhere (ARCHITECTURE.md §10). */
+export const CSP = "default-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'";
+
 /** Content Security Policy for built pages only; the dev server needs inline styles and a socket. */
 function csp(): Plugin {
   return {
     name: 'premise-csp',
     apply: 'build',
-    transformIndexHtml: (html) =>
-      html.replace(
-        '<meta charset="UTF-8" />',
-        `<meta charset="UTF-8" />\n    <meta http-equiv="Content-Security-Policy" content="default-src 'self'" />`,
-      ),
+    transformIndexHtml: () => [
+      { tag: 'meta', attrs: { 'http-equiv': 'Content-Security-Policy', content: CSP }, injectTo: 'head-prepend' },
+    ],
   };
 }
 

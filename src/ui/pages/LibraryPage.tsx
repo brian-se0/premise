@@ -1,8 +1,10 @@
 import { Link } from 'react-router';
 import { content } from '../../content.ts';
+import { isStudyable, studyableTasks } from '../../domain/availability.ts';
 
 export function LibraryPage() {
-  const { exercises, taxonomy } = content;
+  const { taxonomy } = content;
+  const exercises = content.exercises.filter(isStudyable);
   return (
     <>
       <h1>Library</h1>
@@ -15,8 +17,7 @@ export function LibraryPage() {
               <Link to={`/library/${e.id}`}>
                 <span className="card-title">{e.topics.join(', ') || e.id}</span>
                 <span className="meta">
-                  {e.tasks
-                    .filter((t) => t.status === 'active')
+                  {studyableTasks(e)
                     .map((t) => taxonomy.skills[t.skill]?.label ?? t.skill)
                     .join(' · ')}
                 </span>
