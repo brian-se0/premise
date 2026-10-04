@@ -69,6 +69,10 @@ async function paste(page: Page, text: string) {
   await page.getByRole('button', { name: 'Read scores' }).click();
 }
 
+/** The answer card for a row, matched by its heading: card text can quote other rows' ids. */
+const card = (page: Page, rowId: string) =>
+  page.locator('.row-card').filter({ has: page.getByRole('heading', { name: new RegExp(`^${rowId} `) }) });
+
 const confirmButton = (page: Page) => page.getByRole('button', { name: /^Confirm/ });
 
 test('answer, autosave, resume after reload, grade by paste, results', async ({ page }) => {
@@ -136,7 +140,7 @@ test('confirm versus discard, partial grading, and a needs-review row resolved l
   await other.goto(url);
   await paste(page, reply(prompt, { I01: '?', I02: '2' }));
   await expect(confirmButton(page)).toHaveText(/2 grades/);
-  await other.locator('.row-card').filter({ hasText: 'I02' }).getByRole('button', { name: 'Discard' }).click();
+  await card(other, 'I02').getByRole('button', { name: 'Discard' }).click();
   await expect(page.getByText('already discarded')).toBeVisible();
   await expect(confirmButton(page)).toHaveText(/1 grade$/);
   await confirmButton(page).click();
@@ -145,7 +149,7 @@ test('confirm versus discard, partial grading, and a needs-review row resolved l
 
   // The "?" left the row needing review; it is resolved later by manual entry.
   await expect(page.getByText('The grader could not decide.')).toBeVisible();
-  const first = page.locator('.row-card').filter({ hasText: 'I01' });
+  const first = card(page, 'I01');
   await first.getByRole('button', { name: 'Enter a score' }).click();
   await first.getByLabel(/Score out of/).fill('1');
   await first.getByRole('button', { name: 'Save score' }).click();
@@ -168,7 +172,7 @@ test('undo, stale confirm after undo, repeated undo and repeated correction', as
   const text = reply(prompt, { I01: '1', I02: '0' });
   await paste(page, text);
   await confirmButton(page).click();
-  const flaw = page.locator('.row-card').filter({ hasText: 'I02' });
+  const flaw = card(page, 'I02');
 
   // Undo returns the row to waiting; two tabs then preview the same reply and both confirm.
   await flaw.getByRole('button', { name: 'Undo' }).click();
@@ -182,7 +186,7 @@ test('undo, stale confirm after undo, repeated undo and repeated correction', as
   await expect(other.getByText(/0 waiting · closed/)).toBeVisible();
 
   // Repeated correction, then undo; the other tab follows along.
-  const otherFlaw = other.locator('.row-card').filter({ hasText: 'I02' });
+  const otherFlaw = card(other, 'I02');
   await expect(otherFlaw.getByRole('button', { name: 'Undo' })).toBeVisible();
   for (const score of ['1', '2']) {
     await flaw.getByRole('button', { name: 'Correct grade' }).click();

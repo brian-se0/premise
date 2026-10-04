@@ -23,6 +23,7 @@ import {
   OpError,
   rowState,
   StaleError,
+  setTaskControls,
   startSession,
   undoLatest,
   type GradeRow,
@@ -49,6 +50,7 @@ interface Row {
   reply: ReplyRecord | undefined;
   card: CardRecord | undefined;
   changeable: boolean;
+  suspended: boolean;
 }
 
 interface Loaded {
@@ -74,6 +76,7 @@ async function load(id: string): Promise<Loaded | null> {
       reply,
       card: await db.cards.get(attempt.taskId),
       changeable: await canChangeGrade(db, attempt.id),
+      suspended: (await db.taskStates.get(attempt.taskId))?.suspended ?? false,
     });
   }
   return { request, rows };
@@ -87,6 +90,11 @@ function errorText(e: unknown): string {
 
 export function RequestPage() {
   const id = useParams().id ?? '';
+  // Keyed by request so nothing typed or previewed for one request survives navigation to another.
+  return <RequestBody key={id} id={id} />;
+}
+
+function RequestBody({ id }: { id: string }) {
   const [params] = useSearchParams();
   const data = useLive(() => load(id), [id]);
   const settings = useSettings();
@@ -154,7 +162,8 @@ function CopySection({
   disclosureSeen: boolean;
   selfFirst: boolean;
 }) {
-  const [showDisclosure, setShowDisclosure] = useState(false);
+  // The disclosure comes before the prompt leaves the page by either route: clipboard or manual copy.
+  const [showDisclosure, setShowDisclosure] = useState<'copy' | 'show' | null>(null);
   const [copied, setCopied] = useState(false);
   const [fallback, setFallback] = useState(false);
 
@@ -173,28 +182,35 @@ function CopySection({
   };
 
   const onCopy = () => {
-    if (!disclosureSeen) setShowDisclosure(true);
+    if (!disclosureSeen) setShowDisclosure('copy');
     else void copy();
+  };
+
+  const onShow = () => {
+    if (!fallback && !disclosureSeen) setShowDisclosure('show');
+    else setFallback((f) => !f);
   };
 
   return (
     <section aria-labelledby="copy">
       <h2 id="copy">1. Copy the grading prompt</h2>
       {selfFirst && <p className="meta">Grading it yourself? Use "Grade it myself" on each answer below.</p>}
-      {showDisclosure ? (
+      {showDisclosure !== null ? (
         <div role="dialog" aria-modal="false" aria-labelledby="disclosure-title" className="dialog">
           <h3 id="disclosure-title">Before you paste</h3>
           <p>{DISCLOSURE}</p>
           <button
             className="primary"
             onClick={() => {
-              setShowDisclosure(false);
+              const then = showDisclosure;
+              setShowDisclosure(null);
               // Copy inside the click itself: browsers only allow a clipboard write during the gesture.
-              void copy();
+              if (then === 'copy') void copy();
+              else setFallback(true);
               void saveSetting('disclosureSeen', true);
             }}
           >
-            I understand, copy
+            {showDisclosure === 'copy' ? 'I understand, copy' : 'I understand, show the prompt'}
           </button>
         </div>
       ) : (
@@ -202,7 +218,7 @@ function CopySection({
           <button className="primary" onClick={onCopy}>
             {copied ? 'Copied' : 'Copy for grading'}
           </button>
-          <button className="link" onClick={() => setFallback((f) => !f)}>
+          <button className="link" onClick={onShow}>
             {fallback ? 'Hide prompt' : 'Show prompt'}
           </button>
         </div>
@@ -232,6 +248,9 @@ function CopySection({
 }
 
 interface Preview {
+  /** What the preview was read against; Confirm refuses if any of it has changed. */
+  requestId: string;
+  bound: Record<string, { attemptId: string; snapshotHash: string }>;
   raw: string;
   result: ParseResult;
   chosen: ParsedBlock | null;
@@ -260,6 +279,10 @@ function PasteSection({
       rows: rows.map((r) => ({ rowId: r.rowId, max: r.snapshot.max, allowedTags: r.snapshot.allowedTags })),
     });
     setPreview({
+      requestId: request.id,
+      bound: Object.fromEntries(
+        rows.map((r) => [r.rowId, { attemptId: r.attempt.id, snapshotHash: r.attempt.snapshotHash }]),
+      ),
       raw,
       result,
       chosen: result.kind === 'parsed' ? result.block : null,
@@ -282,6 +305,19 @@ function PasteSection({
 
   const confirm = async () => {
     if (!preview || !block || confirming.current) return;
+    const unbound =
+      preview.requestId !== request.id ||
+      preview.raw !== raw ||
+      toSave.some((pr) => {
+        const row = byRow.get(pr.rowId)!;
+        const b = preview.bound[pr.rowId];
+        return !b || b.attemptId !== row.attempt.id || b.snapshotHash !== row.attempt.snapshotHash;
+      });
+    if (unbound) {
+      setPreview(null);
+      onNotice('The reply or the request changed since Premise read it. Nothing was saved; read the scores again.');
+      return;
+    }
     confirming.current = true;
     setBusy(true);
     try {
@@ -323,7 +359,16 @@ function PasteSection({
       <label htmlFor="reply" className="sr-only">
         Chatbot reply
       </label>
-      <textarea id="reply" rows={6} value={raw} onChange={(e) => setRaw(e.target.value)} />
+      <textarea
+        id="reply"
+        rows={6}
+        value={raw}
+        onChange={(e) => {
+          setRaw(e.target.value);
+          // An edit makes the scores read from the old text meaningless.
+          setPreview(null);
+        }}
+      />
       <button onClick={read} disabled={raw.trim() === ''}>
         Read scores
       </button>
@@ -368,8 +413,14 @@ function PasteSection({
                         ? 'missing from the reply'
                         : `invalid: ${pr.reason}`}
                   {pr.status === 'valid' && pr.tags.length > 0 && <span className="meta"> · {pr.tags.join(', ')}</span>}
-                  {pr.status !== 'missing' && pr.feedback === null && pr.status === 'valid' && (
+                  {pr.status === 'valid' && pr.feedback === null && (
                     <span className="meta"> · feedback could not be matched to this item</span>
+                  )}
+                  {pr.status === 'valid' && pr.feedback !== null && (
+                    <details>
+                      <summary>Feedback</summary>
+                      <pre className="plain">{preview!.raw.slice(pr.feedback.start, pr.feedback.end)}</pre>
+                    </details>
                   )}
                   {full && !already && (
                     <fieldset className="rating">
@@ -445,6 +496,13 @@ function RowView({ row, request, onNotice }: { row: Row; request: RequestRecord;
   const navigate = useNavigate();
   const [mode, setMode] = useState<'none' | 'self' | 'manual' | 'correct' | 'flag'>('none');
   const { snapshot, attempt, grading, state } = row;
+  // The revision the student saw when they opened a form. Saving checks against it, so a change made
+  // in another tab meanwhile is reported as stale instead of being silently overwritten.
+  const [seen, setSeen] = useState(attempt.revision);
+  const toggle = (m: typeof mode) => {
+    setSeen(attempt.revision);
+    setMode(mode === m ? 'none' : m);
+  };
   const feedback = feedbackText(row);
   const tip = feedback ? tipOf(feedback) : null;
   const missed = state === 'accepted' && grading!.score! < grading!.max;
@@ -488,10 +546,14 @@ function RowView({ row, request, onNotice }: { row: Row; request: RequestRecord;
               <pre className="plain">{feedback}</pre>
             </details>
           ) : grading!.source === 'parsed' ? (
-            <p className="meta">
-              Score imported; feedback could not be matched to this item. The full reply is kept with the request.
-            </p>
+            <p className="meta">Score imported; feedback could not be matched to this item.</p>
           ) : null}
+          {row.reply && (
+            <details>
+              <summary>Full chatbot reply</summary>
+              <pre className="plain">{row.reply.raw}</pre>
+            </details>
+          )}
           {missed && attempt.kind !== 'coached' && (
             <p className="meta">Premise will check this point on a fresh argument in a later session.</p>
           )}
@@ -507,7 +569,7 @@ function RowView({ row, request, onNotice }: { row: Row; request: RequestRecord;
             {missed && <button onClick={() => void tryAgain()}>Try again</button>}
             {row.changeable ? (
               <>
-                <button onClick={() => setMode(mode === 'correct' ? 'none' : 'correct')}>Correct grade</button>
+                <button onClick={() => toggle('correct')}>Correct grade</button>
                 <button onClick={() => void act(undoLatest(db, ctx(), newOpId(), attempt.id, attempt.revision))}>
                   Undo
                 </button>
@@ -515,20 +577,38 @@ function RowView({ row, request, onNotice }: { row: Row; request: RequestRecord;
             ) : (
               <span className="meta">Older grades are locked because this task was reviewed again since.</span>
             )}
-            <button className="link" onClick={() => setMode(mode === 'flag' ? 'none' : 'flag')}>
+            <button className="link" onClick={() => toggle('flag')}>
               Flag
+            </button>
+            <button
+              className="link"
+              onClick={() =>
+                void act(setTaskControls(db, ctx(), newOpId(), attempt.taskId, { suspended: !row.suspended }))
+              }
+            >
+              {row.suspended ? 'Show this task again' : 'Stop showing this task'}
             </button>
           </div>
         </>
       )}
 
-      {state === 'needs-review' && <p>The grader could not decide. Enter a score or grade it yourself.</p>}
+      {state === 'needs-review' && (
+        <>
+          <p>The grader could not decide. Enter a score or grade it yourself.</p>
+          {feedback && (
+            <details>
+              <summary>Grader's feedback</summary>
+              <pre className="plain">{feedback}</pre>
+            </details>
+          )}
+        </>
+      )}
       {state === 'discarded' && <p className="meta">Discarded: this answer counts for nothing.</p>}
 
       {(state === 'pending' || state === 'needs-review') && (
         <div className="row">
-          <button onClick={() => setMode(mode === 'self' ? 'none' : 'self')}>Grade it myself</button>
-          <button onClick={() => setMode(mode === 'manual' ? 'none' : 'manual')}>Enter a score</button>
+          <button onClick={() => toggle('self')}>Grade it myself</button>
+          <button onClick={() => toggle('manual')}>Enter a score</button>
           <button
             className="link"
             onClick={() =>
@@ -555,7 +635,7 @@ function RowView({ row, request, onNotice }: { row: Row; request: RequestRecord;
                 [
                   {
                     attemptId: attempt.id,
-                    revision: attempt.revision,
+                    revision: seen,
                     score,
                     tags: [],
                     source: 'self',
@@ -577,7 +657,7 @@ function RowView({ row, request, onNotice }: { row: Row; request: RequestRecord;
           onSave={(score, ratingChoice) => {
             const r: GradeRow = {
               attemptId: attempt.id,
-              revision: attempt.revision,
+              revision: seen,
               score,
               tags: mode === 'correct' ? (grading?.tags ?? []) : [],
               source: 'manual',
