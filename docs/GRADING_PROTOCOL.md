@@ -1,6 +1,6 @@
 # Grading Protocol
 
-Status: draft v0.3 (2026-10-04, revised after peer review round 2). Prompt version: `v2`. Parser version: `1`. This is a contract between the prompt builder (`src/domain/prompt.ts`), the chatbot, and the score parser (`src/domain/scoreParser.ts`). Any change to the prompt text bumps the prompt version; any change to how replies are read bumps the parser version. Either needs a `DECISIONS.md` entry and a peer review. The M0 pilot uses these same modules.
+Status: draft v0.4 (2026-10-04, revised after peer review round 3). Prompt version: `v2`. Parser version: `1`. This is a contract between the prompt builder (`src/domain/prompt.ts`), the chatbot, and the score parser (`src/domain/scoreParser.ts`). Any change to the prompt text bumps the prompt version; any change to how replies are read bumps the parser version. Either needs a `DECISIONS.md` entry and a peer review. The M0 pilot uses these same modules.
 
 ## 1. Goals and threat model
 
@@ -25,7 +25,7 @@ A grading request is created by the `prepareGrading` operation (`ARCHITECTURE.md
 
 Batch size: default 4 rows, maximum 8. The full prompt must stay under 24,000 characters. Answers are never truncated, and grading instructions are never left out to save space; an answer over 2,000 characters is rejected at submission with a message.
 
-**Splitting** is deterministic: take the submitted attempts in session order and fill one request at a time, adding the next attempt while the request has fewer rows than the batch size and its prompt (with stimuli de-duplicated within that request) stays under the budget; then start the next request. If a single item alone exceeds the budget, it gets no chatbot request: the app says "This item is too long to grade by chatbot" and offers self-grading. The content build rejects any task whose prompt with a 2,000-character answer would exceed the budget, so this should only occur with edited content.
+**Splitting** is deterministic: take the submitted attempts in session order and fill one request at a time, adding the next attempt while the request has fewer rows than the batch size and its prompt (with stimuli de-duplicated within that request) stays under the budget; then start the next request. If a single item alone exceeds the budget, it gets a **self-grading-only request**: an ordinary request with its row and snapshot mapping and the normal lifecycle, but `promptText: null`. Copy is disabled for it and the app says "This item is too long to grade by chatbot"; self-grading and manual entry work as usual. The budget applies only to non-null prompts. The content build rejects any task whose prompt with a 2,000-character answer would exceed the budget, so this should only occur with edited content.
 
 Before the first copy on a device, the app shows once: "Premise does not upload your answers or progress; it only downloads its own app files. When you paste a grading prompt into another service, that service receives your answers under its own terms and privacy settings. Avoid personal information in answers."
 
@@ -121,9 +121,10 @@ Steps run in this order; each is defined once.
 5. **Drop echoes.** A candidate whose rows are exactly the frozen skeleton (every score `__`, every tag field `--`) is the prompt echoed back, never a grade, and is dropped.
 6. **Choose the block.**
    - No candidates left for this request: if one for another request exists, show "This reply belongs to a different grading request" and offer manual entry; otherwise "No score block found". The parsed path is closed.
-   - Several left that differ after row parsing: show them side by side; the student picks one. Identical ones are treated as one.
+   - Several left that differ after row parsing: show them side by side; the student picks one.
+   - Candidates are **equivalent** only if their parsed rows are identical *and* they have the same completeness and the same warnings. Equivalent candidates count as one, represented by the **last** occurrence in the reply.
    - Exactly one: continue.
-   The chosen block's raw range is stored as `selectedBlock`.
+   The chosen (or representative) block's raw range is stored as `selectedBlock`; feedback and the parse outcome are both derived from that occurrence.
 7. **Incomplete block.** A chosen candidate with no `END SCORES` is parsed, its outcome is at best `recoverable`, and the student must confirm explicitly.
 8. Parse rows (§6), then extract feedback (§7).
 
@@ -176,13 +177,14 @@ Both go through the shared grade validator (integer range, snapshot max, status 
   - **Resolution coverage**: rows with a valid numeric score ÷ all requested rows.
   - **Abstention rate** (`?`) and **invalid-or-missing rate**, over all requested rows. These are non-decisions, not failing grades.
   - **Exact agreement**, over numeric rows with unequivocal gold.
-  - **False passes**: chatbot full credit on an answer the owner scored below full. **False fails**: the reverse. (Full versus not-full is the boundary that drives scheduling.)
+  - **False passes**: numeric rows the owner scored below full that the chatbot scored full, ÷ numeric rows the owner scored below full. **False fails**: numeric rows the owner scored full that the chatbot scored below full, ÷ numeric rows the owner scored full. (Full versus not-full is the boundary that drives scheduling.) Ambiguous-gold rows are excluded from both.
+  - A metric whose denominator is empty is reported as **not evaluable**, never as zero errors.
   - **Pass/fail agreement**, over numeric rows with unequivocal gold.
   - **Parse outcomes** per reply (clean, recoverable, manual) and **feedback match rate** per row.
   - **Manual workload**: rows per request the student had to resolve by hand.
-  - **Run-to-run agreement** on the same answers.
+  - **Run-to-run agreement**: over answers resolved numerically in both runs, the share with the same score; pairs where either run gave a non-decision are counted and reported separately.
 - **Uncertainty.** With few cases, a perfect result proves little: with zero failures in *n* independent cases, the one-sided 95% upper bound on the failure rate is 1 − 0.05^(1/*n*) (28% for *n* = 9; it takes 29 cases to get below 10%). Report the counts and this bound; do not inflate the pilot to manufacture a certification.
-- **Screening targets** for the owner's provisional chatbot choice, on held-out exercises: resolution coverage ≥ 90%, exact agreement ≥ 80%, at most one false pass, pass/fail agreement ≥ 90%, clean parse ≥ 90%, manual outcome ≤ 2%, feedback match ≥ 90%. These are starting targets, revisited after the pilot, and do not make the chatbot a recommendation to anyone else.
+- **Screening targets** for the owner's provisional chatbot choice, applied to **each** run of the frozen candidate on the held-out exercises separately (every run must meet them; results are also shown pooled for information). A target whose metric is not evaluable is not met. The targets: resolution coverage ≥ 90%, exact agreement ≥ 80%, at most one false pass, pass/fail agreement ≥ 90%, clean parse ≥ 90%, manual outcome ≤ 2%, feedback match ≥ 90%. These are starting targets, revisited after the pilot, and do not make the chatbot a recommendation to anyone else.
 - **Second grader.** Where practical, a second person grades a subset blind to the owner's labels; owner-versus-second-grader agreement is reported as a comparison benchmark, not a ceiling.
 - **Outcomes.** The pilot ends in one recorded decision (`ROADMAP.md` M0): proceed with a provisional chatbot configuration; proceed with self-grading only; revise and repeat on fresh held-out exercises; or stop chatbot grading as inconclusive.
 

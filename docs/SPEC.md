@@ -1,6 +1,6 @@
 # Product Spec
 
-Status: draft v0.3 (2026-10-04, revised after peer review round 2). Working name: **Premise** (placeholder; see Open questions).
+Status: draft v0.4 (2026-10-04, revised after peer review round 3). Working name: **Premise** (placeholder; see Open questions).
 
 ## 1. Purpose
 
@@ -100,4 +100,4 @@ Accounts, sync, merge import, hosted AI grading, multiple-choice questions, time
 
 1. Final product name (must avoid "LSAT" and LSAC marks).
 2. May the README describe the target exam by name in one descriptive sentence with a trademark disclaimer? Default: no.
-3. Must public exercises have a reviewer other than their author once outside contributors exist? Default: yes from the first outside contribution; owner approval alone until then. The content build enforces this default (`EXERCISE_FORMAT.md` §4).
+3. Must public exercises have a reviewer other than their author once outside contributors exist? Default: per exercise, an exercise with any contributor who is not a maintainer must be approved by a maintainer who is not one of its contributors; exercises written only by maintainers may be approved by a maintainer. The content build enforces this (`EXERCISE_FORMAT.md` §4).
