@@ -12,8 +12,21 @@ interface Loaded {
   attempts: (AttemptRecord | undefined)[];
 }
 
+/** Freezes the answers into grading requests and opens the first one. */
+async function startGrading(attemptIds: string[], mode: 'copy' | 'self', go: (to: string) => void): Promise<void> {
+  const settings = await loadSettings();
+  const { requestIds } = await prepareGrading(db, ctx(), newOpId(), attemptIds, settings.batchSize);
+  go(`/request/${requestIds[0]}${mode === 'self' ? '?self=1' : ''}`);
+}
+
+function exerciseOf(taskId: string): string {
+  return taskId.split('.')[0]!;
+}
+
 export function SessionPage() {
   const id = useParams().id ?? '';
+  const settings = useSettings();
+  const [continued, setContinued] = useState<string[]>([]);
   const data = useLive<Loaded | null>(async () => {
     const session = await db.sessions.get(id);
     if (!session) return null;
@@ -21,11 +34,27 @@ export function SessionPage() {
     return { session, attempts };
   }, [id]);
 
-  if (data === undefined) return <p>Loading…</p>;
+  if (data === undefined || !settings) return <p>Loading…</p>;
   if (data === null) return <NotFoundPage />;
   const { session, attempts } = data;
   const firstOpen = session.entries.findIndex((_, i) => !attempts[i] || attempts[i]!.state === 'draft');
   if (firstOpen === -1) return <SessionDone session={session} attempts={attempts as AttemptRecord[]} />;
+
+  // Per-exercise grading: offer to grade an argument's answers before moving to the next argument.
+  if (settings.gradingMode === 'per-exercise' && firstOpen > 0) {
+    const previous = exerciseOf(session.entries[firstOpen - 1]!.taskId);
+    const ungraded = attempts.filter(
+      (a): a is AttemptRecord =>
+        !!a && exerciseOf(a.taskId) === previous && a.state === 'submitted' && a.requestId === null,
+    );
+    if (
+      previous !== exerciseOf(session.entries[firstOpen]!.taskId) &&
+      ungraded.length > 0 &&
+      !continued.includes(previous)
+    ) {
+      return <GradeBreak attempts={ungraded} onContinue={() => setContinued([...continued, previous])} />;
+    }
+  }
   return <EntryView key={`${session.id}-${firstOpen}`} session={session} index={firstOpen} attempts={attempts} />;
 }
 
@@ -188,6 +217,34 @@ function EntryView({
   );
 }
 
+function GradeBreak({ attempts, onContinue }: { attempts: AttemptRecord[]; onContinue: () => void }) {
+  const navigate = useNavigate();
+  const [error, setError] = useState('');
+  const grade = (mode: 'copy' | 'self') =>
+    startGrading(
+      attempts.map((a) => a.id),
+      mode,
+      (to) => void navigate(to),
+    ).catch((e: unknown) => setError(e instanceof Error ? e.message : String(e)));
+  return (
+    <>
+      <h1>Grade this argument?</h1>
+      <p>
+        You answered {attempts.length} {attempts.length === 1 ? 'task' : 'tasks'} on this argument. Grade now, or keep
+        going and grade at the end.
+      </p>
+      <div className="row">
+        <button className="primary" onClick={() => void grade('copy')}>
+          Grade with a chatbot
+        </button>
+        <button onClick={() => void grade('self')}>Grade it myself</button>
+        <button onClick={onContinue}>Continue the session</button>
+      </div>
+      {error && <p role="alert">{error}</p>}
+    </>
+  );
+}
+
 function fmt(s: number): string {
   return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 }
@@ -207,15 +264,11 @@ function SessionDone({ session, attempts }: { session: SessionRecord; attempts: 
   const grade = async (mode: 'copy' | 'self') => {
     setBusy(true);
     try {
-      const settings = await loadSettings();
-      const { requestIds: ids } = await prepareGrading(
-        db,
-        ctx(),
-        newOpId(),
+      await startGrading(
         unowned.map((a) => a.id),
-        settings.batchSize,
+        mode,
+        (to) => void navigate(to),
       );
-      navigate(`/request/${ids[0]}${mode === 'self' ? '?self=1' : ''}`);
     } catch (e) {
       setError(e instanceof Error ? e.message : String(e));
       setBusy(false);

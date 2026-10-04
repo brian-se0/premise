@@ -84,17 +84,17 @@ A snapshot freezes everything needed to show, grade and count one task. Its payl
 | Table | Key | Fields |
 | --- | --- | --- |
 | `snapshots` | `hash` | the §4.1 payload, `firstSeenAt` |
-| `sessions` | `id` (uuid) | `entries` (ordered list of `{ taskId, attemptId }`; `attemptId` null until the task is opened), `cursor`, `createdAt`, `endedAt` |
-| `attempts` | `id` (uuid) | `sessionId`, `taskId`, `snapshotHash`, `answer`, `state` (`draft` \| `submitted` \| `skipped` \| `discarded`), `kind` (`new` \| `review` \| `coached`), `stimulusSeenBefore` (bool), `ratingChoice` (`good` \| `hard` \| `easy`, default `good`), `requestId` (nullable), `currentGradingId` (nullable), `revision` (int), `startedAt`, `submittedAt`, `updatedAt` |
+| `sessions` | `id` (uuid) | `entries` (ordered list of `{ taskId, attemptId }`; `attemptId` null until the task is opened), `cursor`, `createdAt`, `endedAt`, `mode` (`today` \| `new` \| `library` \| `retry`; a `retry` session makes coached attempts) |
+| `attempts` | `id` (uuid) | `sessionId`, `taskId`, `snapshotHash`, `answer`, `state` (`draft` \| `submitted` \| `skipped` \| `discarded`), `kind` (`new` \| `review` \| `coached`), `stimulusSeenBefore` (bool), `ratingChoice` (`good` \| `hard` \| `easy`, default `good`), `requestId` (nullable), `currentGradingId` (nullable), `revision` (int), `startedAt`, `submittedAt`, `updatedAt`, `elapsedSeconds` (opening to submission; recorded for the final-weeks timer, never graded) |
 | `requests` | `id` (uuid) | `label`, `rows` (rowId → attemptId), `snapshots` (rowId → snapshot hash), `fence`, `promptVersion`, `promptText` (null for a self-grading-only request; `GRADING_PROTOCOL.md` §2), `createdAt`, `status` (`open` \| `closed` \| `abandoned`) |
 | `replies` | `id` (uuid) | `requestId`, `raw`, `pastedAt`, `parserVersion`, `selectedBlock` (`{ start, end }` or null), `parseOutcome` (`clean` \| `recoverable` \| `manual`) |
 | `gradings` | `id` (uuid) | `attemptId`, `requestId`, `replyId` (nullable), `opId`, `score` (int or null), `max`, `tags[]`, `status` (`accepted` \| `needs-review` \| `superseded`), `source` (`parsed` \| `manual` \| `self`), `disqualified` (bool, self-grading only), `feedbackRange` (`{ start, end }` or null), `createdAt` |
-| `reviewLogs` | `id` (uuid) | `taskId`, `attemptId`, `gradingId`, `opId`, `rating`, `ratingPolicy`, `schedulerVersion`, `reviewedAt` (= attempt `submittedAt`), `cardBefore` (the card's scheduler fields before this review, or null if no card existed), ts-fsrs log fields, `undone` (bool) |
+| `reviewLogs` | `id` (uuid) | `taskId`, `attemptId`, `gradingId`, `opId`, `rating`, `ratingPolicy`, `schedulerVersion`, `reviewedAt` (= attempt `submittedAt`), `cardBefore` (the card's scheduler fields before this review, or null if no card existed), `cardAfter`, `appliedAt` (when the review was applied; orders one card's reviews, since `reviewedAt` can arrive out of order), `undone` (bool) |
 | `cards` | `taskId` | ts-fsrs card fields, `schedulerVersion` (scheduler state only; may be deleted by undo) |
 | `taskStates` | `taskId` | `suspended`, `notBefore` (local date; see §6.4). Student controls, never deleted by undo or correction |
 | `flags` | `id` (uuid) | `attemptId`, `snapshotHash`, `category` (`unfair-grade` \| `content-problem` \| `other`), `note`, `createdAt` |
 | `operations` | `opId` | `name`, `affectedIds`, `resultingRevisions` (attemptId → revision), `result` (the immutable value returned to the UI), `createdAt` |
-| `settings` | `key` | `gradingMode`, `batchSize`, `timerEnabled`, `disclosureSeen`, `lastExportAt`, `persistGranted` |
+| `settings` | `key` | `gradingMode`, `batchSize`, `finalWeeks`, `timerEnabled`, `timerSeconds`, `dailyReviewCap`, `focus` (`{ tag, note }`), `disclosureSeen`, `lastExportAt`, `persistGranted` |
 
 Ranges are offsets in UTF-16 code units into the stored `raw` string, start inclusive, end exclusive (the native JavaScript string index).
 

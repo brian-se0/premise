@@ -264,3 +264,19 @@ test('export then replace-import restores an unfinished session and a partially 
   await page.getByRole('link', { name: /left$/ }).click();
   await expect(page.getByLabel('Your answer')).toHaveValue('half-written draft');
 });
+
+test("per-exercise grading offers to grade each argument before the next, and today's session resumes", async ({
+  page,
+}) => {
+  await page.goto('#/settings');
+  await page.getByRole('combobox', { name: /^Grade/ }).selectOption('per-exercise');
+  await page.goto('#/');
+  await page.getByRole('button', { name: "Start today's session" }).click();
+  await page.getByLabel('Your answer').fill('First answer.');
+  await page.getByRole('button', { name: 'Submit', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Grade this argument?' })).toBeVisible();
+  await page.getByRole('button', { name: 'Continue the session' }).click();
+  await expect(page.getByText('Task 2 of')).toBeVisible();
+  await page.goto('#/');
+  await expect(page.getByRole('link', { name: /left$/ })).toBeVisible();
+});
