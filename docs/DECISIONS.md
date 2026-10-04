@@ -2,6 +2,9 @@
 
 Newest first. Each entry: date, decision, why, and what it rules out. Reopening a decision needs a new entry, not an edit.
 
+## 2026-10-04 — Three flaw tags added
+`unrepresentative-sample`, `part-to-whole` and `attacks-source` join the error tags. **Why:** the pilot exercises test these flaws and no existing tag named them.
+
 ## 2026-10-04 — Spec v0.4 after peer review round 3
 GPT-6 Pro reviewed spec v0.3: of the 20 round-2 findings, 12 resolved and 8 partly; 8 new findings (2 blockers, 2 major, 4 minor), all accepted; see `reviews/2026-10-04-specs-v0.3.md`. Changes: an `operations` receipt table so every grading operation can be retried by id; student task controls (`suspended`, `notBefore`) moved out of the scheduler card into `taskStates`, so undo never loses them; new cross-table invariants; self-grading-only requests with no prompt for oversized items; a fixed representative for identical score blocks; per-run screening targets with stated denominators; the approval hash covers all exercise fields except status and approval bookkeeping; independent approval is per exercise. **Why:** the reviewer judged storage schema v1 not safe to freeze without these, and M0's holdout not ready to use without the measurement definitions. **Rules out:** event sourcing or replay built on the receipts.
 

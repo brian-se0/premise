@@ -45,6 +45,9 @@ error_tags:
   reversed-logic: Confused sufficient and necessary, or reversed the direction
   correlation-causation: Treated correlation or sequence as causation, or missed that flaw
   missed-alternative: Missed an alternative explanation or possibility
+  unrepresentative-sample: Treated evidence from an unrepresentative group as speaking for the whole, or missed that flaw
+  part-to-whole: Assumed what is true of each part is true of the whole (or the reverse), or missed that flaw
+  attacks-source: Rejected a claim because of who made it rather than its merits, or missed that flaw
   wrong-gap: Identified a gap the argument does not rely on
   irrelevant: Answer does not bear on the argument's support
   contradicts-premise: Answer depends on denying a stated premise
