@@ -189,7 +189,9 @@ function CopySection({
             className="primary"
             onClick={() => {
               setShowDisclosure(false);
-              void saveSetting('disclosureSeen', true).then(copy);
+              // Copy inside the click itself: browsers only allow a clipboard write during the gesture.
+              void copy();
+              void saveSetting('disclosureSeen', true);
             }}
           >
             I understand, copy

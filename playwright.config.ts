@@ -26,7 +26,12 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Pixel 7'], ...(chromium ? { launchOptions: { executablePath: chromium } } : {}) },
+      use: {
+        ...devices['Pixel 7'],
+        // Headless Chromium can leave a clipboard write waiting on a permission prompt nobody answers.
+        permissions: ['clipboard-read', 'clipboard-write'],
+        ...(chromium ? { launchOptions: { executablePath: chromium } } : {}),
+      },
     },
     ...(process.env.E2E_WEBKIT === '0' ? [] : [{ name: 'webkit', use: { ...devices['iPhone 15'] } }]),
   ],

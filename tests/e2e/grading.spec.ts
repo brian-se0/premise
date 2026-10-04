@@ -25,11 +25,19 @@ async function toRequest(page: Page): Promise<string> {
 }
 
 async function promptText(page: Page): Promise<string> {
-  await page.getByRole('button', { name: /Copy for grading|Copied/ }).click();
-  const accept = page.getByRole('button', { name: 'I understand, copy' });
-  if (await accept.isVisible()) await accept.click();
   const box = page.locator('#prompt-text');
+  const copied = page.getByRole('button', { name: 'Copied' });
+  const accept = page.getByRole('button', { name: 'I understand, copy' });
+  await page.getByRole('button', { name: /Copy for grading|Copied/ }).click();
+  // Wait for the click to settle: the first copy asks for the disclosure, and a copy the browser
+  // refuses opens the prompt box instead. Checking without waiting raced the render in CI.
+  await expect(accept.or(copied).or(box).first()).toBeVisible();
+  if (await accept.isVisible()) {
+    await accept.click();
+    await expect(copied.or(box).first()).toBeVisible();
+  }
   if (!(await box.isVisible())) await page.getByRole('button', { name: 'Show prompt' }).click();
+  await expect(box).toBeVisible();
   return box.inputValue();
 }
 
