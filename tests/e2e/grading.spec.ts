@@ -38,8 +38,24 @@ async function promptText(page: Page): Promise<string> {
   }
   if (!(await box.isVisible())) await page.getByRole('button', { name: 'Show prompt' }).click();
   await expect(box).toBeVisible();
-  return box.inputValue();
+  const text = await box.inputValue();
+  // Chromium runs with clipboard permission, so check the copy itself, not just the fallback box.
+  if ((await copied.isVisible()) && test.info().project.name === 'chromium') {
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(text);
+  }
+  return text;
 }
+
+/** Exports a backup through Settings and returns the parsed file. Leaves the page on Settings. */
+async function exportFile(page: Page): Promise<Record<string, unknown[]>> {
+  await page.goto('#/settings');
+  const download = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export a backup' }).click();
+  const chunks = await (await (await download).createReadStream()).toArray();
+  return JSON.parse(Buffer.concat(chunks).toString()) as Record<string, unknown[]>;
+}
+
+const STORED = ['attempts', 'requests', 'replies', 'gradings', 'reviewLogs', 'cards', 'taskStates', 'operations'];
 
 /** A chatbot-style reply: feedback per row, then the skeleton filled with the given scores. */
 function reply(prompt: string, scores: Record<string, string>, tags: Record<string, string> = {}): string {
@@ -90,9 +106,15 @@ test('answer, autosave, resume after reload, grade by paste, results', async ({ 
   await toRequest(page);
   const prompt = await promptText(page);
   expect(prompt).toContain('BEGIN SCORES v2 request=');
-  await paste(page, reply(prompt, { I01: '1', I02: '1' }, { I02: 'wrong-gap' }));
+  // Markup in a reply is shown as literal text, never rendered.
+  const markup = '<b id="injected">bold</b><img src=x onerror="window.__ran=1">';
+  await paste(page, `${markup}\n\n${reply(prompt, { I01: '1', I02: '1' }, { I02: 'wrong-gap' })}`);
   await expect(page.getByText(/I02 .*: 1\/2/)).toBeVisible();
   await confirmButton(page).click();
+  await page.getByText('Full chatbot reply').first().click();
+  await expect(page.getByText(markup).first()).toBeVisible();
+  await expect(page.locator('#injected')).toHaveCount(0);
+  expect(await page.evaluate(() => (window as unknown as { __ran?: number }).__ran)).toBeUndefined();
   await expect(page.getByText('Correction:').first()).toBeVisible();
   await expect(page.getByRole('button', { name: 'Try again' })).toBeVisible();
   await expect(page.getByText(/Due again on/).first()).toBeVisible();
@@ -110,23 +132,23 @@ test('double confirm and confirm from two tabs schedule once', async ({ page, co
   await other.goto(url);
   await paste(page, text);
   await paste(other, text);
-  // Both tabs confirm at once; whichever loses either sees the error or finds nothing left to confirm.
-  await Promise.all([
-    confirmButton(page).dblclick(),
-    confirmButton(other)
-      .click({ timeout: 3000 })
-      .catch(() => undefined),
-  ]);
+  await expect(confirmButton(page)).toHaveText(/2 grades/);
+  await expect(confirmButton(other)).toHaveText(/2 grades/);
+  // Fire all three clicks (a double click in one tab, one click in the other) without waiting for
+  // either tab to settle, so every confirmation really reaches storage.
+  const press = (p: Page, times: number) =>
+    p.evaluate((n) => {
+      const b = [...document.querySelectorAll('button')].find((x) => x.textContent?.startsWith('Confirm'))!;
+      for (let i = 0; i < n; i++) b.click();
+    }, times);
+  await Promise.all([press(page, 2), press(other, 1)]);
   await expect(page.getByText(/0 waiting · closed/)).toBeVisible();
   await expect(other.getByText(/0 waiting · closed/)).toBeVisible();
 
-  await page.goto('#/settings');
-  const download = page.waitForEvent('download');
-  await page.getByRole('button', { name: 'Export a backup' }).click();
-  const file = JSON.parse(
-    await (await (await download).createReadStream()).toArray().then((c) => Buffer.concat(c).toString()),
-  );
+  const file = await exportFile(page);
   expect(file.reviewLogs).toHaveLength(2);
+  expect(file.gradings).toHaveLength(2);
+  expect(file.replies).toHaveLength(1);
 });
 
 test('confirm versus discard, partial grading, and a needs-review row resolved later', async ({ page, context }) => {
@@ -165,22 +187,35 @@ test('confirm versus discard, partial grading, and a needs-review row resolved l
   await expect(page.getByText(/1 waiting · open/)).toBeVisible();
 });
 
-test('undo, stale confirm after undo, repeated undo and repeated correction', async ({ page, context }) => {
+test('undo, a preview made before a confirm and undo is stale, repeated undo and correction', async ({
+  page,
+  context,
+}) => {
   await practice(page, 'arg-0001', ['A conclusion.', 'A flaw.']);
   const url = await toRequest(page);
   const prompt = await promptText(page);
   const text = reply(prompt, { I01: '1', I02: '0' });
-  await paste(page, text);
-  await confirmButton(page).click();
-  const flaw = card(page, 'I02');
-
-  // Undo returns the row to waiting; two tabs then preview the same reply and both confirm.
-  await flaw.getByRole('button', { name: 'Undo' }).click();
-  await expect(page.getByText(/1 waiting · open/)).toBeVisible();
   const other = await context.newPage();
   await other.goto(url);
+  // The other tab reads a reply while both rows wait. This tab then grades only I02 (so the request
+  // stays open in both tabs) and undoes it.
+  await paste(other, reply(prompt, { I01: '1', I02: '2' }));
+  await expect(confirmButton(other)).toHaveText(/2 grades/);
+  await paste(page, reply(prompt, { I02: '0' }));
+  await confirmButton(page).click();
+  const flaw = card(page, 'I02');
+  await flaw.getByRole('button', { name: 'Undo' }).click();
+  await expect(page.getByText(/2 waiting · open/)).toBeVisible();
+
+  // Both rows wait again, but the other tab's decision predates the confirm and the undo: it is
+  // refused whole.
+  await expect(confirmButton(other)).toHaveText(/2 grades/);
+  await confirmButton(other).click();
+  await expect(other.getByRole('alert')).toContainText(/changed|stale/i);
+  await expect(page.getByText(/2 waiting · open/)).toBeVisible();
+
+  // A fresh read confirms normally.
   await paste(page, text);
-  await paste(other, text);
   await confirmButton(page).click();
   await expect(page.getByText(/0 waiting · closed/)).toBeVisible();
   await expect(other.getByText(/0 waiting · closed/)).toBeVisible();
@@ -201,13 +236,21 @@ test('undo, stale confirm after undo, repeated undo and repeated correction', as
 
 test('identical re-paste confirms nothing new; a conflicting reply offers a choice', async ({ page }) => {
   await practice(page, 'arg-0001', ['A conclusion.', 'A flaw.']);
-  await toRequest(page);
+  const url = await toRequest(page);
   const prompt = await promptText(page);
-  const text = reply(prompt, { I01: '1', I02: '1' });
+  // The reply grades I01 only, so the request stays open and the same text can be pasted again.
+  const text = reply(prompt, { I01: '1' });
   await paste(page, text);
   await confirmButton(page).click();
-  await expect(page.getByText(/0 waiting/)).toBeVisible();
-  await expect(page.locator('#reply')).toHaveCount(0); // nothing left to paste for
+  await expect(page.getByText(/1 waiting · open/)).toBeVisible();
+  await paste(page, text);
+  await expect(page.getByText('already accepted')).toBeVisible();
+  await expect(confirmButton(page)).toBeDisabled();
+  await expect(confirmButton(page)).toHaveText(/0 grades/);
+  const file = await exportFile(page);
+  expect(file.gradings).toHaveLength(1);
+  expect(file.reviewLogs).toHaveLength(1);
+  await page.goto(url);
 
   await practice(page, 'arg-0002', ['Conclusion.', 'Assumption.']);
   await toRequest(page);
@@ -231,14 +274,21 @@ test('a failure halfway through saving leaves nothing half-written', async ({ pa
     };
   });
   await practice(page, 'arg-0001', ['A conclusion.', 'A flaw.']);
-  await toRequest(page);
+  const url = await toRequest(page);
   const prompt = await promptText(page);
+  const before = await exportFile(page);
+  await page.goto(url);
   await paste(page, reply(prompt, { I01: '1', I02: '2' }));
   await page.evaluate(() => ((window as unknown as { __fail?: boolean }).__fail = true));
   await confirmButton(page).click();
   await expect(page.getByRole('alert')).toContainText('nothing was saved');
   await expect(page.getByText(/2 waiting · open/)).toBeVisible();
   await page.evaluate(() => ((window as unknown as { __fail?: boolean }).__fail = false));
+  // Every stored table is exactly as it was before the failed save: no orphaned reply, grading,
+  // card or receipt.
+  const after = await exportFile(page);
+  for (const table of STORED) expect(after[table], table).toEqual(before[table]);
+  await page.goto(url);
   await paste(page, reply(prompt, { I01: '1', I02: '2' }));
   await confirmButton(page).click();
   await expect(page.getByText(/0 waiting · closed/)).toBeVisible();
@@ -291,4 +341,35 @@ test("per-exercise grading offers to grade each argument before the next, and to
   await expect(page.getByText('Task 2 of')).toBeVisible();
   await page.goto('#/');
   await expect(page.getByRole('link', { name: /left$/ })).toBeVisible();
+});
+
+test('the first-copy disclosure comes before the prompt leaves the page by either route', async ({ page }) => {
+  await practice(page, 'arg-0001', ['A conclusion.', 'A flaw.']);
+  await toRequest(page);
+  const box = page.locator('#prompt-text');
+  // Manual route: Show prompt asks first and shows nothing until accepted.
+  await page.getByRole('button', { name: 'Show prompt' }).click();
+  await expect(page.getByRole('dialog', { name: 'Before you paste' })).toBeVisible();
+  await expect(box).toHaveCount(0);
+  await page.getByRole('button', { name: 'I understand, show the prompt' }).click();
+  await expect(box).toBeVisible();
+  // Seen once, it is not asked again, and the clipboard route copies straight away.
+  await page.reload();
+  await page.getByRole('button', { name: 'Copy for grading' }).click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Copied' })).toBeVisible();
+});
+
+test('the clipboard route asks first too', async ({ page }) => {
+  await practice(page, 'arg-0001', ['A conclusion.', 'A flaw.']);
+  await toRequest(page);
+  await page.getByRole('button', { name: 'Copy for grading' }).click();
+  await expect(page.getByRole('dialog', { name: 'Before you paste' })).toBeVisible();
+  if (test.info().project.name === 'chromium') {
+    await page.evaluate(() => navigator.clipboard.writeText('untouched'));
+    await expect(page.getByRole('dialog', { name: 'Before you paste' })).toBeVisible();
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe('untouched');
+  }
+  await page.getByRole('button', { name: 'I understand, copy' }).click();
+  await expect(page.getByRole('button', { name: 'Copied' })).toBeVisible();
 });
