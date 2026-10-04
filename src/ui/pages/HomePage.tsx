@@ -1,17 +1,23 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { content } from '../../content.ts';
 import { dueTaskIds, planNewOnly, planToday } from '../../domain/planner.ts';
 import { awaitingRequests, beginSession, recentRequests, unfinishedSessions, ungradedSessions } from '../actions.ts';
-import { db, loadPlannerState, loadSettings, useLive, useSettings } from '../runtime.ts';
+import { db, loadPlannerState, loadSettings, today, useLive, useSettings } from '../runtime.ts';
 
 export function HomePage() {
   const navigate = useNavigate();
   const settings = useSettings();
+  // Plans depend on the date, which storage changes don't signal: re-plan when the day turns.
+  const [day, setDay] = useState(today);
+  useEffect(() => {
+    const t = window.setInterval(() => setDay(today()), 60_000);
+    return () => window.clearInterval(t);
+  }, []);
   const plan = useLive(async () => {
     const state = await loadPlannerState();
     return { today: planToday(state), due: dueTaskIds(state).length, state };
-  }, []);
+  }, [day]);
   const awaiting = useLive(awaitingRequests, []);
   const unfinished = useLive(unfinishedSessions, []);
   const ungraded = useLive(ungradedSessions, []);
@@ -22,10 +28,12 @@ export function HomePage() {
 
   const start = async (mode: 'today' | 'new') => {
     if (!plan) return;
+    // Plan again from current storage at the moment of starting, not from what was on screen.
+    const state = await loadPlannerState();
     const entries =
       mode === 'today'
-        ? plan.today
-        : planNewOnly(plan.state, { skill: skill || null, difficulty: difficulty ? Number(difficulty) : null });
+        ? planToday(state)
+        : planNewOnly(state, { skill: skill || null, difficulty: difficulty ? Number(difficulty) : null });
     const id = await beginSession(mode, entries);
     if (id) navigate(`/session/${id}`);
     else setMessage('Nothing matches right now. Try another filter, or come back tomorrow.');
