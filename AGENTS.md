@@ -26,9 +26,11 @@ Rules for any AI coding agent working in this repository (Claude Code, Codex, ot
 | --- | --- |
 | `npm ci` | Install exact dependencies |
 | `npm run dev` | Local dev server |
-| `npm run content` | Validate content and build `src/generated/content.json` |
-| `npm run check` | Typecheck, lint, unit tests, content build. Must pass before every commit. |
-| `npm run test:e2e` | Playwright tests |
+| `npm run content` | Validate content and build `src/generated/content.json` (drafts included; `-- --production` excludes them, `-- --lock` records published tasks) |
+| `npm run build` | Production build into `dist/` (drafts excluded) |
+| `npm run check` | Content build, typecheck, lint and format check, unit tests. Must pass before every commit. |
+| `npm run format` | Apply Prettier |
+| `npm run test:e2e` | Playwright tests (builds and serves the production site; set `PW_CHROMIUM` to use a preinstalled Chromium, `E2E_WEBKIT=0` to skip WebKit) |
 | `npm run prompt-eval` | Score saved chatbot replies against hand grades |
 
 ## Working style
