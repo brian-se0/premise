@@ -1,6 +1,6 @@
 # Product Spec
 
-Status: draft v0.2 (2026-10-04, revised after peer review round 1). Working name: **Premise** (placeholder; see Open questions).
+Status: draft v0.3 (2026-10-04, revised after peer review round 2). Working name: **Premise** (placeholder; see Open questions).
 
 ## 1. Purpose
 
@@ -18,7 +18,7 @@ It does not simulate the official test. Students keep taking official practice t
 1. **No official content.** No LSAC questions, passages, explanations or paraphrases, and no prep-company content. See `CONTENT_GUIDELINES.md`.
 2. **No test branding.** The name, logo, UI and marketing do not use "LSAT" or LSAC marks.
 3. **No server.** Static site. No accounts, backend, AI API calls or analytics.
-4. **Privacy.** Premise stores progress only on the device and transmits nothing. When the student pastes a grading prompt into another service, that service receives the answers under its own terms. This is said plainly before the first copy.
+4. **Privacy.** Premise does not upload answers or progress; it stores them on the device and only downloads its own app files. When the student pastes a grading prompt into another service, that service receives the answers under its own terms. This is said plainly before the first copy, from the first release that can copy.
 5. **Licenses.** Code: AGPL-3.0-only. Content the project can license (`content/`): CC BY-NC-SA 4.0; public-domain and CC BY source text keeps its own status.
 
 ## 4. Core concepts
@@ -38,21 +38,24 @@ It does not simulate the official test. Students keep taking official practice t
 
 1. Home offers **Today** (due reviews plus a few new tasks, mixed), **New only** (filter by skill and difficulty), or one exercise from the Library.
 2. A session is an explicit ordered list of tasks, grouped by stimulus for display. Tasks of the same exercise that were not selected are not shown and not scheduled.
-3. Reviews are mixed with unseen tasks practising the same skill, so the student meets new arguments, not only remembered ones. Two tasks from the same exercise are not both scheduled on the same day unless both are due.
+3. Reviews are mixed with new tasks practising the same skill. New tasks are drawn first from exercises the student has never seen, so they meet new arguments, not only remembered ones. A new task on an already-seen stimulus is allowed when nothing unseen remains, and is recorded as **familiar stimulus**. A stimulus counts as seen once any of its tasks has been shown, whatever happened to that task afterwards.
+   The automatic planner never puts two tasks from the same exercise on the same day unless both are due. Opening an exercise from the Library is the student's explicit choice and may include several of its tasks.
 4. All selected tasks for a stimulus are answered before any reference, feedback or grading for that stimulus is revealed.
-5. Answers autosave as drafts with a visible "Saved" state. The student can submit an answer, submit it blank on purpose, or skip it. Leaving and returning resumes at the same task with drafts intact.
+5. Answers autosave as drafts with a visible "Saved" state. The student can submit an answer, submit it blank on purpose, or skip it. Submitted answers cannot be edited; trying again makes a new attempt. Skipping ends that task for the session. Leaving and returning resumes at the same task with drafts intact.
 6. The student can stop after any exercise; submitted answers are kept for grading. A task can be suspended from its menu.
 7. Grading mode: **batch** (default; grade at the end, up to the batch size, default 4) or **per exercise** (grade after each exercise's tasks).
 
 ### 5.2 Grade
 
-1. The Grade screen lists the request's rows and offers **Copy for grading** and **Grade it myself**.
-2. Copying creates the frozen grading request and puts its prompt on the clipboard. If the clipboard write fails, the prompt appears in a selectable box. Requests waiting for a reply appear in an **Awaiting grading** list on Home and can be resumed any time.
+1. The Grade screen lists the submitted answers and offers **Copy for grading** and **Grade it myself**. Either one first saves the frozen grading request (more than one if the answers don't fit in one prompt). Each answer belongs to one request only.
+2. Copying puts the request's prompt on the clipboard; copying again gives the same prompt. If the clipboard write fails, the prompt appears in a selectable box. Requests with any row still waiting for a grade, including "needs review" rows, appear in an **Awaiting grading** list on Home and can be resumed any time.
 3. Links open common chatbots in a new tab. Links never carry the prompt.
 4. The student pastes the chatbot's whole reply. The app shows, per row: the score or the reason it is invalid, the tags, and the matched feedback. Warnings and the full raw reply are one tap away.
-5. **Confirm** saves valid rows exactly once and schedules them. Invalid, missing or "needs review" rows stay unresolved; the student can re-paste, enter a score manually, or self-grade them.
-6. After confirming, each result shows the feedback, a **Try again** option for missed tasks (a coached attempt, not scheduled), **Flag** for an unfair grade or a content problem, **Correct grade**, and, for full-credit answers, an optional "That was hard" or "Too easy".
-7. **Discard** abandons a request: unresolved attempts become skipped; graded ones keep their grades.
+5. Before confirming, a full-credit row can be marked "That was hard" or "Too easy".
+6. **Confirm** saves valid rows exactly once and schedules them. Invalid, missing or "needs review" rows stay unresolved; the student can re-paste, enter a score manually, or self-grade them. Confirming twice, from two tabs, or after the grade was undone never schedules a task twice.
+7. After confirming, each result shows the feedback, a **Try again** option for missed tasks (a coached attempt, not scheduled), **Flag** for an unfair grade or a content problem (saved with a category and note, and included in exports), and **Correct grade** for the latest grade of that task.
+8. A confirmed task is not offered again before the next day, even if it is due, so the student is not re-tested on an answer they just read.
+9. **Discard** abandons rows that are still waiting, or the whole request: those answers count for nothing; confirmed grades are kept.
 
 ### 5.3 Review
 
@@ -60,8 +63,10 @@ Due cards are shown with a count on Home. A review re-presents the task as a new
 
 ### 5.4 Progress
 
-- Per skill: first-attempt results and review results shown separately, each as "full credit on X of Y tasks", with the number of tasks and their difficulty mix.
-- Pending, needs-review, coached and discarded attempts are excluded.
+- Per skill, shown separately:
+  - **First attempts**: one per task, the first uncoached submission; "full credit on X of Y tasks", split into new-stimulus and familiar-stimulus tasks, with their difficulty mix. A discarded first submission uses up the task's first attempt and is excluded.
+  - **Reviews**: "full credit on X of Y review attempts, across Z tasks".
+- Pending, needs-review, coached and discarded attempts are excluded from results.
 - Error tags from the last 30 days, presented as "things to look at" with links to the tasks, not as a diagnosis.
 - Counts: tasks attempted, due today, and "stable" (scheduled interval of 21 days or more).
 
@@ -85,14 +90,14 @@ Accounts, sync, merge import, hosted AI grading, multiple-choice questions, time
 
 **First release (owner use):**
 - The owner uses Premise on at least 20 of 30 consecutive days.
-- On the owner's grading-pilot set, the chosen chatbot meets the bar in `GRADING_PROTOCOL.md` §9.
+- The M0 pilot ended in a recorded outcome (`ROADMAP.md` M0), and the app uses the chatbot configuration, or self-grading, that outcome chose.
 - No data loss across the test matrix: reload mid-session, partial grading, correction, export then replace-import.
 - The owner's log of workflow friction after 30 days has no unresolved item marked "would stop me using it".
 
-**Before inviting others:** 50 published exercises across the argument skills, each approved under `CONTENT_GUIDELINES.md` §6, and a second pilot run on the holdout set.
+**Before inviting others:** 50 published exercises across the argument skills, each approved under `CONTENT_GUIDELINES.md` §6, and a second pilot run on fresh held-out exercises. Recommending any chatbot to other students is a separate decision.
 
 ## 9. Open questions
 
 1. Final product name (must avoid "LSAT" and LSAC marks).
 2. May the README describe the target exam by name in one descriptive sentence with a trademark disclaimer? Default: no.
-3. Must public exercises have a reviewer other than their author once outside contributors exist? Default: yes from the first outside contribution; owner approval alone until then.
+3. Must public exercises have a reviewer other than their author once outside contributors exist? Default: yes from the first outside contribution; owner approval alone until then. The content build enforces this default (`EXERCISE_FORMAT.md` §4).

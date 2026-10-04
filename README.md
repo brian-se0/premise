@@ -13,7 +13,7 @@ A free, open-source trainer for argument and reading reasoning. Read a short arg
 
 Or grade yourself against the same rubric, no chatbot needed.
 
-No account, no server, no AI bill. Premise stores your progress only on your device and sends nothing; when you paste a grading prompt into a chatbot, that service receives your answers under its own terms. Export your data any time.
+No account, no server, no AI bill. Premise keeps your answers and progress on your device and never uploads them; when you paste a grading prompt into a chatbot, that service receives your answers under its own terms. Export your data any time.
 
 ## Docs
 
