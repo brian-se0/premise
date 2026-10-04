@@ -20,9 +20,11 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npx playwright install --with-deps chromium webkit
+      # Same base path as the deployed site.
       - run: npm run test:e2e
         env:
-          PAGES_BASE: /
+          PAGES_BASE: /${{ github.event.repository.name }}/
+          E2E_DRAFTS: '1'
       - uses: actions/upload-artifact@v5
         if: failure()
         with:

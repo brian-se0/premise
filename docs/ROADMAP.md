@@ -29,7 +29,7 @@ No app UI or storage yet. Two parts, in order.
 - Vite + React + TypeScript (strict), ESLint, Prettier, Vitest, Playwright (Chromium, WebKit), CI, GitHub Pages with hash routing.
 - Zod schema for exercise format schema 3, `scripts/build-content.ts`, hashing, validation rules, drafts excluded from production.
 - Basic About page: source link, deployed commit, licenses.
-- **Done when:** `npm run check` passes in CI; the deployed site loads a deep link and shows the About page; each validation rule in `EXERCISE_FORMAT.md` §4 has a failing-fixture test, including task status, retired-key reuse, approval revision and the independent-approver rule.
+- **Done when:** `npm run check` passes in CI; the deployed site loads a deep link and shows the About page; each machine-checked validation rule in `EXERCISE_FORMAT.md` §4 has a failing-fixture test (rule 13 a warning test), including task status, retired-key reuse, recorded retirement, approval revision and the independent-approver rule; rule 10 is an item on the author's approval checklist (`CONTENT_GUIDELINES.md` §7), not a build check.
 
 ## M2. Vertical slice
 Answer → autosave → submit → copy → paste → validate → confirm once → see results → export → replace-import.
