@@ -15,6 +15,7 @@ export function Layout() {
             Home
           </NavLink>
           <NavLink to="/library">Library</NavLink>
+          <NavLink to="/settings">Settings</NavLink>
           <NavLink to="/about">About</NavLink>
         </nav>
       </header>
