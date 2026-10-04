@@ -29,7 +29,8 @@ import {
   type GradeRow,
   type RowState,
 } from '../../storage/ops.ts';
-import { ctx, db, newOpId, saveSetting, useLive, useSettings } from '../runtime.ts';
+import { openMisses } from '../../domain/planner.ts';
+import { ctx, db, loadPlannerState, newOpId, saveSetting, useLive, useSettings } from '../runtime.ts';
 import { NotFoundPage } from './NotFoundPage.tsx';
 
 export const DISCLOSURE =
@@ -97,6 +98,16 @@ export function RequestPage() {
 function RequestBody({ id }: { id: string }) {
   const [params] = useSearchParams();
   const data = useLive(() => load(id), [id]);
+  // Tasks whose miss still has a fresh argument to check it, so results promise one only when it exists.
+  const freshChecks = useLive(
+    async () =>
+      new Set(
+        openMisses(await loadPlannerState())
+          .filter((m) => m.freshRepair)
+          .map((m) => m.taskId),
+      ),
+    [],
+  );
   const settings = useSettings();
   const [notice, setNotice] = useState('');
 
@@ -131,7 +142,13 @@ function RequestBody({ id }: { id: string }) {
       <h2>Answers</h2>
       <ol className="rows">
         {rows.map((r) => (
-          <RowView key={r.rowId} row={r} request={request} onNotice={setNotice} />
+          <RowView
+            key={r.rowId}
+            row={r}
+            request={request}
+            onNotice={setNotice}
+            freshCheck={freshChecks?.has(r.attempt.taskId) ?? false}
+          />
         ))}
       </ol>
 
@@ -492,7 +509,17 @@ function tipOf(feedback: string): string | null {
     : null;
 }
 
-function RowView({ row, request, onNotice }: { row: Row; request: RequestRecord; onNotice: (s: string) => void }) {
+function RowView({
+  row,
+  request,
+  onNotice,
+  freshCheck,
+}: {
+  row: Row;
+  request: RequestRecord;
+  onNotice: (s: string) => void;
+  freshCheck: boolean;
+}) {
   const navigate = useNavigate();
   const [mode, setMode] = useState<'none' | 'self' | 'manual' | 'correct' | 'flag'>('none');
   const { snapshot, attempt, grading, state } = row;
@@ -555,7 +582,11 @@ function RowView({ row, request, onNotice }: { row: Row; request: RequestRecord;
             </details>
           )}
           {missed && attempt.kind !== 'coached' && (
-            <p className="meta">Premise will check this point on a fresh argument in a later session.</p>
+            <p className="meta">
+              {freshCheck
+                ? 'Premise will check this point on a fresh argument in a later session.'
+                : 'Premise has no unseen argument that tests this point yet; it will come back as a review.'}
+            </p>
           )}
           {row.card && attempt.kind !== 'coached' && row.changeable && (
             <p className="meta">Due again on {formatLocalDate(localDateOf(row.card.due))}.</p>
