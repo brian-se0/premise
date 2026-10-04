@@ -1,0 +1,42 @@
+# Decision Log
+
+Newest first. Each entry: date, decision, why, and what it rules out. Reopening a decision needs a new entry, not an edit.
+
+## 2026-10-04 — Spec v0.2 after peer review round 1
+GPT-6 Pro reviewed spec v0.1 (verdict: ready with changes; 4 blockers, 22 major, 1 minor). All 27 findings were accepted; see `reviews/2026-10-04-specs-v0.1.md`. The decisions below record the ones that change earlier entries or set new rules.
+
+## 2026-10-04 — Grading integrity rules
+Grading requests have UUIDs and frozen content snapshots; score rows use request-local ids; invalid scores are never repaired; confirm is one idempotent transaction; corrections undo and reapply. Prompt version v2, exercise schema v2. **Why:** the v0.1 rules could turn invalid or stale replies into full credit and apply a review twice. **Rules out:** clamping, task-id-keyed rows, short codes as keys.
+
+## 2026-10-04 — Rating policy v1
+Full credit → Good (student may choose Hard or Easy); anything less → Again; needs-review and coached attempts create no review. Review time is the answer's submission time. **Why:** partial credit is not "correct but hard" in FSRS terms. Provisional; to be calibrated with pilot data. **Supersedes:** the ratio mapping in spec v0.1.
+
+## 2026-10-04 — Grading pilot before app code
+Roadmap now starts with M0, a manual grading pilot, then a vertical slice. Merge import, charts, the 100-exercise target and chatbot endorsements are cut from the first release. **Why:** grading quality and the copy-paste loop are the central risks.
+
+## 2026-10-04 — Content sources narrowed
+CC BY-SA removed from allowed sources; CC BY 4.0, original writing, federal-employee works, court opinions and pre-1931 public-domain editions remain, with full provenance fields. Public-domain and CC BY text keeps its own status. **Why:** BY-SA material cannot be relicensed under NonCommercial terms.
+
+## 2026-10-04 — License rationale, corrected
+The licenses stay (code AGPL-3.0-only, contributed content CC BY-NC-SA 4.0). Corrected rationale: AGPL keeps the code and any hosted modifications open, but does not forbid commercial use; NC-SA restricts commercial reuse only of content the project can license. A contributor agreement matters only if the owner later wants to offer the code or content under other terms; its exact grant will be written, with legal review, before any outside contribution is accepted. **Supersedes:** the rationale in the earlier Licenses entry.
+
+## 2026-10-04 — Privacy wording
+"Premise stores progress only on this device and sends nothing. When you paste a grading prompt into another service, that service receives your answers under its own terms." Manual pasting is not a claim of compliance with any chatbot's terms. **Supersedes:** "no personal data held" and "stays within each service's terms" in earlier entries.
+
+## 2026-10-04 — Peer review by a second model
+Specs and milestone pull requests get a review from a second AI model (GPT-6 Pro, via the owner's ChatGPT) using `docs/PEER_REVIEW.md`. **Why:** a different model catches blind spots. **Rules out:** merging contract changes without a review round.
+
+## 2026-10-04 — Licenses
+Code AGPL-3.0-only; exercise content CC BY-NC-SA 4.0. **Why:** keeps the project open while discouraging closed commercial clones and resale of the exercise library. The owner, as copyright holder, can still offer a paid version; outside contributions will need a contributor agreement to keep that option. **Rules out:** MIT/Apache for code; CC BY for content.
+
+## 2026-10-04 — Static app, no server
+Vite/React/TypeScript static site on GitHub Pages; IndexedDB storage with export/import; ts-fsrs scheduling. **Why:** copy-and-paste grading removes the need for any backend, so there is no cost, no accounts and no personal data held. **Rules out:** accounts and sync in v1.
+
+## 2026-10-04 — Copy-and-paste grading with a score block
+The app builds a grading prompt; the student pastes it into any chatbot; the reply ends with a fixed-format score block the student pastes back. Batch grading by default, per-question available. **Why:** zero AI cost, works with any chatbot the student already uses, stays within each service's terms because the student does the pasting. **Rules out:** API keys and hosted AI in v1.
+
+## 2026-10-04 — Free-response reasoning trainer
+Students write conclusions, assumptions, flaws and main points for original or public-domain arguments and passages, graded against reference answers and rubrics. **Why:** trains producing answers rather than recognizing them, which official multiple-choice practice does not, and AI grades written answers against a reference far more reliably than it writes multiple-choice questions. **Rules out:** a multiple-choice question bank.
+
+## 2026-10-04 — No official content, no test branding
+No LSAC questions or paraphrases; no "LSAT" or LSAC marks in the name, UI or marketing. **Why:** LSAC licenses and enforces its content and marks (Law360, 2026-07-07: LSAC sued a test-prep company in the Eastern District of Pennsylvania over unpaid licensing fees and trademark use in digital offerings; https://www.law360.com/articles/2497915), and duplicating LawHub adds nothing. **Rules out:** a LawHub companion that references official questions.
