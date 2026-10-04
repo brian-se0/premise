@@ -18,28 +18,30 @@
     "pilot:prompt": "tsx pilot/build-prompt.ts"
   },
   "devDependencies": {
-    "@types/node": "22.20.5",
-    "tsx": "4.23.15",
-    "typescript": "5.9.3",
-    "vitest": "5.0.3",
-    "yaml": "2.9.1",
-    "vite": "8.3.2",
-    "@vitejs/plugin-react": "6.1.1",
-    "eslint": "10.12.0",
     "@eslint/js": "10.0.1",
-    "typescript-eslint": "8.71.0",
-    "eslint-plugin-react-hooks": "7.1.1",
-    "globals": "17.13.0",
-    "prettier": "3.9.9",
     "@playwright/test": "1.63.0",
+    "@types/node": "22.20.5",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
-    "fake-indexeddb": "6.2.5"
+    "@vitejs/plugin-react": "6.1.1",
+    "eslint": "10.12.0",
+    "eslint-plugin-react-hooks": "7.1.1",
+    "fake-indexeddb": "6.2.5",
+    "globals": "17.13.0",
+    "prettier": "3.9.9",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.71.0",
+    "vite": "8.3.2",
+    "vitest": "5.0.3",
+    "yaml": "2.9.1"
   },
   "dependencies": {
+    "dexie": "4.4.6",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-router": "8.4.0",
+    "ts-fsrs": "5.4.2",
     "zod": "4.6.5"
   }
 }
