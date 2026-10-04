@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { loadExercises } from '../../scripts/content.ts';
 import { addDays, isDueOn, localDate } from '../../src/domain/dates.ts';
-import { planExercise, planNewOnly, planToday, type PlannerState } from '../../src/domain/planner.ts';
+import {
+  dueTaskIds,
+  openMisses,
+  planExercise,
+  planNewOnly,
+  planToday,
+  type PlannerState,
+} from '../../src/domain/planner.ts';
 import type { AttemptRecord, CardRecord, GradingRecord } from '../../src/domain/records.ts';
 import { DEFAULT_SETTINGS } from '../../src/domain/records.ts';
 import { ratingFor, review, Rating } from '../../src/domain/scheduler.ts';
@@ -16,6 +23,7 @@ function state(extra: Partial<PlannerState> = {}): PlannerState {
     gradings: [],
     cards: [],
     taskStates: [],
+    sessions: [],
     settings: { finalWeeks: false, dailyReviewCap: DEFAULT_SETTINGS.dailyReviewCap, focus: { tag: null, note: '' } },
     today: TODAY,
     ...extra,
@@ -23,7 +31,14 @@ function state(extra: Partial<PlannerState> = {}): PlannerState {
 }
 
 let n = 0;
-function graded(taskId: string, score: number, max: number, tags: string[], day: string) {
+function graded(
+  taskId: string,
+  score: number,
+  max: number,
+  tags: string[],
+  day: string,
+  extra: Partial<AttemptRecord> = {},
+) {
   const id = `a${++n}`;
   const at = `${day}T12:00:00.000Z`;
   const attempt: AttemptRecord = {
@@ -43,6 +58,7 @@ function graded(taskId: string, score: number, max: number, tags: string[], day:
     submittedAt: at,
     updatedAt: at,
     elapsedSeconds: null,
+    ...extra,
   };
   const grading: GradingRecord = {
     id: `g${id}`,
@@ -70,6 +86,23 @@ function graded(taskId: string, score: number, max: number, tags: string[], day:
 function exerciseOf(taskId: string) {
   return taskId.split('.')[0];
 }
+
+/** An attempt opened today in a session (shown, not graded). */
+function opened(taskId: string, sessionId: string, extra: Partial<AttemptRecord> = {}): AttemptRecord {
+  return {
+    ...graded(taskId, 0, 1, [], TODAY).attempt,
+    sessionId,
+    state: 'submitted',
+    currentGradingId: null,
+    ...extra,
+  };
+}
+
+function dueYesterday(card: CardRecord): CardRecord {
+  return { ...card, due: '2026-10-09T00:00:00.000Z' };
+}
+
+const FINAL = { finalWeeks: true, dailyReviewCap: 2, focus: { tag: null, note: '' } };
 
 describe('scheduler', () => {
   it('rating policy v1', () => {
@@ -180,5 +213,182 @@ describe('planner', () => {
 
   it('a library session offers every eligible active task of the exercise', () => {
     expect(planExercise(state(), 'arg-0004').map((e) => e.taskId)).toEqual(['arg-0004.flaw', 'arg-0004.weaken']);
+  });
+});
+
+describe('planner repair loop', () => {
+  it('reserves a fresh repair under a full review load and puts it before the repeat', () => {
+    const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-01');
+    const others = ['arg-0002.assumption', 'arg-0006.assumption', 'arg-0008.assumption'].map((t) =>
+      graded(t, 2, 2, [], '2026-10-01'),
+    );
+    const all = [miss, ...others];
+    const s = state({
+      attempts: all.map((x) => x.attempt),
+      gradings: all.map((x) => x.grading),
+      cards: all.map((x) => dueYesterday(x.card)),
+    });
+    expect(dueTaskIds(s)).toHaveLength(4);
+    const plan = planToday(s);
+    expect(plan).toHaveLength(4);
+    const repair = plan.findIndex((e) => e.reason === 'repair');
+    expect(plan[repair]).toMatchObject({ repairs: 'arg-0003.flaw' });
+    expect(plan[repair]!.taskId).toMatch(/^arg-000[1457]\.flaw$/);
+    const repeat = plan.findIndex((e) => e.taskId === 'arg-0003.flaw');
+    expect(repeat).toBeGreaterThan(repair);
+    expect(plan.filter((e) => e.reason === 'review')).toHaveLength(3);
+  });
+
+  it('holds back a repeat when its fresh repair does not fit', () => {
+    const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-01');
+    const s = state({ attempts: [miss.attempt], gradings: [miss.grading], cards: [dueYesterday(miss.card)] });
+    expect(planToday(s, 1)).toEqual([expect.objectContaining({ reason: 'repair', repairs: 'arg-0003.flaw' })]);
+  });
+
+  it('a success on a familiar stimulus leaves the miss open; a fresh one clears it', () => {
+    const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-01');
+    const familiar = graded('arg-0001.flaw', 2, 2, [], '2026-10-02', { stimulusSeenBefore: true });
+    const coached = graded('arg-0004.flaw', 2, 2, [], '2026-10-02', { kind: 'coached' });
+    const fresh = graded('arg-0005.flaw', 2, 2, [], '2026-10-03');
+    const open = (xs: (typeof miss)[]) =>
+      openMisses(state({ attempts: xs.map((x) => x.attempt), gradings: xs.map((x) => x.grading) })).map(
+        (m) => m.taskId,
+      );
+    expect(open([miss, familiar])).toEqual(['arg-0003.flaw']);
+    expect(open([miss, coached])).toEqual(['arg-0003.flaw']);
+    expect(open([miss, familiar, fresh])).toEqual([]);
+  });
+
+  it('repairs only from unseen exercises, and says so when none is left', () => {
+    const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-01');
+    // Seen but never attempted on their flaw task: arg-0001, arg-0004, arg-0005, arg-0007.
+    const shown = ['arg-0001.conclusion', 'arg-0004.weaken', 'arg-0005.conclusion', 'arg-0007.flaw'].map(
+      (t): AttemptRecord => ({
+        ...graded(t, 0, 1, [], '2026-10-02').attempt,
+        state: 'skipped',
+        currentGradingId: null,
+      }),
+    );
+    const s = state({ attempts: [miss.attempt, ...shown], gradings: [miss.grading] });
+    expect(openMisses(s)).toEqual([expect.objectContaining({ taskId: 'arg-0003.flaw', freshRepair: false })]);
+    const plan = planToday(s);
+    expect(plan.some((e) => e.reason === 'repair')).toBe(false);
+    // A flaw task from a seen exercise may still come as a generic new task, never as a repair.
+    for (const e of plan.filter((x) => x.taskId.endsWith('.flaw'))) expect(e.reason).toBe('new');
+
+    const open = openMisses(state({ attempts: [miss.attempt], gradings: [miss.grading] }));
+    expect(open[0]!.freshRepair).toBe(true);
+  });
+});
+
+describe('planner policies on due reviews', () => {
+  it('final-weeks mode drops easy due reviews and applies the remaining daily cap', () => {
+    const reviewedToday = graded('arg-0007.flaw', 2, 2, [], TODAY, { kind: 'review', sessionId: 'today1' });
+    const easy = graded('arg-0006.assumption', 2, 2, [], '2026-10-01');
+    const medium = graded('arg-0004.flaw', 2, 2, [], '2026-10-01');
+    const medium2 = graded('arg-0005.flaw', 2, 2, [], '2026-10-01');
+    const due = [easy, medium, medium2];
+    const s = state({
+      attempts: [reviewedToday.attempt, ...due.map((x) => x.attempt)],
+      gradings: [reviewedToday.grading, ...due.map((x) => x.grading)],
+      cards: [reviewedToday.card, ...due.map((x) => dueYesterday(x.card))],
+      sessions: [{ id: 'today1', mode: 'today' }],
+      settings: FINAL,
+    });
+    expect(dueTaskIds(s)).toEqual(['arg-0004.flaw', 'arg-0005.flaw']);
+    const reviews = planToday(s).filter((e) => e.reason === 'review');
+    expect(reviews).toEqual([{ taskId: 'arg-0004.flaw', reason: 'review' }]); // cap 2, one used today
+    for (const e of planToday(s)) {
+      expect(exercises.find((x) => x.id === exerciseOf(e.taskId))!.difficulty).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  it('final-weeks mode may offer an easier fresh repair, explicitly', () => {
+    const miss = graded('arg-0006.assumption', 0, 2, ['restates-conclusion'], '2026-10-01');
+    const plan = planToday(state({ attempts: [miss.attempt], gradings: [miss.grading], settings: FINAL }));
+    // arg-0002 and arg-0003 are difficulty 2, below the final-weeks floor of 3.
+    expect(plan[0]).toMatchObject({ reason: 'repair', repairs: 'arg-0006.assumption' });
+    expect(plan[0]!.taskId).toMatch(/^arg-000[23]\.assumption$/);
+    expect(plan.slice(1).every((e) => e.reason === 'new')).toBe(true);
+    expect(plan.filter((e) => e.taskId === 'arg-0006.assumption')).toEqual([]); // easy repeat stays out
+  });
+
+  it('mastered conclusions stop coming back as due reviews but stay in the Library', () => {
+    const a = graded('arg-0005.conclusion', 1, 1, [], '2026-10-01');
+    const b = graded('arg-0008.conclusion', 1, 1, [], '2026-10-02');
+    const base = { attempts: [a.attempt, b.attempt], gradings: [a.grading, b.grading] };
+    const s = state({ ...base, cards: [a.card, b.card].map(dueYesterday) });
+    expect(dueTaskIds(s)).toEqual([]);
+    expect(planToday(s).some((e) => e.taskId.endsWith('.conclusion'))).toBe(false);
+    expect(planExercise(s, 'arg-0005')).toContainEqual({ taskId: 'arg-0005.conclusion', reason: 'review' });
+
+    // A later wrong-claim miss brings them back.
+    const c = graded('arg-0004.flaw', 0, 2, ['premise-as-conclusion'], '2026-10-03');
+    const back = state({
+      attempts: [...base.attempts, c.attempt],
+      gradings: [...base.gradings, c.grading],
+      cards: [a.card, b.card].map(dueYesterday),
+    });
+    expect(dueTaskIds(back)).toEqual(['arg-0005.conclusion', 'arg-0008.conclusion']);
+  });
+
+  it('coached successes are not evidence of conclusion mastery', () => {
+    const a = graded('arg-0005.conclusion', 1, 1, [], '2026-10-01', { kind: 'coached' });
+    const b = graded('arg-0008.conclusion', 1, 1, [], '2026-10-02', { kind: 'coached' });
+    const plan = planNewOnly(state({ attempts: [a.attempt, b.attempt], gradings: [a.grading, b.grading] }), {
+      skill: 'conclusion',
+      difficulty: null,
+    });
+    expect(plan.length).toBeGreaterThan(0);
+  });
+});
+
+describe('daily exposure', () => {
+  it('two New only sessions on one day never share an exercise', () => {
+    const filter = { skill: null, difficulty: 3 };
+    const first = planNewOnly(state(), filter);
+    expect(first.map((e) => exerciseOf(e.taskId))).toEqual(['arg-0004', 'arg-0005', 'arg-0007']);
+    const s = state({
+      attempts: first.map((e) => opened(e.taskId, 'new1')),
+      sessions: [{ id: 'new1', mode: 'new' }],
+    });
+    expect(planNewOnly(s, filter)).toEqual([]);
+    const today = planToday(s);
+    for (const e of today) expect(['arg-0004', 'arg-0005', 'arg-0007']).not.toContain(exerciseOf(e.taskId));
+  });
+
+  it('siblings share a day only when both are due reviews', () => {
+    const f = graded('arg-0004.flaw', 2, 2, [], '2026-10-01');
+    const w = graded('arg-0004.weaken', 2, 2, [], '2026-10-01');
+    const base = { attempts: [f.attempt, w.attempt], gradings: [f.grading, w.grading] };
+    const both = planToday(state({ ...base, cards: [f.card, w.card].map(dueYesterday) }));
+    expect(both.filter((e) => e.reason === 'review').map((e) => e.taskId)).toEqual([
+      'arg-0004.flaw',
+      'arg-0004.weaken',
+    ]);
+
+    // One due today, the sibling already seen today in a Library session: not a due review, so no.
+    const lib = opened('arg-0004.flaw', 'lib1', { kind: 'review' });
+    const mixed = planToday(
+      state({
+        attempts: [...base.attempts, lib],
+        gradings: base.gradings,
+        cards: [f.card, dueYesterday(w.card)],
+        sessions: [{ id: 'lib1', mode: 'library' }],
+      }),
+    );
+    expect(mixed.some((e) => exerciseOf(e.taskId) === 'arg-0004')).toBe(false);
+
+    // The same exposure from a Today session's due review allows the due sibling.
+    const due = opened('arg-0004.flaw', 'today1', { kind: 'review' });
+    const allowed = planToday(
+      state({
+        attempts: [...base.attempts, due],
+        gradings: base.gradings,
+        cards: [f.card, dueYesterday(w.card)],
+        sessions: [{ id: 'today1', mode: 'today' }],
+      }),
+    );
+    expect(allowed).toContainEqual({ taskId: 'arg-0004.weaken', reason: 'review' });
   });
 });

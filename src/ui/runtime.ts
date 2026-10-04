@@ -90,12 +90,13 @@ export async function requestPersistence(): Promise<void> {
 }
 
 export async function loadPlannerState(): Promise<PlannerState> {
-  const [attempts, gradings, cards, taskStates, settings] = await Promise.all([
+  const [attempts, gradings, cards, taskStates, sessions, settings] = await Promise.all([
     db.attempts.toArray(),
     db.gradings.toArray(),
     db.cards.toArray(),
     db.taskStates.toArray(),
+    db.sessions.toArray(),
     loadSettings(),
   ]);
-  return { exercises: content.exercises, attempts, gradings, cards, taskStates, settings, today: today() };
+  return { exercises: content.exercises, attempts, gradings, cards, taskStates, sessions, settings, today: today() };
 }
