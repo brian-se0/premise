@@ -12,7 +12,8 @@ import type { BuiltExercise, Snapshot, Task } from '../domain/types.ts';
 import { openDb } from '../storage/db.ts';
 import type { OpContext } from '../storage/ops.ts';
 
-export const db = openDb();
+// The draft preview keeps its own database so its data never mixes with the main site's.
+export const db = openDb(__PREVIEW__ ? 'premise-preview' : 'premise');
 
 function random(): number {
   const buf = new Uint32Array(1);

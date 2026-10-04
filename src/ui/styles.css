@@ -328,3 +328,10 @@ pre {
 main {
   overflow-wrap: anywhere;
 }
+
+.preview-banner {
+  margin: 0;
+  padding: 8px 16px;
+  background: var(--notice);
+  font-size: 0.9rem;
+}

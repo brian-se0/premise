@@ -31,6 +31,11 @@ jobs:
       - run: npm run build
         env:
           PAGES_BASE: /${{ github.event.repository.name }}/
+      # Draft preview at <base>preview/: drafts included, separate storage, labelled as unreviewed.
+      - run: npx tsx scripts/build-content.ts && npx vite build --outDir dist/preview --emptyOutDir
+        env:
+          PAGES_BASE: /${{ github.event.repository.name }}/preview/
+          PREMISE_PREVIEW: '1'
       # Browser-test the exact artifact that will be published, under its real base path.
       - run: npx playwright install --with-deps chromium webkit
       - run: npx playwright test
