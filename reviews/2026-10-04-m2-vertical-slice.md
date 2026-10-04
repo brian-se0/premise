@@ -6580,3 +6580,36 @@ The save-failure test checks visible waiting state and eventual success, but not
 
 **Verdict: merge after fixes.**  
 **Is storage schema v1 now safe to freeze? No — resolve durable review ordering, scheduler provenance/configuration persistence, and the import-validation contract first.**
+
+## Triage
+
+All 26 findings accepted (2 blockers, 22 major, 2 minor). Fixed on `m2-vertical-slice` in the commits after the review. Storage schema v1 is frozen from the M2 merge, now that the three conditions in the verdict are met (`DECISIONS.md` "Storage schema v1 frozen after the M2 review"). CI also caught a Chromium failure before the review arrived: the disclosure's accept button copied after an IndexedDB write, outside the click gesture; it now copies inside the click.
+
+| # | Severity | Decision | Change |
+| --- | --- | --- | --- |
+| M2-1 | blocker | accepted | Review logs carry `seq`, assigned in the applying transaction (unique index). Undo and correction use the highest active seq; `appliedAt` is display-only. Tests: equal timestamps, a clock moving backwards, ids sorting against application order. |
+| M2-2 | blocker | accepted | The request page is keyed by request id, so navigation resets it. Each preview records the request, each row's attempt and snapshot, and the text read; Confirm refuses if any changed. Editing the reply clears the preview. |
+| M2-3 | major | accepted | `confirmRows` and `discardRows` refuse repeated attempts and rows outside the request before writing; `prepareGrading` refuses repeats. Tests compare every table, receipts included. |
+| M2-4 | major | accepted | Autosaves run in order with edit generations; "Saved" shows only for the latest edit. Stop for now and Submit wait for the save and stay on the page with the text if it fails; a failed skip is reported. Browser test injects a quota error. |
+| M2-5 | major | accepted | `saveDraft` checks and increments the revision; a repeated submit succeeds only with identical text (`AlreadySubmittedError` otherwise). A conflicting save or another tab's submit stops autosave and keeps this tab's text on screen. Browser test with two tabs. |
+| M2-6 | major | accepted | Self, manual and correction forms keep the revision seen when opened. `abandonRequest` takes the displayed revisions and checks them. |
+| M2-7 | major | accepted | Home lists submitted-but-ungraded sessions and recent results, and shows stored work even when the build has no exercises. |
+| M2-8 | major | accepted | Candidates track a consumption end separate from the displayed range; feedback after an unterminated candidate is left unmatched. Fixtures for foreign, malformed-header and same-request incomplete candidates (the foreign case reproduced the reported `clean` result). An echoed END OF ITEMS line also ends a candidate. |
+| M2-9 | minor | accepted | Explicit trimming that keeps U+FEFF; zero-width characters never trimmed. Fixtures for U+FEFF and U+200B in scores and tags. |
+| M2-10 | major | accepted | Correction needs an accepted row and a valid score, refuses discarded rows, and leaves `taskStates` untouched (only confirmation sets `notBefore`). Undo and tag edits refuse discarded rows. |
+| M2-11 | major | accepted | `reviewedAt` is the submission time; the effective scheduler time for an out-of-order grade is `cardAfter.last_review` (ARCHITECTURE §6.4). The test checks the stored log. |
+| M2-12 | major | accepted | `schedulerConfigs` table; all referenced configurations re-exported; conflicting definitions refused; new reviews use the current scheduler; `cardBefore` keeps its version. Test: unknown version import, review, undo, export, re-import. |
+| M2-13 | major | accepted | Integrity checker adds reply/request ownership, range bounds, flag snapshots, lifecycle rules, card-chain consistency, unique seq, the grade validator on every revision (needs-review included), and time checks. |
+| M2-14 | major | accepted | Settings validated by key; canonical UTC timestamps required; size checked in bytes, `File.size` before reading. |
+| M2-15 | major | accepted | Backup actions run one at a time (Replace waits for Export); `lastExportAt` is saved after the file is produced; only the latest file selection may show a preview. |
+| M2-16 | major | accepted | Show prompt goes through the disclosure too. `disclosureSeen` and `persistGranted` are device-local: not exported, kept on replace. Browser tests for both routes. |
+| M2-17 | major | accepted | An unparseable reply is stored (`saveReply`) and linked to grades entered by hand; correction keeps reply and range provenance. Previews show matched feedback; results and needs-review rows show their feedback and the full reply after the request closes. |
+| M2-18 | major | accepted | One slot is reserved for a fresh repair; a missed task's repeat comes only after its repair. Test with four due cards. |
+| M2-19 | major | accepted | Repairs only from never-seen exercises; a miss clears only on an uncoached full-credit attempt on an unseen stimulus. `freshRepair: false` when none exists, and the results page says so instead of promising a fresh check. |
+| M2-20 | major | accepted | The final-weeks floor applies to due reviews; a fresh repair is the one stated exception. |
+| M2-21 | major | accepted | The conclusion policy applies to due selection; coached attempts are not evidence; the Library still offers the tasks. |
+| M2-22 | major | accepted | One daily exposure rule across Today and New only, counting every task shown today; siblings only when all are due reviews. Test with two sessions on one day. |
+| M2-23 | major | accepted | `openEntry` rechecks eligibility and competing drafts in its transaction (coached retry excepted) and the session page says why a task can't open. Plans are recomputed from storage on each Home render; planned-but-unopened tasks don't count as shown (the open-time recheck covers them). |
+| M2-24 | minor | accepted | "Stop showing this task" / "Show this task again" on graded answers; Settings lists hidden tasks with Show again. |
+| M2-25 | major | accepted | Exact card restoration after several reviews with undo and correction; full-record export-import-export comparison; a late `replaceAll` failure leaves every table intact; full dataset equality after stale and failed operations; submitted fields stay frozen. |
+| M2-26 | major | accepted | The stale test confirms a preview made before another tab's confirm and undo; re-paste really re-pastes and checks storage; the two-tab confirm fires every click; the failure test compares every table; the clipboard is read back in Chromium; pasted markup stays text. |

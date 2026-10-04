@@ -196,6 +196,7 @@ Rules for all of them:
 - **Out-of-order grades.** If an attempt is confirmed after a later-submitted attempt of the same task was already reviewed, the review is still applied on top of the current card (no replay), and the scheduler runs at the later of `reviewedAt` and the card's `last_review`, so elapsed time is never negative. That effective time is recorded as `cardAfter.last_review`; `reviewedAt` keeps the submission time.
 - **Eligibility** is separate: after a grading is confirmed, the task's `taskStates.notBefore` becomes the next local date after confirmation. A task is offered only when it is due (or new), not suspended, and today is on or after `notBefore`, so a student is never re-tested on an answer they have just read. Undo and correction never clear or set it.
 - **Eligibility is rechecked when work is opened**, not only when a session is planned: `openEntry` creates an uncoached attempt only if, in its own transaction, no other uncoached draft of the task exists, the task is not suspended, it has no submitted attempt still pending or needing review, and today is on or after `notBefore`. A competing draft is returned instead of creating a second attempt, so its text is never lost. A `retry` session (coached attempts, never scheduled) is the one explicit exception.
+- **Automatic planning** (Today, New only) also applies the final-weeks difficulty floor and the conclusion policy to due cards, and the daily exposure rule (no two tasks of one exercise on a day unless both are due reviews). Library sessions skip both, but what they show counts as shown that day. See `DECISIONS.md` "Planner v1 after the M2 review".
 
 ### 6.5 Scheduler configuration
 
@@ -209,7 +210,7 @@ Rules for all of them:
 | `enable_short_term` | false (whole-day intervals only; one practice session a day is the expected use) |
 | `w` | the default parameters of the pinned ts-fsrs version, copied into the file |
 
-Timestamps are stored as UTC ISO 8601. Day boundary is local midnight. A card is due on a local date when its due time falls on or before the end of that date. Due reviews are shown in due order; overdue cards stay due. Adding a scheduler version or changing parameters requires a `DECISIONS.md` entry.
+Timestamps are stored as UTC ISO 8601. Day boundary is local midnight. A card is due on a local date when its due time falls on or before the end of that date. Due reviews are shown in due order, after any reserved fresh repair; overdue cards stay due. Adding a scheduler version or changing parameters requires a `DECISIONS.md` entry.
 
 ## 7. Export and import
 
