@@ -113,11 +113,13 @@ describe('scheduler', () => {
     expect(ratingFor(2, 2, 'coached', 'good')).toBeNull();
   });
 
-  it('uses whole days and never reviews before the last review', () => {
+  it('uses whole days and never runs the scheduler before the last review', () => {
     const first = review('fsrs-1', null, Rating.Good, '2026-10-05T10:00:00.000Z');
     expect(first.after.scheduled_days).toBeGreaterThanOrEqual(1);
+    // The effective scheduler time is clamped; the stored reviewedAt is not (storage.test.ts).
     const late = review('fsrs-1', first.after, Rating.Good, '2026-10-01T10:00:00.000Z');
-    expect(late.reviewedAt).toBe('2026-10-05T10:00:00.000Z');
+    expect(late.effectiveAt).toBe('2026-10-05T10:00:00.000Z');
+    expect(late.after.last_review).toBe('2026-10-05T10:00:00.000Z');
   });
 
   it('local dates', () => {

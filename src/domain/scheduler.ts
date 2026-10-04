@@ -49,21 +49,31 @@ export function emptyCard(at: string): CardFields {
 }
 
 /**
- * Applies one review. `reviewedAt` is the attempt's submission time; if the card was already
- * reviewed later than that (grades confirmed out of order), the review is placed at the card's
- * last review so elapsed time is never negative.
+ * Applies one review under scheduler `version` (ARCHITECTURE.md §6.4).
+ *
+ * `reviewedAt` is the attempt's submission time and is never changed. Out-of-order policy: if the
+ * card was already reviewed later than that (grades confirmed out of order), the scheduler runs at
+ * the card's last review instead, so elapsed time is never negative. That effective time is
+ * returned as `effectiveAt` and is also `after.last_review`; callers store `reviewedAt` as given.
+ *
+ * `before` may come from any scheduler version: its card fields are used as they are.
  */
 export function review(
   version: string,
   before: CardFields | null,
   rating: Grade,
   reviewedAt: string,
-): { after: CardFields; reviewedAt: string } {
+): { after: CardFields; effectiveAt: string } {
   const config = SCHEDULER_CONFIGS[version];
   if (!config) throw new Error(`Unknown scheduler version ${version}`);
   const scheduler = fsrs(generatorParameters({ ...config, w: [...config.w] }));
   const card = before ?? emptyCard(reviewedAt);
-  const at = card.last_review && card.last_review > reviewedAt ? card.last_review : reviewedAt;
+  const at = effectiveReviewTime(before, reviewedAt);
   const { card: next } = scheduler.next(toCard(card), new Date(at), rating);
-  return { after: fromCard(next), reviewedAt: at };
+  return { after: fromCard(next), effectiveAt: at };
+}
+
+/** The time the scheduler applies a review at: the later of submission and the card's last review. */
+export function effectiveReviewTime(before: CardFields | null, reviewedAt: string): string {
+  return before?.last_review && before.last_review > reviewedAt ? before.last_review : reviewedAt;
 }

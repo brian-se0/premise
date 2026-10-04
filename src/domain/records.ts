@@ -1,5 +1,6 @@
 // Stored record shapes, storage schema v1 (docs/ARCHITECTURE.md §5).
-// Timestamps are UTC ISO 8601 strings; local dates are YYYY-MM-DD.
+// Timestamps are canonical UTC ISO 8601 strings (Date.prototype.toISOString, ending in Z), so
+// string order is time order; local dates are YYYY-MM-DD.
 
 import type { SnapshotPayload } from './types.ts';
 
@@ -114,9 +115,13 @@ export interface CardFields {
   last_review: string | null;
 }
 
-export interface CardRecord extends CardFields {
-  taskId: string;
+/** Card fields plus the scheduler version that produced them. */
+export interface VersionedCard extends CardFields {
   schedulerVersion: string;
+}
+
+export interface CardRecord extends VersionedCard {
+  taskId: string;
 }
 
 export interface ReviewLogRecord {
@@ -127,12 +132,21 @@ export interface ReviewLogRecord {
   opId: string;
   rating: number;
   ratingPolicy: string;
+  /** The scheduler that computed cardAfter (always the app's current one when applied). */
   schedulerVersion: string;
+  /** The attempt's submittedAt (what the student knew when they answered). */
   reviewedAt: string;
-  cardBefore: CardFields | null;
+  /** The card before this review, with its own scheduler version, or null if no card existed. */
+  cardBefore: VersionedCard | null;
+  /** cardAfter.last_review is the effective scheduler time: max(reviewedAt, cardBefore.last_review). */
   cardAfter: CardFields;
-  /** When the review was applied; orders reviews of one card (reviewedAt can be out of order). */
+  /** Wall-clock time the review was applied; display only (clocks can move backwards). */
   appliedAt: string;
+  /**
+   * Application order: assigned inside the applying transaction as one more than the highest seq
+   * of any review log, so it strictly increases. Latest-review checks use it, never timestamps.
+   */
+  seq: number;
   undone: boolean;
 }
 
@@ -152,6 +166,12 @@ export interface FlagRecord {
   category: FlagCategory;
   note: string;
   createdAt: string;
+}
+
+/** A scheduler configuration kept for a version this bundle may not know (imported data). */
+export interface SchedulerConfigRecord {
+  version: string;
+  config: Record<string, unknown>;
 }
 
 export interface OperationRecord {
@@ -176,10 +196,15 @@ export interface Settings {
   timerSeconds: number;
   dailyReviewCap: number;
   focus: { tag: string | null; note: string };
+  /** Device-local: never exported, and kept from this device on import. */
   disclosureSeen: boolean;
   lastExportAt: string | null;
+  /** Device-local: never exported, and kept from this device on import. */
   persistGranted: boolean | null;
 }
+
+/** Settings that describe this device, not the student's data (ARCHITECTURE.md §7). */
+export const DEVICE_SETTINGS = ['disclosureSeen', 'persistGranted'] as const satisfies readonly (keyof Settings)[];
 
 export const DEFAULT_SETTINGS: Settings = {
   gradingMode: 'batch',
@@ -207,5 +232,6 @@ export interface DataSet {
   taskStates: TaskStateRecord[];
   flags: FlagRecord[];
   operations: OperationRecord[];
+  schedulerConfigs: SchedulerConfigRecord[];
   settings: SettingRecord[];
 }

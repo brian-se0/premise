@@ -159,7 +159,13 @@ function RequestBody({ id }: { id: string }) {
             onClick={() => {
               if (!window.confirm('Discard every answer still waiting in this request? They will count for nothing.'))
                 return;
-              abandonRequest(db, ctx(), newOpId(), request.id).catch((e: unknown) => setNotice(errorText(e)));
+              abandonRequest(
+                db,
+                ctx(),
+                newOpId(),
+                request.id,
+                Object.fromEntries(rows.map((r) => [r.attempt.id, r.attempt.revision])),
+              ).catch((e: unknown) => setNotice(errorText(e)));
             }}
           >
             Discard the waiting answers

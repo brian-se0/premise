@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { content } from '../../content.ts';
 import { MAX_BATCH_SIZE } from '../../domain/prompt.ts';
-import { checkImport, exportData, MAX_IMPORT_BYTES, replaceAll, type ImportSummary } from '../../storage/backup.ts';
+import { checkImportFile, exportData, replaceAll, type ImportSummary } from '../../storage/backup.ts';
 import type { DataSet } from '../../domain/records.ts';
 import { setTaskControls } from '../../storage/ops.ts';
 import { ctx, db, findTask, newOpId, saveSetting, useLive, useSettings } from '../runtime.ts';
@@ -202,11 +202,7 @@ function Backup({ lastExportAt }: { lastExportAt: string | null }) {
     setPending(null);
     setStatus('');
     if (!file) return;
-    if (file.size > MAX_IMPORT_BYTES) {
-      setProblems([`The file is larger than ${MAX_IMPORT_BYTES / 1024 / 1024} MB.`]);
-      return;
-    }
-    const check = await checkImport(await file.text());
+    const check = await checkImportFile(file);
     if (token !== selection.current) return;
     if (check.ok) setPending({ data: check.data, summary: check.summary });
     else setProblems(check.problems);
