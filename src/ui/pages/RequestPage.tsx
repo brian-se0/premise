@@ -22,6 +22,7 @@ import {
   discardRows,
   OpError,
   rowState,
+  saveReply,
   StaleError,
   setTaskControls,
   startSession,
@@ -110,6 +111,8 @@ function RequestBody({ id }: { id: string }) {
   );
   const settings = useSettings();
   const [notice, setNotice] = useState('');
+  // A pasted reply with no usable scores, kept so grades entered by hand link back to it.
+  const [keptReplyId, setKeptReplyId] = useState<string | null>(null);
 
   if (data === undefined || !settings) return <p>Loading…</p>;
   if (data === null) return <NotFoundPage />;
@@ -135,7 +138,9 @@ function RequestBody({ id }: { id: string }) {
       {waiting.length > 0 && (
         <>
           <CopySection request={request} disclosureSeen={settings.disclosureSeen} selfFirst={params.has('self')} />
-          {request.promptText !== null && <PasteSection request={request} rows={rows} onNotice={setNotice} />}
+          {request.promptText !== null && (
+            <PasteSection request={request} rows={rows} onNotice={setNotice} onKept={setKeptReplyId} />
+          )}
         </>
       )}
 
@@ -147,6 +152,7 @@ function RequestBody({ id }: { id: string }) {
             row={r}
             request={request}
             onNotice={setNotice}
+            keptReplyId={keptReplyId}
             freshCheck={freshChecks?.has(r.attempt.taskId) ?? false}
           />
         ))}
@@ -285,10 +291,12 @@ function PasteSection({
   request,
   rows,
   onNotice,
+  onKept,
 }: {
   request: RequestRecord;
   rows: Row[];
   onNotice: (s: string) => void;
+  onKept: (replyId: string) => void;
 }) {
   const [raw, setRaw] = useState('');
   const [preview, setPreview] = useState<Preview | null>(null);
@@ -313,6 +321,16 @@ function PasteSection({
       revisions: Object.fromEntries(rows.map((r) => [r.rowId, r.attempt.revision])),
     });
     setRatings({});
+    if (result.kind === 'none') {
+      saveReply(db, ctx(), newOpId(), request.id, {
+        raw,
+        parserVersion: PARSER_VERSION,
+        selectedBlock: null,
+        parseOutcome: 'manual',
+      })
+        .then((r) => onKept(r.replyId))
+        .catch((e: unknown) => onNotice(errorText(e)));
+    }
   };
 
   const block = preview?.chosen ?? null;
@@ -397,7 +415,10 @@ function PasteSection({
       </button>
 
       {preview?.result.kind === 'none' && (
-        <p role="alert">{preview.result.message}. You can grade the answers yourself or enter scores below.</p>
+        <p role="alert">
+          {preview.result.message}. The reply is kept with this request; grade the answers yourself or enter scores
+          below.
+        </p>
       )}
 
       {preview?.result.kind === 'choose' && !preview.chosen && (
@@ -519,11 +540,13 @@ function RowView({
   row,
   request,
   onNotice,
+  keptReplyId,
   freshCheck,
 }: {
   row: Row;
   request: RequestRecord;
   onNotice: (s: string) => void;
+  keptReplyId: string | null;
   freshCheck: boolean;
 }) {
   const navigate = useNavigate();
@@ -678,6 +701,7 @@ function RowView({
                     source: 'self',
                     disqualified,
                     feedbackRange: null,
+                    ...(state === 'pending' && keptReplyId ? { replyId: keptReplyId } : {}),
                     ratingChoice,
                   },
                 ],
@@ -700,6 +724,7 @@ function RowView({
               source: 'manual',
               disqualified: false,
               feedbackRange: mode === 'correct' ? (grading?.feedbackRange ?? null) : null,
+              ...(mode === 'manual' && state === 'pending' && keptReplyId ? { replyId: keptReplyId } : {}),
               ratingChoice,
             };
             return act(

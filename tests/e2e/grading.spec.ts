@@ -12,7 +12,7 @@ async function practice(page: Page, exerciseId: string, answers: string[]) {
   for (const [i, a] of answers.entries()) {
     await expect(page.getByText(`Task ${i + 1} of ${answers.length}`)).toBeVisible();
     await page.getByLabel('Your answer').fill(a);
-    await expect(page.getByText('Saved')).toBeVisible();
+    await expect(page.getByText('Saved', { exact: true })).toBeVisible();
     await page.getByRole('button', { name: 'Submit', exact: true }).click();
   }
   await expect(page.getByRole('heading', { name: 'Session done' })).toBeVisible();
@@ -95,7 +95,7 @@ test('answer, autosave, resume after reload, grade by paste, results', async ({ 
   await page.goto('#/library/arg-0001');
   await page.getByRole('button', { name: 'Practice this exercise' }).click();
   await page.getByLabel('Your answer').fill('Harlow should keep its five-day week.');
-  await expect(page.getByText('Saved')).toBeVisible();
+  await expect(page.getByText('Saved', { exact: true })).toBeVisible();
   await page.reload();
   await expect(page.getByLabel('Your answer')).toHaveValue('Harlow should keep its five-day week.');
   await page.getByRole('button', { name: 'Submit', exact: true }).click();
@@ -303,7 +303,7 @@ test('export then replace-import restores an unfinished session and a partially 
   await page.goto('#/library/arg-0002');
   await page.getByRole('button', { name: 'Practice this exercise' }).click();
   await page.getByLabel('Your answer').fill('half-written draft');
-  await expect(page.getByText('Saved')).toBeVisible();
+  await expect(page.getByText('Saved', { exact: true })).toBeVisible();
 
   await page.goto('#/settings');
   const download = page.waitForEvent('download');
@@ -372,4 +372,67 @@ test('the clipboard route asks first too', async ({ page }) => {
   }
   await page.getByRole('button', { name: 'I understand, copy' }).click();
   await expect(page.getByRole('button', { name: 'Copied' })).toBeVisible();
+});
+
+test('a reply with no usable scores is kept and linked when the score is entered by hand', async ({ page }) => {
+  await practice(page, 'arg-0001', ['A conclusion.', 'A flaw.']);
+  await toRequest(page);
+  await paste(page, 'Sorry, I could not grade these. <i>no block</i>');
+  await expect(page.getByText('The reply is kept with this request')).toBeVisible();
+  const first = card(page, 'I01');
+  await first.getByRole('button', { name: 'Enter a score' }).click();
+  await first.getByLabel(/Score out of/).fill('1');
+  await first.getByRole('button', { name: 'Save score' }).click();
+  await first.getByText('Full chatbot reply').click();
+  await expect(first.getByText('Sorry, I could not grade these. <i>no block</i>')).toBeVisible();
+});
+
+test('a draft that cannot be saved keeps the page open with the text; two tabs never overwrite each other', async ({
+  page,
+  context,
+}) => {
+  await page.addInitScript(() => {
+    for (const name of ['put', 'add'] as const) {
+      const original = IDBObjectStore.prototype[name];
+      IDBObjectStore.prototype[name] = function (this: IDBObjectStore, ...args: Parameters<typeof original>) {
+        if (this.name === 'attempts' && (window as unknown as { __fail?: boolean }).__fail) {
+          throw new DOMException('Simulated quota error', 'QuotaExceededError');
+        }
+        return original.apply(this, args);
+      } as typeof original;
+    }
+  });
+  await page.goto('#/library/arg-0001');
+  await page.getByRole('button', { name: 'Practice this exercise' }).click();
+  await page.getByLabel('Your answer').fill('First words.');
+  await expect(page.getByText('Saved', { exact: true })).toBeVisible();
+  const url = page.url();
+
+  // Saving fails: "Stop for now" stays on the page with the text instead of leaving.
+  await page.evaluate(() => ((window as unknown as { __fail?: boolean }).__fail = true));
+  await page.getByLabel('Your answer').fill('First words, then more.');
+  await page.getByRole('button', { name: 'Stop for now' }).click();
+  await expect(page.getByRole('alert')).toContainText('Could not save');
+  await expect(page.getByLabel('Your answer')).toHaveValue('First words, then more.');
+  await expect(page).toHaveURL(url);
+  await page.evaluate(() => ((window as unknown as { __fail?: boolean }).__fail = false));
+  await page.getByLabel('Your answer').fill('First words, then more, saved.');
+  await expect(page.getByText('Saved', { exact: true })).toBeVisible();
+
+  // A second tab edits the same draft; the first tab's next save is refused, not silently applied.
+  const other = await context.newPage();
+  await other.goto(url);
+  await expect(other.getByLabel('Your answer')).toHaveValue('First words, then more, saved.');
+  await other.getByLabel('Your answer').fill('Written in the other tab.');
+  await expect(other.getByText('Saved', { exact: true })).toBeVisible();
+  await page.getByLabel('Your answer').fill('Written in the first tab.');
+  await expect(page.getByRole('alert')).toContainText('changed in another tab');
+  await expect(page.getByLabel('Your answer')).toHaveValue('Written in the first tab.');
+  await other.reload();
+  await expect(other.getByLabel('Your answer')).toHaveValue('Written in the other tab.');
+
+  // The other tab submits; the first tab keeps its text on screen and says so.
+  await other.getByRole('button', { name: 'Submit', exact: true }).click();
+  await expect(page.getByText('This task was submitted in another tab.')).toBeVisible();
+  await expect(page.getByText('Written in the first tab.')).toBeVisible();
 });
