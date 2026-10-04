@@ -61,6 +61,16 @@ export function SettingsPage() {
           </>
         )}
         <label>
+          Grade{' '}
+          <select
+            value={settings.gradingMode}
+            onChange={(e) => void saveSetting('gradingMode', e.target.value as typeof settings.gradingMode)}
+          >
+            <option value="batch">at the end of a session</option>
+            <option value="per-exercise">after each argument</option>
+          </select>
+        </label>
+        <label>
           Answers per grading prompt{' '}
           <select value={settings.batchSize} onChange={(e) => void saveSetting('batchSize', Number(e.target.value))}>
             {Array.from({ length: MAX_BATCH_SIZE }, (_, i) => i + 1).map((n) => (

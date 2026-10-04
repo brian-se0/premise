@@ -194,6 +194,23 @@ Both go through the shared grade validator (integer range, snapshot max, status 
 - **Second grader.** Where practical, a second person grades a subset blind to the owner's labels; owner-versus-second-grader agreement is reported as a comparison benchmark, not a ceiling.
 - **Outcomes.** The pilot ends in one recorded decision (`ROADMAP.md` M0): proceed with a provisional chatbot configuration; proceed with self-grading only; revise and repeat on fresh held-out exercises; or stop chatbot grading as inconclusive.
 
+## 9a. Parser v1 clarifications
+
+Where §§4–7 left a choice, parser version 1 (`src/domain/scoreParser.ts`) does this:
+
+- A `?` row is valid, so a complete block whose rows are all valid, some of them `?`, is `clean`.
+- Unknown row ids are reported and add a warning, so the outcome is at best `recoverable`.
+- A candidate with no row lines is dropped like an echo. An echo is a block with at least one row in which every row has score `__` and tags `--`.
+- A `BEGIN SCORES` line that does not match the header grammar is set aside; it still ends a feedback region.
+- Line clean-up strips a leading `>` once, a bullet only when followed by whitespace, leading and trailing `**`/`__` independently, and outer pipes only when both are present. Fence-only lines are three backticks or tildes with an optional language word.
+- An incomplete block collects row lines up to the next `BEGIN` or the end of the reply.
+- Any `Ixx:` heading ends the previous row's feedback, even for ids not in the request. Trailing blank and fence-only lines are dropped from a feedback range.
+- Repeated allowed tags are kept once without a warning; an empty tag field means no tags, with a warning.
+- When a score has several problems, the reason names the first in this order: field count, `score/max` shape, max, `?`, `__`, negative, fraction, not a number, over max.
+- Options offered for a choice are listed in the order of their last occurrence.
+- Text inside answer fences is not hidden from the parser (it does not know the fence); the header check, echo drop and the `=== END OF ITEMS ===` rule keep echoed answers from being chosen.
+- A reply over 200,000 characters gets "This reply is longer than 200,000 characters".
+
 ## 10. Test fixtures
 
 `tests/fixtures/pilot/` holds the M0 pilot's exact inputs, generated prompts, raw replies and hand-checked expected parse results. The app's prompt builder must reproduce the prompts byte for byte, and its parser must reproduce the expected results.
