@@ -1,6 +1,6 @@
 # Content Guidelines
 
-Status: draft v0.3 (2026-10-04, revised after peer review round 2). Applies to everything under `content/`. Not legal advice; when unsure whether a source is usable, leave it out.
+Status: draft v0.4 (2026-10-04, revised after peer review round 3). Applies to everything under `content/`. Not legal advice; when unsure whether a source is usable, leave it out.
 
 ## 1. Allowed sources
 
@@ -50,7 +50,7 @@ U.S. public-domain status is not a worldwide determination. If a source's status
 
 - `contributors` lists the humans who wrote or substantially rewrote the exercise. `ai_assistance` records whether and how AI drafted any part.
 - AI-drafted text that no human substantially rewrote may not be protectable by copyright; the project does not rely on the license to protect it.
-- Publishing is an explicit maintainer action: set `approved_by`, `approved_at` and `approved_revision` (printed by `npm run content`) after completing the checklist below. Any later edit changes the revision and requires approving again.
+- Publishing is an explicit maintainer action: set `approved_by`, `approved_at` and `approved_revision` (printed by `npm run content`) after completing the checklist below. Any later edit to the exercise, other than its `status` and the approval fields themselves, changes the revision and requires approving again.
 - Until outside contributors exist, the owner's approval is enough, even for exercises the owner wrote. Once an exercise has a contributor who is not a maintainer, the build requires an approving maintainer who is not one of its contributors (`EXERCISE_FORMAT.md` §4).
 
 ## 7. Approval checklist

@@ -1,6 +1,6 @@
 # Architecture
 
-Status: draft v0.3 (2026-10-04, revised after peer review round 2).
+Status: draft v0.4 (2026-10-04, revised after peer review round 3).
 
 ## 1. Shape
 
@@ -86,12 +86,14 @@ A snapshot freezes everything needed to show, grade and count one task. Its payl
 | `snapshots` | `hash` | the §4.1 payload, `firstSeenAt` |
 | `sessions` | `id` (uuid) | `entries` (ordered list of `{ taskId, attemptId }`; `attemptId` null until the task is opened), `cursor`, `createdAt`, `endedAt` |
 | `attempts` | `id` (uuid) | `sessionId`, `taskId`, `snapshotHash`, `answer`, `state` (`draft` \| `submitted` \| `skipped` \| `discarded`), `kind` (`new` \| `review` \| `coached`), `stimulusSeenBefore` (bool), `ratingChoice` (`good` \| `hard` \| `easy`, default `good`), `requestId` (nullable), `currentGradingId` (nullable), `revision` (int), `startedAt`, `submittedAt`, `updatedAt` |
-| `requests` | `id` (uuid) | `label`, `rows` (rowId → attemptId), `snapshots` (rowId → snapshot hash), `fence`, `promptVersion`, `promptText`, `createdAt`, `status` (`open` \| `closed` \| `abandoned`) |
+| `requests` | `id` (uuid) | `label`, `rows` (rowId → attemptId), `snapshots` (rowId → snapshot hash), `fence`, `promptVersion`, `promptText` (null for a self-grading-only request; `GRADING_PROTOCOL.md` §2), `createdAt`, `status` (`open` \| `closed` \| `abandoned`) |
 | `replies` | `id` (uuid) | `requestId`, `raw`, `pastedAt`, `parserVersion`, `selectedBlock` (`{ start, end }` or null), `parseOutcome` (`clean` \| `recoverable` \| `manual`) |
 | `gradings` | `id` (uuid) | `attemptId`, `requestId`, `replyId` (nullable), `opId`, `score` (int or null), `max`, `tags[]`, `status` (`accepted` \| `needs-review` \| `superseded`), `source` (`parsed` \| `manual` \| `self`), `disqualified` (bool, self-grading only), `feedbackRange` (`{ start, end }` or null), `createdAt` |
 | `reviewLogs` | `id` (uuid) | `taskId`, `attemptId`, `gradingId`, `opId`, `rating`, `ratingPolicy`, `schedulerVersion`, `reviewedAt` (= attempt `submittedAt`), `cardBefore` (the card's scheduler fields before this review, or null if no card existed), ts-fsrs log fields, `undone` (bool) |
-| `cards` | `taskId` | ts-fsrs card fields, `schedulerVersion`, `suspended`, `notBefore` (local date; see §6.4) |
+| `cards` | `taskId` | ts-fsrs card fields, `schedulerVersion` (scheduler state only; may be deleted by undo) |
+| `taskStates` | `taskId` | `suspended`, `notBefore` (local date; see §6.4). Student controls, never deleted by undo or correction |
 | `flags` | `id` (uuid) | `attemptId`, `snapshotHash`, `category` (`unfair-grade` \| `content-problem` \| `other`), `note`, `createdAt` |
+| `operations` | `opId` | `name`, `affectedIds`, `resultingRevisions` (attemptId → revision), `result` (the immutable value returned to the UI), `createdAt` |
 | `settings` | `key` | `gradingMode`, `batchSize`, `timerEnabled`, `disclosureSeen`, `lastExportAt`, `persistGranted` |
 
 Ranges are offsets in UTF-16 code units into the stored `raw` string, start inclusive, end exclusive (the native JavaScript string index).
@@ -105,7 +107,9 @@ The grade validator and import both enforce these:
 3. **One current grading per attempt.** `currentGradingId` points to the attempt's only grading whose status is not `superseded`. Older revisions stay, marked `superseded`.
 4. **At most one active review per attempt.** At most one review log per attempt has `undone: false`, and it points to the attempt's current grading, which is `accepted`.
 5. **Accepted means valid.** An `accepted` grading has an integer score with `0 ≤ score ≤ max`, `max` equal to the snapshot's `max`, and only tags allowed by the snapshot. A `needs-review` grading has a null score.
-6. **Session entries name their attempt.** Each attempt appears in at most one session entry, and that entry's `taskId` matches it.
+6. **Session entries name their attempt.** Each attempt appears in at most one session entry; that entry's `taskId` matches the attempt's, and the attempt's `sessionId` is that session.
+7. **Snapshots agree.** For every request row, `request.snapshots[rowId]` equals the attempt's `snapshotHash`, and `rows` and `snapshots` have the same row ids. A snapshot's `taskId` equals the `taskId` of every attempt that references it. A review log's `taskId` and `attemptId` match its grading's attempt.
+8. **Disqualified means zero.** A grading with `disqualified: true` has `source: self` and score 0.
 
 ### 5.2 Row and request states
 
@@ -149,18 +153,21 @@ Every grading mutation is a named operation with a client-generated `opId` and t
 | `correctGrade(attemptId, grading)` | Replaces the current grading with a new revision (§6.3). |
 | `undoLatest(attemptId)` | Undoes the attempt's active review, if it is its card's latest; the grading becomes `superseded`, `currentGradingId` is cleared and the row returns to `pending`. |
 | `discardRows(requestId, rowIds)` / `abandonRequest(requestId)` | Moves pending or needs-review rows to `discarded`. |
+| `setTaskControls(taskId, controls)` | Suspends or resumes a task; edits `taskStates` only. |
 | `setTags(attemptId, tags)` | Writes a new grading revision with the same score and status; no scheduling change. |
 
 Rules for all of them:
 
 - Each runs in **one IndexedDB read-write transaction** covering every table it reads or writes. Existence checks, revision checks, latest-review checks and writes all happen inside it. IndexedDB serializes overlapping read-write transactions on the same tables, so no other locking is needed. Clipboard writes and other async work happen outside the transaction.
-- **Same `opId` again** (double tap, retry after a crash): the operation finds its own `opId` on the gradings or review logs and returns the recorded result without writing.
-- **Stale revision** (another tab, or an undo, changed the attempt since the UI read it): the operation writes nothing and the UI reloads the row and says what changed. A stale confirm never becomes a new review.
+- **Receipts.** Every successful operation writes an `operations` receipt in the same transaction as its changes.
+- **Same `opId` again** (double tap, retry after a crash): the receipt is checked first, before any revision check, and its recorded result is returned without writing.
+- **Stale revision** (another tab, or an undo, changed the attempt since the UI read it, and there is no receipt for this `opId`): the operation writes nothing and the UI reloads the row and says what changed. A stale confirm never becomes a new review.
+- Receipts are a result ledger for retries, not an event log; nothing is replayed from them.
 - Every successful operation increments `revision` on each attempt it changes.
 
 ### 6.3 Correction and undo
 
-- **Correct grade** is allowed when the attempt has no active review, or its active review is the card's latest non-undone review. Otherwise the UI explains that older grades are locked. In one transaction: mark the review log `undone`, restore the card from its `cardBefore` (deleting the card if `cardBefore` is null), keep the card's current `suspended` and `notBefore` values, mark the old grading `superseded`, then apply the new grading as in `confirmRows`.
+- **Correct grade** is allowed when the attempt has no active review, or its active review is the card's latest non-undone review. Otherwise the UI explains that older grades are locked. In one transaction: mark the review log `undone`, restore the card from its `cardBefore` (deleting the card if `cardBefore` is null), leave `taskStates` untouched, mark the old grading `superseded`, then apply the new grading as in `confirmRows`.
 - **Undo** does the same restore without applying a new grading.
 - Repeated corrections stack revisions; each one undoes only the review it replaces.
 - A general history-replay engine is out of scope.
@@ -168,7 +175,7 @@ Rules for all of them:
 ### 6.4 Review time and study eligibility
 
 - **Review time** (`reviewedAt`) is the attempt's `submittedAt`: what the student knew when they answered. Grading may arrive days later.
-- **Eligibility** is separate: after a grading is confirmed, the task's card gets `notBefore` = the next local date after confirmation. A task is offered only when it is due and today is on or after `notBefore`, so a student is never re-tested on an answer they have just read.
+- **Eligibility** is separate: after a grading is confirmed, the task's `taskStates.notBefore` becomes the next local date after confirmation. A task is offered only when it is due (or new), not suspended, and today is on or after `notBefore`, so a student is never re-tested on an answer they have just read. Undo and correction never clear it.
 
 ### 6.5 Scheduler configuration
 
@@ -189,13 +196,14 @@ Timestamps are stored as UTC ISO 8601. Day boundary is local midnight. A card is
 ```json
 { "app": "premise", "schemaVersion": 1, "exportedAt": "…", "appVersion": "…",
   "snapshots": [], "sessions": [], "attempts": [], "requests": [], "replies": [],
-  "gradings": [], "reviewLogs": [], "cards": [], "flags": [], "settings": [],
+  "gradings": [], "reviewLogs": [], "cards": [], "taskStates": [], "flags": [],
+  "operations": [], "settings": [],
   "schedulerConfigs": {} }
 ```
 
 - `schedulerConfigs` carries the full configuration of every scheduler version referenced in the file.
 - **Replace-only import** in v1. Steps: validate, show a summary (counts, date range, newest activity), offer to export the current data first, then replace everything in one transaction.
-- Validation: Zod shape; unique ids; every reference resolves (attempt → snapshot, grading → attempt, review log → grading, flag → attempt, session entry → attempt); snapshot hashes recompute (§4.1); the §5.1 invariants hold; request status matches the §5.2 rule; timestamps parse; scheduler numbers are finite; file under 50 MB. Newer schema versions are refused with a clear message.
+- Validation: Zod shape; unique ids; every reference resolves (attempt → snapshot, attempt → session, grading → attempt, review log → grading, flag → attempt, session entry → attempt); snapshot hashes recompute (§4.1); the §5.1 invariants hold, checked with deliberately inconsistent fixtures; request status matches the §5.2 rule; timestamps parse; scheduler numbers are finite; file under 50 MB. Newer schema versions are refused with a clear message.
 - A file referencing a scheduler version this app does not know is imported, and its history stays readable, but correction and undo of reviews made under that version are refused. New reviews use the app's current version.
 - Snapshots travel in the export, so history survives even if an exercise is later retired or removed.
 - Merge import is out of scope until conflict rules are written.

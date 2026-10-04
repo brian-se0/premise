@@ -1,6 +1,6 @@
 # Exercise Format
 
-Status: draft v0.3 (2026-10-04, revised after peer review round 2). Schema version: `3`. This is a contract: the build script, the prompt builder and contributors all depend on it. Changing it requires a `DECISIONS.md` entry and a peer review.
+Status: draft v0.4 (2026-10-04, revised after peer review round 3). Schema version: `3`. This is a contract: the build script, the prompt builder and contributors all depend on it. Changing it requires a `DECISIONS.md` entry and a peer review.
 
 ## 1. Files
 
@@ -78,7 +78,7 @@ Stimulus text. Arguments: 60–180 words. Passages: 350–550 words, 3–5 parag
 4. `max` equals the number of rubric criteria.
 5. `anchors` has exactly one entry for each score from 0 to `max`.
 6. `accept` is present and non-empty for skills marked `open_ended` in the taxonomy.
-7. `status: published` requires `approved_by`, `approved_at` and `approved_revision`, and `approved_revision` must equal the exercise's current **content revision**: a SHA-256 over the stimulus, source fields and every task's fields, computed by the build and printed for each exercise. Any edit, including adding a task, therefore requires re-approval.
+7. `status: published` requires `approved_by`, `approved_at` and `approved_revision`, and `approved_revision` must equal the exercise's current **content revision**: a SHA-256, computed by the build and printed for each exercise, over the stimulus body and every front-matter field except `status`, `approved_by`, `approved_at` and `approved_revision` (serialized as in `ARCHITECTURE.md` §4.1). Any other edit, including difficulty, contributors, adding a task or retiring one, therefore requires re-approval.
 8. `approved_by` must be listed in `content/maintainers.yaml`. If any contributor is not a maintainer, `approved_by` must be a maintainer who is not among the contributors.
 9. `source.type` other than `original` requires `title`, `creator`, `locator`, `attribution` and `rights_basis`; `public-domain` also requires `year`; `cc-by` also requires `license_uri`.
 10. Rubric criteria test only what the task prompt asks for (checked by the author, `CONTENT_GUIDELINES.md` §7; not machine-checkable).
