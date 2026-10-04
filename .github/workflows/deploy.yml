@@ -1,0 +1,77 @@
+name: Deploy
+
+# Builds the production site (drafts excluded) and publishes it to GitHub Pages.
+# Needs Settings → Pages → Source: GitHub Actions.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+        env:
+          PAGES_BASE: /${{ github.event.repository.name }}/
+      # Browser-test the exact artifact that will be published, under its real base path.
+      - run: npx playwright install --with-deps chromium webkit
+      - run: npx playwright test
+        env:
+          PAGES_BASE: /${{ github.event.repository.name }}/
+          E2E_PREBUILT: '1'
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  smoke:
+    needs: deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      # Pages can take a moment to serve the new build; retry a few times before failing.
+      - run: |
+          for i in 1 2 3 4 5; do
+            npx playwright test --project chromium && exit 0
+            sleep 20
+          done
+          exit 1
+        env:
+          E2E_BASE_URL: ${{ needs.deploy.outputs.page_url }}
+          E2E_EXPECT_COMMIT: ${{ github.sha }}

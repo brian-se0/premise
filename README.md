@@ -2,7 +2,16 @@
 
 A free, open-source trainer for argument and reading reasoning. Read a short argument or passage, write your analysis in your own words, and have it graded by any AI chatbot you already use. Premise tracks your weak skills and schedules redos with spaced repetition.
 
-> Status: pre-implementation. Specs are in [`docs/`](docs/). "Premise" is a working name.
+> Status: early development (milestone M1, scaffold). Specs are in [`docs/`](docs/). "Premise" is a working name.
+
+## Develop
+
+```sh
+npm ci
+npm run dev      # local site with draft exercises
+npm run check    # content build, typecheck, lint, unit tests
+npm run test:e2e # browser tests
+```
 
 ## How it works
 

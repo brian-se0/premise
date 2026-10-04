@@ -78,3 +78,19 @@ export interface SnapshotPayload {
 export interface Snapshot extends SnapshotPayload {
   hash: string;
 }
+
+/** An exercise as emitted by the content build, with its content revision. */
+export interface BuiltExercise extends Exercise {
+  revision: string;
+}
+
+export interface TaxonomyData {
+  skills: Record<string, { label: string; open_ended: boolean }>;
+  error_tags: Record<string, string>;
+}
+
+/** src/generated/content.json */
+export interface ContentBundle {
+  exercises: BuiltExercise[];
+  taxonomy: TaxonomyData;
+}
