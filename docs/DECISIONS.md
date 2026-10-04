@@ -2,6 +2,9 @@
 
 Newest first. Each entry: date, decision, why, and what it rules out. Reopening a decision needs a new entry, not an edit.
 
+## 2026-10-04 — Positioning: targeted reasoning repair with a final-weeks mode
+The owner chose this over a final-weeks-only product, after a GPT-6 Pro consultation (`reviews/2026-10-04-difficulty-and-niche.md`). Premise targets students past the basics who understand explanations but keep missing the same reasoning move; it gives one correction, then checks the same point on a fresh argument. A time-capped final-weeks mode serves the last stretch. Conclusion tasks become a selective diagnostic, scored on identifying the conclusion, not on brevity. Task-level difficulty and difficulty notes are added to schema 3 (no exercise was published yet). Authoring rules for difficulty and a necessary-assumption check go into the content guidelines. The roadmap splits M0 into content validity then grading feasibility, brings strengthen and weaken forward, and adds an M3 usefulness pilot with a few students past the basics before daily-use polish. **Why:** the owner found a signposted conclusion task too easy; the reviewer found five answer keys defective and argued that usefulness, not difficulty alone, is the product's open risk. **Rules out:** making every task hard; treating final weeks as the only audience.
+
 ## 2026-10-04 — Three flaw tags added
 `unrepresentative-sample`, `part-to-whole` and `attacks-source` join the error tags. **Why:** the pilot exercises test these flaws and no existing tag named them.
 

@@ -1,6 +1,6 @@
 # Content Guidelines
 
-Status: draft v0.4 (2026-10-04, revised after peer review round 3). Applies to everything under `content/`. Not legal advice; when unsure whether a source is usable, leave it out.
+Status: draft v0.5 (2026-10-04, after the difficulty consultation). Applies to everything under `content/`. Not legal advice; when unsure whether a source is usable, leave it out.
 
 ## 1. Allowed sources
 
@@ -30,6 +30,24 @@ U.S. public-domain status is not a worldwide determination. If a source's status
 - Varied topics: science, policy, business, ethics, history, arts. No real private individuals; public figures only in neutral, factual framing.
 - One main reasoning issue per argument for `flaw` tasks.
 - Avoid content that turns on outside knowledge, current events, or political positions the student must agree with.
+
+### 3.1 Writing to a difficulty target
+
+Difficulty comes from precise logical discrimination, not from hiding the conclusion, adding clauses or an unforgiving rubric. Difficulty labels are author-predicted until students have attempted the task. For a task meant to be medium or hard, the author writes a short `difficulty_note` and meets the rules that apply:
+
+- **Structure map.** Write down the main conclusion, intermediate conclusions, premises, concessions and opposing views. A hard conclusion task has at least one plausible rival (usually an intermediate conclusion or an attributed opposing view) and the note says which way support runs. Moving the recommendation to the middle is not enough.
+- **Scope.** Mark the population, time period, measured quantity and claim strength in evidence and conclusion. A scope task turns on a specific mismatch, not "the groups might differ".
+- **Quantifiers.** Name the boundary that matters (some, most, all, a proportion, a threshold) and check the reference against a counterexample to the tempting stronger answer.
+- **Conditionals.** Translate the relationship into its direction. Match the key to the conclusion's actual strength: failing to guarantee an outcome does not refute a claim that it is likely.
+- **Causes.** Rule out one plausible alternative in the stimulus and leave a consequential one open, so "correlation isn't causation" alone does not earn full credit.
+- **Competing claims.** Every distracting claim has a clear role (someone else's view, a concession, background, an intermediate conclusion). Ambiguous attribution is an editing problem, not difficulty.
+- **Two demands, no padding.** A hard task combines two interacting demands (for example an intermediate conclusion and a quantifier) and drops complications that serve neither. No outside knowledge.
+- **Near misses.** Write at least two plausible near-miss answers and say exactly why each fails (too strong, wrong population, helpful but not required, denies a premise). Use them as anchors or in notes.
+- **Strengthen and weaken.** For advanced tasks, constrain the kind of fact asked for (for example about the comparison group or the measurement) and accept every fact that satisfies the constraint.
+
+### 3.2 The necessary-assumption check
+
+For every assumption task, negate the reference and each full-credit anchor, keep the premises, and confirm that the specific inference fails, not merely that the conclusion becomes less likely. The assumption must not restate the conclusion or a premise, and must not be stronger than the argument needs. Not every flaw argument supports a clean assumption task; when it doesn't, leave the task out.
 
 ## 4. Writing passages
 

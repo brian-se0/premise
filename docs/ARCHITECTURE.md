@@ -31,7 +31,7 @@ Versions current on 2026-10-04; pin exact versions in `package.json` when scaffo
 | Validation | Zod 4 (content schema, export schema) |
 | Front matter | `yaml` package, build script only |
 | Scheduling | ts-fsrs 5, configuration pinned in `src/domain/schedulerConfig.ts` (§6.5) |
-| Offline / install | vite-plugin-pwa, prompt-to-update (added in M4) |
+| Offline / install | vite-plugin-pwa, prompt-to-update (added in M5) |
 | Unit tests | Vitest |
 | End-to-end | Playwright on Chromium and WebKit |
 | Hosting | GitHub Pages via GitHub Actions, Vite `base` set to the repo path |
@@ -132,7 +132,7 @@ A task with an attempt in `pending` or `needs-review` is not offered for practic
 
 ### 6.1 Rating policy `v1`
 
-Provisional; reassessed with M3 usage data (M0 cannot calibrate it).
+Provisional; reassessed with M4 daily-use data (M0 cannot calibrate it).
 
 | Grading | Rating |
 | --- | --- |
@@ -222,7 +222,7 @@ Timestamps are stored as UTC ISO 8601. Day boundary is local midnight. A card is
 - CI on pull requests: `npm ci`, `npm run check`, Playwright (Chromium and WebKit). On `main`: build and deploy to GitHub Pages.
 - Routing uses hash URLs so direct navigation and refresh work on GitHub Pages. A deployed-site smoke test loads a deep link.
 - From the first deployment (M1), the About page links to the source code, names the deployed commit and shows the licenses.
-- PWA (from M4): the service worker never reloads a page by itself; it shows "Update available" and applies on the next navigation without unsaved drafts.
+- PWA (from M5): the service worker never reloads a page by itself; it shows "Update available" and applies on the next navigation without unsaved drafts.
 
 ## 10. Security and privacy
 

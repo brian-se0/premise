@@ -1,17 +1,19 @@
 # Product Spec
 
-Status: draft v0.4 (2026-10-04, revised after peer review round 3). Working name: **Premise** (placeholder; see Open questions).
+Status: draft v0.5 (2026-10-04, repositioned after the difficulty consultation). Working name: **Premise** (placeholder; see Open questions).
 
 ## 1. Purpose
 
 Premise is a free, open-source trainer for the reasoning skills tested by law school admission exams. Students read short arguments and passages, **write** their analysis in their own words, and have it graded by any AI chatbot they already use, or grade it themselves against a rubric. The app tracks results and schedules reviews.
 
+**Positioning: targeted reasoning repair.** Premise is for the student who understands an explanation after reading it but still misses the reasoning move on the next unfamiliar argument. It finds the step a student keeps missing, gives one precise correction, then checks the same point on a fresh argument. A time-capped **final-weeks mode** serves the last stretch before the exam.
+
 It does not simulate the official test. Students keep taking official practice tests elsewhere (LawHub) to measure progress. Premise trains the step those tests don't: producing the answer before seeing the choices. Whether this transfers to better test scores is a hypothesis the owner's own use will test, not a promise.
 
 ## 2. Users
 
-- **Primary (first release):** the project owner, studying for the exam, on a phone and a Windows PC.
-- **Later:** other self-studying test takers comfortable copying and pasting between apps.
+- **Primary (first release):** the project owner, studying for the exam from the start, on a phone and a Windows PC.
+- **Target:** self-studying test takers past the basics, including those in their final weeks, comfortable copying and pasting between apps. A small group of such students tests usefulness before the app is opened to others (`ROADMAP.md` M3).
 
 ## 3. Hard constraints
 
@@ -44,6 +46,10 @@ It does not simulate the official test. Students keep taking official practice t
 5. Answers autosave as drafts with a visible "Saved" state. The student can submit an answer, submit it blank on purpose, or skip it. Submitted answers cannot be edited; trying again makes a new attempt. Skipping ends that task for the session. Leaving and returning resumes at the same task with drafts intact.
 6. The student can stop after any exercise; submitted answers are kept for grading. A task can be suspended from its menu.
 7. Grading mode: **batch** (default; grade at the end, up to the batch size, default 4) or **per exercise** (grade after each exercise's tasks).
+8. **Focus.** The student can pick a reasoning distinction to work on (an error tag, such as `overstated` or `reversed-logic`) or type a short note about a miss from their own official practice. The planner then favours tasks whose likely errors include it. Notes never contain official questions; the app says so where the note is typed.
+9. **Repair loop.** After a missed task, the result screen gives the one correction from the grader's feedback, and the planner schedules a **fresh-stimulus task on the same skill and likely error** for a later session, before any repeat of the missed task.
+10. **Conclusion tasks are selective.** They are offered as a quick diagnostic early on and after a flaw or assumption answer that attacked the wrong claim, not as a routine first step. Once the student gets them right on medium and hard stimuli, the planner stops offering them unless a later miss points back to them.
+11. **Final-weeks mode** (a setting): sessions of 3–4 tasks, about 10–15 minutes including grading; only medium and hard tasks, plus easier ones only to rebuild a distinction the student just missed; an optional timed check of 90–120 seconds per task with overtime allowed and recorded separately from correctness; a daily cap on reviews, prioritising unresolved misses, and no "you are behind" backlog.
 
 ### 5.2 Grade
 
@@ -67,8 +73,8 @@ Due cards are shown with a count on Home. A review re-presents the task as a new
   - **First attempts**: one per task, the first uncoached submission; "full credit on X of Y tasks", split into new-stimulus and familiar-stimulus tasks, with their difficulty mix. A discarded first submission uses up the task's first attempt and is excluded.
   - **Reviews**: "full credit on X of Y review attempts, across Z tasks".
 - Pending, needs-review, coached and discarded attempts are excluded from results.
-- Error tags from the last 30 days, presented as "things to look at" with links to the tasks, not as a diagnosis.
-- Counts: tasks attempted, due today, and "stable" (scheduled interval of 21 days or more).
+- Error tags from the last 30 days, presented as "things to look at" with links to the tasks, not as a diagnosis. For each, whether the student has since got a fresh-stimulus task with the same likely error right.
+- Counts: tasks attempted, due today, and "stable" (scheduled interval of 21 days or more; hidden in final-weeks mode, where it means little).
 
 ### 5.5 Data
 
@@ -94,7 +100,7 @@ Accounts, sync, merge import, hosted AI grading, multiple-choice questions, time
 - No data loss across the test matrix: reload mid-session, partial grading, correction, export then replace-import.
 - The owner's log of workflow friction after 30 days has no unresolved item marked "would stop me using it".
 
-**Before inviting others:** 50 published exercises across the argument skills, each approved under `CONTENT_GUIDELINES.md` §6, and a second pilot run on fresh held-out exercises. Recommending any chatbot to other students is a separate decision.
+**Before opening to others:** the M3 usefulness pilot ended in a recorded "go"; at least 50 published exercises across the argument skills, each approved under `CONTENT_GUIDELINES.md` §6; and a second grading pilot run on fresh held-out exercises. Recommending any chatbot to other students is a separate decision.
 
 ## 9. Open questions
 
