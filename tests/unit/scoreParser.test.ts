@@ -105,6 +105,26 @@ describe('score parser', () => {
     expect(feedbackText(raw, result.block, 'I02')).toBe('I02: 1/3\r\n- Criterion 1: not met.\r\n- Tip: Name the gap.');
   });
 
+  it('keeps a lone carriage return inside a bounded pipe heading while preserving CRLF offsets', () => {
+    const first = 'I01: 2/2\r\n- First assessment.';
+    const second = '| I02:\r1/3 |\r\n- Actual I02 tip.';
+    const raw = `BEGIN FEEDBACK request=${ID}\r\n${first}\r\n${second}\r\nEND FEEDBACK\r\n${BLOCK.replaceAll('\n', '\r\n')}\r\n`;
+    const result = parseReply(raw, { ...REQUEST, promptVersion: 'v4' });
+    if (result.kind !== 'parsed') throw new Error(result.kind);
+    expect(result.block.rows.map((r) => r.status)).toEqual(['valid', 'valid']);
+    expect(result.block.rows.map((r) => (r.status === 'valid' ? r.score : null))).toEqual([2, 1]);
+    expect(feedbackText(raw, result.block, 'I01')).toBe(first);
+    expect(feedbackText(raw, result.block, 'I02')).toBe(second);
+    expect(result.block.rows[0]!.feedback).toEqual({
+      start: raw.indexOf(first),
+      end: raw.indexOf(first) + first.length,
+    });
+    expect(result.block.rows[1]!.feedback).toEqual({
+      start: raw.indexOf(second),
+      end: raw.indexOf(second) + second.length,
+    });
+  });
+
   it('slices feedback from the heading to the next heading, trailing whitespace and fences trimmed', () => {
     const raw = `Intro line.\n\n**I01: 2/2**\n- met\n   \n\nI02: 1/3\n- not met\n\n\`\`\`\n${BLOCK}\n\`\`\`\n`;
     const result = parseReply(raw, REQUEST);
