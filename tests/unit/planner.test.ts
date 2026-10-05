@@ -266,6 +266,7 @@ describe('planner repair loop', () => {
     const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-01');
     const successAt = '2026-10-01T13:00:00.000Z';
     const success = graded('arg-0005.flaw', 2, 2, [], '2026-10-01', {
+      startedAt: successAt,
       submittedAt: successAt,
       updatedAt: successAt,
     });
@@ -285,14 +286,59 @@ describe('planner repair loop', () => {
 
   it('a fresh success at the exact miss submission time cannot clear the miss', () => {
     const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-09');
-    const success = graded('arg-0001.flaw', 2, 2, [], '2026-10-09');
-    const base = { attempts: [miss.attempt, success.attempt] };
-    for (const gradings of [
-      [miss.grading, success.grading],
-      [success.grading, miss.grading],
-    ]) {
-      expect(openMisses(state({ ...base, gradings })).map((m) => m.taskId)).toEqual(['arg-0003.flaw']);
-    }
+    const success = graded('arg-0001.flaw', 2, 2, [], '2026-10-09', { sessionId: 'later' });
+    // Isolate the submission-order rule even if a legacy grading timestamp predates its
+    // submission. Both attempts tie, and the miss's id makes it sort first.
+    const firstGrading = { ...miss.grading, createdAt: '2026-10-09T11:59:59.999Z' };
+    const tied = state({ attempts: [miss.attempt, success.attempt], gradings: [firstGrading, success.grading] });
+    expect(openMisses(tied).map((m) => m.taskId)).toEqual(['arg-0003.flaw']);
+
+    const later = '2026-10-09T12:00:00.001Z';
+    const oneMillisecondLater = { ...success.attempt, startedAt: later, submittedAt: later, updatedAt: later };
+    expect(
+      openMisses(state({ attempts: [miss.attempt, oneMillisecondLater], gradings: [firstGrading, success.grading] })),
+    ).toEqual([]);
+  });
+
+  it('keeps a deferred miss open when the success began before the miss was first graded', () => {
+    const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-01', { sessionId: 'miss' });
+    const success = graded('arg-0001.flaw', 2, 2, [], '2026-10-02', { sessionId: 'success' });
+    const firstGrading = { ...miss.grading, createdAt: '2026-10-03T09:00:00.000Z' };
+    const successGrading = { ...success.grading, createdAt: '2026-10-03T10:00:00.000Z' };
+    const s = state({ attempts: [miss.attempt, success.attempt], gradings: [firstGrading, successGrading] });
+    expect(openMisses(s).map((m) => m.taskId)).toEqual(['arg-0003.flaw']);
+    expect(planToday(s, 1)).toEqual([expect.objectContaining({ reason: 'repair', repairs: 'arg-0003.flaw' })]);
+  });
+
+  it('does not let an older session finished after the miss repair it retroactively', () => {
+    const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-01', { sessionId: 'miss' });
+    const success = graded('arg-0001.flaw', 2, 2, [], '2026-10-01', {
+      sessionId: 'older',
+      startedAt: '2026-10-01T09:00:00.000Z',
+      submittedAt: '2026-10-01T13:00:00.000Z',
+      updatedAt: '2026-10-01T13:00:00.000Z',
+    });
+    const firstGrading = { ...miss.grading, createdAt: '2026-10-01T12:30:00.000Z' };
+    const successGrading = { ...success.grading, createdAt: '2026-10-03T10:00:00.000Z' };
+    expect(
+      openMisses(state({ attempts: [miss.attempt, success.attempt], gradings: [firstGrading, successGrading] })).map(
+        (m) => m.taskId,
+      ),
+    ).toEqual(['arg-0003.flaw']);
+  });
+
+  it('clears a miss only when the fresh success starts after the first grading, including superseded grades', () => {
+    const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-01', { sessionId: 'miss' });
+    const success = graded('arg-0001.flaw', 2, 2, [], '2026-10-03', { sessionId: 'success' });
+    const early = {
+      ...miss.grading,
+      id: 'superseded',
+      status: 'superseded' as const,
+      createdAt: '2026-10-02T09:00:00.000Z',
+    };
+    const corrected = { ...miss.grading, createdAt: '2026-10-04T09:00:00.000Z' };
+    const s = state({ attempts: [miss.attempt, success.attempt], gradings: [early, corrected, success.grading] });
+    expect(openMisses(s)).toEqual([]);
   });
 
   it('tracks separate misses on one task and holds its repeat until both fresh checks fit', () => {
