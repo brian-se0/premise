@@ -1,6 +1,6 @@
 # PR #3 review: storage, sessions, planner, backup and parser
 
-Independent review by Claude, 2026-10-05, of saint's draft PR #3 (https://github.com/brian-se0/premise/pull/3) at `9e263bb`. The `src/` tree is identical on its merge with today's `main` (`19b2166`), so every line reference below applies to the PR branch as it stands. GPT-6 Pro's review of the same code is pending; it will be recorded with the triage in `2026-10-05-pr3-hardening.md`.
+Independent review by Claude, 2026-10-05, of the owner's draft PR #3 (https://github.com/brian-se0/premise/pull/3) at `9e263bb`. The `src/` tree is identical on its merge with today's `main` (`19b2166`), so every line reference below applies to the PR branch as it stands. GPT-6 Pro's review of the same code, and a triage covering both reviews, are in `2026-10-05-pr3-hardening.md`.
 
 **Verdict: merge after fixes.** No blockers. Nothing found loses a draft, applies a review twice or breaks a transaction. Five small fixes are worth making before merge. One of them is a regression that would leave some backups unrestorable.
 

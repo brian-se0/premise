@@ -9088,3 +9088,195 @@ index 0000000..5ebc0e6
 ````
 
 End of packet. Please answer in the response format of section 3.
+
+## Reviewer response
+
+GPT-6 Pro (thinking effort 4 of 4) in the owner's ChatGPT account, 2026-10-05, sent by the device session in Brave as one attachment; it worked for about 28 minutes. The reply follows verbatim, from the first rule below to the last rule before `## Triage` (SHA-256 of the text between them, without the blank lines next to the rules: `4ef35e8c8be9f5a74cc39e7cea3d1a873ec0e18488ce93b7274911b7aecd32e7`, 17,648 bytes). "premise-pr3-packet" is ChatGPT's citation chip for the packet.
+
+---
+
+Reviewed the packet’s code at `9e263bb`, with selected unchanged helpers checked at `d76cef5`. I ran the 14 added reply fixtures, reproduced the three pinned prompt hashes, and ran isolated parser, import-invariant and counter probes. I did not rerun the full application, browser or deployment suites. **The major findings below should be fixed before merge and deployment; none requires a storage-schema change or a new synchronization mechanism.**
+
+### PR3-1 — major — Navigation can discard the local answer while conflict verification is pending
+
+**Where:** `src/ui/pages/SessionPage.tsx:145–176, 251–288` — `useBlocker`, `beforeUnload`, and the live-state verification effect.
+
+**Problem:** A known discrepancy with storage starts an asynchronous verification and removes the “Saved” label, but the navigation guards still consider the answer safe to discard. Both guards examine only edit generations and `conflictRef`; neither includes the pending verification. `conflictRef` becomes true only after the database read completes. premise-pr3-packet premise-pr3-packet
+
+**Failing scenario:** Tab A has saved “My answer,” so its edit generations are equal. Tab B replaces that draft with different text. Tab A receives the live discrepancy and begins its consistency read. While that read is pending, the student clicks Library or reloads. The blocker returns false, and the unload handler returns without warning. On an in-app departure, the verification effect is cancelled when the editor unmounts. The original answer—which now exists only in Tab A’s memory—is lost without the explicit choice promised by the conflict design. The existing `flush()` would wait for verification, but header navigation never invokes that path when the blocker returns false. premise-pr3-packet premise-pr3-packet premise-pr3-packet
+
+**Proposed fix:** Treat verification-pending, and any already-observed live mismatch, as unsafe to discard in both guards. An in-app departure should wait for verification and then either proceed or retain the editor with the existing conflict choices. A reload should warn during that interval. Keep “no unsaved local edits” separate from “this local copy has been verified against storage.”
+
+Add a browser regression that delays the verification read after a remote replacement, then attempts both header navigation and reload **before** the conflict alert appears.
+
+### PR3-2 — major — Confirmation binds feedback offsets, but not the saved reply text the student previewed
+
+**Where:** `src/storage/ops.ts:805–839` — parsed-row reparse; `src/ui/pages/RequestPage.tsx:291–300, 403–438` — preview binding and confirmation payload.
+
+**Problem:** The confirmation-time reparse checks the saved reply’s parser version, selected-block range, outcome, score, tags and feedback range. It does not compare the saved reply’s current `raw` with the raw text used to produce the preview. The UI’s `preview.raw !== raw` check compares two local strings, not either string against the database record. A replace-import can therefore change the displayed meaning of a reply without changing any checked value. premise-pr3-packet premise-pr3-packet
+
+**Failing scenario:** Read a valid reply containing:
+
+```text
+I01: 2/2
+- Tip: Name the gap.
+```
+
+Before Confirm, replace-import a backup that preserves the request, attempt, reply ID, revisions and ranges, but changes the tip to:
+
+```text
+I01: 2/2
+- Tip: Hide the gap.
+```
+
+Those replacements have equal UTF-16 lengths. In the isolated parser probe, the two complete replies produced **deep-equal parse results**, including all block and feedback offsets. The preview still shows “Name,” but every confirmation check accepts the replacement, and the resulting grading displays “Hide.” The importer checks reply shape and range validity, so this modification does not require breaking another import invariant. premise-pr3-packet premise-pr3-packet
+
+**Proposed fix:** Pass the preview’s expected saved-reply text into confirmation and compare it with `saved.raw` inside the transaction, once per distinct reply. An expected content digest would also work, but comparing the already-bounded string avoids another hashing dependency or persistent field. Keep the reparse checks as well: content identity and parse consistency protect different things.
+
+Add the same-ID, same-length replacement regression. Confirmation should refuse it without creating a grading, review, card update or confirmation receipt.
+
+### PR3-3 — major — Mixed Markdown formatting still lets one row absorb another row’s feedback
+
+**Where:** `src/domain/scoreParser.ts:107–117, 377–433` — shared line cleaning and bounded heading detection.
+
+**Problem:** The bounded reader strips Markdown heading marks **after** `cleanLine` has already attempted to remove bold wrappers. Consequently, a heading such as `### **I02: 1/3**` is not recognized as a heading or even as a boundary. The preceding row’s range extends through it. This affects the gap check as well as the headings inside the feedback section. premise-pr3-packet premise-pr3-packet premise-pr3-packet
+
+**Reproduced scenario:** Inside a valid request-bound section, followed by a valid score block giving I01 `2/2` and I02 `1/3`:
+
+```text
+I01: 2/2
+- Criterion 1: met.
+### **I02: 1/3**
+- Criterion 2: not met.
+- Tip: Name the gap.
+```
+
+Parser v3 gives I01 the **entire text above** and leaves I02 unmatched. Since `tipOf` takes the first tip in the attributed range, I02’s tip can also become I01’s displayed Correction. Scores themselves remain unchanged. premise-pr3-packet premise-pr3-packet
+
+There is a related contradiction-check escape: `**I01:** 0/2` is recognized as I01, but the remaining `**` before the score prevents `HEADING_SCORE` from matching. The probe attached that zero-credit assessment to a score-block result of `2/2`. A nested quotation such as `>> I02: 1/3` also fails to terminate the preceding row’s range. premise-pr3-packet premise-pr3-packet premise-pr3-packet
+
+**Proposed fix:** Introduce a small **bounded-reader-only** heading recognizer, used consistently for gap detection, row boundaries and heading-score checking. Handle combinations of the supported heading and emphasis wrappers. Preserve quotation/fence eligibility separately: recognizing a quoted heading as a boundary must not make it attributable feedback. A recognizable but unsupported heading shape should at least end the preceding row’s range.
+
+Do not change shared `cleanLine` merely to fix bounded feedback; that risks changing score parsing and historical v2 behavior. Add fixtures for the combinations above and bump the parser version, with the required decision entry. The prompt text need not change for this fix. premise-pr3-packet
+
+### PR3-4 — major — Import accepts ended sessions that still contain drafts, making those drafts unreachable
+
+**Where:** `src/domain/integrity.ts:144–176` — session and attempt lifecycle validation; `src/ui/pages/SessionPage.tsx:85`; `src/storage/ops.ts` — `openEntry` and `endSession`.
+
+**Problem:** The new `endSession` operation refuses to end a session containing a draft, but import does not enforce the corresponding invariant. Session validation checks entry ownership, and attempt validation checks submission/request lifecycle, without checking an ended session for drafts. An isolated `checkDataSet` probe returned no problems for that state. premise-pr3-packet premise-pr3-packet
+
+**Failing scenario:** Take a valid export containing an unfinished answer and change only its session’s `endedAt` to a canonical timestamp. After replacement, SessionPage immediately renders SessionDone, which does not expose draft answers. Home excludes the session from unfinished sessions, and `openEntry` refuses to open an ended session. Attempting the task from another session can return `draft-elsewhere`, pointing back to the same unusable session. The text remains in the database, but the normal UI cannot resume, submit or skip it. premise-pr3-packet premise-pr3-packet premise-pr3-packet premise-pr3-packet premise-pr3-packet
+
+**Proposed fix:** Reject an import when an ended session owns any draft attempt. Do not silently discard or skip the draft to repair the file. Preserve the newly intended distinction: **ended sessions may contain unopened entries, but not draft attempts**.
+
+Add a negative import fixture for the ended-draft state and a positive fixture proving that an ended session with submitted answers plus unopened entries remains importable and gradable.
+
+### PR3-5 — major — An imported oversized submitted answer can never enter either grading route
+
+**Where:** `src/storage/backup.ts:135–153`; `src/domain/integrity.ts:161–176`; `src/domain/prompt.ts:240–244`.
+
+**Problem:** Submission enforces the 2,000-character answer limit, but import accepts an arbitrary-length `answer` even for a frozen submitted attempt. The cross-table checker also omits that limit. Later, `planRequests` rejects the answer before it can create either a chatbot request or a self-grading-only request. premise-pr3-packet premise-pr3-packet premise-pr3-packet
+
+**Failing scenario:** Start from a valid export with one submitted, unowned answer and no grading request. Replace the answer with 2,001 characters, keeping all identifiers, timestamps and references valid. The isolated cross-table probe accepts it. The exact `planRequests` implementation rejects it. Both “Grade with a chatbot” and “Grade it myself” use `startGrading` → `prepareGrading`, so both fail. The answer is frozen, and SessionDone offers no discard operation for an unowned submission. Its task also remains blocked as awaiting a grade. premise-pr3-packet premise-pr3-packet premise-pr3-packet premise-pr3-packet
+
+**Proposed fix:** Enforce `MAX_ANSWER_LENGTH` on imported `submitted` and `discarded` attempts. Do **not** apply the limit indiscriminately to all stored answers: `saveDraft` and Skip can legitimately retain over-limit text, which must still round-trip without truncation. premise-pr3-packet premise-pr3-packet
+
+Test 2,000 versus 2,001 characters for a frozen submission, plus a positive over-limit draft/skip export-import case.
+
+### PR3-6 — major — Session IDs can pass import validation but produce unusable routes
+
+**Where:** `src/storage/backup.ts:125–132`; `src/domain/integrity.ts:144–167, 229`; `src/ui/pages/HomePage.tsx:74, 89`; `src/main.tsx` — session route.
+
+**Problem:** Request IDs now receive UUID validation, but session IDs remain unrestricted strings despite the data model declaring them UUIDs. Session links interpolate those strings directly into route paths. Reference consistency alone does not make an ID usable in that position. premise-pr3-packet premise-pr3-packet premise-pr3-packet premise-pr3-packet
+
+**Failing scenario:** In a valid backup containing a finished session with an unowned submitted answer, change the session ID to `bad/session` and change the attempt’s `sessionId` to match. Leave everything else unchanged. The cross-table probe accepts it, and the shape schema permits it. Home generates `#/session/bad/session`, which does not match `session/:id`; the student reaches NotFound instead of the page that can create the grading request. The same defect can make an unfinished session’s resume link unusable. premise-pr3-packet premise-pr3-packet premise-pr3-packet
+
+**Proposed fix:** Enforce the declared UUID contract for session IDs, using the same deliberate grammar policy as request IDs. Review the other declared identity fields for empty-string cases where runtime code uses truthiness instead of null checks. If arbitrary session IDs are intentionally supported instead, encode and decode them consistently in every generated route rather than interpolating them raw.
+
+Add malformed-ID import fixtures whose foreign keys all agree, so rejection demonstrably comes from ID validation rather than a broken reference.
+
+### PR3-7 — minor — Frozen-answer binding remains optional at the parsed-confirmation boundary
+
+**Where:** `src/storage/ops.ts:549–555, 717–731` — `GradeRow` and `loadFresh`.
+
+**Problem:** `expectedAnswer` and `expectedSnapshotHash` are optional, and `loadFresh` silently omits their checks when a caller leaves them out. This leaves a fail-open storage API even though every parsed confirmation now requires reply provenance. The current production preview does supply the fields, which is why I rate this minor rather than report it as another current UI exploit. premise-pr3-packet premise-pr3-packet premise-pr3-packet
+
+**Failing scenario:** A caller builds a legally typed parsed `GradeRow` without those fields. A replacement changes the frozen answer and its canonical prompt while retaining the IDs, revision, snapshot maximum and allowed tags. Confirmation sees the same revision and successfully reparses the saved score, because that reparse receives row IDs, maxima and allowed tags—not answer text. Nothing requires this caller to prove which frozen answer it previewed. premise-pr3-packet
+
+**Proposed fix:** Make the frozen-answer and snapshot expectations required for parsed confirmation, in both the type and runtime preconditions. Incorporate the expected reply-content binding from PR3-2 into that same explicit confirmation input. Do not require unrelated operations to carry these fields merely to share a broad `GradeRow` type.
+
+Add a test that omission is rejected, and a same-revision replacement test using a real saved parsed reply.
+
+### PR3-8 — minor — The last permitted counter increment creates an export that import refuses
+
+**Where:** `src/storage/ops.ts:144–149`; `src/domain/integrity.ts:87–88, 161–162`.
+
+**Problem:** The writer and importer disagree at the safe-integer boundary. Import permits `MAX_SAFE_INTEGER - 1`; `nextCounter` permits incrementing it to `MAX_SAFE_INTEGER`; import then rejects the resulting revision or review sequence for having no headroom. This is separate from the accepted aggregate backup-size limitation. premise-pr3-packet premise-pr3-packet premise-pr3-packet
+
+**Reproduced scenario:** An otherwise valid draft with revision `MAX_SAFE_INTEGER - 1` passes `checkDataSet`. The exact `nextCounter` function advances it successfully. The resulting state is immediately rejected by `checkDataSet` with “revision has no safe headroom.” `exportData` does not prevent exporting that state. premise-pr3-packet
+
+**Proposed fix:** Align the write and import ceilings. Keeping the current import policy means refusing the increment before it produces the forbidden terminal value. Alternatively, explicitly support terminal values as readable/importable data while continuing to refuse further increments. Update the limit message so it does not imply that export/import restores counter capacity.
+
+Add a boundary round-trip test covering the final successful write. This needs an artificially near-limit input, not plausible natural pilot volume, so it should not drive a larger counter-repair system.
+
+### PR3-9 — minor — Several new tests do not isolate the protection named in their descriptions
+
+**Where:** `tests/e2e/grading.spec.ts` — request navigation, failed confirmation and preview recovery tests; `tests/unit/planner.test.ts` — equal-time repair test.
+
+**Problem and concrete surviving regressions:**
+
+The **request-navigation test** goes through Library and a new practice session before opening the second request. That unmounts the first RequestPage regardless of its request key. Removing `<RequestBody key={id}>` would not make this test fail. Exercise a direct, same-route SPA transition from request A to request B while A has a preview. premise-pr3-packet
+
+The **equal-submission-time repair test** leaves both attempts in the helper’s default session. The unchanged helper sets `sessionId: 's'`, so the different-session condition already prevents repair. Removing the strict `a.submittedAt > m.at` condition would leave this named test green. Give the attempts different sessions, ensure the miss sorts before the success at the tied timestamp, and pair the negative case with a success one millisecond later. premise-pr3-packet 
+
+The **failed-confirmation browser test** removes `operations` from the compared tables entirely. It correctly accounts for the newly retained reply, but no longer proves that the failed grading operation left no confirmation receipt. Account explicitly for the expected `saveReply` receipt and assert that no `confirmRows` receipt was added. This is a weakness of that browser assertion, not evidence that the current transaction is non-atomic. premise-pr3-packet premise-pr3-packet
+
+The **legacy-preview recovery test** constructs the supposed old database by copying the current database’s schema, and populates only a focus note. It can therefore stay green if the current v1 schema drifts: the “old” fixture already contains the drifted layout. It also does not exercise recovery of historical requests, replies or grading records. Use a frozen v1 fixture with a small representative history, verify the recovery export against it, and compare the legacy database before and after export to establish the read-only promise. premise-pr3-packet premise-pr3-packet
+
+**Proposed fix:** Strengthen those specific fixtures and assertions, alongside the regressions requested above. A few isolated negative tests and one frozen recovery fixture are sufficient; a new testing framework or broad migration project is not warranted for this pilot.
+
+**Verdict: merge after fixes.**
+
+---
+
+## Triage
+
+Proposed by Claude on 2026-10-05. The owner implements PR #3, so each "accepted" below is a recommendation for that PR until the owner records the change.
+
+Claude also reviewed PR #3 independently, in `2026-10-05-pr3-claude-review.md` (findings C1 to C14 below are its findings 1 to 14). The two reviews agree on three points and otherwise found different problems, so this table covers both. Every Pro finding was checked against `9e263bb`:
+- PR3-3 with a parser probe.
+- PR3-4 and PR3-5 had already been reproduced in Claude's review.
+- The rest by reading the code and tests.
+
+All findings are accepted; none is declined. Both reviews say merge after fixes. No fix needs a storage-schema or export-schema change. The parser fix (PR3-3, C6, C7) needs a parser version bump and a `DECISIONS.md` entry.
+
+### Fix in PR #3 before merge
+
+| # | Finding | Decision | Fix and notes |
+| --- | --- | --- | --- |
+| C1 | major: import now caps reply text at 200,000 characters (`backup.ts:172`), but the live version (`d76cef5`) saved longer unparseable replies with no cap. A database holding one exports a backup that can't be restored. | accepted | Drop the cap at import, or apply it only when `parserVersion >= 3`. Pro did not report this one. |
+| PR3-1 | major: leaving or reloading while a cross-tab conflict check is pending can drop the local answer without a choice. | accepted | Confirmed in code: the navigation blocker (`SessionPage.tsx:145-151`) and `beforeunload` (`:167-177`) test only edit generations and `conflictRef`, not the pending `verification`. The window lasts one IndexedDB read before the first conflict shows, so it is narrow, but the fix is small. Treat a pending check as unsafe in both guards. |
+| C2 | major: when another tab finishes the session, this tab shows a false "changed in another tab" error with every button disabled. | accepted | Pass `allowEnded = true` at `SessionPage.tsx:246` and `:278`. |
+| PR3-2 | major: Confirm checks the saved reply's parse, but not its text. A same-length replacement of the reply by a replace-import changes the feedback shown. | accepted | Confirmed in code: the reparse in `confirmRows` (`ops.ts:805-839`) compares range, outcome, score, tags and feedback range only. It needs a crafted backup imported between preview and Confirm, and it affects feedback only, so Claude would rate it minor. Compare `saved.raw` with the previewed text inside the transaction. |
+| PR3-7 | minor: `expectedAnswer` and `expectedSnapshotHash` are optional, and `loadFresh` skips them when absent (`ops.ts:549-555`, `:717-731`). | accepted | The current UI supplies both. Make them required for parsed confirmation, together with PR3-2's reply text. |
+| PR3-3 | major: a grader heading such as `### **I02: 1/3**` isn't seen as a heading or a boundary, so the previous row absorbs the next row's feedback and tip. | accepted | Confirmed by probe: `### **I02: 1/3**`, `## **I02:** 1/3` and `>> I02: 1/3` give I01 all of I02's feedback and leave I02 unmatched. `I02: 1/3`, `### I02: 1/3`, `**I02: 1/3**` and `**I02:** 1/3` attach correctly. Use one bounded-reader heading recognizer for gap detection, row boundaries and the heading-score check, as Pro proposes. Bump the parser version, add fixtures and a decision entry. |
+| C6 | minor: a code fence opened on a list-item line flips the fence state. Feedback is dropped, or with heading-shaped student text, misattributed. | accepted | Same change as PR3-3: treat a fence after a list marker as an opener. |
+| C7 | minor: formatted heading scores (`**I01:** 0/2`, `I01: **0/2**`, `(0/2)`, `Score 0/2`) skip the check against the block score. | accepted | Pro reports the first form too. Same change as PR3-3. |
+| PR3-4 = C3 | major (Pro), minor (Claude): import accepts an ended session that still holds a draft, and the draft can't be reached again. | accepted | Reject it at import. Add a positive fixture: an ended session with submitted answers and unopened entries still imports and can be graded. Claude rates it minor because only a damaged or edited file can hold this state. |
+| PR3-5 = C4 | major (Pro), minor (Claude): import accepts a submitted answer over 2,000 characters, which then blocks grading. | accepted | Refuse it for submitted and discarded attempts only. Drafts and skipped attempts may legitimately hold longer text and must still round-trip. |
+| PR3-6 | major: session IDs aren't validated, and routes interpolate them raw, so an ID like `bad/session` gives a dead link. | accepted | Confirmed in code (`backup.ts:125-132`; `HomePage.tsx:74`, `:89`). Crafted file only, so Claude would rate it minor. Require UUIDs. |
+| C5 | minor: two request IDs that differ only in case both import, and a reply for one grades the other. | accepted | Same ID policy as PR3-6: require lower-case UUIDs for sessions and requests (`randomUUID` only produces lower case). |
+| PR3-8 | minor: `nextCounter` (`ops.ts:144-149`) can reach `MAX_SAFE_INTEGER`, which import refuses (`integrity.ts:87-88`, `:161-162`). | accepted | Refuse the increment that would reach it. Only an artificial near-limit input gets there. |
+| PR3-9 | minor: four new tests would stay green if the protection they name broke. | accepted | All four confirmed by reading. (a) The request-navigation test (`grading.spec.ts:269`) passes through Library and a new session, which unmounts the request page, so it never exercises `key={id}`. (b) The equal-time repair test (`planner.test.ts:286`) leaves both attempts in the helper's session `s`, so the different-session rule alone keeps the miss open. (c) `GRADING_STORED` (`grading.spec.ts:59`) no longer includes replies or operations, so the stale-preview test can't show that no confirmation receipt was written. (d) The old-preview recovery test (`grading.spec.ts:391`) builds the old database from the current schema and stores only a focus note. |
+| C8 | major (learning logic, not security): a success answered before the student saw the miss's correction clears the miss (`planner.ts:232-242`). | accepted | Also require the success to start after the miss's first grading. Fix it in PR #3, since PR #3 already changes this rule. |
+
+### Can follow PR #3
+
+| # | Finding | Decision | Notes |
+| --- | --- | --- | --- |
+| C10 | minor: nothing saves when a phone tab is hidden or closed; iOS Safari doesn't reliably fire `beforeunload`. | accepted | Fix it in PR #3 if the owner's phone session will be on an iPhone. |
+| C9 | minor: two same-error misses on one task get two repair slots, but one success clears both. | accepted | Follow-up before the M3 pilot. |
+| C11 | minor, already in the live version: a grade confirmed under a clock set far ahead locks the task. | accepted | Follow-up. |
+| C12 | nit: far-future timestamps import, then the next export can't be imported. | accepted | Follow-up. |
+| C13 | nit: checking for old preview data can upgrade that old database's schema. | accepted | Follow-up. |
+| C14 | nits: "Stay here" and save races, error messages, the reply box after Confirm, and failed live reads showing "Loading…". | accepted | Follow-up. |
