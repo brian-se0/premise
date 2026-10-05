@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { loadExercises } from '../../scripts/content.ts';
 import {
   PROMPT_BUDGET,
+  MAX_ANSWER_LENGTH,
   renderPromptForVersion,
   renderPromptV2,
   type PromptRow,
@@ -18,6 +19,8 @@ import {
   endSession,
   openEntry,
   prepareGrading,
+  saveDraft,
+  skipAttempt,
   startSession,
   submitAttempt,
   type OpContext,
@@ -200,18 +203,209 @@ describe('backup import security boundaries', () => {
     expect((await problems(file)).join(' ')).toContain('revision');
   });
 
-  it('rejects a stored reply beyond the parser limit', async () => {
-    const file = await reviewedFile();
-    file.replies.push({
+  it('imports and round-trips an old saved reply beyond the current paste limit', async () => {
+    const initial = await checkImport(JSON.stringify(await reviewedFile(false)));
+    expect(initial.ok).toBe(true);
+    if (!initial.ok) return;
+    const db = openDb(`backup-security-${crypto.randomUUID()}`);
+    await replaceAll(db, initial.data);
+    const requestId = (await db.requests.toArray())[0]!.id;
+    const raw = 'x'.repeat(MAX_REPLY_LENGTH + 1);
+    // The deployed release stored unparseable replies without a length check.
+    await db.replies.add({
       id: 'large-reply',
-      requestId: file.requests[0]!.id,
-      raw: 'x'.repeat(MAX_REPLY_LENGTH + 1),
+      requestId,
+      raw,
       pastedAt: NOW,
       parserVersion: 1,
       selectedBlock: null,
       parseOutcome: 'manual',
     });
-    expect((await problems(file)).join(' ')).toContain('replies');
+    const exported = await exportData(db, NOW, 'test');
+    const checked = await checkImport(JSON.stringify(exported));
+    expect(checked.ok ? [] : checked.problems).toEqual([]);
+    if (!checked.ok) return;
+    const restored = openDb(`backup-security-${crypto.randomUUID()}`);
+    await replaceAll(restored, checked.data);
+    expect((await restored.replies.get('large-reply'))?.raw).toBe(raw);
+    expect((await checkImport(JSON.stringify(await exportData(restored, NOW, 'test')))).ok).toBe(true);
+  });
+
+  it('refuses an ended session that still owns a draft attempt', async () => {
+    const db = openDb(`backup-security-${crypto.randomUUID()}`);
+    const exercise = (await loadExercises()).find((e) => e.id === 'arg-0002')!;
+    const snapshot = await buildSnapshot(exercise, exercise.tasks[0]!);
+    const ctx: OpContext = { now: NOW, newId: () => crypto.randomUUID(), random: () => 0.42 };
+    const session = await startSession(db, ctx, 'today', [snapshot.taskId]);
+    const opened = await openEntry(db, ctx, session.id, 0, snapshot);
+    if (opened.status !== 'opened') throw new Error('Expected a draft');
+    const file = await exportData(db, NOW, 'test');
+    file.sessions[0]!.endedAt = NOW;
+    expect((await problems(file)).join(' ')).toMatch(/ended session.*draft/i);
+  });
+
+  it('imports an ended session with submitted and unopened entries and can grade its answer', async () => {
+    const file = await reviewedFile(false);
+    file.sessions[0]!.entries.push({ taskId: 'arg-0002.assumption', attemptId: null });
+    const checked = await checkImport(JSON.stringify(file));
+    expect(checked.ok ? [] : checked.problems).toEqual([]);
+    if (!checked.ok) return;
+    const db = openDb(`backup-security-${crypto.randomUUID()}`);
+    await replaceAll(db, checked.data);
+    const attempt = (await db.attempts.toArray())[0]!;
+    const request = (await db.requests.toArray())[0]!;
+    const snapshot = (await db.snapshots.get(attempt.snapshotHash))!;
+    const ctx: OpContext = { now: NOW, newId: () => crypto.randomUUID(), random: () => 0.42 };
+    await confirmRows(
+      db,
+      ctx,
+      'confirm-imported',
+      request.id,
+      [
+        {
+          attemptId: attempt.id,
+          revision: attempt.revision,
+          score: snapshot.max,
+          tags: [],
+          source: 'manual',
+          disqualified: false,
+          feedbackRange: null,
+          ratingChoice: 'good',
+        },
+      ],
+      null,
+    );
+    expect(await db.reviewLogs.count()).toBe(1);
+  });
+
+  it.each([MAX_ANSWER_LENGTH, MAX_ANSWER_LENGTH + 1])(
+    'checks a submitted answer of %i characters at import',
+    async (length) => {
+      const file = await reviewedFile(false);
+      file.attempts[0]!.answer = 'x'.repeat(length);
+      const request = file.requests[0]!;
+      request.promptText = renderPromptForVersion(
+        request.promptVersion as PromptVersion,
+        request.id,
+        request.fence,
+        requestRows(file),
+      );
+      const found = await problems(file);
+      if (length === MAX_ANSWER_LENGTH) expect(found).toEqual([]);
+      else expect(found.join(' ')).toMatch(/submitted.*answer.*2,?000/i);
+    },
+  );
+
+  it('refuses an over-limit discarded answer as well', async () => {
+    const file = await reviewedFile(false);
+    file.attempts[0]!.answer = 'x'.repeat(MAX_ANSWER_LENGTH + 1);
+    file.attempts[0]!.state = 'discarded';
+    file.requests[0]!.status = 'closed';
+    const request = file.requests[0]!;
+    request.promptText = renderPromptForVersion(
+      request.promptVersion as PromptVersion,
+      request.id,
+      request.fence,
+      requestRows(file),
+    );
+    expect((await problems(file)).join(' ')).toMatch(/discarded.*answer.*2,?000/i);
+  });
+
+  it('round-trips long drafts and skipped answers unchanged', async () => {
+    const db = openDb(`backup-security-${crypto.randomUUID()}`);
+    const ctx: OpContext = { now: NOW, newId: () => crypto.randomUUID(), random: () => 0.42 };
+    const exercises = await loadExercises();
+    const makeAttempt = async (exerciseId: string, skip: boolean) => {
+      const exercise = exercises.find((e) => e.id === exerciseId)!;
+      const snapshot = await buildSnapshot(exercise, exercise.tasks[0]!);
+      const session = await startSession(db, ctx, 'today', [snapshot.taskId]);
+      const opened = await openEntry(db, ctx, session.id, 0, snapshot);
+      if (opened.status !== 'opened') throw new Error('Expected a draft');
+      const answer = exerciseId.repeat(MAX_ANSWER_LENGTH / exerciseId.length + 1);
+      await saveDraft(db, ctx, { session, entryIndex: 0, attempt: opened.attempt }, answer);
+      const saved = (await db.attempts.get(opened.attempt.id))!;
+      if (skip) await skipAttempt(db, ctx, { session, entryIndex: 0, attempt: saved });
+      return { id: opened.attempt.id, answer };
+    };
+    const draft = await makeAttempt('arg-0002', false);
+    const skipped = await makeAttempt('arg-0003', true);
+    const checked = await checkImport(JSON.stringify(await exportData(db, NOW, 'test')));
+    expect(checked.ok ? [] : checked.problems).toEqual([]);
+    if (!checked.ok) return;
+    const restored = openDb(`backup-security-${crypto.randomUUID()}`);
+    await replaceAll(restored, checked.data);
+    expect((await restored.attempts.get(draft.id))?.answer).toBe(draft.answer);
+    expect((await restored.attempts.get(skipped.id))?.answer).toBe(skipped.answer);
+    expect((await restored.attempts.get(draft.id))?.state).toBe('draft');
+    expect((await restored.attempts.get(skipped.id))?.state).toBe('skipped');
+  });
+
+  it('refuses a route-breaking session ID with consistent attempt foreign keys', async () => {
+    const file = await reviewedFile(false);
+    file.sessions[0]!.id = 'bad/session';
+    file.attempts[0]!.sessionId = 'bad/session';
+    expect(await problems(file)).toEqual(['session bad/session: ID is not a canonical lower-case UUID']);
+  });
+
+  it('refuses case variants of a request ID even when all foreign keys match', async () => {
+    const file = await reviewedFile(false);
+    const first = file.requests[0]!;
+    first.id = 'aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa';
+    file.attempts[0]!.requestId = first.id;
+    first.promptText = renderPromptForVersion(
+      first.promptVersion as PromptVersion,
+      first.id,
+      first.fence,
+      requestRows(file),
+    );
+    const sourceSession = file.sessions[0]!;
+    const sourceAttempt = file.attempts[0]!;
+    const secondSessionId = 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb';
+    const secondAttemptId = 'cccccccc-cccc-4ccc-8ccc-cccccccccccc';
+    const secondRequestId = first.id.toUpperCase();
+    file.sessions.push({
+      ...sourceSession,
+      id: secondSessionId,
+      entries: [{ taskId: sourceAttempt.taskId, attemptId: secondAttemptId }],
+    });
+    file.attempts.push({
+      ...sourceAttempt,
+      id: secondAttemptId,
+      sessionId: secondSessionId,
+      requestId: secondRequestId,
+    });
+    const second = {
+      ...first,
+      id: secondRequestId,
+      rows: { I01: secondAttemptId },
+      snapshots: { I01: sourceAttempt.snapshotHash },
+    };
+    file.requests.push(second);
+    second.promptText = renderPromptForVersion(
+      second.promptVersion as PromptVersion,
+      second.id,
+      second.fence,
+      requestRows({ ...file, requests: [second] }),
+    );
+    expect(await problems(file)).toEqual([`request ${secondRequestId}: ID is not a canonical lower-case UUID`]);
+  });
+
+  it('refuses empty record IDs that runtime code treats as absent', async () => {
+    const file = await reviewedFile(false);
+    file.attempts[0]!.id = '';
+    file.sessions[0]!.entries[0]!.attemptId = '';
+    file.requests[0]!.rows.I01 = '';
+    file.requests[0]!.promptText = renderPromptForVersion(
+      file.requests[0]!.promptVersion as PromptVersion,
+      file.requests[0]!.id,
+      file.requests[0]!.fence,
+      requestRows(file),
+    );
+    expect((await problems(file)).join(' ')).toMatch(/attempts: empty id/i);
+  });
+
+  it('imports an ordinary export with generated session and request UUIDs', async () => {
+    expect(await problems(await reviewedFile(false))).toEqual([]);
   });
 
   it('rejects a prompt that differs from the frozen attempts and snapshots', async () => {
