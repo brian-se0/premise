@@ -140,6 +140,7 @@ function EntryView({
   const chain = useRef<Promise<void>>(Promise.resolve());
   const verification = useRef<Promise<void> | null>(null);
   const conflictRef = useRef(false);
+  const liveMismatchRef = useRef(false);
   const flushRef = useRef<() => Promise<boolean>>(async () => false);
   const [navigationFailed, setNavigationFailed] = useState(false);
   const blocker = useBlocker(({ currentLocation, nextLocation }) => {
@@ -147,7 +148,13 @@ function EntryView({
       currentLocation.pathname !== nextLocation.pathname ||
       currentLocation.search !== nextLocation.search ||
       currentLocation.hash !== nextLocation.hash;
-    return differentPage && (edits.current.latest !== edits.current.saved || conflictRef.current);
+    return (
+      differentPage &&
+      (edits.current.latest !== edits.current.saved ||
+        conflictRef.current ||
+        !!verification.current ||
+        liveMismatchRef.current)
+    );
   });
   const blockerRef = useRef(blocker);
   useEffect(() => {
@@ -163,12 +170,27 @@ function EntryView({
     }),
     [session, index],
   );
+  liveMismatchRef.current =
+    !!attempt &&
+    !leaving &&
+    !(
+      matchesDraftIdentity(liveSession, live, precondition(attempt), true) &&
+      live?.state === 'draft' &&
+      live.revision === revision.current &&
+      live.answer === edits.current.savedText
+    );
 
   // A browser reload or close cannot wait for IndexedDB. Warn while text is unsaved or a
   // concurrent edit has made this local copy unsafe to discard.
   useEffect(() => {
     const beforeUnload = (event: BeforeUnloadEvent) => {
-      if (edits.current.latest === edits.current.saved && !conflictRef.current) return;
+      if (
+        edits.current.latest === edits.current.saved &&
+        !conflictRef.current &&
+        !verification.current &&
+        !liveMismatchRef.current
+      )
+        return;
       event.preventDefault();
       event.returnValue = '';
     };
@@ -243,82 +265,81 @@ function EntryView({
 
   // Another tab submitted or skipped this same answer while it was open here.
   const takenElsewhere =
-    !!attempt && !leaving && matchesDraftIdentity(liveSession, live, precondition(attempt)) && live?.state !== 'draft';
+    !!attempt &&
+    !leaving &&
+    matchesDraftIdentity(liveSession, live, precondition(attempt), true) &&
+    live?.state !== 'draft';
 
-  // A live query may briefly publish a snapshot from before this tab's own save. A lower
-  // revision is therefore checked against a fresh, consistent read before declaring a backup
-  // rollback. During that check, stop claiming the local text is saved.
-  useEffect(() => {
-    if (!attempt || leaving || conflictRef.current) return;
-    if (
-      matchesDraftIdentity(liveSession, live, precondition(attempt)) &&
-      live?.state === 'draft' &&
-      live.revision === revision.current &&
-      live.answer === edits.current.savedText
-    )
-      return;
+  // A live query may briefly publish a snapshot from before this tab's own save. Check a
+  // consistent read before declaring a backup rollback. Navigation can start this same check
+  // if it arrives between the mismatch render and the effect below.
+  const verifyDraft = useCallback(async () => {
+    if (!attempt) return;
+    try {
+      // If a local write completes during the read, compare again with its new revision.
+      for (;;) {
+        const readRevision = revision.current;
+        const savedText = edits.current.savedText;
+        const current = await db.transaction('r', db.sessions, db.attempts, async () => ({
+          session: await db.sessions.get(session.id),
+          attempt: await db.attempts.get(attempt.id),
+        }));
+        if (conflictRef.current) return;
+        if (readRevision !== revision.current || savedText !== edits.current.savedText) continue;
 
-    let cancelled = false;
-    setSaved(edits.current.latest === edits.current.saved ? 'idle' : 'saving');
-    const check = (async () => {
-      try {
-        // If a local write completes during the read, compare again with its new revision.
-        for (;;) {
-          const readRevision = revision.current;
-          const savedText = edits.current.savedText;
-          const current = await db.transaction('r', db.sessions, db.attempts, async () => ({
-            session: await db.sessions.get(session.id),
-            attempt: await db.attempts.get(attempt.id),
-          }));
-          if (cancelled || conflictRef.current) return;
-          if (readRevision !== revision.current || savedText !== edits.current.savedText) continue;
+        const a = current.attempt;
+        let message = '';
+        if (!a || !matchesDraftIdentity(current.session, a, precondition(attempt), true))
+          message =
+            'This session was replaced in another tab. Your text is still here; copy it before leaving this page.';
+        else if (a.state !== 'draft' || a.revision < revision.current)
+          message = 'This answer changed in another tab. Your text is still here; copy it before leaving this page.';
+        else if (a.answer !== edits.current.savedText && a.answer !== edits.current.text)
+          message = 'This answer changed in another tab. Your text is still here; copy it before leaving this page.';
 
-          const a = current.attempt;
-          let message = '';
-          if (!a || !matchesDraftIdentity(current.session, a, precondition(attempt)))
-            message =
-              'This session was replaced in another tab. Your text is still here; copy it before leaving this page.';
-          else if (a.state !== 'draft' || a.revision < revision.current)
-            message = 'This answer changed in another tab. Your text is still here; copy it before leaving this page.';
-          else if (a.answer !== edits.current.savedText && a.answer !== edits.current.text)
-            message = 'This answer changed in another tab. Your text is still here; copy it before leaving this page.';
-
-          if (message) {
-            window.clearTimeout(timer.current);
-            conflictRef.current = true;
-            setConflict(true);
-            setSaved('error');
-            setError(message);
-          } else if (a) {
-            revision.current = a.revision;
-            if (a.answer === edits.current.text) {
-              edits.current.saved = edits.current.latest;
-              edits.current.savedText = a.answer;
-              setSaved('saved');
-            } else {
-              setSaved('saving');
-            }
+        if (message) {
+          window.clearTimeout(timer.current);
+          conflictRef.current = true;
+          setConflict(true);
+          setSaved('error');
+          setError(message);
+        } else if (a) {
+          revision.current = a.revision;
+          if (a.answer === edits.current.text) {
+            edits.current.saved = edits.current.latest;
+            edits.current.savedText = a.answer;
+            setSaved('saved');
+          } else {
+            setSaved('saving');
           }
-          return;
         }
-      } catch (e) {
-        if (cancelled) return;
-        conflictRef.current = true;
-        setConflict(true);
-        setSaved('error');
-        setError(
-          `Could not check the saved answer: ${e instanceof Error ? e.message : String(e)}. Your text is still here; copy it before leaving this page.`,
-        );
+        return;
       }
-    })();
+    } catch (e) {
+      conflictRef.current = true;
+      setConflict(true);
+      setSaved('error');
+      setError(
+        `Could not check the saved answer: ${e instanceof Error ? e.message : String(e)}. Your text is still here; copy it before leaving this page.`,
+      );
+    }
+  }, [attempt, precondition, session.id]);
+
+  const beginVerification = useCallback(() => {
+    if (verification.current) return verification.current;
+    const check = verifyDraft();
     verification.current = check;
     void check.finally(() => {
       if (verification.current === check) verification.current = null;
     });
-    return () => {
-      cancelled = true;
-    };
-  }, [attempt, live, liveSession, index, session.id, leaving, precondition]);
+    return check;
+  }, [verifyDraft]);
+
+  useEffect(() => {
+    if (!attempt || leaving || conflictRef.current || !liveMismatchRef.current) return;
+    setSaved(edits.current.latest === edits.current.saved ? 'idle' : 'saving');
+    void beginVerification();
+  }, [attempt, live, liveSession, leaving, beginVerification]);
 
   const loadSavedDraft = async () => {
     if (!attempt) return;
@@ -374,6 +395,7 @@ function EntryView({
     window.clearTimeout(timer.current);
     if (conflictRef.current) return Promise.resolve(false);
     const run = chain.current.then(async () => {
+      if (liveMismatchRef.current && !verification.current) await beginVerification();
       while (verification.current) await verification.current;
       while (attempt && !conflictRef.current && edits.current.latest !== edits.current.saved) {
         const { latest, text } = edits.current;
@@ -399,6 +421,21 @@ function EntryView({
   useEffect(() => {
     flushRef.current = flush;
   });
+
+  // A phone browser may hide or discard the page without running beforeunload. Start the
+  // checked save while the document is still alive, within the autosave delay.
+  useEffect(() => {
+    const saveWhenHidden = () => {
+      if (document.visibilityState === 'hidden') void flushRef.current();
+    };
+    const saveOnPageHide = () => void flushRef.current();
+    document.addEventListener('visibilitychange', saveWhenHidden);
+    window.addEventListener('pagehide', saveOnPageHide);
+    return () => {
+      document.removeEventListener('visibilitychange', saveWhenHidden);
+      window.removeEventListener('pagehide', saveOnPageHide);
+    };
+  }, []);
 
   // An in-app link waits for the same checked, serialized draft save as "Stop for now".
   // A failed save leaves the route and textarea in place until the student retries or explicitly
