@@ -386,7 +386,7 @@ test('export then replace-import restores an unfinished session and a partially 
   await page.goto('#/settings');
   const download = page.waitForEvent('download');
   await page.getByRole('button', { name: 'Export a backup' }).click();
-  const path = await (await download).path();
+  const backup = Buffer.concat(await (await (await download).createReadStream()).toArray());
 
   // Change things, then restore.
   await page.goto('#/');
@@ -396,7 +396,9 @@ test('export then replace-import restores an unfinished session and a partially 
   await expect(page.getByText(/0 waiting/)).toBeVisible();
 
   await page.goto('#/settings');
-  await page.getByLabel('Backup file').setInputFiles(path);
+  await page
+    .getByLabel('Backup file')
+    .setInputFiles({ name: 'backup.json', mimeType: 'application/json', buffer: backup });
   await page.getByRole('button', { name: 'Replace everything' }).click();
   await expect(page.getByText('Imported.')).toBeVisible();
   await page.goto('#/');
