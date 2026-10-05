@@ -2,7 +2,7 @@
 
 import { createEmptyCard, fsrs, generatorParameters, Rating, type Card, type Grade } from 'ts-fsrs';
 import type { AttemptKind, CardFields, RatingChoice } from './records.ts';
-import { SCHEDULER_CONFIGS } from './schedulerConfig.ts';
+import { schedulerConfig } from './schedulerConfig.ts';
 
 export { Rating };
 
@@ -64,7 +64,7 @@ export function review(
   rating: Grade,
   reviewedAt: string,
 ): { after: CardFields; effectiveAt: string } {
-  const config = SCHEDULER_CONFIGS[version];
+  const config = schedulerConfig(version);
   if (!config) throw new Error(`Unknown scheduler version ${version}`);
   const scheduler = fsrs(generatorParameters({ ...config, w: [...config.w] }));
   const card = before ?? emptyCard(reviewedAt);

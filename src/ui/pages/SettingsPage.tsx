@@ -1,9 +1,11 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import Dexie from 'dexie';
 import { content } from '../../content.ts';
 import { MAX_BATCH_SIZE } from '../../domain/prompt.ts';
 import { checkImportFile, exportData, replaceAll, type ImportSummary } from '../../storage/backup.ts';
 import type { DataSet } from '../../domain/records.ts';
 import { setTaskControls } from '../../storage/ops.ts';
+import { openDb } from '../../storage/db.ts';
 import { ctx, db, findTask, newOpId, saveSetting, useLive, useSettings } from '../runtime.ts';
 
 export function SettingsPage() {
@@ -165,14 +167,58 @@ async function exportNow() {
   await saveSetting('lastExportAt', now);
 }
 
+const LEGACY_PREVIEW_DB = 'premise-preview';
+
+/** The removed public preview used its own database on the same origin. Inspect it without creating it. */
+async function hasLegacyPreviewData(): Promise<boolean> {
+  if (__PREVIEW__ || !(await Dexie.exists(LEGACY_PREVIEW_DB))) return false;
+  const legacy = openDb(LEGACY_PREVIEW_DB);
+  try {
+    // Include settings and other records too: a focus note may be the only data worth recovering.
+    return (await Promise.all(legacy.tables.map((table) => table.count()))).some((count) => count > 0);
+  } catch {
+    // If an old database cannot be inspected, still offer the export path rather than hide it.
+    return true;
+  } finally {
+    legacy.close();
+  }
+}
+
+async function exportLegacyPreview(): Promise<void> {
+  if (!(await Dexie.exists(LEGACY_PREVIEW_DB))) throw new Error('The old preview data is no longer present.');
+  const legacy = openDb(LEGACY_PREVIEW_DB);
+  try {
+    const now = new Date().toISOString();
+    const file = await exportData(legacy, now, __COMMIT__.slice(0, 7));
+    download(`premise-preview-recovery-${now.slice(0, 10)}.json`, JSON.stringify(file));
+  } finally {
+    legacy.close();
+  }
+}
+
 function Backup({ lastExportAt }: { lastExportAt: string | null }) {
   const [pending, setPending] = useState<{ data: DataSet; summary: ImportSummary } | null>(null);
   const [problems, setProblems] = useState<string[]>([]);
   const [status, setStatus] = useState('');
+  const [legacyPreviewAvailable, setLegacyPreviewAvailable] = useState(false);
   // One backup action at a time, so "Export current data first" finishes before Replace can start.
   const [busy, setBusy] = useState(false);
   // Only the latest file selection may show a preview; an earlier, slower check is ignored.
   const selection = useRef(0);
+
+  useEffect(() => {
+    let active = true;
+    void hasLegacyPreviewData()
+      .then((available) => {
+        if (active) setLegacyPreviewAvailable(available);
+      })
+      .catch((e: unknown) => {
+        if (active) setStatus(`Could not check old preview data: ${e instanceof Error ? e.message : String(e)}`);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const running = useRef(false);
   const run = async (action: () => Promise<void>) => {
@@ -196,16 +242,30 @@ function Backup({ lastExportAt }: { lastExportAt: string | null }) {
       }
     });
 
+  const onLegacyExport = () =>
+    run(async () => {
+      try {
+        await exportLegacyPreview();
+        setStatus('Old preview backup downloaded.');
+      } catch (e) {
+        setStatus(`Old preview export failed: ${e instanceof Error ? e.message : String(e)}`);
+      }
+    });
+
   const onFile = async (file: File | undefined) => {
     const token = ++selection.current;
     setProblems([]);
     setPending(null);
     setStatus('');
     if (!file) return;
-    const check = await checkImportFile(file);
-    if (token !== selection.current) return;
-    if (check.ok) setPending({ data: check.data, summary: check.summary });
-    else setProblems(check.problems);
+    try {
+      const check = await checkImportFile(file);
+      if (token !== selection.current) return;
+      if (check.ok) setPending({ data: check.data, summary: check.summary });
+      else setProblems(check.problems);
+    } catch {
+      if (token === selection.current) setProblems(['The backup file could not be read or validated.']);
+    }
   };
 
   const replace = () =>
@@ -230,6 +290,18 @@ function Backup({ lastExportAt }: { lastExportAt: string | null }) {
       <button disabled={busy} onClick={() => void onExport()}>
         Export a backup
       </button>
+      {legacyPreviewAvailable && (
+        <div className="panel">
+          <h3>One-time recovery: old preview data</h3>
+          <p>
+            An earlier preview kept practice data separately on this device. Download its backup to preserve it. This
+            does not add it to your current practice data or change either copy.
+          </p>
+          <button disabled={busy} onClick={() => void onLegacyExport()}>
+            Download old preview backup
+          </button>
+        </div>
+      )}
       <h3>Import</h3>
       <p className="meta">Importing replaces all data on this device with the file's contents.</p>
       <label>
