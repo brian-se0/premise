@@ -382,6 +382,26 @@ describe('planner repair loop', () => {
     expect(planToday(s, 1)).toEqual([expect.objectContaining({ reason: 'repair', repairs: 'arg-0003.flaw' })]);
   });
 
+  it('keeps a miss open when a fresh success starts exactly when the miss is first graded', () => {
+    const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-01', { sessionId: 'miss' });
+    const firstMissGradedAt = '2026-10-03T09:00:00.000Z';
+    const success = graded('arg-0001.flaw', 2, 2, [], '2026-10-03', {
+      sessionId: 'success',
+      startedAt: firstMissGradedAt,
+      submittedAt: '2026-10-03T09:00:01.000Z',
+      updatedAt: '2026-10-03T09:00:01.000Z',
+    });
+    const s = state({
+      attempts: [miss.attempt, success.attempt],
+      gradings: [
+        { ...miss.grading, createdAt: firstMissGradedAt },
+        { ...success.grading, createdAt: '2026-10-03T09:01:00.000Z' },
+      ],
+    });
+    expect(openMisses(s).map((m) => m.taskId)).toEqual(['arg-0003.flaw']);
+    expect(planToday(s, 1)).toEqual([expect.objectContaining({ reason: 'repair', repairs: 'arg-0003.flaw' })]);
+  });
+
   it('does not let an older session finished after the miss repair it retroactively', () => {
     const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-01', { sessionId: 'miss' });
     const success = graded('arg-0001.flaw', 2, 2, [], '2026-10-01', {
