@@ -1852,3 +1852,14 @@ All ten exercises were marked "fix". Every finding is accepted except one replac
 | B1-22 | arg-0018.flaw | The 1-point anchor asserts the sample is unrepresentative; difficulty 3 is too high. | accepted in part | Difficulty 2 and the new note accepted. The proposed anchor ("may not be representative of the population") is still a generic label, which by the review's own standard (B1-9, B1-16, B1-21) earns 0; the 1-point anchor identifies the inference only. |
 | B1-23 | arg-0018.strengthen | The reference overclaims a "fair guide"; one answer per person should not be preapproved; difficulty 4 is too high. | accepted | New reference, note, `accept` and criterion 2; difficulty 4 to 3. |
 | B1-24 | Patterns for later batches | Negation gate, no partial controls treated as exclusions, criterion-by-criterion anchors, three distinct standards, difficulty as an estimate. | accepted | Applied to this batch and used for batch 2. Adding them to `CONTENT_GUIDELINES.md` waits until PR #3 is on main, since it edits the docs. |
+
+### Follow-up check
+
+After these fixes, a separate Claude pass graded every anchor literally against its rubric and re-ran the negation tests. Every anchor scored as stated. It found seven further problems, all fixed:
+
+- `arg-0015.assumption`: the key missed the causal bridge (removing the goats explains at least part of the recovery on the three islands); added as bridge (c) in `accept` and criterion 2.
+- `arg-0011.assumption`: a frequency claim limited to sites matching both premises (spring and soil as fertile as any) is necessary and now earns 2; only claims about broader groups earn 1.
+- `arg-0010.weaken`: the reference's departure rates can explain much of the rise but not all of it (at most about 4.2 from 3.6), so the reference now says "much of the rise".
+- `arg-0001.flaw`: `accept` now credits the Harlow-versus-neighbors gap that criterion 2 already credits.
+- `arg-0009.flaw`: the reference now describes the comparison with the other seven branches, not only the timing; the 2-point anchor's alternative is teenagers moving in from outside Fenwick, since moves within the city are ruled out.
+- `arg-0015.strengthen`: the note now matches `accept`, which also credits facts showing the goats' removal explains the recovery on the three islands.
