@@ -31,7 +31,7 @@ Rules for any AI coding agent working in this repository (Claude Code, Codex, ot
 | `npm run check` | Content build, typecheck, lint and format check, unit tests. Must pass before every commit. |
 | `npm run format` | Apply Prettier |
 | `npm run test:e2e` | Playwright tests (builds and serves the production site; set `PW_CHROMIUM` to use a preinstalled Chromium, `E2E_WEBKIT=0` to skip WebKit) |
-| `npm run prompt-eval` | Score saved chatbot replies against hand grades |
+| `npm run pilot:prompt -- pilot/runs/<run>.yaml` | Build pilot grading prompts from a run file (the hand-grade evaluation is not yet automated) |
 
 ## Working style
 

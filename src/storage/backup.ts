@@ -82,7 +82,9 @@ const settingSchemas: Record<keyof Settings, z.ZodType> = {
 };
 
 const setting = z.strictObject({ key: z.string(), value: z.unknown() }).superRefine((s, ctx) => {
-  const schema = settingSchemas[s.key as keyof Settings] as z.ZodType | undefined;
+  const schema = Object.hasOwn(settingSchemas, s.key)
+    ? (settingSchemas[s.key as keyof Settings] as z.ZodType)
+    : undefined;
   if (!schema) {
     ctx.addIssue({ code: 'custom', message: `unknown setting ${s.key}` });
     return;
@@ -263,6 +265,21 @@ function referencedVersions(data: Pick<DataSet, 'cards' | 'reviewLogs'>): string
   return [...versions].sort();
 }
 
+/** JSON.parse can produce Infinity from an exponent such as 1e400, including deep in unknown configs. */
+function finiteJsonNumbers(value: unknown): boolean {
+  const pending: unknown[] = [value];
+  const seen = new Set<object>();
+  while (pending.length) {
+    const item = pending.pop();
+    if (typeof item === 'number' && !Number.isFinite(item)) return false;
+    if (item !== null && typeof item === 'object' && !seen.has(item)) {
+      seen.add(item);
+      for (const child of Object.values(item)) pending.push(child);
+    }
+  }
+  return true;
+}
+
 export async function exportData(db: PremiseDb, now: string, appVersion: string): Promise<ExportFile> {
   return db.transaction(
     'r',
@@ -272,10 +289,11 @@ export async function exportData(db: PremiseDb, now: string, appVersion: string)
         await Promise.all(TABLES.map(async (t) => [t, await db.table(t).toArray()] as const)),
       ) as unknown as DataSet;
       const stored = new Map(data.schedulerConfigs.map((c) => [c.version, c.config]));
-      const schedulerConfigs: ExportFile['schedulerConfigs'] = {};
+      const schedulerConfigs = Object.create(null) as ExportFile['schedulerConfigs'];
       for (const v of referencedVersions(data)) {
-        const config = (SCHEDULER_CONFIGS[v] as Record<string, unknown> | undefined) ?? stored.get(v);
+        const config = Object.hasOwn(SCHEDULER_CONFIGS, v) ? SCHEDULER_CONFIGS[v] : stored.get(v);
         if (!config) throw new Error(`Scheduler version ${v} has no stored configuration.`);
+        if (!finiteJsonNumbers(config)) throw new Error(`Scheduler version ${v} has non-finite configuration numbers.`);
         schedulerConfigs[v] = JSON.parse(JSON.stringify(config)) as Record<string, unknown>;
       }
       const { schedulerConfigs: _table, settings, ...rest } = data;
@@ -334,6 +352,18 @@ export async function checkImport(text: string): Promise<ImportCheck> {
   }
   const file = parsed.data as unknown as ExportFile;
   const problems: string[] = [];
+  // Zod's record parser omits an own "__proto__" key. Keep validated JSON keys in a null-prototype
+  // map so unknown scheduler versions and their configurations survive import and export exactly.
+  const rawConfigs = (json as ExportFile).schedulerConfigs;
+  const schedulerMap = Object.create(null) as ExportFile['schedulerConfigs'];
+  for (const [version, config] of Object.entries(rawConfigs)) {
+    if (config === null || typeof config !== 'object' || Array.isArray(config)) {
+      problems.push(`scheduler ${version}: configuration must be an object`);
+    } else {
+      schedulerMap[version] = config;
+    }
+  }
+  file.schedulerConfigs = schedulerMap;
   for (const s of file.snapshots) {
     const { hash, firstSeenAt: _seen, ...payload } = s;
     if ((await sha256Hex(canonicalJson(payload))) !== hash)
@@ -341,13 +371,24 @@ export async function checkImport(text: string): Promise<ImportCheck> {
   }
   const referenced = referencedVersions(file);
   for (const v of referenced) {
-    if (!file.schedulerConfigs[v]) problems.push(`scheduler ${v}: configuration missing from the file`);
+    if (!Object.hasOwn(file.schedulerConfigs, v)) problems.push(`scheduler ${v}: configuration missing from the file`);
   }
   const schedulerConfigs: SchedulerConfigRecord[] = [];
   for (const [v, config] of Object.entries(file.schedulerConfigs)) {
-    const known = SCHEDULER_CONFIGS[v];
+    if (!finiteJsonNumbers(config)) {
+      problems.push(`scheduler ${v}: configuration has a non-finite number`);
+      continue;
+    }
+    const known = Object.hasOwn(SCHEDULER_CONFIGS, v) ? SCHEDULER_CONFIGS[v] : undefined;
     if (known) {
-      if (canonicalJson(config) !== canonicalJson(known)) {
+      let agrees: boolean;
+      try {
+        agrees = canonicalJson(config) === canonicalJson(known);
+      } catch {
+        problems.push(`scheduler ${v}: configuration cannot be validated`);
+        continue;
+      }
+      if (!agrees) {
         problems.push(`scheduler ${v}: configuration differs from this app's definition`);
       }
     } else if (referenced.includes(v)) {
@@ -375,7 +416,7 @@ export async function checkImport(text: string): Promise<ImportCheck> {
       counts: Object.fromEntries(TABLES.map((t) => [t, data[t].length])),
       firstActivity: times[0] ?? null,
       lastActivity: times.at(-1) ?? null,
-      unknownSchedulers: referenced.filter((v) => !SCHEDULER_CONFIGS[v]),
+      unknownSchedulers: referenced.filter((v) => !Object.hasOwn(SCHEDULER_CONFIGS, v)),
     },
   };
 }

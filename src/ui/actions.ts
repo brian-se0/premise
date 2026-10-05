@@ -59,16 +59,18 @@ export async function unfinishedSessions(): Promise<{ session: SessionRecord; re
   return out.sort((a, b) => (a.session.createdAt < b.session.createdAt ? 1 : -1));
 }
 
-/** Ended sessions whose submitted answers were never put into a grading request, newest first. */
+/** Finished sessions whose submitted answers were never put into a grading request, newest first. */
 export async function ungradedSessions(): Promise<{ session: SessionRecord; attempts: AttemptRecord[] }[]> {
   const sessions = await db.sessions.toArray();
   const out: { session: SessionRecord; attempts: AttemptRecord[] }[] = [];
   for (const s of sessions) {
-    if (!s.endedAt) continue;
+    // The final submit and the session's end timestamp are separate writes. Make the grading
+    // route visible immediately after the final answer, even before SessionDone mounts.
+    if (!s.endedAt && s.entries.some((e) => e.attemptId === null)) continue;
     const ids = s.entries.map((e) => e.attemptId).filter((x): x is string => x !== null);
-    const attempts = (await db.attempts.bulkGet(ids)).filter(
-      (a): a is AttemptRecord => !!a && a.state === 'submitted' && a.requestId === null,
-    );
+    const all = await db.attempts.bulkGet(ids);
+    if (!s.endedAt && all.some((a) => !a || a.state === 'draft')) continue;
+    const attempts = all.filter((a): a is AttemptRecord => !!a && a.state === 'submitted' && a.requestId === null);
     if (attempts.length > 0) out.push({ session: s, attempts });
   }
   return out.sort((a, b) => (a.session.createdAt < b.session.createdAt ? 1 : -1));
