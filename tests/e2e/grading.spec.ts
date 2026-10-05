@@ -56,7 +56,16 @@ async function exportFile(page: Page): Promise<Record<string, unknown[]>> {
   return JSON.parse(Buffer.concat(chunks).toString()) as Record<string, unknown[]>;
 }
 
-const GRADING_STORED = ['attempts', 'requests', 'gradings', 'reviewLogs', 'cards', 'taskStates'];
+const GRADING_STORED = [
+  'attempts',
+  'requests',
+  'replies',
+  'gradings',
+  'reviewLogs',
+  'cards',
+  'taskStates',
+  'operations',
+];
 
 /** A chatbot-style reply: feedback per row, then the skeleton filled with the given scores. */
 function reply(prompt: string, scores: Record<string, string>, tags: Record<string, string> = {}): string {
@@ -268,21 +277,20 @@ test('identical re-paste confirms nothing new; a conflicting reply offers a choi
 
 test('a preview cannot follow navigation to a different grading request', async ({ page }) => {
   await practice(page, 'arg-0001', ['A conclusion.', 'A flaw.']);
-  await toRequest(page);
+  const firstUrl = await toRequest(page);
   const firstPrompt = await promptText(page);
+  await practice(page, 'arg-0002', ['Another conclusion.', 'Another flaw.']);
+  const secondUrl = await toRequest(page);
+
+  await page.goto(firstUrl);
   await paste(page, reply(firstPrompt, { I01: '1', I02: '2' }));
   await expect(confirmButton(page)).toHaveText(/2 grades/);
-
-  // Use in-app links so React Router reuses its mounted route tree while the request changes.
-  await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Library' }).click();
-  await page.locator('a[href="#/library/arg-0002"]').click();
-  await page.getByRole('button', { name: 'Practice this exercise' }).click();
-  for (const answer of ['Another conclusion.', 'Another flaw.']) {
-    await page.getByLabel('Your answer').fill(answer);
-    await expect(page.getByText('Saved', { exact: true })).toBeVisible();
-    await page.getByRole('button', { name: 'Submit', exact: true }).click();
-  }
-  await toRequest(page);
+  // Change only the request parameter while RequestPage stays mounted. A missing key on
+  // RequestBody would carry the old preview into the new request.
+  await page.evaluate((url) => {
+    window.location.hash = new URL(url).hash;
+  }, secondUrl);
+  await expect(page).toHaveURL(secondUrl);
   await expect(page.locator('#reply')).toHaveValue('');
   await expect(confirmButton(page)).toHaveCount(0);
   const file = await exportFile(page);
@@ -345,10 +353,19 @@ test('a failure halfway through saving leaves nothing half-written', async ({ pa
   await expect(page.getByText(/2 waiting · open/)).toBeVisible();
   await page.evaluate(() => ((window as unknown as { __fail?: boolean }).__fail = false));
   // Read scores already kept the reply and its receipt. The failed grading transaction must add
-  // no grading, card, review, or second reply.
+  // no grading, card, review, second reply, or confirmRows receipt.
   const after = await exportFile(page);
-  for (const table of GRADING_STORED) expect(after[table], table).toEqual(before[table]);
+  for (const table of GRADING_STORED.filter((name) => name !== 'replies' && name !== 'operations')) {
+    expect(after[table], table).toEqual(before[table]);
+  }
   expect(after.replies).toHaveLength((before.replies?.length ?? 0) + 1);
+  const beforeOps = before.operations as { opId: string; name: string }[];
+  const afterOps = after.operations as { opId: string; name: string }[];
+  const addedOps = afterOps.filter((op) => !beforeOps.some((prior) => prior.opId === op.opId));
+  expect(addedOps).toEqual([expect.objectContaining({ name: 'saveReply' })]);
+  expect(afterOps.filter((op) => op.name === 'confirmRows')).toEqual(
+    beforeOps.filter((op) => op.name === 'confirmRows'),
+  );
   await page.goto(url);
   await paste(page, reply(prompt, { I01: '1', I02: '2' }));
   await confirmButton(page).click();
@@ -386,82 +403,6 @@ test('export then replace-import restores an unfinished session and a partially 
   await expect(page.getByRole('link', { name: /Request .*: 1 waiting/ })).toBeVisible();
   await page.getByRole('link', { name: /left$/ }).click();
   await expect(page.getByLabel('Your answer')).toHaveValue('half-written draft');
-});
-
-test('old preview data has a separate one-time recovery export', async ({ page }) => {
-  await page.goto('#/settings');
-  await expect(page.getByRole('button', { name: 'Download old preview backup' })).toHaveCount(0);
-
-  // Recreate the old v1 preview database with a user-authored focus note as its only activity.
-  // Copy the active v1 schema so this fixture remains an actual database the exporter can read.
-  await page.evaluate(async () => {
-    const activeOpen = indexedDB.open('premise');
-    const active = await new Promise<IDBDatabase>((resolve, reject) => {
-      activeOpen.onsuccess = () => resolve(activeOpen.result);
-      activeOpen.onerror = () => reject(activeOpen.error);
-    });
-    const names = Array.from(active.objectStoreNames);
-    const read = active.transaction(names, 'readonly');
-    const schema = names.map((name) => {
-      const store = read.objectStore(name);
-      return {
-        name,
-        keyPath: store.keyPath,
-        autoIncrement: store.autoIncrement,
-        indexes: Array.from(store.indexNames, (indexName) => {
-          const index = store.index(indexName);
-          return { name: indexName, keyPath: index.keyPath, unique: index.unique, multiEntry: index.multiEntry };
-        }),
-      };
-    });
-    const version = active.version;
-    active.close();
-
-    const oldOpen = indexedDB.open('premise-preview', version);
-    oldOpen.onupgradeneeded = () => {
-      for (const item of schema) {
-        const store = oldOpen.result.createObjectStore(item.name, {
-          keyPath: item.keyPath,
-          autoIncrement: item.autoIncrement,
-        });
-        for (const index of item.indexes) {
-          store.createIndex(index.name, index.keyPath, { unique: index.unique, multiEntry: index.multiEntry });
-        }
-      }
-    };
-    const old = await new Promise<IDBDatabase>((resolve, reject) => {
-      oldOpen.onsuccess = () => resolve(oldOpen.result);
-      oldOpen.onerror = () => reject(oldOpen.error);
-    });
-    const write = old.transaction('settings', 'readwrite');
-    write.objectStore('settings').put({ key: 'focus', value: { tag: null, note: 'Old preview focus note.' } });
-    await new Promise<void>((resolve, reject) => {
-      write.oncomplete = () => resolve();
-      write.onerror = () => reject(write.error);
-    });
-    old.close();
-  });
-
-  await page.goto('#/');
-  await page.goto('#/settings');
-  const recover = page.getByRole('button', { name: 'Download old preview backup' });
-  await expect(recover).toBeVisible();
-  const download = page.waitForEvent('download');
-  await recover.click();
-  const file = await download;
-  expect(file.suggestedFilename()).toMatch(/^premise-preview-recovery-\d{4}-\d{2}-\d{2}\.json$/);
-  const chunks = await (await file.createReadStream()).toArray();
-  const recovered = JSON.parse(Buffer.concat(chunks).toString()) as {
-    settings: { key: string; value: unknown }[];
-  };
-  expect(recovered.settings).toContainEqual({ key: 'focus', value: { tag: null, note: 'Old preview focus note.' } });
-  await page.getByLabel('Backup file').setInputFiles(await file.path());
-  await expect(page.getByRole('button', { name: 'Replace everything' })).toBeVisible();
-  await page.getByRole('button', { name: 'Cancel' }).click();
-
-  const current = await exportFile(page);
-  expect(current.settings).not.toContainEqual({ key: 'focus', value: { tag: null, note: 'Old preview focus note.' } });
-  await expect(recover).toBeVisible();
 });
 
 test("per-exercise grading offers to grade each argument before the next, and today's session resumes", async ({

@@ -26,8 +26,11 @@ test('navigation works and survives a reload', async ({ page }) => {
 
 test('the skip link moves focus to the page without changing the route', async ({ page }) => {
   await page.goto('#/about');
-  await page.keyboard.press('Tab');
-  await expect(page.getByRole('link', { name: 'Skip to content' })).toBeFocused();
+  // Mobile WebKit's first Tab target depends on keyboard settings. Focus the link explicitly,
+  // then activate it with the keyboard to test the app's accessible behavior.
+  const skip = page.getByRole('link', { name: 'Skip to content' });
+  await skip.focus();
+  await expect(skip).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page).toHaveURL(/#\/about$/);
   await expect(page.locator('main')).toBeFocused();
