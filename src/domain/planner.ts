@@ -205,23 +205,24 @@ function repairCandidates(
 /**
  * Accepted, uncoached misses in the last 30 days that no later fresh-stimulus success repaired.
  * A miss clears only on full credit from an uncoached attempt started after the miss was first
- * graded, submitted later, in a later session on a stimulus the student had not seen before
+ * graded as a miss, submitted later, in a later session on a stimulus the student had not seen before
  * (stimulusSeenBefore false), on a different exercise with the same skill and a shared likely
  * error. Success before the student received the correction is not transfer.
  */
 export function openMisses(state: PlannerState, tasks = availableTasks(state.exercises)): OpenMiss[] {
   const taskById = new Map(tasks.map((t) => [t.taskId, t]));
-  const firstGradedAt = new Map<string, string>();
+  const firstMissGradedAt = new Map<string, string>();
   for (const grading of state.gradings) {
-    const prior = firstGradedAt.get(grading.attemptId);
+    if (grading.score === null || grading.score >= grading.max) continue;
+    const prior = firstMissGradedAt.get(grading.attemptId);
     if (prior === undefined || grading.createdAt < prior) {
-      firstGradedAt.set(grading.attemptId, grading.createdAt);
+      firstMissGradedAt.set(grading.attemptId, grading.createdAt);
     }
   }
   const cutoff = new Date(`${state.today}T00:00:00`);
   cutoff.setDate(cutoff.getDate() - REPAIR_WINDOW_DAYS);
 
-  const misses: (Omit<OpenMiss, 'freshRepair'> & { sessionId: string; firstGradedAt: string })[] = [];
+  const misses: (Omit<OpenMiss, 'freshRepair'> & { sessionId: string; firstMissGradedAt: string })[] = [];
   for (const { g, a } of acceptedHistory(state)) {
     const task = taskById.get(a.taskId);
     if (!task || a.kind === 'coached' || new Date(a.submittedAt!) < cutoff) continue;
@@ -232,7 +233,7 @@ export function openMisses(state: PlannerState, tasks = availableTasks(state.exe
         tags: g.tags.length ? g.tags : task.likelyErrors,
         at: a.submittedAt!,
         sessionId: a.sessionId,
-        firstGradedAt: firstGradedAt.get(a.id) ?? g.createdAt,
+        firstMissGradedAt: firstMissGradedAt.get(a.id) ?? g.createdAt,
       });
       continue;
     }
@@ -241,7 +242,7 @@ export function openMisses(state: PlannerState, tasks = availableTasks(state.exe
       const m = misses[i]!;
       if (
         a.submittedAt! > m.at &&
-        a.startedAt > m.firstGradedAt &&
+        a.startedAt > m.firstMissGradedAt &&
         a.sessionId !== m.sessionId &&
         exerciseOf(m.taskId) !== task.exerciseId &&
         m.skill === task.skill &&
