@@ -333,7 +333,7 @@ function Backup({ lastExportAt }: { lastExportAt: string | null }) {
   const [pending, setPending] = useState<{ data: DataSet; summary: ImportSummary } | null>(null);
   const [problems, setProblems] = useState<string[]>([]);
   const [status, setStatus] = useState('');
-  const [legacyPreviewAvailable, setLegacyPreviewAvailable] = useState(false);
+  const [legacyPreviewAvailable, setLegacyPreviewAvailable] = useState<boolean | null>(null);
   // One backup action at a time, so "Export current data first" finishes before Replace can start.
   const [busy, setBusy] = useState(false);
   // Only the latest file selection may show a preview; an earlier, slower check is ignored.
@@ -346,7 +346,10 @@ function Backup({ lastExportAt }: { lastExportAt: string | null }) {
         if (active) setLegacyPreviewAvailable(available);
       })
       .catch((e: unknown) => {
-        if (active) setStatus(`Could not check old preview data: ${e instanceof Error ? e.message : String(e)}`);
+        if (active) {
+          setLegacyPreviewAvailable(false);
+          setStatus(`Could not check old preview data: ${e instanceof Error ? e.message : String(e)}`);
+        }
       });
     return () => {
       active = false;
@@ -414,7 +417,7 @@ function Backup({ lastExportAt }: { lastExportAt: string | null }) {
     });
 
   return (
-    <section aria-labelledby="backup">
+    <section aria-labelledby="backup" aria-busy={legacyPreviewAvailable === null}>
       <h2 id="backup">Backup</h2>
       <p className="meta">
         Everything stays on this device.{' '}

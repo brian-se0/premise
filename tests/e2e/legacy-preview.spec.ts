@@ -153,6 +153,7 @@ async function permitEarlyLibraryReview(page: Page) {
 
 test('Settings neither offers recovery nor creates a preview database when none exists', async ({ page }) => {
   await page.goto('#/settings');
+  await expect(page.getByRole('region', { name: 'Backup' })).toHaveAttribute('aria-busy', 'false');
   await expect(page.getByRole('button', { name: 'Download old preview backup' })).toHaveCount(0);
   expect(
     await page.evaluate(async () =>
