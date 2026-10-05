@@ -10,7 +10,6 @@ import {
   type Settings,
 } from '../domain/records.ts';
 import { SCHEDULER_CONFIGS } from '../domain/schedulerConfig.ts';
-import { MAX_REPLY_LENGTH } from '../domain/scoreParser.ts';
 import { canonicalJson, sha256Hex } from '../domain/snapshot.ts';
 import { TABLES, type PremiseDb } from './db.ts';
 
@@ -169,7 +168,7 @@ const exportSchema = z.strictObject({
     z.strictObject({
       id: z.string(),
       requestId: z.string(),
-      raw: z.string().max(MAX_REPLY_LENGTH),
+      raw: z.string(),
       pastedAt: iso,
       parserVersion: int,
       selectedBlock: range,
