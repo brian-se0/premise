@@ -134,8 +134,11 @@ export function HomePage() {
             </button>
             {settings?.focus.tag && (
               <p className="meta">
-                Focus: {content.taxonomy.error_tags[settings.focus.tag] ?? settings.focus.tag} (
-                <Link to="/settings#focus">change</Link>)
+                Focus:{' '}
+                {Object.hasOwn(content.taxonomy.error_tags, settings.focus.tag)
+                  ? content.taxonomy.error_tags[settings.focus.tag]
+                  : settings.focus.tag}{' '}
+                (<Link to="/settings#focus">change</Link>)
               </p>
             )}
           </section>
