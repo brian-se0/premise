@@ -1246,3 +1246,609 @@ mountain parks should limit the number of visitors allowed in each day during th
 visit the parks in summer oppose daily limits.
 ````
 
+## Reviewer response
+
+GPT-6 Pro (thinking effort 5 of 5) in the owner's ChatGPT account, 2026-10-05, sent by the device session in Brave as one attachment; it worked for 29 minutes. The reply follows verbatim, from the first rule below to the last rule before `## Triage` (SHA-256 of the text between them: `c02541bf2a19fe1faf6ef7eb4030697e0b5865f9c0b3a06925a39d69840e71e5`). "Pasted text" is ChatGPT's citation chip for the packet.
+
+---
+
+## arg-0009 — FIX: make the excluded alternative a premise, and repair the strengthening explanation.
+
+### `arg-0009.flaw`
+
+**Problem.** Steady borrowing at the other branches does not establish that no borrowing transferred: new borrowing there could replace borrowing that moved. The stimulus therefore contains a second questionable inference, while the key treats its conclusion as an independently established premise. The full-credit anchor also changes “most requests for later hours” into “keenest on the library,” which is not the stated selection criterion. Pasted text Pasted text
+
+**Replace the stimulus’s sentence beginning “Their collections…” with:**
+
+> Their collections and staff were otherwise unchanged, and teenage borrowing at the other seven branches held steady. An analysis of individual borrowing records also established that the increase at the five branches did not come from teenagers transferring their borrowing from other branches.
+
+**Replace the 2-point anchor’s answer with:**
+
+> The five branches had received the most requests for later hours, but an increase in the number of teenagers living nearby could have raised borrowing even without the change. The rise after the hours were extended therefore does not establish that the longer hours caused it.
+
+**Replace the 0-point anchor’s note with:**
+
+> The independently checked borrowing records rule out this proposed transfer of borrowing, and the answer does not identify the director’s unsupported causal inference.
+
+### `arg-0009.strengthen`
+
+**Problem.** The reference’s explanation assumes that another cause would also increase borrowing during the old hours. A different cause could operate principally in the evening. Locating borrowing after 6 p.m. can strengthen the argument, but it does not establish that competing explanations should produce a different time distribution. Pasted text
+
+**Replace `reference` with:**
+
+> Most of the additional borrowing came from teenagers who could not visit during the branches’ former opening hours and began borrowing during the added hours. The extended schedule gave those teenagers an opportunity to borrow that they previously lacked, making the longer hours themselves a more plausible cause of the increase.
+
+---
+
+## arg-0010 — FIX: distinguish problem type from difficulty, and replace the unsafe necessary-assumption tests.
+
+### `arg-0010.weaken`
+
+**Problem.** “Much the same kinds of problems” does not fix their difficulty, severity, or exact proportions. The 0-point anchor about simpler problems can therefore be consistent with the stimulus. **I would give it 1, not 0:** it supplies a relevant alternative explanation but does not explain its effect on the inference. The disqualifier is correspondingly too broad. Pasted text Pasted text
+
+The reference also uses an absolute number of departures without establishing a change in the proportion or composition excluded. Twice as many departures could accompany twice as many chats. A strong selection-effect reference should specify differential departure rates. Pasted text
+
+**Replace these fields:**
+
+```yaml
+difficulty_note: >-
+  The survey excludes customers who leave before the agent closes the chat.
+  The premise holds problem kinds roughly constant, not their difficulty,
+  severity or exact proportions. Valid weakeners may expose selective
+  nonresponse or another change that could explain the higher ratings.
+
+reference: >-
+  After the script was introduced, 60 percent of dissatisfied customers left
+  before the agent closed the chat, compared with 10 percent before; the
+  corresponding departure rate among satisfied customers was unchanged.
+  This selectively removes more dissatisfied customers from the later survey,
+  so its higher average could reflect selection rather than improved satisfaction.
+
+accept: >-
+  Any new fact consistent with every premise that gives a material reason to
+  doubt that the script increased customers' satisfaction, with an explanation
+  of that connection. Relevant facts may concern selective survey participation,
+  another cause of higher ratings, or whether the ratings track satisfaction.
+  Much the same kinds of problems does not mean identical difficulty, severity
+  or proportions, so differences within the same problem kinds are not
+  automatically contradictions. Facts about problem resolution must be connected
+  to satisfaction rather than treating the two as identical. A relevant fact
+  without an explanation earns 1. An actual contradiction of a premise earns 0.
+
+disqualifiers:
+  - Contradicts a stated premise, such as the reported average rating in either six-month period.
+```
+
+**Replace the 0-point anchor’s answer and note with:**
+
+> **Answer:** In the six months after the script was introduced, the average survey rating was 3.0 out of 5.  
+> **Note:** Contradicts the stated post-change average of 4.3.
+
+### `arg-0010.assumption`
+
+**Problem and negation tests.**
+
+The reference’s negation establishes a selection effect large enough that it **could** explain the rise. That wording does not establish that selection actually explains the entire rise, rather than coexisting with genuine improvement. The acceptance test likewise mistakes permitting an alternative explanation for breaking the inference. Pasted text
+
+The 2-point anchor fails more plainly. Negate it: **the script did tell agents to request top scores.** Customers could ignore those requests, or the requests could have a negligible effect while satisfaction genuinely increases. **That anchor earns 1, not 2:** it identifies a relevant measurement issue but states an unnecessarily strong prohibition. Pasted text
+
+**Replace these fields:**
+
+```yaml
+difficulty: 3
+
+difficulty_note: >-
+  Distinguish a necessary measurement or causal bridge from a helpful safeguard.
+  A complete artifact or wholly unrelated cause can destroy the relevant
+  evidential link; the mere presence of some selection, score solicitation
+  or another concurrent change need not do so.
+
+reference: >-
+  The higher average is not wholly an artifact of changes in who supplied the
+  ratings or how ratings were recorded; at least some of the rise reflects
+  greater satisfaction with the help received.
+
+accept: >-
+  Accept an unstated claim whose negation removes a measurement or causal link
+  needed to use the rating increase as evidence that the script improved
+  satisfaction. Do not award full credit merely because the negation makes an
+  alternative explanation possible or makes the argument less persuasive.
+  A claim may exclude a complete selection or scoring artifact, or the entire
+  increase being attributable solely to changes unrelated to the script.
+  It need not exclude every difference between the periods. An otherwise
+  relevant but unnecessarily strong claim earns 1. Repeating a premise or
+  restating the conclusion earns 0.
+
+rubric:
+  - States an unstated claim relevant to interpreting the rating increase as evidence of improved satisfaction caused by the script, rather than repeating a premise or the conclusion.
+  - Passes the negation test for that evidential link without requiring the absence of every potentially relevant difference or influence.
+
+disqualifiers:
+  - Repeats a stated premise or merely restates that the script made customers more satisfied.
+```
+
+**Replace the 2-point anchor’s answer and note with:**
+
+> **Answer:** The rise in ratings was not wholly caused by changes unrelated to the script, such as shorter waits introduced independently of it.  
+> **Note:** A causal bridge, unlike the reference’s measurement bridge. Its negation attributes the entire observed rise to unrelated changes, leaving that rise without support for attributing an improvement to the script.
+
+The replacement reference’s negation removes the genuine-satisfaction interpretation of the rise. Neither replacement requires proving that the script could not have helped anyone; the test concerns what these ratings support.
+
+---
+
+## arg-0011 — FIX: distinguish increased plausibility from “probably,” and replace the overbroad population assumption.
+
+### `arg-0011.flaw`
+
+**Problem.** The reference overstates the criticism by saying that the water requirement gives “little reason” for largeness. Satisfying a necessary condition can increase an outcome’s probability; the missing support is for the stronger claim that this settlement was **probably** large. The reference also changes a necessary reliable water source into a necessary spring. Pasted text
+
+The stimulus leaves the settlement’s date unspecified, so a spring’s existence for three thousand years does not establish its availability during occupation. That creates another possible objection which the key improperly dismisses. Pasted text Pasted text
+
+Finally, **the generic 1-point anchor earns 0 under the stated rubric**: it neither identifies this argument’s terms nor addresses the distinction between insufficient proof and unsupported probability. Pasted text
+
+**Replace the stimulus’s spring-and-soil sentence with:**
+
+> Mineral deposits show that Kessel Ridge had a year-round fresh-water spring during the settlement’s occupation, and its soils were then as fertile as any in the valley.
+
+**Replace `reference`, `accept`, and rubric criterion 2 with:**
+
+> **Reference:** The argument moves from conditions that permitted or favored a large settlement to the claim that a large settlement was likely. It supplies no information establishing that settlements with Kessel Ridge’s water and soil conditions were more likely to become large than remain small.
+>
+> **Accept:** Accept answers identifying the unsupported move from a necessary water supply and favorable soil to “probably large.” The answer must address the unsupported likelihood claim, not merely observe that a large settlement is not guaranteed. It may explain that the argument provides no relevant frequency information or other basis for favoring a large settlement over a small one. Do not require the student to claim that water and soil provide no evidence at all.
+>
+> **Rubric criterion 2:** Explains that the supplied conditions do not establish the claimed likelihood of a large settlement, rather than merely saying that they fail to guarantee one.
+
+**Replace the 2-point anchor with:**
+
+> Large settlements needed year-round water, and Kessel Ridge had it, but the argument does not establish how often sites with both that water and such fertile soil became large. Those conditions therefore do not by themselves justify calling this settlement probably large.
+
+**Replace the 1-point anchor’s answer and note with:**
+
+> **Answer:** The argument uses the fact that large settlements needed year-round water, and that Kessel Ridge had it, to conclude that the settlement was probably large.  
+> **Note:** Identifies the premises and inference, but does not explain why the probability claim lacks support.
+
+### `arg-0011.assumption`
+
+**Problem and negation tests.**
+
+The reference contains two problems. “Did not mostly remain small” is not equivalent to “usually grew large”; an even division already separates those claims. More importantly, a majority claim about all spring-fed fertile sites need not hold for the more specific evidence about Kessel Ridge. For example, ordinary fertile sites could mostly remain small while sites with soil **as fertile as any in the valley** usually become large. That counterexample preserves the actual soil premise while denying the reference’s broad majority claim. Pasted text
+
+The existing full-credit anchor **does pass** negation: if Kessel Ridge lacked an indispensable condition for a large settlement, it could not have been large. That is the sound type of necessary-condition answer to retain.
+
+The acceptance note also inconsistently gives 1 point to “Kessel Ridge certainly was large” while rejecting restatements of the conclusion. A stronger restatement is still not an assumption. Pasted text
+
+**Replace these fields:**
+
+```yaml
+difficulty: 3
+
+difficulty_note: >-
+  A necessary enabling condition must not be confused with a majority claim
+  about a broader class of sites or with a restatement that this settlement
+  was large. Negating a genuine enabling condition makes a large settlement
+  impossible without denying the stated water and soil premises.
+
+reference: >-
+  Kessel Ridge's usable space did not place an upper limit on settlement size
+  below what would count as large.
+
+accept: >-
+  Accept an unstated claim whose negation, while preserving the premises,
+  removes a necessary basis for the inference that Kessel Ridge was probably
+  large. One valid kind rules out a site-specific constraint that would have
+  made a large settlement impossible. Do not automatically credit majority
+  claims about more loosely described groups of sites: their necessity must
+  be tested against the exact evidence about Kessel Ridge. An otherwise
+  relevant but unnecessarily strong bridge earns 1. Repeating a premise or
+  asserting that Kessel Ridge was, probably was, or certainly was large earns 0.
+
+rubric:
+  - States an unstated claim bearing on the inference from Kessel Ridge's conditions to settlement size, rather than repeating a premise or the conclusion.
+  - Passes the negation test without requiring universal growth, actual largeness, or a population-frequency claim not required by the evidence.
+
+disqualifiers:
+  - Repeats a premise or merely asserts that Kessel Ridge was, probably was, or certainly was large.
+```
+
+**Use this 2-point anchor, distinct from the reference’s space constraint:**
+
+> **Answer:** The food available to the settlement was not so limited that a large settlement there would have been impossible.  
+> **Note:** Negation makes a large settlement impossible because of a resource constraint, while preserving the stated water and soil facts.
+
+The replacement reference similarly passes: negate it, and the site’s usable space rules out a large settlement.
+
+---
+
+## arg-0012 — FIX: make the citywide exclusion independent and apply the time constraint consistently.
+
+### `arg-0012.weaken`
+
+**Problem.** The 40-versus-5-percent comparison does not itself rule out a citywide influence: the two sets of streets could respond differently. The stimulus should independently establish the exclusion that the keys require. Pasted text
+
+The full-credit anchor relies on a project’s **post-installation completion**, while the task and 0-point note reject facts about that period. Although the current wording can be read to award 2 because the answer also mentions prior approval, it teaches an unstable boundary. Make the full-credit anchor’s evidential fact entirely pre-installation. Pasted text Pasted text
+
+The 0-point anchor has another problem: camera-induced traffic diversion can be a mechanism by which cameras reduce crashes on those streets. The conclusion concerns crash numbers there, not necessarily safer driving or citywide benefits. **Its zero is defensible, but the note misses this independent reason it is not a weakener.**
+
+**Replace the stimulus’s sentence beginning “Over the same period…” with:**
+
+> Over the same period, injury crashes on Marrow’s other streets fell by only 5 percent. A separate analysis ruled out citywide changes, such as safer cars or milder weather, as the main cause of the decline on the eight streets.
+
+**Replace these task fields:**
+
+```yaml
+difficulty: 3
+
+difficulty_note: >-
+  The answer must concern pre-installation history. A prior spike or an
+  established decline can explain why crashes would have fallen anyway.
+  Do not make a full-credit answer depend on a new fact about a project's
+  completion after installation. Citywide changes are ruled out by the
+  separately stated analysis, not by the percentage comparison alone.
+
+accept: >-
+  Any new fact about the eight streets in the years before installation,
+  consistent with every premise, that materially undermines attributing most
+  of the later decline to the cameras, with an explanation. Examples include
+  an unusual pre-installation spike, an established downward trend, or an
+  earlier change whose continuing effects could explain the decline.
+  A different qualifying pre-installation fact may also earn full credit.
+  Do not rely on an additional post-installation fact to make the proposed
+  weakener work. A qualifying relevant fact without an explanation earns 1.
+  An answer containing only an out-of-period fact earns 0.
+
+rubric:
+  - Gives a new, premise-consistent fact about the eight streets in the years before installation that bears on whether the cameras caused most of the decline.
+  - Explains how that qualifying pre-installation fact makes it more plausible that most of the decline would have occurred without the cameras.
+```
+
+**Replace the 2-point anchor’s answer and note with:**
+
+> **Answer:** For four years before the cameras were installed, injury crashes on those streets had already been falling by about 25 percent a year. Continuing that trend would produce roughly a 44 percent fall over two years, so the later 40 percent decline need not chiefly reflect the cameras.  
+> **Note:** A different weakener from the reference: an established downward trend rather than a return to normal after a spike.
+
+**Replace the 0-point anchor’s answer and note with:**
+
+> **Answer:** When the cameras went live, the city also prohibited heavy trucks on those streets. Removing the trucks could account for much of the crash reduction.  
+> **Note:** This could weaken an unconstrained version of the argument, but its new fact concerns the installation period, not the preceding years, so it earns neither criterion here.
+
+---
+
+## arg-0013 — FIX: lower the conclusion-task estimate and repair the recommendation assumptions.
+
+### `arg-0013.conclusion`
+
+**Problem.** The recommendation is stated twice, including in the final sentence. There is a genuine intermediate conclusion, but identifying the main conclusion does not require the additional interacting discrimination that would justify a predicted 4. **I would label this 3.** Pasted text Pasted text
+
+**Replacement:** Set both the exercise-level `difficulty` and this task’s `difficulty` to `3`.
+
+### `arg-0013.assumption`
+
+**Problem and negation tests.**
+
+Negate the reference: **every alternative recording has the same kind of slow-movement distortion.** Another recording could nevertheless have that defect to a smaller degree and be a better introduction. Having no such defect is stronger than the comparative recommendation needs. Pasted text
+
+Negate the full-credit anchor: **Beethoven’s markings are not a fair guide.** It does not follow that this performance’s faster tempos distort nothing; the appropriate tempos could be slower still. Moreover, the stimulus expressly advances the distorted-impression claim as an intermediate conclusion. The key should distinguish assumptions supporting that claim from assumptions connecting it to the recommendation. **The current anchor earns 1, not 2.** Pasted text Pasted text
+
+**Replace these fields to test the recommendation link explicitly:**
+
+```yaml
+difficulty_note: >-
+  Grant the author's claim that this recording gives newcomers a distorted
+  impression. The remaining gap concerns why that defect supports choosing
+  another recording: a comparatively better alternative must be available,
+  and the distortion must matter when choosing an introduction.
+
+prompt: >-
+  Grant the author's claim that the Ardent recording would give a newcomer a
+  distorted sense of the quartets. State a necessary assumption linking that
+  claim to the recommendation to begin with a different recording: a claim
+  whose negation would remove the stated reason for that recommendation.
+
+reference: >-
+  At least one other available recording would give newcomers a less distorted
+  impression of the quartets than the Ardent recording would.
+
+accept: >-
+  Accept an unstated claim whose negation removes the granted distortion
+  claim's support for choosing another recording. Relevant bridges concern
+  the availability of a less-distorting alternative or the relevance of that
+  distortion when choosing an introduction. Do not require a distortion-free
+  alternative, exact adherence to tempo markings, or superiority of every
+  alternative. Claims about whether Beethoven's markings are accurate concern
+  an upstream inference that this prompt grants rather than tests.
+  Repeating a premise or the recommendation earns 0.
+
+rubric:
+  - States an unstated claim about the comparative suitability of available alternatives or the relevance of distortion when choosing an introduction.
+  - Its negation removes the stated basis for choosing a different recording, without requiring perfect alternatives or other unnecessarily strong conditions.
+```
+
+**Replace the 2-point anchor’s answer and note with:**
+
+> **Answer:** Giving a newcomer a distorted first impression of the quartets is a drawback when choosing their introductory recording.  
+> **Note:** A normative bridge, unlike the reference’s comparative availability claim. Negating it removes the stated reason to count the distortion against this recording.
+
+**Replace the 1-point anchor’s answer and note with:**
+
+> **Answer:** Every other available recording would give newcomers a less distorted impression of the quartets than the Ardent recording would.  
+> **Note:** Too strong: one better alternative is enough. Some equally or more distorted alternatives would not defeat the recommendation.
+
+The replacement reference passes the scoped test: if no available alternative gives a less distorted introduction, this defect supplies no comparative reason to choose another recording.
+
+---
+
+## arg-0014 — FIX: repair the partial-credit anchor and make the numerical boundary exact.
+
+### `arg-0014.flaw`
+
+**Problem.** **The current 1-point anchor earns 0 under the literal rubric.** “It confuses a percentage with a total” neither identifies the specific inference required by criterion 1 nor explains the larger-denominator issue required by criterion 2. The argument also explicitly flags the denominator increase; a predicted difficulty of 4 is too high for this direct mismatch. Pasted text Pasted text
+
+**Set the exercise-level difficulty and this task’s difficulty to `2`.**
+
+**Replace `difficulty_note` with:**
+
+> The evidence concerns percentages and the conclusion concerns numbers of missed appointments. The explicitly increased booking total must be considered; a lower percentage does not by itself establish a lower count.
+
+**Replace the 1-point anchor’s answer and note with:**
+
+> **Answer:** The director infers fewer missed appointments from the fall in the missed-appointment rate from 15 percent to 9 percent.  
+> **Note:** Identifies the specific inference but does not explain why the larger booking total makes it unreliable.
+
+### `arg-0014.weaken`
+
+**Problem.** The threshold is **at least two-thirds**, not “about two-thirds.” With the stipulated rates, a booking increase below that boundary establishes fewer missed appointments. For example, bookings rising from 2,000 to 3,300—65 percent—takes missed appointments from 300 to 297. That confirms, rather than weakens, the conclusion. The acceptance note should also expressly include an unchanged missed-appointment count. Pasted text
+
+**Replace these fields:**
+
+```yaml
+difficulty: 2
+
+difficulty_note: >-
+  With the rates fixed at 15 and 9 percent, equal missed-appointment counts
+  occur when new bookings are exactly five-thirds of old bookings.
+  The answer must connect a new booking figure or a direct count to that
+  exact comparison over comparable periods.
+
+accept: >-
+  Any new, premise-consistent fact that materially undermines the conclusion
+  that the number of missed appointments fell, with an explanation.
+  A booking increase of at least two-thirds qualifies: the new booking total
+  is then at least five-thirds of the old total, so 9 percent of the new total
+  is at least 15 percent of the old total. A direct count showing the same
+  number of missed appointments as before, or a larger number, also qualifies.
+  Comparisons must concern comparable periods. Merely repeating that bookings
+  increased earns 0. A relevant new fact without an explanation earns 1.
+  Contradicting either stipulated rate earns 0.
+```
+
+---
+
+## arg-0015 — FIX: replace the local-survival assumption and clean up the baseline and partial-credit wording.
+
+### `arg-0015.assumption`
+
+**Problem and negation tests.**
+
+The reference passes: its negation introduces another factor that would prevent recovery after goat removal, defeating the predicted recovery on the affected island.
+
+The full-credit anchor does not pass. Negate it: **no saltbush plants or seeds currently survive on the four islands.** Seeds or plants could subsequently arrive; the acceptance note itself recognizes that possibility. **The anchor deserves at most 1, not 2.** On the ordinary reading of the stimulus’s present saltbush cover, its claim about surviving plants also risks repeating information already supplied. Pasted text Pasted text
+
+The difficulty note overstates what the baseline controls: “a small fraction” on all seven islands does not establish identical initial cover or rule out other initial differences. The 1-point anchor’s “every other respect” also sweeps in goat presence and current saltbush cover, which the stimulus explicitly distinguishes. Pasted text Pasted text
+
+**Replace `difficulty_note` and `accept` with:**
+
+> **Difficulty note:** All seven islands had low saltbush cover before removal; this does not establish identical starting cover or identical environmental conditions. The necessary-assumption test distinguishes an obstacle that would prevent recovery from differences that merely affect its speed or extent.
+>
+> **Accept:** Accept an unstated condition whose negation, with the premises preserved, would prevent saltbush recovery on at least one of the four islands after goat removal. A remaining grazer or other specific obstacle must be severe enough to prevent recovery, not merely make recovery slower. A source for regrowth may consist of plants or viable seeds that survive or subsequently arrive; current local survival is not individually necessary. Do not require identical island conditions or recovery matching the other islands’ extent. Merely repeating that saltbush could recover after goat removal does not supply an assumption. An otherwise relevant but unnecessarily strong condition earns 1.
+
+**Replace the 2-point anchor’s answer and note with:**
+
+> **Answer:** On each of the four islands, saltbush plants or viable seeds could remain available after goat removal, or could subsequently reach the island, providing a source for recovery.  
+> **Note:** Negation excludes those sources of regrowth on at least one island. The answer does not require that the source already be present locally.
+
+**Replace the 1-point anchor’s answer and note with:**
+
+> **Answer:** The four goat islands have exactly the same soil composition and receive exactly the same amount of rain as the three goat-free islands.  
+> **Note:** Relevant but too strong: differences in soil or rainfall can coexist with successful recovery. Unlike “identical in every respect,” this answer does not contradict the stated differences in goats and saltbush cover.
+
+---
+
+## arg-0016 — FIX: remove the oldest-equals-slowest assumption and correct the timing claim.
+
+### `arg-0016.flaw`
+
+**Problem.** “Oldest supported phone” does not entail “slowest supported phone” or “hardest case.” The key imports that relationship and thereby excludes a legitimate device-generalization concern. The deadline’s scope should also be explicit. Pasted text Pasted text
+
+**Replace the stimulus with:**
+
+> Corvane is about to release a new version of its delivery-tracking app. The company’s release-test rule is that, on every supported phone under the specified test conditions, the map screen must finish updating within half a second of a driver’s new location arriving. The screen is built from forty separate components, among them the map itself, the driver’s marker and the estimated arrival time. Testers ran each component on its own on every supported phone under those conditions; every component finished updating in under half a second in every test. The release manager concludes that the new version’s map screen meets the half-second rule.
+
+This preserves the parts-to-whole problem while removing the untested-device inference.
+
+**Set the exercise-level difficulty and this task’s difficulty to `2`.**
+
+**Replace `difficulty_note` with:**
+
+> Every supported phone has isolated-component test results. The remaining gap is between those individual times and the whole screen’s completion time, which can include sequential work and interactions among components.
+
+**Replace the final sentence of `accept` with:**
+
+> Objections confined to unsupported phones do not challenge the stated rule; all supported phones were included in the stipulated isolated-component tests.
+
+**Replace the 0-point anchor’s answer and note with:**
+
+> **Answer:** The app might update too slowly on a phone it does not support.  
+> **Note:** The stated release-test rule concerns supported phones, so this does not challenge the inference being tested.
+
+### `arg-0016.weaken`
+
+**Problem.** “Most” of forty updates taking more than 0.1 seconds does not imply a total above four seconds. For example, 21 updates at 0.11 seconds and 19 at 0.01 seconds total **2.5 seconds**. The weakener still works, but its arithmetic teaches the wrong quantifier inference. Pasted text
+
+The note also wrongly says a valid weakener must concern components working together. A delay between location arrival and the start of updating, or additional screen-finalization time, can violate the end-to-end deadline without contradicting isolated component times. Pasted text
+
+**Replace these fields:**
+
+```yaml
+difficulty: 2
+
+difficulty_note: >-
+  Isolated component times do not determine end-to-end screen latency.
+  Relevant new facts may concern sequential work, component interactions,
+  or delays before or after the isolated updates. A conflicting report about
+  the stipulated isolated tests themselves contradicts a premise.
+
+reference: >-
+  When a new location arrives, all forty components update one after another,
+  and each takes 0.1 seconds. Those updates alone take four seconds, far beyond
+  the half-second limit, although every component individually meets the limit.
+
+accept: >-
+  Any new fact consistent with the stipulated isolated-component results that
+  materially undermines the screen's compliance with the end-to-end deadline
+  under the stated test conditions, with an explanation. Valid facts may
+  concern sequential updates, dependencies, resource contention, delays before
+  updating starts, additional work before the screen finishes, or a whole-screen
+  timing above half a second. A relevant fact without an explanation earns 1.
+  A claim that a component exceeded half a second in the stipulated isolated
+  tests contradicts a premise and earns 0.
+
+disqualifiers:
+  - Contradicts the stipulated isolated-test results, such as asserting that a component took more than half a second in those tests.
+```
+
+**Replace the 0-point anchor’s answer and note with:**
+
+> **Answer:** In the stipulated isolated tests, the map component took 0.7 seconds.  
+> **Note:** Contradicts the stated result that every component finished in under half a second in those tests.
+
+---
+
+## arg-0017 — FIX: distinguish a reason for caution from a sufficient reason for wholesale dismissal.
+
+### `arg-0017.flaw`
+
+**Problem.** The reference says interested funding is not a reason to think a finding false, and the full-credit anchor says it “says nothing” about the finding. Those formulations overcorrect. A financial interest can bear on credibility without establishing falsity or justifying the refusal to give a study any weight. The flaw is the **categorical dismissal**, not considering the funding at all. Pasted text Pasted text
+
+Under a literal application of the rubric, **the 1-point anchor earns 0**: it supplies neither the specified argument details nor the required explanation of why the funding does not establish untrustworthiness. Replace it with an answer that clearly satisfies criterion 1 alone.
+
+**Replace `reference` with:**
+
+> The author treats the bicycle makers’ financial interest as enough to rule out trusting the study, without identifying a defect in its methods or data. The funding can justify caution, but does not by itself establish that the finding is unreliable or deserves no evidential weight.
+
+**Replace the 2-point anchor’s answer with:**
+
+> The bicycle makers may profit from more cycling, but a study they fund could still have sound methods and accurate sales data. Their financial interest alone therefore does not justify the author’s refusal to give the finding any weight.
+
+**Replace the 1-point anchor’s answer and note with:**
+
+> **Answer:** The author dismisses the shop-sales finding because the Association of Bicycle Makers funded the study and benefits from more cycling.  
+> **Note:** Identifies the reason and dismissal, but does not explain why the funding alone is insufficient to justify that dismissal.
+
+---
+
+## arg-0018 — FIX: state the representativeness risk accurately and remove an unsafe preapproved strengthener.
+
+### `arg-0018.flaw`
+
+**Problem.** The 1-point anchor asserts that the sample is unrepresentative. The evidence establishes a risk of unrepresentativeness, not that the respondents’ views actually differ from the population’s. This is also a direct voluntary-response sample-to-population problem; **I would predict difficulty 2 rather than 3**. Pasted text Pasted text
+
+**Set the exercise-level difficulty and this task’s difficulty to `2`.**
+
+**Replace `difficulty_note` with:**
+
+> This is a direct inference from voluntary website respondents to summer visitors generally. The large response count does not resolve whether the respondents represent that target population.
+
+**Replace the 1-point anchor’s answer with:**
+
+> The sample may not be representative of the population the editor is describing.
+
+### `arg-0018.strengthen`
+
+**Problem.** Matching age, residence, and visit frequency can strengthen the inference, but does not establish that the poll is a “fair guide”: selection by opinion can remain within every matched category. The reference should claim increased support, not established representativeness. Pasted text
+
+The once-only-voting example should not be preapproved. It is a procedural restriction rather than a new fact connecting respondents to summer visitors, and the stimulus already reports a percentage of **people**, not raw votes. The key supplies no independent reason that this restriction materially improves the stated inference. The respondent constraint also does not, by itself, make this a difficulty-4 task. Pasted text Pasted text
+
+**Replace these fields:**
+
+```yaml
+difficulty: 3
+
+difficulty_note: >-
+  The fact must concern the poll's respondents and improve the connection to
+  summer visitors. Establishing visitor status, population coverage or relevant
+  similarities can strengthen that connection without proving that all
+  self-selection bias has disappeared.
+
+reference: >-
+  The respondents closely matched the parks' summer visitors in where they
+  live, their ages and how often they visit. This reduces concern about
+  differences in those characteristics and makes the poll result more
+  informative about summer visitors, although selection by strength of opinion
+  could still remain.
+
+accept: >-
+  Any new, premise-consistent fact about the respondents that materially
+  increases support for generalizing their opposition to summer visitors,
+  with an explanation. Relevant facts may establish that respondents are
+  summer visitors, cover a substantial share of that population, or resemble
+  it in characteristics relevant to their views. Full credit does not require
+  eliminating every remaining source of bias. A separate survey is outside
+  the requested fact type. A procedural restriction on repeat voting does
+  not automatically qualify, particularly when the premise already reports
+  percentages of people rather than votes. A qualifying relevant fact without
+  an explanation earns 1.
+```
+
+**Replace rubric criterion 2 with:**
+
+> Explains how that qualifying fact about the respondents increases support for generalizing their views to the parks’ summer visitors.
+
+---
+
+## Patterns to change in later batches
+
+**Necessary assumptions need a stricter drafting gate.** Several entries are helpful safeguards or plausible strengthen­ers rewritten as necessities. For each reference and full-credit anchor, record its exact negation and identify which evidential link disappears. “Another explanation becomes possible” is not enough. Do not require a perfect alternative when a better one suffices, or one particular route when several routes could satisfy the requirement. This is the test the supplied guidelines already require. Pasted text
+
+**Stop converting partial controls into conclusive exclusions.** A comparison group, a similar baseline, a demographic match, or a device’s age establishes only what its wording supports. When an alternative must be unavailable for the exercise to have one intended gap, independently stipulate the fact that excludes it.
+
+**Audit scoring criterion by criterion, not by intended impression.** A generic label does not automatically earn one point under a rubric requiring a specific inferential link or explanation. Construct partial-credit anchors that visibly satisfy exactly one criterion. Keep references, acceptance notes, disqualifiers, and anchors synchronized after every edit. Pasted text
+
+**Keep the three standards distinct:** a strengthener need not prove the conclusion; a weakener need not refute it; a necessary assumption must pass negation. Several current explanations slide between those standards.
+
+**Treat the proposed difficulty changes as editorial estimates, not calibration.** Reserve higher labels for interacting logical demands—not merely a restrictive prompt, a large number, or an explicitly signposted denominator change. Student-performance evidence is still needed to calibrate the scale. Pasted text
+
+---
+
+## Triage
+
+All ten exercises were marked "fix". Every finding is accepted except one replacement anchor (B1-22), which repeats the problem the review identifies elsewhere. Two changes apply across the batch:
+
+- The review's proposed rubric criteria ("passes the negation test") are rewritten as observable criteria that name the kinds of bridge, as `CONTENT_GUIDELINES.md` §5 asks. Wording throughout follows the content's plain style; the substance is the review's.
+- Its "partial-credit anchors satisfy exactly one criterion" rule is also applied to the generic flaw-label anchors it did not flag individually: `arg-0016.flaw` in this batch and `arg-0001`, `arg-0003`, `arg-0004` and `arg-0007` from the first eight. Each now identifies the inference without explaining it.
+
+| # | Task | Finding | Decision | Change |
+| --- | --- | --- | --- | --- |
+| B1-1 | arg-0009 stimulus, flaw | Steady borrowing elsewhere does not rule out a transfer between branches, yet the key treats it as settled. | accepted | The stimulus now says a records analysis ruled out a transfer; the 0-point note cites it. |
+| B1-2 | arg-0009.flaw | The 2-point anchor changes the selection criterion to "keenest on the library". | accepted | The anchor uses the stated criterion (most requests for later hours). |
+| B1-3 | arg-0009.strengthen | The reference assumes any rival cause would also raise borrowing in the old hours. | accepted | New reference: the extra borrowing came from teenagers who could not visit in the old hours. |
+| B1-4 | arg-0010.weaken | "Much the same kinds of problems" does not fix their difficulty, so the simpler-problems anchor is consistent and earns 1; the disqualifier is too broad. | accepted | The 0-point anchor now contradicts the 4.3 average; the disqualifier names the averages; `accept` says differences within the same kinds are not contradictions. |
+| B1-5 | arg-0010.weaken | The reference counts departures instead of comparing rates. | accepted | The reference compares departure rates of unhappy and happy customers. |
+| B1-6 | arg-0010.assumption | The reference's negation only makes an alternative possible; the 2-point anchor (no request for top scores) fails negation. | accepted | New reference (the rise is not entirely an artifact of who answered or how ratings were collected) and 2-point anchor (not entirely due to unrelated changes); `accept`, rubric and note rewritten; difficulty 4 to 3. |
+| B1-7 | arg-0011 stimulus | A spring that has flowed for 3,000 years need not have flowed while the settlement was occupied. | accepted | The stimulus says the spring flowed during occupation. |
+| B1-8 | arg-0011.flaw | The reference overstates the flaw ("little reason") and swaps the water requirement for a spring. | accepted | New reference, `accept`, criterion 2 and 2-point anchor target the unsupported "probably". |
+| B1-9 | arg-0011.flaw | The generic 1-point anchor earns 0 under the rubric. | accepted | The 1-point anchor identifies the inference only. |
+| B1-10 | arg-0011.assumption | A majority claim about a broad group of sites is not necessary; "certainly large" was given 1. | accepted | New reference (enough usable land) and 2-point anchor (enough food); `accept`, rubric and disqualifier rewritten; difficulty 4 to 3. |
+| B1-11 | arg-0012 stimulus | The 40-versus-5 comparison alone does not rule out a citywide cause. | accepted | The stimulus adds a separate analysis ruling it out; the strengthen key treats that as given. |
+| B1-12 | arg-0012.weaken | The 2-point anchor depends on work finished after installation. | accepted | The 2-point anchor is a decline already under way (25 percent a year, about 44 percent over two years). |
+| B1-13 | arg-0012.weaken | The 0-point note misses that diversion is a way the cameras cut crashes. | accepted | The 0-point anchor is a truck ban at installation (outside the required period); note, `accept` and rubric updated; difficulty 4 to 3. |
+| B1-14 | arg-0013.conclusion | Difficulty 4 is too high with the recommendation stated twice. | accepted | Exercise and task difficulty 3. |
+| B1-15 | arg-0013.assumption | The reference is stronger than needed; the markings anchor fails negation and supports the intermediate claim, not the recommendation. | accepted | The prompt grants the intermediate conclusion; new reference (a less distorting recording exists), 2-point anchor (the distortion is a drawback) and 1-point anchor (every other recording is better). |
+| B1-16 | arg-0014.flaw | The generic 1-point anchor earns 0; difficulty 4 is too high for a signposted denominator. | accepted | The 1-point anchor identifies the inference only; exercise and both tasks difficulty 2. |
+| B1-17 | arg-0014.weaken | The threshold is at least two-thirds growth, not about two-thirds. | accepted | Note and `accept` state the five-thirds boundary and include an unchanged count. |
+| B1-18 | arg-0015.assumption | The 2-point anchor (plants survive now) fails negation and is implied by the present cover; the note overstates the baseline; "every other respect" contradicts stated differences. | accepted | New note, `accept`, criterion 2, 2-point anchor (plants or seed surviving or arriving) and 1-point anchor (same soil and rain). |
+| B1-19 | arg-0016 stimulus, flaw | "Oldest supported phone" is not "slowest"; the rule's scope is unstated. | accepted | The stimulus tests every supported phone in standard tests; `accept` and 0-point anchor updated; difficulty 3 to 2. |
+| B1-20 | arg-0016.weaken | The reference's arithmetic is wrong ("most over 0.1 seconds" does not give over four seconds); the note is too narrow. | accepted | The reference has each of forty updates take 0.1 seconds in sequence; note and `accept` include delays before or after; difficulty 3 to 2. |
+| B1-21 | arg-0017.flaw | The reference and 2-point anchor overcorrect ("says nothing"); the generic 1-point anchor earns 0. | accepted | Reference and criterion 2: funding justifies caution, not dismissal; new 2- and 1-point anchors. |
+| B1-22 | arg-0018.flaw | The 1-point anchor asserts the sample is unrepresentative; difficulty 3 is too high. | accepted in part | Difficulty 2 and the new note accepted. The proposed anchor ("may not be representative of the population") is still a generic label, which by the review's own standard (B1-9, B1-16, B1-21) earns 0; the 1-point anchor identifies the inference only. |
+| B1-23 | arg-0018.strengthen | The reference overclaims a "fair guide"; one answer per person should not be preapproved; difficulty 4 is too high. | accepted | New reference, note, `accept` and criterion 2; difficulty 4 to 3. |
+| B1-24 | Patterns for later batches | Negation gate, no partial controls treated as exclusions, criterion-by-criterion anchors, three distinct standards, difficulty as an estimate. | accepted | Applied to this batch and used for batch 2. Adding them to `CONTENT_GUIDELINES.md` waits until PR #3 is on main, since it edits the docs. |
