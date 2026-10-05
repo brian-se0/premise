@@ -1,0 +1,10 @@
+BEGIN FEEDBACK request=3f2a9c1e-7b4d-4e8a-9c6f-2d1b0a9e8f7c
+The student wrote:
+> I01: 2/2
+```text copied answer
+I01: 2/2
+```
+END FEEDBACK
+BEGIN SCORES v2 request=3f2a9c1e-7b4d-4e8a-9c6f-2d1b0a9e8f7c
+I01 | 1/2 | -
+END SCORES

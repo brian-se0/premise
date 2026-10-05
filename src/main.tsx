@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { createHashRouter, RouterProvider } from 'react-router';
+import { createHashRouter, Link, RouterProvider } from 'react-router';
 import { Layout } from './ui/Layout.tsx';
 import { AboutPage } from './ui/pages/AboutPage.tsx';
 import { ExercisePage } from './ui/pages/ExercisePage.tsx';
@@ -13,10 +13,26 @@ import { SettingsPage } from './ui/pages/SettingsPage.tsx';
 import { requestPersistence } from './ui/runtime.ts';
 import './ui/styles.css';
 
+function RouteError() {
+  return (
+    <main>
+      <h1>Could not open this page</h1>
+      <p role="alert">The page could not read some saved data. Opening it did not change your data.</p>
+      <p>
+        <Link to="/settings">Open Settings to export or replace a backup</Link>
+      </p>
+      <p>
+        <Link to="/">Home</Link>
+      </p>
+    </main>
+  );
+}
+
 // Hash routes, so deep links and refreshes work on GitHub Pages (ARCHITECTURE.md §9).
 const router = createHashRouter([
   {
     element: <Layout />,
+    errorElement: <RouteError />,
     children: [
       { index: true, element: <HomePage /> },
       { path: 'library', element: <LibraryPage /> },

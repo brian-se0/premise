@@ -1,6 +1,6 @@
 # Architecture
 
-Status: draft v0.4 (2026-10-04, revised after peer review round 3).
+Status: draft v0.5 (2026-10-04, security audit alignment).
 
 ## 1. Shape
 
@@ -101,7 +101,7 @@ Ranges are offsets in UTF-16 code units into the stored `raw` string, start incl
 
 Timestamps are canonical UTC ISO 8601 strings exactly as `Date.prototype.toISOString` writes them (`2026-10-04T12:00:00.000Z`), so string order is time order. Import refuses any other form.
 
-Schema v1 is not frozen yet and holds no user data, so it is still edited in place (Dexie version 1, no migration).
+Schema v1 is frozen. Any table or index change requires a Dexie version bump, a migration tested against a v1 database, and an export schema review (`DECISIONS.md`).
 
 ### 5.1 Invariants
 
@@ -119,7 +119,7 @@ The grade validator and import both enforce these:
 Import also checks, locally and without replaying history (§7):
 
 - **Provenance.** A grading's reply belongs to the grading's request; feedback and selected-block ranges lie inside their reply; a flag's snapshot exists and is its attempt's.
-- **Lifecycle.** Only `submitted` and `discarded` attempts have `submittedAt`, a request or gradings. A discarded attempt has no accepted grading and no active review. A coached attempt has no review log. An accepted, uncoached current grading has its active review, whose rating follows from the grading by the rating policy.
+- **Lifecycle.** Only `submitted` and `discarded` attempts have `submittedAt`, a request or gradings, and their answers have at most 2,000 characters. Draft and skipped answers retain longer text. An ended session has no draft attempts, but may have submitted answers and unopened entries. A discarded attempt has no accepted grading and no active review. A coached attempt has no review log. An accepted, uncoached current grading has its active review, whose rating follows from the grading by the rating policy.
 - **Grades.** Every grading revision passes the shared grade validator (max equals the snapshot's, allowed and non-repeating tags, a null score only from a parsed reply); `needs-review` means a parsed null score.
 - **Cards.** A task's active reviews, in `seq` order, chain: the first has `cardBefore` null and each later one's `cardBefore` is the previous one's `cardAfter` with its version. The card equals the latest one's `cardAfter`; a task with no active review has no card.
 - **Time.** A review log's `reviewedAt` equals its attempt's `submittedAt`, and `cardAfter.last_review` is the effective time of §6.4.
@@ -161,11 +161,12 @@ Every grading mutation is a named operation with a client-generated `opId` and t
 
 | Operation | Effect |
 | --- | --- |
-| `openEntry(sessionId, index)` | Creates the entry's draft attempt the first time, after rechecking eligibility (§6.4) in the same transaction. Returns the attempt, the competing draft, or why the task is not eligible; it writes nothing unless it opens. |
-| `saveDraft(attemptId, revision, answer)`, `submitAttempt(attemptId, revision, answer)` | Check and increment the draft's revision, so one tab never overwrites another. Submitting again with the submitted text returns the stored attempt; different text is refused as a distinct conflict. |
-| `saveReply(requestId, reply)` | Stores a reply the student read even when it gave no usable scores, so manual or self grades after it keep the raw text and can link to it. |
+| `openEntry(sessionId, index)` | Creates the entry's draft attempt the first time, after rechecking eligibility (§6.4) in the same transaction. Returns the attempt, the competing draft, or why the task is not eligible; it writes nothing unless it opens. An ended session cannot open another entry. |
+| `endSession(sessionId)` | Ends a session with submitted, skipped or unopened entries, making submitted answers reachable for grading; refuses to end while any entry still holds a draft. |
+| `saveDraft(expectedDraft, answer)`, `submitAttempt(expectedDraft, answer)`, `skipAttempt(expectedDraft)` | In one transaction, check the original session identity and entry mapping, the attempt's fixed identity, its revision and its persisted answer before changing a draft. This also catches a replacement backup that reuses an id and revision. Submitting again with the submitted text returns the stored attempt only when its identity and session still match; different text is refused as a distinct conflict. |
+| `saveReply(requestId, reply)` | Stores every reply the student explicitly reads, including replies with unusable scores, up to 200,000 characters. Manual or self grades may link to a selected saved reply. |
 | `prepareGrading(attemptIds)` | Creates the request(s) for these submitted, unowned attempts (`GRADING_PROTOCOL.md` §2). Used by Copy and by Grade it myself. Re-running for already-owned attempts returns the existing requests and their stored prompt text. |
-| `confirmRows(requestId, rows)` | For each row, writes a grading revision; for an accepted, uncoached row, appends a review log and updates the card; sets `notBefore` (§6.4). Updates request status. Each attempt may appear once and must be a row of this request. A row links to the reply saved with it, or to a stored reply of the request, or keeps its needs-review grading's reply and range. |
+| `confirmRows(requestId, rows)` | For each row, writes a grading revision; for an accepted, uncoached row, appends a review log and updates the card; sets `notBefore` (§6.4). Updates request status. Each attempt may appear once and must be a row of this request. A row links to the reply saved with it, or to a stored reply of the request, or keeps its needs-review grading's reply and range. Every parsed row carries the previewed answer, snapshot hash and exact reply text; the transaction compares all three with storage, requires a saved current-parser reply and reparses it before writing. |
 | `correctGrade(attemptId, grading)` | Replaces the current accepted grading with a new accepted revision (§6.3). |
 | `undoLatest(attemptId)` | Undoes the attempt's active review, if it is its card's latest; the grading becomes `superseded`, `currentGradingId` is cleared and the row returns to `pending`. |
 | `discardRows(requestId, rows)` / `abandonRequest(requestId, revisions)` | Moves pending or needs-review rows to `discarded`. `abandonRequest` takes every row's revision as the student saw it. |
@@ -177,9 +178,9 @@ Rules for all of them:
 - Each runs in **one IndexedDB read-write transaction** covering every table it reads or writes. Existence checks, revision checks, latest-review checks and writes all happen inside it. IndexedDB serializes overlapping read-write transactions on the same tables, so no other locking is needed. Clipboard writes and other async work happen outside the transaction.
 - **Receipts.** Every successful operation writes an `operations` receipt in the same transaction as its changes.
 - **Same `opId` again** (double tap, retry after a crash): the receipt is checked first, before any revision check, and its recorded result is returned without writing.
-- **Stale revision** (another tab, or an undo, changed the attempt since the UI read it, and there is no receipt for this `opId`): the operation writes nothing and the UI reloads the row and says what changed. A stale confirm never becomes a new review.
+- **Stale draft or revision** (another tab, a replacement backup, or an undo changed the attempt or its session since the UI read it, and there is no receipt for this `opId`): the operation writes nothing and the UI keeps local text visible until the student chooses what to do. A stale confirm never becomes a new review.
 - Receipts are a result ledger for retries, not an event log; nothing is replayed from them.
-- Every successful operation increments `revision` on each attempt it changes.
+- Every successful operation increments `revision` on each attempt it changes. An increment that would reach `Number.MAX_SAFE_INTEGER` fails before writing, leaving every saved revision and review sequence importable; exporting does not restore capacity.
 - **Row sets.** An operation over several rows refuses, before writing anything, a row set that repeats an attempt or names one outside the request.
 - **Application order.** Each review log gets `seq`, one more than the highest `seq` of any stored review log, assigned inside the applying transaction, so it strictly increases in the order reviews were applied. "Latest review" always means the highest `seq` among a task's active reviews. Timestamps (`appliedAt`, `reviewedAt`) and ids never order reviews: device clocks can repeat or move backwards, and ids are random.
 
@@ -195,8 +196,9 @@ Rules for all of them:
 - **Review time** (`reviewedAt`) is the attempt's `submittedAt`: what the student knew when they answered. Grading may arrive days later. It is stored unchanged in every case.
 - **Out-of-order grades.** If an attempt is confirmed after a later-submitted attempt of the same task was already reviewed, the review is still applied on top of the current card (no replay), and the scheduler runs at the later of `reviewedAt` and the card's `last_review`, so elapsed time is never negative. That effective time is recorded as `cardAfter.last_review`; `reviewedAt` keeps the submission time.
 - **Eligibility** is separate: after a grading is confirmed, the task's `taskStates.notBefore` becomes the next local date after confirmation. A task is offered only when it is due (or new), not suspended, and today is on or after `notBefore`, so a student is never re-tested on an answer they have just read. Undo and correction never clear or set it.
-- **Eligibility is rechecked when work is opened**, not only when a session is planned: `openEntry` creates an uncoached attempt only if, in its own transaction, no other uncoached draft of the task exists, the task is not suspended, it has no submitted attempt still pending or needing review, and today is on or after `notBefore`. A competing draft is returned instead of creating a second attempt, so its text is never lost. A `retry` session (coached attempts, never scheduled) is the one explicit exception.
+- **Eligibility is rechecked when work is opened**, not only when a session is planned: `openEntry` creates an uncoached attempt only if, in its own transaction, no other uncoached draft of the task exists, the task is not suspended, it has no submitted attempt still pending or needing review, and today is on or after `notBefore`. Today sessions also recheck the card's due date; New sessions refuse tasks seen since planning. Library may open a task before its due date. A competing draft is returned instead of creating a second attempt, so its text is never lost. A `retry` session (coached attempts, never scheduled) is the explicit exception.
 - **Automatic planning** (Today, New only) also applies the final-weeks difficulty floor and the conclusion policy to due cards, and the daily exposure rule (no two tasks of one exercise on a day unless both are due reviews). Library sessions skip both, but what they show counts as shown that day. See `DECISIONS.md` "Planner v1 after the M2 review".
+- **Fresh repair** clears a miss only for a full-credit attempt in a different session, submitted later and started after the miss attempt's earliest grading that showed a miss, including superseded revisions. An earlier full-credit or `?` grade does not make a later miss available for repair; a success before that correction leaves the miss open.
 
 ### 6.5 Scheduler configuration
 
@@ -225,9 +227,10 @@ Timestamps are stored as UTC ISO 8601. Day boundary is local midnight. A card is
 - `schedulerConfigs` carries the full configuration of every scheduler version referenced in the file (by cards, review logs and their `cardBefore`). Import refuses a file that omits one, or that defines a version this app knows differently from the app. Configurations of versions the app does not know are stored in the `schedulerConfigs` table and exported again.
 - **Device-local settings.** `disclosureSeen` and `persistGranted` describe this browser, not the student's data: export leaves them out, import ignores them if present, and replacement keeps this device's values.
 - **Replace-only import** in v1. Steps: validate, show a summary (counts, date range, newest activity), offer to export the current data first, then replace everything in one transaction.
-- Validation: Zod shape; known settings validated by key (unknown keys refused); unique ids and `seq`s; every reference resolves (attempt → snapshot, attempt → session, grading → attempt, grading → reply, review log → grading, flag → attempt and snapshot, session entry → attempt); snapshot hashes recompute (§4.1); the §5.1 invariants and the import checks after them hold, tested with deliberately inconsistent fixtures; request status matches the §5.2 rule; timestamps are canonical UTC (§5); scheduler numbers are finite; the file is at most 50 MB in bytes. The UI checks `File.size` before reading the file (`checkImportFile`); text callers are checked by UTF-8 byte length. Newer schema versions are refused with a clear message.
+- Validation: Zod shape; known settings validated by key (unknown keys refused); unique and nonempty IDs and `seq`s; canonical lower-case UUID session and request IDs used in routes; every reference resolves (attempt → snapshot, attempt → session, grading → attempt, grading → reply, review log → grading, flag → attempt and snapshot, session entry → attempt); snapshot hashes recompute (§4.1); the §5.1 invariants and the import checks after them hold, tested with deliberately inconsistent fixtures; request status matches the §5.2 rule; stored v2/v3/v4 prompt text exactly matches the frozen request rows and fits the prompt budget (a null prompt is reserved for an oversized single item); timestamps are canonical UTC (§5); scheduler numbers are finite; the file is at most 50 MB in bytes. Old stored replies of any length within that file budget remain importable, although new replies are capped at 200,000 characters. The UI checks `File.size` before reading the file (`checkImportFile`); text callers are checked by UTF-8 byte length. Newer schema versions are refused with a clear message.
 - A file referencing a scheduler version this app does not know is imported, and its history stays readable, but correction and undo of reviews made under that version are refused. New reviews always use the app's current version, starting from the stored card's fields whatever version produced them; their `cardBefore` keeps the old version, so undoing them restores the imported card exactly.
 - Snapshots travel in the export, so history survives even if an exercise is later retired or removed.
+- Settings offers a separate read-only export when the old `premise-preview` database exists. The deployed preview only ran the frozen v1 store and index layout, and its recovery file matches a normal export for the same data. Settings opens the database without a declared version, so even the availability check cannot upgrade an older layout. Filling missing fields from an earlier, undeployed v1 layout is defensive and happens only in memory: those review logs get sequence numbers from their card chain, a `cardBefore` scheduler version, and the attempt submission time in `reviewedAt`, while scores, statuses and effective card times remain unchanged. The file follows the same export schema and can be checked by the normal importer. The old database and the current database remain untouched.
 - Merge import is out of scope until conflict rules are written.
 
 ## 8. Persistence
@@ -241,7 +244,7 @@ Timestamps are stored as UTC ISO 8601. Day boundary is local midnight. A card is
 
 - `npm run content` parses, validates, hashes and emits content; production builds exclude drafts.
 - `npm run check` = typecheck + lint + unit tests + content build.
-- CI on pull requests: `npm ci`, `npm run check`, Playwright (Chromium and WebKit). On `main`: build and deploy to GitHub Pages.
+- CI on pull requests: `npm ci --ignore-scripts`, `npm run check`, Playwright (Chromium and WebKit). On `main`: build production content, test the artifact, and deploy to GitHub Pages. Drafts remain local; no public preview is published.
 - Routing uses hash URLs so direct navigation and refresh work on GitHub Pages. A deployed-site smoke test loads a deep link.
 - From the first deployment (M1), the About page links to the source code, names the deployed commit and shows the licenses.
 - PWA (from M5): the service worker never reloads a page by itself; it shows "Update available" and applies on the next navigation without unsaved drafts.

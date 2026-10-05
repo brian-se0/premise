@@ -2,9 +2,10 @@
 // every table it touches. Grading operations take a client-generated opId: a repeated opId
 // returns the stored receipt's result without writing; a stale revision writes nothing.
 
-import { addDays, localDate } from '../domain/dates.ts';
+import { addDays, localDate, localDateOf } from '../domain/dates.ts';
 import { validateGrade, validateRange } from '../domain/gradeValidator.ts';
 import { MAX_ANSWER_LENGTH, planRequests, type GradingItem } from '../domain/prompt.ts';
+import { MAX_REPLY_LENGTH, PARSER_VERSION, parseReply, type ParsedBlock } from '../domain/scoreParser.ts';
 import type {
   AttemptKind,
   AttemptRecord,
@@ -21,7 +22,7 @@ import type {
   VersionedCard,
 } from '../domain/records.ts';
 import { ratingFor, review } from '../domain/scheduler.ts';
-import { CURRENT_SCHEDULER, RATING_POLICY, SCHEDULER_CONFIGS } from '../domain/schedulerConfig.ts';
+import { CURRENT_SCHEDULER, RATING_POLICY, schedulerConfig } from '../domain/schedulerConfig.ts';
 import type { Snapshot } from '../domain/types.ts';
 import type { PremiseDb } from './db.ts';
 
@@ -78,6 +79,76 @@ export interface AttemptOpResult {
   revision: number;
 }
 
+/** The persisted draft and session entry this editor last accepted. */
+export interface DraftPrecondition {
+  session: Pick<SessionRecord, 'id' | 'createdAt' | 'mode'>;
+  entryIndex: number;
+  attempt: Pick<
+    AttemptRecord,
+    | 'id'
+    | 'sessionId'
+    | 'taskId'
+    | 'snapshotHash'
+    | 'kind'
+    | 'stimulusSeenBefore'
+    | 'ratingChoice'
+    | 'startedAt'
+    | 'revision'
+    | 'answer'
+  >;
+}
+
+/** Identity excludes the mutable revision and text, which each operation checks separately. */
+export function matchesDraftIdentity(
+  session: SessionRecord | undefined | null,
+  attempt: AttemptRecord | undefined | null,
+  expected: DraftPrecondition,
+  allowEnded = false,
+): boolean {
+  const original = expected.attempt;
+  return (
+    !!session &&
+    !!attempt &&
+    session.id === expected.session.id &&
+    session.createdAt === expected.session.createdAt &&
+    session.mode === expected.session.mode &&
+    (allowEnded || session.endedAt === null) &&
+    session.entries[expected.entryIndex]?.attemptId === original.id &&
+    session.entries[expected.entryIndex]?.taskId === original.taskId &&
+    attempt.id === original.id &&
+    attempt.sessionId === original.sessionId &&
+    attempt.sessionId === session.id &&
+    attempt.taskId === original.taskId &&
+    attempt.snapshotHash === original.snapshotHash &&
+    attempt.kind === original.kind &&
+    attempt.stimulusSeenBefore === original.stimulusSeenBefore &&
+    attempt.ratingChoice === original.ratingChoice &&
+    attempt.startedAt === original.startedAt
+  );
+}
+
+async function draftRow(
+  db: PremiseDb,
+  expected: DraftPrecondition,
+  allowEnded = false,
+): Promise<{ session: SessionRecord; attempt: AttemptRecord }> {
+  const session = await db.sessions.get(expected.session.id);
+  const attempt = await db.attempts.get(expected.attempt.id);
+  if (!matchesDraftIdentity(session, attempt, expected, allowEnded)) {
+    throw new StaleError([expected.attempt.id], 'This answer or its session was replaced in another tab.');
+  }
+  return { session: session!, attempt: attempt! };
+}
+
+/** Counters must advance exactly; rounded integers would defeat revision checks and review ordering. */
+function nextCounter(current: number, name: string): number {
+  const next = current + 1;
+  if (!Number.isSafeInteger(current) || current < 0 || !Number.isSafeInteger(next) || next >= Number.MAX_SAFE_INTEGER) {
+    throw new OpError(`${name} has reached the limit for safe, importable data.`);
+  }
+  return next;
+}
+
 // ---------- Sessions and attempts ----------
 
 export async function startSession(
@@ -107,7 +178,11 @@ export type OpenEntryResult =
    */
   | { status: 'draft-elsewhere'; attempt: AttemptRecord }
   /** The task may not be practised now; nothing was created. */
-  | { status: 'ineligible'; reason: 'suspended' | 'awaiting-grade' | 'not-before'; notBefore: string | null };
+  | {
+      status: 'ineligible';
+      reason: 'suspended' | 'awaiting-grade' | 'not-before' | 'not-due' | 'already-seen';
+      notBefore: string | null;
+    };
 
 /**
  * Opens a session entry. The first time, it rechecks eligibility in the same transaction that
@@ -129,6 +204,7 @@ export async function openEntry(
     async (): Promise<OpenEntryResult> => {
       const session = await db.sessions.get(sessionId);
       if (!session) throw new OpError('Session not found.');
+      if (session.endedAt !== null) throw new OpError('This session has ended.');
       const entry = session.entries[index];
       if (!entry) throw new OpError('No such task in this session.');
       if (entry.taskId !== snapshot.taskId) throw new OpError('Snapshot does not match the session entry.');
@@ -139,7 +215,7 @@ export async function openEntry(
         return { status: 'opened', attempt: existing };
       }
       if (session.mode !== 'retry') {
-        const blocked = await eligibility(db, snapshot.taskId, localDate(new Date(ctx.now)));
+        const blocked = await eligibility(db, snapshot.taskId, localDate(new Date(ctx.now)), session.mode);
         if (blocked) return blocked;
       }
       if (!(await db.snapshots.get(snapshot.hash))) {
@@ -176,7 +252,12 @@ export async function openEntry(
 }
 
 /** Why a new uncoached attempt of this task may not be created now, or null if it may. */
-async function eligibility(db: Tx, taskId: string, today: string): Promise<OpenEntryResult | null> {
+async function eligibility(
+  db: Tx,
+  taskId: string,
+  today: string,
+  mode: SessionRecord['mode'],
+): Promise<OpenEntryResult | null> {
   const attempts = await db.attempts.where('taskId').equals(taskId).toArray();
   const draft = attempts.find((a) => a.state === 'draft' && a.kind !== 'coached');
   if (draft) return { status: 'draft-elsewhere', attempt: draft };
@@ -189,58 +270,67 @@ async function eligibility(db: Tx, taskId: string, today: string): Promise<OpenE
     if (g?.status !== 'accepted') return { status: 'ineligible', reason: 'awaiting-grade', notBefore };
   }
   if (notBefore !== null && today < notBefore) return { status: 'ineligible', reason: 'not-before', notBefore };
+  // New-only planning deliberately keeps skipped work available; a submitted or discarded
+  // attempt means the task has actually been seen since this session was planned.
+  if (mode === 'new' && attempts.some((a) => a.state === 'submitted' || a.state === 'discarded')) {
+    return { status: 'ineligible', reason: 'already-seen', notBefore: null };
+  }
+  if (mode === 'today') {
+    const card = await db.cards.get(taskId);
+    if (card && today < localDateOf(card.due)) {
+      return { status: 'ineligible', reason: 'not-due', notBefore: localDateOf(card.due) };
+    }
+  }
   return null;
 }
 
 /**
- * Saves a draft answer if the attempt is still at `revision` (the revision this editor last read
- * or wrote) and increments it. A stale revision, or an attempt that is no longer a draft, throws
- * StaleError and writes nothing, so one tab never silently overwrites another.
+ * Saves only if the original session entry still owns this draft and its persisted revision and
+ * answer still match what the editor last read or wrote. The check and write share a transaction.
  */
 export async function saveDraft(
   db: PremiseDb,
   ctx: OpContext,
-  attemptId: string,
-  revision: number,
+  expected: DraftPrecondition,
   answer: string,
 ): Promise<AttemptOpResult> {
-  return db.transaction('rw', [db.attempts], async () => {
-    const a = await db.attempts.get(attemptId);
-    if (!a) throw new OpError('Attempt not found.');
+  return db.transaction('rw', [db.sessions, db.attempts], async () => {
+    const { attempt: a } = await draftRow(db, expected);
     if (a.state !== 'draft') throw new StaleError([a.id], 'This answer was already submitted or skipped.');
-    if (a.revision !== revision) throw new StaleError([a.id], 'This answer was changed in another tab.');
-    const next = a.revision + 1;
-    await db.attempts.update(attemptId, { answer, updatedAt: ctx.now, revision: next });
-    return { attemptId, revision: next };
+    if (a.revision !== expected.attempt.revision || a.answer !== expected.attempt.answer)
+      throw new StaleError([a.id], 'This answer was changed in another tab.');
+    const next = nextCounter(a.revision, 'Attempt revision');
+    await db.attempts.update(a.id, { answer, updatedAt: ctx.now, revision: next });
+    return { attemptId: a.id, revision: next };
   });
 }
 
 /**
  * Freezes the attempt (invariant 1). An empty answer is a deliberate blank submission. The draft
- * must still be at `revision`. Retrying a submission that already happened returns the stored
+ * must still match the draft precondition. Retrying a submission that already happened returns the stored
  * attempt only if `answer` equals the submitted answer; otherwise it throws
  * AlreadySubmittedError and writes nothing.
  */
 export async function submitAttempt(
   db: PremiseDb,
   ctx: OpContext,
-  attemptId: string,
-  revision: number,
+  expected: DraftPrecondition,
   answer: string,
   elapsedSeconds: number | null,
 ): Promise<AttemptRecord> {
   if (answer.length > MAX_ANSWER_LENGTH) {
     throw new OpError(`Answers are limited to ${MAX_ANSWER_LENGTH.toLocaleString()} characters.`);
   }
-  return db.transaction('rw', [db.attempts], async () => {
-    const a = await db.attempts.get(attemptId);
-    if (!a) throw new OpError('Attempt not found.');
+  return db.transaction('rw', [db.sessions, db.attempts], async () => {
+    const { attempt: a, session } = await draftRow(db, expected, true);
     if (a.state === 'submitted' || a.state === 'discarded') {
       if (a.answer === answer) return a;
       throw new AlreadySubmittedError(a);
     }
+    if (session.endedAt !== null) throw new StaleError([a.id], 'This session has already ended.');
     if (a.state !== 'draft') throw new StaleError([a.id], 'This task was skipped.');
-    if (a.revision !== revision) throw new StaleError([a.id], 'This answer was changed in another tab.');
+    if (a.revision !== expected.attempt.revision || a.answer !== expected.attempt.answer)
+      throw new StaleError([a.id], 'This answer was changed in another tab.');
     const next: AttemptRecord = {
       ...a,
       answer,
@@ -248,23 +338,38 @@ export async function submitAttempt(
       submittedAt: ctx.now,
       updatedAt: ctx.now,
       elapsedSeconds,
-      revision: a.revision + 1,
+      revision: nextCounter(a.revision, 'Attempt revision'),
     };
     await db.attempts.put(next);
     return next;
   });
 }
 
-export async function skipAttempt(db: PremiseDb, ctx: OpContext, attemptId: string): Promise<void> {
-  await db.transaction('rw', [db.attempts], async () => {
-    const a = await db.attempts.get(attemptId);
-    if (!a || a.state !== 'draft') return;
-    await db.attempts.update(attemptId, { state: 'skipped', updatedAt: ctx.now, revision: a.revision + 1 });
+export async function skipAttempt(db: PremiseDb, ctx: OpContext, expected: DraftPrecondition): Promise<void> {
+  await db.transaction('rw', [db.sessions, db.attempts], async () => {
+    const { attempt: a } = await draftRow(db, expected);
+    if (a.state !== 'draft' || a.revision !== expected.attempt.revision || a.answer !== expected.attempt.answer) {
+      throw new StaleError([a.id], 'This answer changed or was finished in another tab.');
+    }
+    await db.attempts.update(a.id, {
+      state: 'skipped',
+      updatedAt: ctx.now,
+      revision: nextCounter(a.revision, 'Attempt revision'),
+    });
   });
 }
 
 export async function endSession(db: PremiseDb, ctx: OpContext, sessionId: string): Promise<void> {
-  await db.sessions.update(sessionId, { endedAt: ctx.now });
+  await db.transaction('rw', [db.sessions, db.attempts], async () => {
+    const session = await db.sessions.get(sessionId);
+    if (!session) throw new OpError('Session not found.');
+    if (session.endedAt !== null) return;
+    const attempts = await db.attempts.bulkGet(session.entries.map((entry) => entry.attemptId ?? ''));
+    if (attempts.some((attempt) => attempt?.state === 'draft')) {
+      throw new OpError('Save, submit or skip the unfinished answer before ending this session.');
+    }
+    await db.sessions.update(sessionId, { endedAt: ctx.now });
+  });
 }
 
 // ---------- Receipts ----------
@@ -333,6 +438,7 @@ export async function prepareGrading(
   return db.transaction('rw', GRADING_TABLES(db), async () => {
     const done = await receipt<PrepareResult>(db, opId);
     if (done) return done;
+    if (attemptIds.length === 0) throw new OpError('There are no submitted answers to grade.');
     if (new Set(attemptIds).size !== attemptIds.length) throw new OpError('The same answer appears twice.');
     const attempts = await db.attempts.bulkGet(attemptIds);
     const requestIds: string[] = [];
@@ -365,7 +471,12 @@ export async function prepareGrading(
       requestIds.push(request.id);
       for (const r of planned.rows) {
         const a = attempts.find((x) => x?.id === r.attemptId)!;
-        const next = { ...a, requestId: request.id, revision: a.revision + 1, updatedAt: ctx.now };
+        const next = {
+          ...a,
+          requestId: request.id,
+          revision: nextCounter(a.revision, 'Attempt revision'),
+          updatedAt: ctx.now,
+        };
         await db.attempts.put(next);
         changed.push(next);
       }
@@ -421,6 +532,8 @@ export async function saveReply(
     const done = await receipt<{ replyId: string }>(db, opId);
     if (done) return done;
     if (!(await db.requests.get(requestId))) throw new OpError('Grading request not found.');
+    if (reply.raw.length > MAX_REPLY_LENGTH)
+      throw new OpError(`Replies are limited to ${MAX_REPLY_LENGTH} characters.`);
     const problems = validateRange(reply.selectedBlock, reply.raw.length);
     if (problems.length) throw new OpError(problems.join(' '));
     const replyId = ctx.newId();
@@ -433,13 +546,12 @@ export async function saveReply(
 
 // ---------- Applying grades ----------
 
-export interface GradeRow {
+interface GradeRowBase {
   attemptId: string;
   /** The attempt revision the UI last read. */
   revision: number;
   score: number | null;
   tags: string[];
-  source: GradingSource;
   disqualified: boolean;
   /** Offsets into the linked reply's raw text; needs a reply. */
   feedbackRange: Range | null;
@@ -452,6 +564,23 @@ export interface GradeRow {
   replyId?: string | null;
 }
 
+export type GradeRow = GradeRowBase &
+  (
+    | {
+        source: 'parsed';
+        /** The frozen answer, snapshot, and reply text shown in this preview. */
+        expectedAnswer: string;
+        expectedSnapshotHash: string;
+        expectedReplyRaw: string;
+      }
+    | {
+        source: Exclude<GradingSource, 'parsed'>;
+        expectedAnswer?: string;
+        expectedSnapshotHash?: string;
+        expectedReplyRaw?: never;
+      }
+  );
+
 interface Provenance {
   replyId: string | null;
   feedbackRange: Range | null;
@@ -460,7 +589,7 @@ interface Provenance {
 /** The highest stored review-log seq plus one; called inside the applying transaction. */
 async function nextSeq(db: Tx): Promise<number> {
   const last = await db.reviewLogs.orderBy('seq').last();
-  return (last?.seq ?? 0) + 1;
+  return nextCounter(last?.seq ?? 0, 'Review sequence');
 }
 
 /** The task's latest active review, by application sequence (never by timestamp or id). */
@@ -591,16 +720,44 @@ async function applyGrade(
     ...attempt,
     currentGradingId: grading.id,
     ratingChoice: row.ratingChoice,
-    revision: attempt.revision + 1,
+    revision: nextCounter(attempt.revision, 'Attempt revision'),
     updatedAt: ctx.now,
   };
   await db.attempts.put(next);
   return next;
 }
 
-async function loadFresh(db: Tx, rows: { attemptId: string; revision: number }[]): Promise<AttemptRecord[]> {
+async function loadFresh(
+  db: Tx,
+  rows: {
+    attemptId: string;
+    revision: number;
+    source?: GradingSource;
+    expectedAnswer?: string;
+    expectedSnapshotHash?: string;
+    expectedReplyRaw?: string;
+  }[],
+): Promise<AttemptRecord[]> {
+  if (
+    rows.some(
+      (r) =>
+        r.source === 'parsed' &&
+        (typeof r.expectedAnswer !== 'string' ||
+          typeof r.expectedSnapshotHash !== 'string' ||
+          typeof r.expectedReplyRaw !== 'string'),
+    )
+  ) {
+    throw new OpError('A parsed grade needs the answer, snapshot and saved reply text shown in its preview.');
+  }
   const attempts = await db.attempts.bulkGet(rows.map((r) => r.attemptId));
-  const stale = rows.filter((r, i) => attempts[i]?.revision !== r.revision).map((r) => r.attemptId);
+  const stale = rows
+    .filter(
+      (r, i) =>
+        attempts[i]?.revision !== r.revision ||
+        (r.expectedAnswer !== undefined && attempts[i]?.answer !== r.expectedAnswer) ||
+        (r.expectedSnapshotHash !== undefined && attempts[i]?.snapshotHash !== r.expectedSnapshotHash),
+    )
+    .map((r) => r.attemptId);
   if (stale.length) throw new StaleError(stale);
   return attempts as AttemptRecord[];
 }
@@ -656,11 +813,15 @@ export async function confirmRows(
     }
     let replyId: string | null = null;
     if (reply) {
+      if (reply.raw.length > MAX_REPLY_LENGTH)
+        throw new OpError(`Replies are limited to ${MAX_REPLY_LENGTH} characters.`);
       const problems = validateRange(reply.selectedBlock, reply.raw.length);
       if (problems.length) throw new OpError(problems.join(' '));
       replyId = ctx.newId();
       await db.replies.add({ ...reply, id: replyId, requestId, pastedAt: ctx.now });
     }
+    const parsedBlocks = new Map<string, { block: ParsedBlock; raw: string }>();
+    const rowIdByAttempt = new Map(Object.entries(request.rows).map(([rowId, attemptId]) => [attemptId, rowId]));
     const changed: AttemptRecord[] = [];
     const gradingIds: Record<string, string> = {};
     for (const [i, row] of rows.entries()) {
@@ -672,6 +833,49 @@ export async function confirmRows(
           : current?.replyId
             ? { replyId: current.replyId, feedbackRange: row.feedbackRange ?? current.feedbackRange }
             : { replyId: null, feedbackRange: row.feedbackRange };
+      if (row.source === 'parsed') {
+        const saved = provenance.replyId ? await db.replies.get(provenance.replyId) : undefined;
+        if (!saved || saved.requestId !== requestId || saved.parserVersion !== PARSER_VERSION) {
+          throw new OpError('This parsed grade needs a reply read by the current parser. Read it again.');
+        }
+        let checked = parsedBlocks.get(saved.id);
+        if (!checked) {
+          if (saved.raw !== row.expectedReplyRaw) {
+            throw new OpError('The stored reply changed since the preview. Read the scores again.');
+          }
+          const parserRows = await Promise.all(
+            Object.entries(request.rows).map(async ([rowId, attemptId]) => {
+              const owned = await db.attempts.get(attemptId);
+              const snapshot = owned ? await db.snapshots.get(owned.snapshotHash) : undefined;
+              if (!snapshot) throw new OpError('Snapshot missing.');
+              return { rowId, max: snapshot.max, allowedTags: snapshot.allowedTags };
+            }),
+          );
+          const parsed = parseReply(saved.raw, {
+            id: request.id,
+            rows: parserRows,
+            promptVersion: request.promptVersion,
+          });
+          const candidates = parsed.kind === 'parsed' ? [parsed.block] : parsed.kind === 'choose' ? parsed.options : [];
+          const block = candidates.find((candidate) => sameRange(candidate.range, saved.selectedBlock));
+          if (!block || block.outcome !== saved.parseOutcome) {
+            throw new OpError('The stored reply no longer matches the selected score block. Read it again.');
+          }
+          checked = { block, raw: saved.raw };
+          parsedBlocks.set(saved.id, checked);
+        } else if (row.expectedReplyRaw !== checked.raw) {
+          throw new OpError('The parsed rows came from different previews of the same reply. Read the scores again.');
+        }
+        const parsedRow = checked.block.rows.find((candidate) => candidate.rowId === rowIdByAttempt.get(row.attemptId));
+        if (
+          parsedRow?.status !== 'valid' ||
+          parsedRow.score !== row.score ||
+          !sameRange(parsedRow.feedback, provenance.feedbackRange) ||
+          JSON.stringify(parsedRow.tags) !== JSON.stringify(row.tags)
+        ) {
+          throw new OpError('The score or feedback differs from the stored reply. Read it again.');
+        }
+      }
       const next = await applyGrade(db, ctx, opId, attempts[i]!, row, provenance, true);
       changed.push(next);
       gradingIds[next.id] = next.currentGradingId!;
@@ -699,7 +903,7 @@ async function unwindForChange(db: Tx, attempt: AttemptRecord): Promise<void> {
   if (log) {
     const latest = await latestActiveLog(db, attempt.taskId);
     if (latest?.id !== log.id) throw new OpError('Older grades are locked: this task was reviewed again since.');
-    if (!SCHEDULER_CONFIGS[log.schedulerVersion])
+    if (!schedulerConfig(log.schedulerVersion))
       throw new OpError('This review used a scheduler this app does not know.');
     await undoReview(db, log);
   }
@@ -725,6 +929,7 @@ export async function correctGrade(
     const current = await currentGrading(db, attempt!);
     if (current?.status !== 'accepted') throw new OpError('Only an accepted grade can be corrected.');
     if (row.score === null) throw new OpError('A correction needs a score.');
+    if (row.source === 'parsed') throw new OpError('Correct a grade manually or by self-grading.');
     if (row.replyId !== undefined && row.replyId !== current.replyId) {
       throw new OpError('A correction keeps the reply of the grade it corrects.');
     }
@@ -761,7 +966,12 @@ export async function undoLatest(
     if (!attempt!.currentGradingId) throw new OpError('There is no grade to undo.');
     await unwindForChange(db, attempt!);
     await db.gradings.update(attempt!.currentGradingId, { status: 'superseded' });
-    const next = { ...attempt!, currentGradingId: null, revision: attempt!.revision + 1, updatedAt: ctx.now };
+    const next = {
+      ...attempt!,
+      currentGradingId: null,
+      revision: nextCounter(attempt!.revision, 'Attempt revision'),
+      updatedAt: ctx.now,
+    };
     await db.attempts.put(next);
     await refreshRequestStatus(db, attempt!.requestId!);
     const result = { attemptId, revision: next.revision };
@@ -794,7 +1004,12 @@ export async function discardRows(
       const state = rowState(a, await currentGrading(db, a));
       if (state !== 'pending' && state !== 'needs-review')
         throw new StaleError([a.id], `This answer is already ${state}.`);
-      const next = { ...a, state: 'discarded' as const, revision: a.revision + 1, updatedAt: ctx.now };
+      const next = {
+        ...a,
+        state: 'discarded' as const,
+        revision: nextCounter(a.revision, 'Attempt revision'),
+        updatedAt: ctx.now,
+      };
       await db.attempts.put(next);
       changed.push(next);
     }
@@ -832,7 +1047,12 @@ export async function abandonRequest(
     for (const a of attempts) {
       const state = rowState(a, await currentGrading(db, a));
       if (state !== 'pending' && state !== 'needs-review') continue;
-      const next = { ...a, state: 'discarded' as const, revision: a.revision + 1, updatedAt: ctx.now };
+      const next = {
+        ...a,
+        state: 'discarded' as const,
+        revision: nextCounter(a.revision, 'Attempt revision'),
+        updatedAt: ctx.now,
+      };
       await db.attempts.put(next);
       changed.push(next);
     }
@@ -871,7 +1091,12 @@ export async function setTags(
     // The active review now points at the new revision (invariant 4).
     const log = await activeLogFor(db, attemptId);
     if (log) await db.reviewLogs.update(log.id, { gradingId: grading.id });
-    const next = { ...attempt!, currentGradingId: grading.id, revision: attempt!.revision + 1, updatedAt: ctx.now };
+    const next = {
+      ...attempt!,
+      currentGradingId: grading.id,
+      revision: nextCounter(attempt!.revision, 'Attempt revision'),
+      updatedAt: ctx.now,
+    };
     await db.attempts.put(next);
     const result = { attemptId, revision: next.revision };
     await writeReceipt(db, ctx, opId, 'setTags', [next], result);
