@@ -2043,3 +2043,19 @@ Nine exercises were marked "fix" and arg-0025 "keep". Every finding is accepted.
 ### Carried forward
 
 The review's patterns also apply to published batch 1 exercises. Four of their assumption tasks use the unscoped disqualifier: arg-0010, arg-0011, arg-0013 and arg-0015. Eight strengthen and weaken tasks have a criterion 1 that is not directional: arg-0009, arg-0010, arg-0012 (both tasks), arg-0014, arg-0015, arg-0016 and arg-0018. Changing them needs the owner's re-approval, so they are left for a separate change. Pro's patterns for later batches are recorded with the content-batch notes and will go into `CONTENT_GUIDELINES.md` with batch 1's after PR #3 lands.
+
+### Follow-up check
+
+After the fixes above, a separate Claude check graded every changed anchor against its own task's rubric and `accept` text. It found one mismatch and eight wording gaps, all fixed:
+
+| # | Task | Finding | Fix |
+| --- | --- | --- | --- |
+| F-1 | arg-0021.assumption | Criterion 1 asked for "a particular obstacle", so the general-rule assumption that `accept` scores 1 would have graded 0. | Criterion 1 now covers ruling out one obstacle or every obstacle through a broader rule. |
+| F-2 | arg-0028.weaken | Criterion 2's parenthetical could read as rewarding the inference that the code forbids publishing. | Criterion 2 now says the explanation must not infer that, because this rule does not apply, the code forbids publishing. |
+| F-3 | arg-0023.weaken | `accept` gave no score for a fact about 2020 alone. | Such a fact weakens only by raising the possibility that 2020 was inflated relative to 2025; treating it as showing little or no real drop, without accounting for 2025, earns 1. |
+| F-4 | arg-0024.assumption | Criterion 1 named the topics of the two bridges rather than their direction. | Criterion 1 now gives both bridges as examples in their needed direction. |
+| F-5 | arg-0027.assumption | Criterion 1 required linking the sheet to Holt, which the 2-point anchor deliberately does not do. | Criterion 1 now asks for a claim that lets Holt's records date the sheet, with both bridges as examples. |
+| F-6 | All directional criterion 1s in the batch | "More likely" and "a reason to doubt" let a trivially small effect pass, though the prompt asks for a material one. | "Materially more likely" and "a material reason to doubt" in arg-0019, 0020, 0022 (both tasks), 0023, 0026 (both tasks), 0027 and 0028. |
+| F-7 | arg-0019.strengthen | The same-farm comparison in `accept` did not say the fields were otherwise treated alike. | The comparison now names fields that got the same seed, fertilizer and irrigation. |
+| F-8 | arg-0023.assumption | The 2-point anchor said "a real fall", weaker than the conclusion's substantial fall. | Now "a substantial fall". |
+| F-9 | arg-0024.assumption | The 2-point anchor's note ended mid-sentence. | Completed. |
