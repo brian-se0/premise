@@ -1,0 +1,20 @@
+{
+  "request": {
+    "id": "3f2a9c1e-7b4d-4e8a-9c6f-2d1b0a9e8f7c",
+    "promptVersion": "v3",
+    "rows": [{ "rowId": "I01", "max": 2, "allowedTags": [] }]
+  },
+  "expected": {
+    "kind": "parsed",
+    "block": {
+      "complete": true,
+      "rows": [{ "rowId": "I01", "status": "valid", "score": 1, "max": 2, "tags": [], "warnings": [] }],
+      "unknownRowIds": [],
+      "warnings": [],
+      "outcome": "clean"
+    }
+  },
+  "feedbackText": {
+    "I01": "I01: 1/2\n- Criterion 1: met; criterion 2: not met.\n- Tip: Explain the missing step."
+  }
+}

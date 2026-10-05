@@ -1,9 +1,9 @@
-// Score block parser, parser version 1 (docs/GRADING_PROTOCOL.md §§4–7).
+// Score block parser, parser version 4 (docs/GRADING_PROTOCOL.md §§4–7).
 // Pure: reads a pasted reply against one grading request. Never repairs, clamps or guesses a score.
 
 import type { ParseOutcome, Range } from './records.ts';
 
-export const PARSER_VERSION = 1;
+export const PARSER_VERSION = 4;
 export const MAX_REPLY_LENGTH = 200_000;
 /** The only score block version this parser reads (prompt version v2). */
 const BLOCK_VERSION = 2;
@@ -11,6 +11,8 @@ const BLOCK_VERSION = 2;
 export interface ParserRequest {
   /** Request UUID. */
   id: string;
+  /** The saved request's prompt version. The score block remains v2 for every supported prompt. */
+  promptVersion: string;
   /** In request order. */
   rows: { rowId: string; max: number; allowedTags: string[] }[];
 }
@@ -48,13 +50,18 @@ export type ParseResult =
   | { kind: 'parsed'; block: ParsedBlock }
   /** Two or more non-equivalent candidates for this request, in reply order. */
   | { kind: 'choose'; options: ParsedBlock[] }
-  | { kind: 'none'; reason: 'too-long' | 'no-block' | 'other-request' | 'unsupported-version'; message: string };
+  | {
+      kind: 'none';
+      reason: 'too-long' | 'no-block' | 'other-request' | 'unsupported-version' | 'unsupported-prompt-version';
+      message: string;
+    };
 
 const MESSAGES = {
   'too-long': 'This reply is longer than 200,000 characters',
   'no-block': 'No score block found',
   'other-request': 'This reply belongs to a different grading request',
   'unsupported-version': 'This reply uses an unsupported score format',
+  'unsupported-prompt-version': 'This grading request uses an unsupported prompt version',
 } as const;
 
 /**
@@ -83,6 +90,16 @@ const HEADING_LINE = /^I\d{2}:/i;
 const BULLET = new RegExp(`^[-*•]${WS}+`);
 const UNFILLED_SCORE = new RegExp(`^__${WS}*/`);
 const FENCE_LINE = /^(`{3,}|~{3,})[\w+-]*$/;
+// Backtick fence info strings cannot contain backticks; an inline code span is not an opener.
+const FEEDBACK_FENCE_START = /^(`{3,}(?=[^`]*$)|~{3,})(.*)$/;
+const MARKDOWN_HEADING = /#{1,6}[ \t]+/y;
+const HEADING_SCORE = new RegExp(`^(${WS}*(?:\\d+|\\?)${WS}*/${WS}*\\d+)(?=${WS}|$|[^\\w/])`);
+const FEEDBACK_LIST_MARKER = new RegExp(`^(?:[-*+•]|\\d+[.)])${WS}+`);
+const BOUNDED_OUTER_PIPES = new RegExp(`^([*_\\x60~]+)?${WS}*\\|([^]+)\\|${WS}*([*_\\x60~]+)?$`);
+const HEADING_DECORATORS = /^[*_`~]*/;
+const HEADING_PREFIX_DECORATORS = /[*_`~]+/y;
+const BOUNDED_HEADING_ID = /^I\d+/i;
+const BOUNDED_HEADING_SEPARATOR = /^[:.\-–—]/;
 const END_OF_ITEMS = '=== END OF ITEMS ===';
 
 /** One line of the reply: raw offsets (line break excluded) and the cleaned text used for matching. */
@@ -330,9 +347,200 @@ function attachFeedback(block: ParsedBlock, raw: string, lines: Line[], candidat
   return { ...block, rows };
 }
 
+interface BoundedHeading {
+  id: string;
+  quoted: boolean;
+  /** An unsupported heading still bounds the preceding row, but cannot start its own feedback. */
+  attributable: boolean;
+  /** A nested list heading also counts toward ambiguity for its own row. */
+  nestedList: boolean;
+  score: { points: string; max: string } | null;
+}
+
+function skipScoreDecoration(text: string): string {
+  let i = 0;
+  while (i < text.length) {
+    const char = text[i]!;
+    if (IS_WS.test(char) || '*_`([{'.includes(char)) i++;
+    else break;
+  }
+  return text.slice(i);
+}
+
+/** Only a heading's assessment, not its ID or score block, gets emphasis/code normalization. */
+function headingAssessment(text: string): string {
+  // Keep a mark between digits inside the number, but make every other mark a token boundary.
+  let assessment = text.replace(/(\d)[*_`]+(?=\d)/g, '$1').replace(/[*_`]/g, ' ');
+  assessment = skipScoreDecoration(assessment);
+  assessment = skipScoreDecoration(assessment.replace(/^Score\b(?:[ \t]*:)?[ \t]*/i, ''));
+  return assessment;
+}
+
+/** The bounded reader's single interpretation of a raw heading line, including its score. */
+function recognizeBoundedHeading(rawLine: string): BoundedHeading | null {
+  let line = trimWs(rawLine);
+  let quoted = false;
+  let listMarkers = 0;
+  // A quote can appear inside a list item, and lists and quotes can alternate at any depth.
+  while (line) {
+    if (line.startsWith('>')) {
+      quoted = true;
+      line = trimWs(line.slice(1));
+      continue;
+    }
+    const withoutList = line.replace(FEEDBACK_LIST_MARKER, '');
+    if (withoutList === line) break;
+    listMarkers++;
+    line = trimWs(withoutList);
+  }
+  // Presentation marks outside a pipe pair identify a boundary, never a feedback start.
+  const outerPipes = BOUNDED_OUTER_PIPES.exec(line);
+  const outsidePipeMarks = !!outerPipes?.[1] || !!outerPipes?.[3];
+  if (outerPipes) line = trimWs(outerPipes[2]!);
+  let offset = 0;
+  let prefixHasTilde = false;
+  let markedHeading = false;
+  // The heading marks may sit outside or inside emphasis/code wrappers.
+  while (offset < line.length) {
+    while (offset < line.length && IS_WS.test(line[offset]!)) offset++;
+    MARKDOWN_HEADING.lastIndex = offset;
+    const marks = MARKDOWN_HEADING.exec(line);
+    if (marks) {
+      markedHeading = true;
+      offset = MARKDOWN_HEADING.lastIndex;
+      continue;
+    }
+    HEADING_PREFIX_DECORATORS.lastIndex = offset;
+    const wrapper = HEADING_PREFIX_DECORATORS.exec(line)?.[0];
+    if (!wrapper) break;
+    prefixHasTilde ||= wrapper.includes('~');
+    offset = HEADING_PREFIX_DECORATORS.lastIndex;
+  }
+  line = trimWs(line.slice(offset));
+  const id = BOUNDED_HEADING_ID.exec(line)?.[0];
+  if (!id) return null;
+  line = line.slice(id.length);
+  const suffix = HEADING_DECORATORS.exec(line)![0];
+  line = trimWs(line.slice(suffix.length));
+  const separator = BOUNDED_HEADING_SEPARATOR.exec(line)?.[0];
+  // A bare marked ID or an ID followed by score/max is row-shaped but not an attributable label.
+  // Ordinary prose such as "I02 is discussed below" is not a heading.
+  if (!separator && line !== '' && !markedHeading && !HEADING_SCORE.test(headingAssessment(line))) return null;
+
+  const attributable = separator === ':' && !prefixHasTilde && !suffix.includes('~') && !outsidePipeMarks;
+  const assessment = headingAssessment(line.slice(separator?.length ?? 0));
+  const token = HEADING_SCORE.exec(assessment)?.[1];
+  let score: BoundedHeading['score'] = null;
+  if (token) {
+    const [points, max] = token.split('/').map(trimWs);
+    score = { points: points!, max: max! };
+  }
+  return { id: id.toUpperCase(), quoted, attributable, nestedList: listMarkers > 1 && separator === ':', score };
+}
+
+/**
+ * Prompts v3 and v4 require one explicit, request-matching feedback section for the chosen score block.
+ * Unbounded prose, echoed answers and ambiguous sections never become row feedback.
+ * Score parsing is independent: a missing or malformed section leaves feedback unmatched.
+ */
+function attachBoundedFeedback(
+  block: ParsedBlock,
+  raw: string,
+  lines: Line[],
+  candidates: Candidate[],
+  requestId: string,
+): ParsedBlock {
+  const regionEnd = block.range.start;
+  let regionStart = 0;
+  for (const c of candidates) if (c.consumedEnd <= regionEnd) regionStart = Math.max(regionStart, c.consumedEnd);
+  for (const l of lines) {
+    if (l.end <= regionEnd && l.text === END_OF_ITEMS) regionStart = Math.max(regionStart, l.end);
+  }
+
+  const markers = lines.filter((l) => {
+    if (l.start < regionStart || l.start >= regionEnd) return false;
+    if (trimWs(raw.slice(l.start, l.end)).startsWith('>')) return false;
+    const upper = l.text?.toUpperCase() ?? '';
+    return upper.startsWith('BEGIN FEEDBACK') || upper.startsWith('END FEEDBACK');
+  });
+  if (markers.length !== 2) return block;
+  const [begin, end] = markers as [Line, Line];
+  if (
+    begin.text?.toLowerCase() !== `begin feedback request=${requestId.toLowerCase()}` ||
+    end.text?.toLowerCase() !== 'end feedback' ||
+    begin.start >= end.start
+  ) {
+    return block;
+  }
+  // A second item heading in the gap could be unbounded feedback. Other text is harmless because
+  // the section boundaries and selected score block already identify the region.
+  if (
+    lines.some(
+      (l) => l.start >= end.end && l.start < regionEnd && recognizeBoundedHeading(raw.slice(l.start, l.end)) !== null,
+    )
+  ) {
+    return block;
+  }
+
+  const headings: { line: Line; heading: BoundedHeading; eligible: boolean; countsTowardRow: boolean }[] = [];
+  let fence: { mark: string; length: number } | null = null;
+  for (const l of lines) {
+    if (l.start <= begin.start || l.start >= end.start) continue;
+    const original = trimWs(raw.slice(l.start, l.end));
+    // A quoted or fenced heading ends the preceding row but is not itself attributable feedback.
+    // This prevents one row from absorbing another when a grader's fence closes unexpectedly.
+    const heading = recognizeBoundedHeading(original);
+    const quoted = original.startsWith('>');
+    const fenceStart = FEEDBACK_FENCE_START.exec(original.replace(FEEDBACK_LIST_MARKER, ''));
+    if (heading && !fenceStart) {
+      const unquoted = heading.attributable && !heading.quoted && !fence;
+      headings.push({
+        line: l,
+        heading,
+        eligible: unquoted && !heading.nestedList,
+        countsTowardRow: !!unquoted,
+      });
+    }
+    if (quoted) continue;
+    if (fence) {
+      let runLength = 0;
+      while (original[runLength] === fence.mark) runLength++;
+      if (runLength >= fence.length && trimWs(original.slice(runLength)) === '') fence = null;
+      continue;
+    }
+    if (fenceStart) {
+      fence = { mark: fenceStart[1]![0]!, length: fenceStart[1]!.length };
+      continue;
+    }
+  }
+  // A broken fence makes heading eligibility uncertain for the entire section.
+  if (fence) return block;
+
+  const rows = block.rows.map((r) => {
+    const own = headings.filter((h) => h.countsTowardRow && h.heading.id === r.rowId.toUpperCase());
+    if (own.length !== 1 || !own[0]!.eligible) return r;
+    const score = own[0]!.heading.score;
+    if (score) {
+      if (r.status !== 'valid') return r;
+      if (Number(score.max) !== r.max || (score.points === '?' ? r.score !== null : Number(score.points) !== r.score))
+        return r;
+    }
+    const start = own[0]!.line.start;
+    const boundary = headings.find((h) => h.line.start > start)?.line.start ?? end.start;
+    const content = lines.filter((l) => l.start >= start && l.start < boundary && l.text);
+    let finish = Math.min(content.at(-1)!.end, boundary);
+    while (finish > start && IS_WS.test(raw[finish - 1]!)) finish--;
+    return { ...r, feedback: { start, end: finish } };
+  });
+  return { ...block, rows };
+}
+
 /** Parses a pasted reply against one grading request (docs/GRADING_PROTOCOL.md §5). */
 export function parseReply(raw: string, request: ParserRequest): ParseResult {
   if (raw.length > MAX_REPLY_LENGTH) return none('too-long');
+  const promptVersion = request.promptVersion;
+  if (promptVersion !== 'v2' && promptVersion !== 'v3' && promptVersion !== 'v4')
+    return none('unsupported-prompt-version');
 
   const lines = lineView(raw);
   const candidates = findCandidates(lines, request.id, raw.length);
@@ -354,7 +562,11 @@ export function parseReply(raw: string, request: ParserRequest): ParseResult {
   const keys = parsed.map(equivalenceKey);
   const distinct = parsed
     .filter((_, i) => keys.indexOf(keys[i]!, i + 1) === -1)
-    .map((b) => attachFeedback(b, raw, lines, candidates));
+    .map((b) =>
+      promptVersion === 'v3' || promptVersion === 'v4'
+        ? attachBoundedFeedback(b, raw, lines, candidates, request.id)
+        : attachFeedback(b, raw, lines, candidates),
+    );
 
   if (distinct.length === 1) return { kind: 'parsed', block: distinct[0]! };
   return { kind: 'choose', options: distinct };

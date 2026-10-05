@@ -15,15 +15,24 @@ const TS_FSRS_5_4_2_DEFAULT_W = [
   0.6014, 1.8729, 0.5425, 0.0912, 0.0658, 0.1542,
 ] as const;
 
-export const SCHEDULER_CONFIGS: Record<string, SchedulerConfig> = {
-  'fsrs-1': {
-    request_retention: 0.9,
-    maximum_interval: 365,
-    enable_fuzz: false,
-    enable_short_term: false,
-    w: TS_FSRS_5_4_2_DEFAULT_W,
+// Versions come from imported files. A null prototype makes every lookup, including callers that
+// use bracket notation, an own-key lookup rather than an Object.prototype lookup.
+export const SCHEDULER_CONFIGS: Record<string, SchedulerConfig> = Object.assign(
+  Object.create(null) as Record<string, SchedulerConfig>,
+  {
+    'fsrs-1': {
+      request_retention: 0.9,
+      maximum_interval: 365,
+      enable_fuzz: false,
+      enable_short_term: false,
+      w: TS_FSRS_5_4_2_DEFAULT_W,
+    },
   },
-};
+);
+
+export function schedulerConfig(version: string): SchedulerConfig | undefined {
+  return Object.hasOwn(SCHEDULER_CONFIGS, version) ? SCHEDULER_CONFIGS[version] : undefined;
+}
 
 export const CURRENT_SCHEDULER = 'fsrs-1';
 export const RATING_POLICY = 'v1';

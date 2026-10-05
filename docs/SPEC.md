@@ -1,6 +1,6 @@
 # Product Spec
 
-Status: draft v0.5 (2026-10-04, repositioned after the difficulty consultation). Working name: **Premise** (placeholder; see Open questions).
+Status: draft v0.6 (2026-10-04, security audit alignment). Working name: **Premise** (placeholder; see Open questions).
 
 ## 1. Purpose
 
@@ -88,6 +88,8 @@ Home (Today, Awaiting grading, due count) · Session · Grade · Results · Prog
 
 Mobile-first; usable at 360px wide. Keyboard-navigable; WCAG 2.2 AA contrast; validated manually with a screen reader (`ARCHITECTURE.md` §11).
 
+The deployed site contains production content only. Draft exercises remain available in a local build, not on the public site (`DECISIONS.md`, 2026-10-04 production deploy decision).
+
 ## 7. Out of scope for the first release
 
 Accounts, sync, merge import, hosted AI grading, multiple-choice questions, timed full tests, writing practice, social features, native apps, progress charts beyond the counts above, chatbot endorsements, and the 100-exercise target.
@@ -107,4 +109,3 @@ Accounts, sync, merge import, hosted AI grading, multiple-choice questions, time
 1. Final product name (must avoid "LSAT" and LSAC marks).
 2. May the README describe the target exam by name in one descriptive sentence with a trademark disclaimer? Default: no.
 3. Must public exercises have a reviewer other than their author once outside contributors exist? Default: per exercise, an exercise with any contributor who is not a maintainer must be approved by a maintainer who is not one of its contributors; exercises written only by maintainers may be approved by a maintainer. The content build enforces this (`EXERCISE_FORMAT.md` §4).
-4. Can the owner study draft exercises on the deployed site before approving them? Default: no; production builds exclude drafts (`EXERCISE_FORMAT.md` §6), so the owner approves exercises or studies on a local build.

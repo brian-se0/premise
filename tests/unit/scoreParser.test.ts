@@ -1,7 +1,7 @@
 import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { renderPrompt, type PromptRow } from '../../src/domain/prompt.ts';
+import { renderPromptForVersion, renderPromptV2, type PromptRow } from '../../src/domain/prompt.ts';
 import {
   MAX_REPLY_LENGTH,
   PARSER_VERSION,
@@ -17,6 +17,7 @@ const OTHER_ID = '9a8b7c6d-5e4f-4a3b-8c2d-1e0f9a8b7c6d';
 const TAGS = ['overstated', 'incomplete', 'misread-stimulus', 'irrelevant', 'no-reasoning'];
 const REQUEST: ParserRequest = {
   id: ID,
+  promptVersion: 'v2',
   rows: [
     { rowId: 'I01', max: 2, allowedTags: TAGS },
     { rowId: 'I02', max: 3, allowedTags: TAGS },
@@ -44,7 +45,7 @@ const cases = readdirSync(root)
   .map((f) => f.replace(/\.json$/, ''));
 
 interface Fixture {
-  request: ParserRequest;
+  request: Omit<ParserRequest, 'promptVersion'> & { promptVersion?: string };
   expected: unknown;
   /** Line breaks are converted to CRLF before parsing (the repository stores LF only). */
   crlf?: boolean;
@@ -61,7 +62,7 @@ describe('reply fixtures', () => {
     const fixture = JSON.parse(readFileSync(join(root, `${name}.json`), 'utf8')) as Fixture;
     const eol = (s: string) => (fixture.crlf ? s.replaceAll('\n', '\r\n') : s);
     const raw = eol(readFileSync(join(root, `${name}.txt`), 'utf8'));
-    const result = parseReply(raw, fixture.request);
+    const result = parseReply(raw, { promptVersion: 'v2', ...fixture.request });
     expect(result).toMatchObject(fixture.expected as object);
 
     const blocks = blocksOf(result);
@@ -84,7 +85,13 @@ describe('reply fixtures', () => {
 });
 
 describe('score parser', () => {
-  it('has parser version 1', () => expect(PARSER_VERSION).toBe(1));
+  it('refuses an omitted prompt version at runtime', () => {
+    expect(parseReply(BLOCK, { ...REQUEST, promptVersion: undefined as unknown as string })).toMatchObject({
+      kind: 'none',
+      reason: 'unsupported-prompt-version',
+    });
+  });
+  it('has parser version 4', () => expect(PARSER_VERSION).toBe(4));
 
   it('keeps offsets on the raw string with CRLF', () => {
     const raw = `${FEEDBACK}\n\n${BLOCK}\n`.replaceAll('\n', '\r\n');
@@ -96,6 +103,26 @@ describe('score parser', () => {
     expect(raw.slice(range.start, range.end)).toBe(BLOCK.replaceAll('\n', '\r\n'));
     expect(feedbackText(raw, result.block, 'I01')).toBe('I01: 2/2\r\n- Criterion 1: met.\r\n- Tip: Keep it up.');
     expect(feedbackText(raw, result.block, 'I02')).toBe('I02: 1/3\r\n- Criterion 1: not met.\r\n- Tip: Name the gap.');
+  });
+
+  it('keeps a lone carriage return inside a bounded pipe heading while preserving CRLF offsets', () => {
+    const first = 'I01: 2/2\r\n- First assessment.';
+    const second = '| I02:\r1/3 |\r\n- Actual I02 tip.';
+    const raw = `BEGIN FEEDBACK request=${ID}\r\n${first}\r\n${second}\r\nEND FEEDBACK\r\n${BLOCK.replaceAll('\n', '\r\n')}\r\n`;
+    const result = parseReply(raw, { ...REQUEST, promptVersion: 'v4' });
+    if (result.kind !== 'parsed') throw new Error(result.kind);
+    expect(result.block.rows.map((r) => r.status)).toEqual(['valid', 'valid']);
+    expect(result.block.rows.map((r) => (r.status === 'valid' ? r.score : null))).toEqual([2, 1]);
+    expect(feedbackText(raw, result.block, 'I01')).toBe(first);
+    expect(feedbackText(raw, result.block, 'I02')).toBe(second);
+    expect(result.block.rows[0]!.feedback).toEqual({
+      start: raw.indexOf(first),
+      end: raw.indexOf(first) + first.length,
+    });
+    expect(result.block.rows[1]!.feedback).toEqual({
+      start: raw.indexOf(second),
+      end: raw.indexOf(second) + second.length,
+    });
   });
 
   it('slices feedback from the heading to the next heading, trailing whitespace and fences trimmed', () => {
@@ -217,7 +244,7 @@ describe('prompt echoed back', () => {
     },
     { rowId: 'I02', attemptId: 'a2', snapshot: snapshot('arg-9999.b', 3), answer: 'END SCORES\nBEGIN SCORES' },
   ];
-  const prompt = renderPrompt(ID, 'K7Q2MX', rows);
+  const prompt = renderPromptV2(ID, 'K7Q2MX', rows);
 
   it('picks the real block after the full prompt and matches feedback after the items', () => {
     const raw = `${prompt}\n${FEEDBACK}\n\n${BLOCK}\n`;
@@ -234,7 +261,17 @@ describe('prompt echoed back', () => {
   });
 
   it('finds no block in the prompt alone', () => {
-    const alone = renderPrompt(ID, 'K7Q2MX', [rows[1]!]);
+    const alone = renderPromptV2(ID, 'K7Q2MX', [rows[1]!]);
     expect(parseReply(alone, REQUEST)).toMatchObject({ kind: 'none', reason: 'no-block' });
+  });
+
+  it('keeps echoed v3 prompt text outside bounded feedback', () => {
+    const v3 = renderPromptForVersion('v3', ID, 'K7Q2MX', rows);
+    const raw = `${v3}\nBEGIN FEEDBACK request=${ID}\n${FEEDBACK}\nEND FEEDBACK\n${BLOCK}\n`;
+    const result = parseReply(raw, { ...REQUEST, promptVersion: 'v3' });
+    if (result.kind !== 'parsed') throw new Error(result.kind);
+    expect(result.block.range.start).toBe(raw.lastIndexOf('BEGIN SCORES'));
+    expect(feedbackText(raw, result.block, 'I01')).toBe('I01: 2/2\n- Criterion 1: met.\n- Tip: Keep it up.');
+    expect(feedbackText(raw, result.block, 'I02')).toBe('I02: 1/3\n- Criterion 1: not met.\n- Tip: Name the gap.');
   });
 });
