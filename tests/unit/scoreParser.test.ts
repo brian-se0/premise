@@ -91,7 +91,7 @@ describe('score parser', () => {
       reason: 'unsupported-prompt-version',
     });
   });
-  it('has parser version 3', () => expect(PARSER_VERSION).toBe(3));
+  it('has parser version 4', () => expect(PARSER_VERSION).toBe(4));
 
   it('keeps offsets on the raw string with CRLF', () => {
     const raw = `${FEEDBACK}\n\n${BLOCK}\n`.replaceAll('\n', '\r\n');

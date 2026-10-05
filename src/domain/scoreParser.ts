@@ -1,9 +1,9 @@
-// Score block parser, parser version 3 (docs/GRADING_PROTOCOL.md §§4–7).
+// Score block parser, parser version 4 (docs/GRADING_PROTOCOL.md §§4–7).
 // Pure: reads a pasted reply against one grading request. Never repairs, clamps or guesses a score.
 
 import type { ParseOutcome, Range } from './records.ts';
 
-export const PARSER_VERSION = 3;
+export const PARSER_VERSION = 4;
 export const MAX_REPLY_LENGTH = 200_000;
 /** The only score block version this parser reads (prompt version v2). */
 const BLOCK_VERSION = 2;
@@ -91,8 +91,13 @@ const BULLET = new RegExp(`^[-*•]${WS}+`);
 const UNFILLED_SCORE = new RegExp(`^__${WS}*/`);
 const FENCE_LINE = /^(`{3,}|~{3,})[\w+-]*$/;
 const FEEDBACK_FENCE_START = /^(`{3,}|~{3,})(.*)$/;
-const MARKDOWN_HEADING = /^#{1,6}[ \t]+/;
+const MARKDOWN_HEADING = /#{1,6}[ \t]+/y;
 const HEADING_SCORE = new RegExp(`^(${WS}*(?:\\d+|\\?)${WS}*/${WS}*\\d+)(?=${WS}|$|[^\\w/])`);
+const FEEDBACK_LIST_MARKER = /^(?:[-*+•]|\d+[.)])[ \t]+/;
+const HEADING_DECORATORS = /^[*_`~]*/;
+const HEADING_PREFIX_DECORATORS = /[*_`~]+/y;
+const BOUNDED_HEADING_ID = /^I\d+/i;
+const BOUNDED_HEADING_SEPARATOR = /^[:.\-–—]/;
 const END_OF_ITEMS = '=== END OF ITEMS ===';
 
 /** One line of the reply: raw offsets (line break excluded) and the cleaned text used for matching. */
@@ -340,6 +345,72 @@ function attachFeedback(block: ParsedBlock, raw: string, lines: Line[], candidat
   return { ...block, rows };
 }
 
+interface BoundedHeading {
+  id: string;
+  quoted: boolean;
+  /** An unsupported heading still bounds the preceding row, but cannot start its own feedback. */
+  attributable: boolean;
+  score: { points: string; max: string } | null;
+}
+
+function skipScoreDecoration(text: string): string {
+  let i = 0;
+  while (i < text.length) {
+    const char = text[i]!;
+    if (IS_WS.test(char) || '*_`([{'.includes(char)) i++;
+    else break;
+  }
+  return text.slice(i);
+}
+
+/** The bounded reader's single interpretation of a raw heading line, including its score. */
+function recognizeBoundedHeading(rawLine: string): BoundedHeading | null {
+  let line = trimWs(rawLine);
+  const quoted = line.startsWith('>');
+  if (quoted) line = trimWs(line.replace(/^(?:>[ \t]*)+/, ''));
+  line = trimWs(line.replace(FEEDBACK_LIST_MARKER, ''));
+  let offset = 0;
+  let prefixHasTilde = false;
+  let markedHeading = false;
+  // The heading marks may sit outside or inside emphasis/code wrappers.
+  while (offset < line.length) {
+    while (offset < line.length && IS_WS.test(line[offset]!)) offset++;
+    MARKDOWN_HEADING.lastIndex = offset;
+    const marks = MARKDOWN_HEADING.exec(line);
+    if (marks) {
+      markedHeading = true;
+      offset = MARKDOWN_HEADING.lastIndex;
+      continue;
+    }
+    HEADING_PREFIX_DECORATORS.lastIndex = offset;
+    const wrapper = HEADING_PREFIX_DECORATORS.exec(line)?.[0];
+    if (!wrapper) break;
+    prefixHasTilde ||= wrapper.includes('~');
+    offset = HEADING_PREFIX_DECORATORS.lastIndex;
+  }
+  line = trimWs(line.slice(offset));
+  const id = BOUNDED_HEADING_ID.exec(line)?.[0];
+  if (!id) return null;
+  line = line.slice(id.length);
+  const suffix = HEADING_DECORATORS.exec(line)![0];
+  line = trimWs(line.slice(suffix.length));
+  const separator = BOUNDED_HEADING_SEPARATOR.exec(line)?.[0];
+  // A bare marked ID or an ID followed by score/max is row-shaped but not an attributable label.
+  // Ordinary prose such as "I02 is discussed below" is not a heading.
+  if (!separator && line !== '' && !markedHeading && !HEADING_SCORE.test(skipScoreDecoration(line))) return null;
+
+  const attributable = separator === ':' && !prefixHasTilde && !suffix.includes('~');
+  let remainder = skipScoreDecoration(line.slice(separator?.length ?? 0));
+  remainder = skipScoreDecoration(remainder.replace(/^Score\b(?:[ \t]*:)?[ \t]*/i, ''));
+  const token = HEADING_SCORE.exec(remainder)?.[1];
+  let score: BoundedHeading['score'] = null;
+  if (token) {
+    const [points, max] = token.split('/').map(trimWs);
+    score = { points: points!, max: max! };
+  }
+  return { id: id.toUpperCase(), quoted, attributable, score };
+}
+
 /**
  * Prompts v3 and v4 require one explicit, request-matching feedback section for the chosen score block.
  * Unbounded prose, echoed answers and ambiguous sections never become row feedback.
@@ -378,28 +449,24 @@ function attachBoundedFeedback(
   // the section boundaries and selected score block already identify the region.
   if (
     lines.some(
-      (l) =>
-        l.start >= end.end &&
-        l.start < regionEnd &&
-        l.text !== null &&
-        HEADING_LINE.test(l.text.replace(MARKDOWN_HEADING, '')),
+      (l) => l.start >= end.end && l.start < regionEnd && recognizeBoundedHeading(raw.slice(l.start, l.end)) !== null,
     )
   ) {
     return block;
   }
 
-  const headings: { line: Line; id: string; eligible: boolean }[] = [];
+  const headings: { line: Line; heading: BoundedHeading; eligible: boolean }[] = [];
   let fence: { mark: string; length: number } | null = null;
   for (const l of lines) {
     if (l.start <= begin.start || l.start >= end.start) continue;
     const original = trimWs(raw.slice(l.start, l.end));
     // A quoted or fenced heading ends the preceding row but is not itself attributable feedback.
     // This prevents one row from absorbing another when a grader's fence closes unexpectedly.
-    const heading = l.text?.replace(MARKDOWN_HEADING, '');
-    const headingId = heading && HEADING_LINE.test(heading) ? heading.slice(0, 3).toUpperCase() : null;
+    const heading = recognizeBoundedHeading(original);
     const quoted = original.startsWith('>');
-    const fenceStart = FEEDBACK_FENCE_START.exec(original);
-    if (headingId && !fenceStart) headings.push({ line: l, id: headingId, eligible: !quoted && !fence });
+    const fenceStart = FEEDBACK_FENCE_START.exec(original.replace(FEEDBACK_LIST_MARKER, ''));
+    if (heading && !fenceStart)
+      headings.push({ line: l, heading, eligible: heading.attributable && !heading.quoted && !fence });
     if (quoted) continue;
     if (fence) {
       let runLength = 0;
@@ -416,14 +483,13 @@ function attachBoundedFeedback(
   if (fence) return block;
 
   const rows = block.rows.map((r) => {
-    const own = headings.filter((h) => h.eligible && h.id === r.rowId.toUpperCase());
+    const own = headings.filter((h) => h.eligible && h.heading.id === r.rowId.toUpperCase());
     if (own.length !== 1) return r;
-    const heading = own[0]!.line.text!.replace(MARKDOWN_HEADING, '');
-    const score = HEADING_SCORE.exec(heading.slice(4));
+    const score = own[0]!.heading.score;
     if (score) {
       if (r.status !== 'valid') return r;
-      const [points, max] = score[1]!.split('/').map((part) => trimWs(part));
-      if (Number(max) !== r.max || (points === '?' ? r.score !== null : Number(points) !== r.score)) return r;
+      if (Number(score.max) !== r.max || (score.points === '?' ? r.score !== null : Number(score.points) !== r.score))
+        return r;
     }
     const start = own[0]!.line.start;
     const boundary = headings.find((h) => h.line.start > start)?.line.start ?? end.start;
