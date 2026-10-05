@@ -193,6 +193,7 @@ function CopySection({
 }) {
   // The disclosure comes before the prompt leaves the page by either route: clipboard or manual copy.
   const [showDisclosure, setShowDisclosure] = useState<'copy' | 'show' | null>(null);
+  const [disclosureError, setDisclosureError] = useState('');
   const [copied, setCopied] = useState(false);
   const [fallback, setFallback] = useState(false);
 
@@ -232,15 +233,21 @@ function CopySection({
             className="primary"
             onClick={() => {
               const then = showDisclosure;
-              setShowDisclosure(null);
               // Copy inside the click itself: browsers only allow a clipboard write during the gesture.
               if (then === 'copy') void copy();
-              else setFallback(true);
-              void saveSetting('disclosureSeen', true);
+              // Keep the choice on screen until it is durable. A quick reload must not ask again
+              // after the prompt has been shown or copied.
+              void saveSetting('disclosureSeen', true)
+                .then(() => {
+                  setShowDisclosure(null);
+                  if (then === 'show') setFallback(true);
+                })
+                .catch((e: unknown) => setDisclosureError(`Could not save your choice: ${errorText(e)}`));
             }}
           >
             {showDisclosure === 'copy' ? 'I understand, copy' : 'I understand, show the prompt'}
           </button>
+          {disclosureError && <p role="alert">{disclosureError}</p>}
         </div>
       ) : (
         <div className="row">
