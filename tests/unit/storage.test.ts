@@ -6,9 +6,10 @@ import 'fake-indexeddb/auto';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { loadExercises } from '../../scripts/content.ts';
 import { checkDataSet } from '../../src/domain/integrity.ts';
-import type { AttemptRecord, CardRecord, DataSet } from '../../src/domain/records.ts';
+import type { AttemptRecord, CardRecord, DataSet, SessionRecord } from '../../src/domain/records.ts';
 import { Rating, review } from '../../src/domain/scheduler.ts';
 import { CURRENT_SCHEDULER } from '../../src/domain/schedulerConfig.ts';
+import { parseReply, PARSER_VERSION } from '../../src/domain/scoreParser.ts';
 import { buildSnapshot } from '../../src/domain/snapshot.ts';
 import type { Snapshot } from '../../src/domain/types.ts';
 import {
@@ -38,11 +39,13 @@ import {
   saveReply,
   setTags,
   setTaskControls,
+  skipAttempt,
   StaleError,
   startSession,
   submitAttempt,
   undoLatest,
   type GradeRow,
+  type DraftPrecondition,
   type OpContext,
 } from '../../src/storage/ops.ts';
 
@@ -55,7 +58,8 @@ const ctx = (): OpContext => ({
   now,
   newId: () => {
     n++;
-    return ids === 'asc' ? `id-${String(n).padStart(4, '0')}` : `id-${String(9999 - n).padStart(4, '0')}`;
+    const ordinal = ids === 'asc' ? n : 9999 - n;
+    return `00000000-0000-4000-8000-${String(ordinal).padStart(12, '0')}`;
   },
   random: () => ((n * 7919) % 1000) / 1000,
 });
@@ -82,12 +86,23 @@ async function open(sessionId: string, index: number, taskId: string): Promise<A
   return r.attempt;
 }
 
+async function expectedDraft(
+  attempt: AttemptRecord,
+  entryIndex = 0,
+  revision = attempt.revision,
+  answer = attempt.answer,
+): Promise<DraftPrecondition> {
+  const session = await db.sessions.get(attempt.sessionId);
+  if (!session) throw new Error(`Session ${attempt.sessionId} missing in test setup`);
+  return { session, entryIndex, attempt: { ...attempt, revision, answer } };
+}
+
 async function answer(taskIds: string[], answers: string[] = taskIds.map((_, i) => `answer ${i}`)) {
   const session = await startSession(db, ctx(), 'today', taskIds);
   const attemptIds: string[] = [];
   for (const [i, t] of taskIds.entries()) {
     const a = await open(session.id, i, t);
-    await submitAttempt(db, ctx(), a.id, a.revision, answers[i]!, 30);
+    await submitAttempt(db, ctx(), await expectedDraft(a, i), answers[i]!, 30);
     attemptIds.push(a.id);
   }
   await endSession(db, ctx(), session.id);
@@ -108,12 +123,45 @@ async function row(attemptId: string, score: number | null, extra: Partial<Grade
     revision: a.revision,
     score,
     tags: [],
-    source: 'parsed',
+    source: 'manual',
     disqualified: false,
     feedbackRange: null,
     ratingChoice: 'good',
     ...extra,
   };
+}
+
+/** A real parsed row and its immutable saved reply for provenance-sensitive tests. */
+async function parsedGradeRow(
+  requestId: string,
+  attemptId: string,
+  score: number | null,
+  saveOpId: string,
+): Promise<GradeRow> {
+  const request = (await db.requests.get(requestId))!;
+  const rowId = Object.entries(request.rows).find(([, id]) => id === attemptId)?.[0];
+  if (!rowId) throw new Error('Attempt is not in the request');
+  const parserRows = await Promise.all(
+    Object.entries(request.rows).map(async ([id, ownedAttemptId]) => {
+      const owned = (await db.attempts.get(ownedAttemptId))!;
+      const snapshot = (await db.snapshots.get(owned.snapshotHash))!;
+      return { rowId: id, max: snapshot.max, allowedTags: snapshot.allowedTags };
+    }),
+  );
+  const max = parserRows.find((r) => r.rowId === rowId)!.max;
+  const token = score === null ? '?' : String(score);
+  const raw = `BEGIN FEEDBACK request=${requestId}\n${rowId}: ${token}/${max}\n- Tip: Check the reasoning.\nEND FEEDBACK\nBEGIN SCORES v2 request=${requestId}\n${rowId} | ${token}/${max} | -\nEND SCORES`;
+  const parsed = parseReply(raw, { id: requestId, promptVersion: request.promptVersion, rows: parserRows });
+  if (parsed.kind !== 'parsed') throw new Error('Expected a parsed reply');
+  const result = parsed.block.rows.find((r) => r.rowId === rowId);
+  if (result?.status !== 'valid') throw new Error('Expected a valid parsed row');
+  const { replyId } = await saveReply(db, ctx(), saveOpId, requestId, {
+    raw,
+    parserVersion: PARSER_VERSION,
+    selectedBlock: parsed.block.range,
+    parseOutcome: parsed.block.outcome,
+  });
+  return row(attemptId, score, { source: 'parsed', replyId, feedbackRange: result.feedback });
 }
 
 async function rev(attemptId: string): Promise<number> {
@@ -222,7 +270,14 @@ describe('confirmRows', () => {
 
   it('keeps needs-review rows open, then resolves them with a manual score', async () => {
     const { attemptIds, requestId } = await prepared(['arg-0001.flaw']);
-    await confirmRows(db, ctx(), 'c1', requestId, [await row(attemptIds[0]!, null)], null);
+    await confirmRows(
+      db,
+      ctx(),
+      'c1',
+      requestId,
+      [await parsedGradeRow(requestId, attemptIds[0]!, null, 'saved-needs-review')],
+      null,
+    );
     expect((await db.requests.get(requestId))!.status).toBe('open');
     expect(await db.reviewLogs.count()).toBe(0);
     await confirmRows(db, ctx(), 'c2', requestId, [await row(attemptIds[0]!, 2, { source: 'manual' })], null);
@@ -271,7 +326,7 @@ describe('confirmRows', () => {
     const retry = await startSession(db, ctx(), 'retry', ['arg-0001.flaw']);
     const coached = await open(retry.id, 0, 'arg-0001.flaw');
     expect(coached.kind).toBe('coached');
-    await submitAttempt(db, ctx(), coached.id, coached.revision, 'better', null);
+    await submitAttempt(db, ctx(), await expectedDraft(coached), 'better', null);
     const { requestIds } = await prepareGrading(db, ctx(), 'p2', [coached.id], 4);
     await confirmRows(db, ctx(), 'c2', requestIds[0]!, [await row(coached.id, 2)], null);
     expect(await db.reviewLogs.count()).toBe(1);
@@ -283,26 +338,117 @@ describe('drafts and submission', () => {
   it('saveDraft checks and increments the revision; a stale editor writes nothing', async () => {
     const s = await startSession(db, ctx(), 'today', ['arg-0001.flaw']);
     const a = await open(s.id, 0, 'arg-0001.flaw');
-    const first = await saveDraft(db, ctx(), a.id, a.revision, 'tab one');
+    const first = await saveDraft(db, ctx(), await expectedDraft(a), 'tab one');
     expect(first.revision).toBe(a.revision + 1);
-    await expectUnchanged(() => saveDraft(db, ctx(), a.id, a.revision, 'tab two'), StaleError);
-    await expectUnchanged(() => submitAttempt(db, ctx(), a.id, a.revision, 'tab two', 1), StaleError);
+    await expectUnchanged(async () => saveDraft(db, ctx(), await expectedDraft(a), 'tab two'), StaleError);
+    await expectUnchanged(async () => submitAttempt(db, ctx(), await expectedDraft(a), 'tab two', 1), StaleError);
     expect((await db.attempts.get(a.id))!.answer).toBe('tab one');
-    await submitAttempt(db, ctx(), a.id, first.revision, 'tab one', 1);
-    await expectUnchanged(() => saveDraft(db, ctx(), a.id, first.revision + 1, 'late'), StaleError);
+    await submitAttempt(db, ctx(), await expectedDraft(a, 0, first.revision, 'tab one'), 'tab one', 1);
+    await expectUnchanged(
+      async () => saveDraft(db, ctx(), await expectedDraft(a, 0, first.revision + 1), 'late'),
+      StaleError,
+    );
   });
 
   it('a retried submission with the same text succeeds; different text is a distinct conflict', async () => {
     const s = await startSession(db, ctx(), 'today', ['arg-0001.flaw']);
     const a = await open(s.id, 0, 'arg-0001.flaw');
-    const submitted = await submitAttempt(db, ctx(), a.id, a.revision, 'mine', 10);
+    const submitted = await submitAttempt(db, ctx(), await expectedDraft(a), 'mine', 10);
+    await endSession(db, ctx(), s.id);
     const before = await dump();
-    expect(await submitAttempt(db, ctx(), a.id, a.revision, 'mine', 99)).toEqual(submitted);
+    expect(await submitAttempt(db, ctx(), await expectedDraft(a), 'mine', 99)).toEqual(submitted);
     expect(await dump()).toEqual(before);
-    const conflict = submitAttempt(db, ctx(), a.id, a.revision, 'theirs', 10);
+    const conflict = submitAttempt(db, ctx(), await expectedDraft(a), 'theirs', 10);
     await expect(conflict).rejects.toBeInstanceOf(AlreadySubmittedError);
     await expect(conflict).rejects.toMatchObject({ attempt: { answer: 'mine' } });
     expect(await dump()).toEqual(before);
+  });
+
+  it('a stale tab cannot skip a newer saved draft', async () => {
+    const s = await startSession(db, ctx(), 'today', ['arg-0001.flaw']);
+    const a = await open(s.id, 0, 'arg-0001.flaw');
+    await saveDraft(db, ctx(), await expectedDraft(a), 'newer work');
+    await expectUnchanged(async () => skipAttempt(db, ctx(), await expectedDraft(a)), StaleError);
+    expect(await db.attempts.get(a.id)).toMatchObject({ answer: 'newer work', state: 'draft' });
+    await skipAttempt(db, ctx(), await expectedDraft(a, 0, await rev(a.id), 'newer work'));
+    expect(await db.attempts.get(a.id)).toMatchObject({ answer: 'newer work', state: 'skipped' });
+  });
+
+  it('refuses save, submit and skip when a replacement has the same revision but different text', async () => {
+    const session = await startSession(db, ctx(), 'today', ['arg-0001.flaw']);
+    const attempt = await open(session.id, 0, 'arg-0001.flaw');
+    const expected = await expectedDraft(attempt);
+    await db.attempts.update(attempt.id, { answer: 'answer from replacement backup' });
+
+    await expectUnchanged(() => saveDraft(db, ctx(), expected, 'stale local edit'), StaleError);
+    await expectUnchanged(() => submitAttempt(db, ctx(), expected, 'stale local edit', 5), StaleError);
+    await expectUnchanged(() => skipAttempt(db, ctx(), expected), StaleError);
+  });
+
+  it.each([
+    ['session removed', async (s: SessionRecord) => db.sessions.delete(s.id)],
+    [
+      'session entry repointed',
+      async (s: SessionRecord) => db.sessions.update(s.id, { entries: [{ taskId: 'arg-0001.flaw', attemptId: null }] }),
+    ],
+    [
+      'session creation changed',
+      async (s: SessionRecord) => db.sessions.update(s.id, { createdAt: '2026-10-06T15:00:00.000Z' }),
+    ],
+    ['session mode changed', async (s: SessionRecord) => db.sessions.update(s.id, { mode: 'library' })],
+  ] as const)('refuses all draft mutations when the %s', async (_label, replace) => {
+    const session = await startSession(db, ctx(), 'today', ['arg-0001.flaw']);
+    const attempt = await open(session.id, 0, 'arg-0001.flaw');
+    const expected = await expectedDraft(attempt);
+    await replace(session);
+
+    await expectUnchanged(() => saveDraft(db, ctx(), expected, 'stale local edit'), StaleError);
+    await expectUnchanged(() => submitAttempt(db, ctx(), expected, 'stale local edit', 5), StaleError);
+    await expectUnchanged(() => skipAttempt(db, ctx(), expected), StaleError);
+  });
+
+  it.each([
+    ['sessionId', { sessionId: 'other-session' }],
+    ['taskId', { taskId: 'arg-0001.conclusion' }],
+    ['snapshotHash', { snapshotHash: '0'.repeat(64) }],
+    ['kind', { kind: 'review' as const }],
+    ['startedAt', { startedAt: '2026-10-06T15:00:00.000Z' }],
+    ['stimulusSeenBefore', { stimulusSeenBefore: true }],
+    ['ratingChoice', { ratingChoice: 'hard' as const }],
+  ] as const)(
+    'refuses all draft mutations when replacement changes %s at the same revision',
+    async (_field, change) => {
+      const session = await startSession(db, ctx(), 'today', ['arg-0001.flaw']);
+      const attempt = await open(session.id, 0, 'arg-0001.flaw');
+      const expected = await expectedDraft(attempt);
+      await db.attempts.update(attempt.id, change);
+
+      await expectUnchanged(() => saveDraft(db, ctx(), expected, 'stale local edit'), StaleError);
+      await expectUnchanged(() => submitAttempt(db, ctx(), expected, 'stale local edit', 5), StaleError);
+      await expectUnchanged(() => skipAttempt(db, ctx(), expected), StaleError);
+    },
+  );
+
+  it('does not mistake a different submitted attempt for an idempotent retry', async () => {
+    const session = await startSession(db, ctx(), 'today', ['arg-0001.flaw']);
+    const attempt = await open(session.id, 0, 'arg-0001.flaw');
+    const expected = await expectedDraft(attempt);
+    await db.attempts.update(attempt.id, {
+      state: 'submitted',
+      answer: 'same text',
+      startedAt: '2026-10-06T15:00:00.000Z',
+    });
+    await expectUnchanged(() => submitAttempt(db, ctx(), expected, 'same text', 5), StaleError);
+  });
+
+  it('refuses a revision increment that would round instead of advancing', async () => {
+    const s = await startSession(db, ctx(), 'today', ['arg-0001.flaw']);
+    const a = await open(s.id, 0, 'arg-0001.flaw');
+    await db.attempts.update(a.id, { revision: Number.MAX_SAFE_INTEGER });
+    await expectUnchanged(
+      async () => saveDraft(db, ctx(), await expectedDraft(a, 0, Number.MAX_SAFE_INTEGER), 'overwritten'),
+      OpError,
+    );
   });
 
   it('keeps submitted fields frozen through every operation', async () => {
@@ -321,8 +467,9 @@ describe('drafts and submission', () => {
     });
     const original = frozen((await db.attempts.get(id))!);
     now = '2026-10-06T15:00:00.000Z';
-    await expect(saveDraft(db, ctx(), id, await rev(id), 'edited')).rejects.toBeInstanceOf(StaleError);
-    await expect(submitAttempt(db, ctx(), id, await rev(id), 'edited', 1)).rejects.toBeInstanceOf(StaleError);
+    const stored = (await db.attempts.get(id))!;
+    await expect(saveDraft(db, ctx(), await expectedDraft(stored), 'edited')).rejects.toBeInstanceOf(StaleError);
+    await expect(submitAttempt(db, ctx(), await expectedDraft(stored), 'edited', 1)).rejects.toBeInstanceOf(StaleError);
     await confirmRows(db, ctx(), 'c1', requestId, [await row(id, 1)], null);
     await setTags(db, ctx(), 't1', id, await rev(id), ['correlation-causation']);
     await correctGrade(db, ctx(), 'f1', await row(id, 2, { source: 'manual', tags: ['correlation-causation'] }));
@@ -335,6 +482,43 @@ describe('drafts and submission', () => {
 });
 
 describe('opening work rechecks eligibility', () => {
+  it('does not end a session that still holds a draft answer', async () => {
+    const session = await startSession(db, ctx(), 'today', ['arg-0001.flaw']);
+    const attempt = await open(session.id, 0, 'arg-0001.flaw');
+    await saveDraft(db, ctx(), await expectedDraft(attempt), 'unfinished reasoning');
+    await expectUnchanged(() => endSession(db, ctx(), session.id), OpError);
+    expect((await db.sessions.get(session.id))?.endedAt).toBeNull();
+  });
+
+  it('lets New only reopen skipped work but refuses a task submitted since planning', async () => {
+    const taskId = 'arg-0001.flaw';
+    const first = await startSession(db, ctx(), 'new', [taskId]);
+    const skipped = await open(first.id, 0, taskId);
+    await skipAttempt(db, ctx(), await expectedDraft(skipped));
+    await endSession(db, ctx(), first.id);
+
+    const second = await startSession(db, ctx(), 'new', [taskId]);
+    const resumed = await open(second.id, 0, taskId);
+    expect(resumed.kind).toBe('new');
+    await submitAttempt(db, ctx(), await expectedDraft(resumed), 'an answer', 5);
+
+    const stale = await startSession(db, ctx(), 'new', [taskId]);
+    const before = await dump();
+    expect(await openEntry(db, ctx(), stale.id, 0, snaps.get(taskId)!)).toMatchObject({
+      status: 'ineligible',
+      reason: 'awaiting-grade',
+    });
+    expect(await dump()).toEqual(before);
+
+    const prepared = await prepareGrading(db, ctx(), 'new-after-skip', [resumed.id], 4);
+    await confirmRows(db, ctx(), 'grade-after-skip', prepared.requestIds[0]!, [await row(resumed.id, 2)], null);
+    now = '2026-10-07T15:00:00.000Z';
+    expect(await openEntry(db, ctx(), stale.id, 0, snaps.get(taskId)!)).toMatchObject({
+      status: 'ineligible',
+      reason: 'already-seen',
+    });
+  });
+
   it('refuses suspended, awaiting-grade and not-before tasks without writing, except coached retries', async () => {
     await setTaskControls(db, ctx(), 's1', 'arg-0002.assumption', { suspended: true });
     const s1 = await startSession(db, ctx(), 'today', ['arg-0002.assumption']);
@@ -371,7 +555,7 @@ describe('opening work rechecks eligibility', () => {
   it('returns a competing draft instead of creating a second attempt, so its text is kept', async () => {
     const s1 = await startSession(db, ctx(), 'today', ['arg-0001.flaw']);
     const a = await open(s1.id, 0, 'arg-0001.flaw');
-    await saveDraft(db, ctx(), a.id, a.revision, 'half an answer');
+    await saveDraft(db, ctx(), await expectedDraft(a), 'half an answer');
     const s2 = await startSession(db, ctx(), 'library', ['arg-0001.flaw']);
     const before = await dump();
     const r = await openEntry(db, ctx(), s2.id, 0, snaps.get('arg-0001.flaw')!);
@@ -380,6 +564,23 @@ describe('opening work rechecks eligibility', () => {
     expect(await dump()).toEqual(before);
     // Reopening the entry that owns the draft still works.
     expect((await open(s1.id, 0, 'arg-0001.flaw')).id).toBe(a.id);
+  });
+
+  it('refuses a stale automatic entry whose card is now due later, while Library can open it', async () => {
+    const { attemptIds, requestId } = await prepared(['arg-0001.flaw']);
+    const stale = await startSession(db, ctx(), 'today', ['arg-0001.flaw']);
+    await confirmRows(db, ctx(), 'c1', requestId, [await row(attemptIds[0]!, 2)], null);
+    const due = (await db.cards.get('arg-0001.flaw'))!.due.slice(0, 10);
+    now = '2026-10-06T15:00:00.000Z';
+    expect(due > '2026-10-06').toBe(true);
+    const before = await dump();
+    expect(await openEntry(db, ctx(), stale.id, 0, snaps.get('arg-0001.flaw')!)).toMatchObject({
+      status: 'ineligible',
+      reason: 'not-due',
+    });
+    expect(await dump()).toEqual(before);
+    const library = await startSession(db, ctx(), 'library', ['arg-0001.flaw']);
+    expect((await open(library.id, 0, 'arg-0001.flaw')).kind).toBe('review');
   });
 });
 
@@ -408,6 +609,18 @@ describe('review order', () => {
 
   it('uses the application sequence when timestamps are equal', async () => {
     await expectBLatest(await twoReviews('2026-10-25T15:00:00.000Z', '2026-10-25T15:00:00.000Z'));
+  });
+
+  it('refuses a review sequence increment beyond safe integer precision atomically', async () => {
+    const first = await prepared(['arg-0001.flaw']);
+    await confirmRows(db, ctx(), 'first-grade', first.requestId, [await row(first.attemptIds[0]!, 2)], null);
+    const log = (await db.reviewLogs.toArray())[0]!;
+    await db.reviewLogs.update(log.id, { seq: Number.MAX_SAFE_INTEGER });
+    const second = await prepared(['arg-0002.assumption']);
+    await expectUnchanged(
+      async () => confirmRows(db, ctx(), 'second-grade', second.requestId, [await row(second.attemptIds[0]!, 2)], null),
+      OpError,
+    );
   });
 
   it('uses the application sequence when the clock moved backwards', async () => {
@@ -472,7 +685,8 @@ describe('correction and undo', () => {
     const card1 = (await db.cards.get(task))!;
     const second = await reviewOnce(task, '2026-10-09T15:00:00.000Z', '2026-10-09T16:00:00.000Z', 2);
     const card2 = (await db.cards.get(task))!;
-    const third = await reviewOnce(task, '2026-10-20T15:00:00.000Z', '2026-10-20T16:00:00.000Z', 0);
+    const thirdDay = card2.due.slice(0, 10);
+    const third = await reviewOnce(task, `${thirdDay}T15:00:00.000Z`, `${thirdDay}T16:00:00.000Z`, 0);
 
     await undoLatest(db, ctx(), 'u3', third, await rev(third));
     expect(await db.cards.get(task)).toEqual(card2);
@@ -496,7 +710,7 @@ describe('correction and undo', () => {
     const { attemptIds, requestId } = await prepared(['arg-0001.conclusion', 'arg-0001.flaw']);
     const [x, y] = attemptIds as [string, string];
     await expectUnchanged(async () => correctGrade(db, ctx(), 'f1', await row(x, 1, { source: 'manual' })), OpError);
-    await confirmRows(db, ctx(), 'c1', requestId, [await row(x, null)], null);
+    await confirmRows(db, ctx(), 'c1', requestId, [await parsedGradeRow(requestId, x, null, 'saved-unknown')], null);
     await discardRows(db, ctx(), 'd1', requestId, [{ attemptId: x, revision: await rev(x) }]);
     await expectUnchanged(async () => correctGrade(db, ctx(), 'f2', await row(x, 1, { source: 'manual' })), OpError);
     await expectUnchanged(async () => undoLatest(db, ctx(), 'u2', x, await rev(x)), OpError);
@@ -615,14 +829,179 @@ describe('replies and provenance', () => {
     );
   });
 
+  it('refuses replies longer than the parser limit in both save paths', async () => {
+    const { attemptIds, requestId } = await prepared(['arg-0001.flaw']);
+    const oversized = {
+      raw: 'x'.repeat(200_001),
+      parserVersion: 2,
+      selectedBlock: null,
+      parseOutcome: 'manual' as const,
+    };
+    await expectUnchanged(() => saveReply(db, ctx(), 'too-long', requestId, oversized), OpError);
+    await expectUnchanged(
+      async () => confirmRows(db, ctx(), 'too-long-confirm', requestId, [await row(attemptIds[0]!, 1)], oversized),
+      OpError,
+    );
+  });
+
+  it('rejects a preview bound to an older answer even when an import reused its revision', async () => {
+    const { attemptIds, requestId } = await prepared(['arg-0001.flaw']);
+    const id = attemptIds[0]!;
+    const a = (await db.attempts.get(id))!;
+    const shown = await row(id, 1, { expectedAnswer: a.answer, expectedSnapshotHash: a.snapshotHash });
+    await db.attempts.update(id, { answer: 'replacement backup answer' });
+    await expectUnchanged(() => confirmRows(db, ctx(), 'stale-answer', requestId, [shown], null), StaleError);
+  });
+
+  it('rechecks a parsed score against the saved reply inside the confirming transaction', async () => {
+    const { attemptIds, requestId } = await prepared(['arg-0001.flaw']);
+    const id = attemptIds[0]!;
+    const snapshot = (await db.snapshots.get((await db.attempts.get(id))!.snapshotHash))!;
+    const raw = `BEGIN FEEDBACK request=${requestId}\nI01: The reasoning misses a gap.\nEND FEEDBACK\nBEGIN SCORES v2 request=${requestId}\nI01 | 1/${snapshot.max} | -\nEND SCORES`;
+    const parsed = parseReply(raw, {
+      id: requestId,
+      promptVersion: (await db.requests.get(requestId))!.promptVersion,
+      rows: [{ rowId: 'I01', max: snapshot.max, allowedTags: snapshot.allowedTags }],
+    });
+    expect(parsed.kind).toBe('parsed');
+    if (parsed.kind !== 'parsed') throw new Error('expected a parsed reply');
+    const { replyId } = await saveReply(db, ctx(), 'saved-parse', requestId, {
+      raw,
+      parserVersion: PARSER_VERSION,
+      selectedBlock: parsed.block.range,
+      parseOutcome: parsed.block.outcome,
+    });
+    const valid = parsed.block.rows[0]!;
+    if (valid.status !== 'valid') throw new Error('expected a valid row');
+    await expectUnchanged(
+      async () =>
+        confirmRows(
+          db,
+          ctx(),
+          'forged-score',
+          requestId,
+          [await row(id, 2, { source: 'parsed', replyId, feedbackRange: valid.feedback })],
+          null,
+        ),
+      OpError,
+    );
+    await confirmRows(
+      db,
+      ctx(),
+      'real-score',
+      requestId,
+      [await row(id, 1, { source: 'parsed', replyId, feedbackRange: valid.feedback })],
+      null,
+    );
+    expect((await db.gradings.toArray())[0]).toMatchObject({ score: 1, replyId });
+  });
+
+  it('refuses a parsed grade without a reply or with an older parser, without writing', async () => {
+    const { attemptIds, requestId } = await prepared(['arg-0001.flaw']);
+    const id = attemptIds[0]!;
+    await expectUnchanged(
+      async () => confirmRows(db, ctx(), 'no-reply', requestId, [await row(id, 1, { source: 'parsed' })], null),
+      OpError,
+    );
+    const { replyId } = await saveReply(db, ctx(), 'old-reply', requestId, {
+      raw: 'An old reply',
+      parserVersion: PARSER_VERSION - 1,
+      selectedBlock: null,
+      parseOutcome: 'manual',
+    });
+    await expectUnchanged(
+      async () =>
+        confirmRows(db, ctx(), 'old-parser', requestId, [await row(id, 1, { source: 'parsed', replyId })], null),
+      OpError,
+    );
+    expect(await db.gradings.count()).toBe(0);
+  });
+
+  it('rechecks a reply inherited from a needs-review grading', async () => {
+    const { attemptIds, requestId } = await prepared(['arg-0001.flaw']);
+    const id = attemptIds[0]!;
+    const pending = await parsedGradeRow(requestId, id, null, 'saved-inherited');
+    await confirmRows(db, ctx(), 'needs-review', requestId, [pending], null);
+    await expectUnchanged(
+      async () => confirmRows(db, ctx(), 'inherited-score', requestId, [await row(id, 1, { source: 'parsed' })], null),
+      OpError,
+    );
+    await db.replies.update(pending.replyId!, { parserVersion: PARSER_VERSION - 1 });
+    await expectUnchanged(
+      async () =>
+        confirmRows(db, ctx(), 'inherited-old-parser', requestId, [await row(id, null, { source: 'parsed' })], null),
+      OpError,
+    );
+  });
+
+  it('accepts only the chosen option of a saved multi-block reply', async () => {
+    const { attemptIds, requestId } = await prepared(['arg-0001.flaw']);
+    const id = attemptIds[0]!;
+    const snapshot = (await db.snapshots.get((await db.attempts.get(id))!.snapshotHash))!;
+    const scoreBlock = (score: number) =>
+      `BEGIN SCORES v2 request=${requestId}\nI01 | ${score}/${snapshot.max} | -\nEND SCORES`;
+    const raw = `${scoreBlock(0)}\n\n${scoreBlock(1)}`;
+    const parsed = parseReply(raw, {
+      id: requestId,
+      promptVersion: (await db.requests.get(requestId))!.promptVersion,
+      rows: [{ rowId: 'I01', max: snapshot.max, allowedTags: snapshot.allowedTags }],
+    });
+    expect(parsed.kind).toBe('choose');
+    if (parsed.kind !== 'choose') throw new Error('Expected two blocks');
+    const first = parsed.options[0]!;
+    const second = parsed.options[1]!;
+    const { replyId: firstReplyId } = await saveReply(db, ctx(), 'first-option', requestId, {
+      raw,
+      parserVersion: PARSER_VERSION,
+      selectedBlock: first.range,
+      parseOutcome: first.outcome,
+    });
+    await expectUnchanged(
+      async () =>
+        confirmRows(
+          db,
+          ctx(),
+          'wrong-option',
+          requestId,
+          [await row(id, 1, { source: 'parsed', replyId: firstReplyId })],
+          null,
+        ),
+      OpError,
+    );
+    const { replyId: secondReplyId } = await saveReply(db, ctx(), 'second-option', requestId, {
+      raw,
+      parserVersion: PARSER_VERSION,
+      selectedBlock: second.range,
+      parseOutcome: second.outcome,
+    });
+    await confirmRows(
+      db,
+      ctx(),
+      'right-option',
+      requestId,
+      [await row(id, 1, { source: 'parsed', replyId: secondReplyId })],
+      null,
+    );
+    expect((await db.gradings.toArray())[0]).toMatchObject({ score: 1, replyId: secondReplyId });
+  });
+
+  it('requires human source labels on a corrected grade', async () => {
+    const { attemptIds, requestId } = await prepared(['arg-0001.flaw']);
+    const id = attemptIds[0]!;
+    await confirmRows(db, ctx(), 'first-grade', requestId, [await row(id, 1)], null);
+    await expectUnchanged(
+      async () => correctGrade(db, ctx(), 'forged-correction', await row(id, 2, { source: 'parsed' })),
+      OpError,
+    );
+  });
+
   it('resolution and correction keep the reply and feedback range, labelling the new source', async () => {
     const { attemptIds, requestId } = await prepared(['arg-0001.flaw']);
     const x = attemptIds[0]!;
-    const range = { start: 9, end: 36 };
-    const { replyId } = await confirmRows(db, ctx(), 'c1', requestId, [await row(x, null, { feedbackRange: range })], {
-      ...reply,
-      parseOutcome: 'recoverable',
-    });
+    const pending = await parsedGradeRow(requestId, x, null, 'saved-for-resolution');
+    const range = pending.feedbackRange;
+    const replyId = pending.replyId!;
+    await confirmRows(db, ctx(), 'c1', requestId, [pending], null);
     await confirmRows(db, ctx(), 'c2', requestId, [await row(x, 2, { source: 'manual' })], null);
     await correctGrade(db, ctx(), 'f1', await row(x, 1, { source: 'self' }));
     const current = (await db.gradings.get((await db.attempts.get(x))!.currentGradingId!))!;
@@ -689,8 +1068,8 @@ describe('discard, abandon and tags', () => {
 
 describe('export and import', () => {
   /**
-   * Request 1: both rows accepted from a parsed reply (two reviews, one tagged and flagged).
-   * Request 2: one row needs review, linked to a reply saved with saveReply. Plus an unfinished
+   * Request 1: both rows accepted with a saved reply (two reviews, one tagged and flagged).
+   * Request 2: one parsed row needs review, linked to a saved reply. Plus an unfinished
    * session with a draft.
    */
   async function populated(): Promise<ExportFile> {
@@ -705,16 +1084,11 @@ describe('export and import', () => {
     );
     await addFlag(db, ctx(), attemptIds[1]!, 'unfair-grade', 'too harsh');
     const second = await prepared(['arg-0002.assumption']);
-    const { replyId } = await saveReply(db, ctx(), 'r2', second.requestId, {
-      raw: 'I01: ?',
-      parserVersion: 1,
-      selectedBlock: null,
-      parseOutcome: 'manual',
-    });
-    await confirmRows(db, ctx(), 'c2', second.requestId, [await row(second.attemptIds[0]!, null, { replyId })], null);
+    const pending = await parsedGradeRow(second.requestId, second.attemptIds[0]!, null, 'r2');
+    await confirmRows(db, ctx(), 'c2', second.requestId, [pending], null);
     const s = await startSession(db, ctx(), 'today', ['arg-0003.flaw']);
     const draft = await open(s.id, 0, 'arg-0003.flaw');
-    await saveDraft(db, ctx(), draft.id, draft.revision, 'unfinished');
+    await saveDraft(db, ctx(), await expectedDraft(draft), 'unfinished');
     await db.settings.bulkPut([
       { key: 'batchSize', value: 3 },
       { key: 'focus', value: { tag: null, note: 'assumptions' } },

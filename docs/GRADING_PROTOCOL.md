@@ -1,6 +1,6 @@
 # Grading Protocol
 
-Status: draft v0.4 (2026-10-04, revised after peer review round 3). Prompt version: `v2`. Parser version: `1`. This is a contract between the prompt builder (`src/domain/prompt.ts`), the chatbot, and the score parser (`src/domain/scoreParser.ts`). Any change to the prompt text bumps the prompt version; any change to how replies are read bumps the parser version. Either needs a `DECISIONS.md` entry and a peer review. The M0 pilot uses these same modules.
+Status: draft v0.6 (2026-10-04, security audit follow-up). Current prompt version: `v4`. Current parser version: `3`. The score block grammar remains `v2`. This is a contract between the prompt builder (`src/domain/prompt.ts`), the chatbot, and the score parser (`src/domain/scoreParser.ts`). Any change to the prompt text bumps the prompt version; any change to how replies are read bumps the parser version. Either needs a `DECISIONS.md` entry and a peer review. Saved `v2` and `v3` requests keep their exact prompt text; pilot fixtures retain the prompt version recorded with each request.
 
 ## 1. Goals and threat model
 
@@ -23,7 +23,7 @@ A grading request is created by the `prepareGrading` operation (`ARCHITECTURE.md
 | `fence` | Random 6-char token used in answer delimiters, chosen so it does not occur in any included stimulus or answer. |
 | `promptVersion`, `promptText`, `createdAt` | As named. `promptText` is the exact clipboard text. |
 
-Batch size: default 4 rows, maximum 8. The full prompt must stay under 24,000 characters. Answers are never truncated, and grading instructions are never left out to save space; an answer over 2,000 characters is rejected at submission with a message.
+Batch size: default 4 rows, maximum 8. Invalid batch sizes (zero, negative, non-integer or non-finite) use the default; values above 8 are capped at 8. A request always has at least one row. The full prompt must stay under 24,000 characters. Answers are never truncated, and grading instructions are never left out to save space; an answer over 2,000 characters is rejected at submission with a message.
 
 **Splitting** is deterministic: take the submitted attempts in session order and fill one request at a time, adding the next attempt while the request has fewer rows than the batch size and its prompt (with stimuli de-duplicated within that request) stays under the budget; then start the next request. If a single item alone exceeds the budget, it gets a **self-grading-only request**: an ordinary request with its row and snapshot mapping and the normal lifecycle, but `promptText: null`. Copy is disabled for it and the app says "This item is too long to grade by chatbot"; self-grading and manual entry work as usual. The budget applies only to non-null prompts. The content build rejects any task whose prompt with a 2,000-character answer would exceed the budget, so this should only occur with edited content.
 
@@ -31,7 +31,7 @@ Before the first copy on a device, the app shows once: "Premise does not upload 
 
 ## 3. Prompt template
 
-`{{…}}` placeholders are filled by the builder; everything else is fixed text. One ITEM block per row. When several rows share a stimulus, the stimulus is printed once under the first and later rows say `Stimulus: same as I01`.
+`{{…}}` placeholders are filled by the builder; everything else is fixed text. One ITEM block per row. When several rows share a stimulus, the stimulus is printed once under the first and later rows say `Stimulus: same as I01`. This is the current `v4` template. The `v2` and `v3` renderers remain for saved requests and fixture reproduction.
 
 ```text
 You are grading a student's written answers to reasoning exercises. Each item has a stimulus, a task,
@@ -51,13 +51,22 @@ How to grade:
 - Tag only errors you actually observe in the answer, using only that item's allowed tags. If there are
   none, use -.
 
-For each item, write:
-{row id}: {score}/{max}
+Write all feedback for this request inside exactly one section. Put BEGIN FEEDBACK once, on
+its own line before the first item, and END FEEDBACK once, on its own line after the last
+item. Do not wrap each item in a separate pair. Use these plain-text lines and layout:
+BEGIN FEEDBACK request={{requestId}}
+{{#each rows}}{{rowId}}: {score}/{{max}}
 - Criterion by criterion: met or not met, with a short reason for each.
 - Tip: one sentence the student can apply next time.
+{{/each}}END FEEDBACK
 
-Then end your reply by copying the block below, replacing each __ with the score and each -- with the
-tags (comma-separated, or - for none). Change nothing else and write nothing after END SCORES.
+The layout above has one {row id}: heading for each item in this request. If you quote the
+student's answer, do not present its text as another item heading. Write no feedback outside
+the boundaries. Keep the boundary lines plain, not inside a quote, bullet or Markdown styling.
+
+Copy the completed score block directly after END FEEDBACK, with only a blank line between
+them. Replace each __ with the score and each -- with the tags (comma-separated, or - for
+none). Change nothing else and write nothing after END SCORES.
 
 BEGIN SCORES v2 request={{requestId}}
 {{#each rows}}{{rowId}} | __/{{max}} | --
@@ -90,7 +99,7 @@ ANSWER-{{fence}}>>>
 === END OF ITEMS ===
 ```
 
-`allowedTags` = the task's `likely_errors` plus `incomplete`, `misread-stimulus`, `irrelevant`, `no-reasoning`, without duplicates, joined with `, `.
+`allowedTags` = the task's `likely_errors` plus `incomplete`, `misread-stimulus`, `irrelevant`, `no-reasoning`, without duplicates, joined with `, `. The feedback boundary carries the same request UUID as the unchanged `v2` score block; it does not authenticate a chatbot reply.
 
 Rendering details (`src/domain/prompt.ts` is the reference implementation):
 - The fixed text is used exactly as shown, including its line breaks. Lines end with LF; the prompt ends with one LF after `=== END OF ITEMS ===`.
@@ -132,7 +141,7 @@ Steps run in this order; each is defined once.
    - Exactly one: continue.
    The chosen (or representative) block's raw range is stored as `selectedBlock`; feedback and the parse outcome are both derived from that occurrence.
 7. **Incomplete block.** A chosen candidate with no `END SCORES` is parsed, its outcome is at best `recoverable`, and the student must confirm explicitly.
-8. Parse rows (§6), then extract feedback (§7).
+8. Parse rows (§6), then extract feedback according to the request's stored prompt version (§7). Missing feedback boundaries never change a score parse outcome.
 
 ## 6. Row parsing and validation
 
@@ -156,12 +165,15 @@ Each valid row then passes through the shared grade validator, the same one used
 
 ## 7. Feedback
 
-Feedback is attributed only from text belonging to the chosen block:
+Feedback is attributed only from text belonging to the chosen score block. The potential **feedback region** starts after the end of the nearest earlier candidate block of any kind (or after an echoed `=== END OF ITEMS ===` line, if later; or the start of the reply) and ends where the chosen score block begins.
 
-- The **feedback region** starts after the end of the nearest earlier candidate block of any kind (or after an echoed `=== END OF ITEMS ===` line, if later; or the start of the reply) and ends where the chosen block begins.
-- Within the region, a row's feedback is the text from a line starting with `{rowId}:` (after the §5 line clean-up, so bold headings match) up to the next such heading or the end of the region.
-- If a row's heading appears more than once in the region, or not at all, that row's feedback is **unmatched**: the app says "Score imported; feedback could not be matched to this item" and links to the full reply. It never guesses.
-- Each grading stores its `feedbackRange` (`ARCHITECTURE.md` §5); the reply stores `parserVersion`. The display truncates long feedback with "show more"; storage never truncates.
+For a `v3` or `v4` request, the bounded reader requires exactly one `BEGIN FEEDBACK request=<this request UUID>` line followed by one `END FEEDBACK` line in that region. Boundary lines are compared case-insensitively after the §5 line clean-up, so bullets, backticks and bold wrappers are accepted; a raw line starting with `>` is a quotation and cannot be a boundary. Every unquoted cleaned line starting with either boundary name counts toward the required pair, so a malformed, foreign or duplicate boundary leaves every row unmatched. Text between `END FEEDBACK` and the chosen score block may include a separator or a lead-in, but any `Ixx:` heading there leaves every row unmatched. Score rows still parse.
+
+Within the pair, a trimmed raw line starting with three or more backticks or tildes opens a Markdown code fence; a later line beginning with at least the same number of the same character and containing only whitespace afterward closes it. An unclosed fence leaves every row's feedback unmatched. A heading inside a fence or on a raw blockquoted line is not eligible to start that row's feedback, but it still ends the previous row's range. Other headings use §5 line clean-up, including bold headings, and may start with one to six Markdown heading marks (`#`) followed by a space. If a heading starts with a `score/max` or `?/max` token, that score and maximum must agree with the chosen block row or the row's feedback is unmatched.
+
+For a saved `v2` request, parser version 3 retains parser version 1's legacy feedback reading: headings are sought in the whole potential region without the new boundaries. Its older ambiguity around quoted answer text remains; the full raw reply is always available. Previously stored replies and their ranges are not reparsed.
+
+For a saved `v2` request, a row's feedback runs from its single eligible `{rowId}:` heading to the next eligible heading or the region end. For a `v3` or `v4` request, it runs to the next heading-shaped line, even when quoted or fenced, or to `END FEEDBACK`. Trailing whitespace is removed. If a row has more than one eligible heading or none, its feedback is **unmatched**: the app says "Score imported; feedback could not be matched to this item" and links to the full reply. Each grading stores its `feedbackRange` (`ARCHITECTURE.md` §5); the reply stores `parserVersion`. The display truncates long feedback with "show more"; storage never truncates.
 
 ## 8. Self-grading and manual entry
 
@@ -196,7 +208,7 @@ Both go through the shared grade validator (integer range, snapshot max, status 
 
 ## 9a. Parser v1 clarifications
 
-Where §§4–7 left a choice, parser version 1 (`src/domain/scoreParser.ts`) does this:
+Where §§4–7 left a choice, parser version 1 (`src/domain/scoreParser.ts`) established the rules below. Parser version 3 keeps them for score blocks and for feedback on saved `v2` requests; its `v3` and `v4` feedback boundaries are specified in §7.
 
 - A `?` row is valid, so a complete block whose rows are all valid, some of them `?`, is `clean`.
 - Unknown row ids are reported and add a warning, so the outcome is at best `recoverable`.
@@ -227,4 +239,5 @@ Where §§4–7 left a choice, parser version 1 (`src/domain/scoreParser.ts`) do
 - an answer containing `BEGIN SCORES`, `END SCORES` and the fence text
 - feedback: bold headings, a heading repeated in the region, two complete assessments with the second block chosen; feedback after an incomplete candidate (another request, a malformed header, this request) left unmatched
 - U+200B and U+FEFF inside a score and a tag field
+- v3 bounded feedback: quoted answer headings outside and inside the section, missing or foreign boundaries, duplicate sections, two equivalent score blocks with feedback from the selected last occurrence, unclosed and balanced fences, formatted boundaries, prose before the score block, Markdown headings and contradictory heading scores
 - a 150,000-character reply

@@ -3,6 +3,15 @@
 // history (ARCHITECTURE.md §5.1, §7). Local checks only: nothing is replayed. Used by import and tests.
 
 import { validateGrade, validateRange, validateStatus } from './gradeValidator.ts';
+import {
+  MAX_BATCH_SIZE,
+  PROMPT_BUDGET,
+  renderPromptForVersion,
+  rowId,
+  SUPPORTED_PROMPT_VERSIONS,
+  type PromptRow,
+  type PromptVersion,
+} from './prompt.ts';
 import type { AttemptRecord, CardFields, DataSet, GradingRecord, ReviewLogRecord, VersionedCard } from './records.ts';
 import { effectiveReviewTime, ratingFor } from './scheduler.ts';
 import { SCHEDULER_CONFIGS } from './schedulerConfig.ts';
@@ -21,8 +30,37 @@ const CARD_KEYS = [
   'last_review',
 ] as const satisfies readonly (keyof CardFields)[];
 
+// The score parser accepts only UUID-shaped request IDs in BEGIN SCORES headers.
+const REQUEST_UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 function sameCard(a: VersionedCard, b: VersionedCard): boolean {
   return a.schedulerVersion === b.schedulerVersion && CARD_KEYS.every((k) => a[k] === b[k]);
+}
+
+/** Cards on the active chain can become the current card after undo, then enter ts-fsrs again. */
+function usableCardProblems(card: VersionedCard): string[] {
+  const problems: string[] = [];
+  if (![0, 1, 2, 3].includes(card.state)) problems.push('state is not supported by this scheduler');
+  for (const key of ['elapsed_days', 'scheduled_days', 'learning_steps', 'reps', 'lapses'] as const) {
+    if (!Number.isSafeInteger(card[key]) || card[key] < 0 || card[key] >= Number.MAX_SAFE_INTEGER) {
+      problems.push(`${key} is not a nonnegative safe counter`);
+    }
+  }
+  if (!Number.isFinite(card.stability) || !Number.isFinite(card.difficulty)) {
+    problems.push('memory values are not finite');
+  } else if (card.state === 0) {
+    if (card.stability !== 0 || card.difficulty !== 0) problems.push('new state has nonempty memory');
+  } else if (card.stability < 0.001 || card.difficulty < 1 || card.difficulty > 10) {
+    problems.push('memory values are outside the FSRS input range');
+  }
+  if (card.state !== 0 && card.last_review === null) problems.push('reviewed state has no last review');
+  if (card.schedulerVersion === 'fsrs-1') {
+    if (card.state !== 2) problems.push('fsrs-1 card is not in review state');
+    if (card.stability > 36500) problems.push('fsrs-1 stability exceeds its supported range');
+    if (card.learning_steps !== 0) problems.push('fsrs-1 card has learning steps despite long-term scheduling');
+    if (card.scheduled_days < 1 || card.reps < 1) problems.push('fsrs-1 card has no completed review interval');
+  }
+  return problems;
 }
 
 export function checkDataSet(data: DataSet): string[] {
@@ -46,6 +84,9 @@ export function checkDataSet(data: DataSet): string[] {
   const gradings = unique(data.gradings, (g) => g.id, 'gradings');
   unique(data.reviewLogs, (l) => l.id, 'reviewLogs');
   unique(data.reviewLogs, (l) => String(l.seq), 'reviewLogs seq');
+  for (const l of data.reviewLogs) {
+    if (l.seq >= Number.MAX_SAFE_INTEGER) fail(`review log ${l.id}: seq has no safe headroom`);
+  }
   const cards = unique(data.cards, (c) => c.taskId, 'cards');
   unique(data.taskStates, (s) => s.taskId, 'taskStates');
   unique(data.flags, (f) => f.id, 'flags');
@@ -56,11 +97,17 @@ export function checkDataSet(data: DataSet): string[] {
   // Scheduler configurations: every referenced version resolves; a version this app knows has
   // exactly this app's definition.
   for (const c of data.schedulerConfigs) {
-    const known = SCHEDULER_CONFIGS[c.version];
-    if (known && canonicalJson(c.config) !== canonicalJson(known))
-      fail(`scheduler ${c.version}: stored configuration differs from this app's definition`);
+    const known = Object.hasOwn(SCHEDULER_CONFIGS, c.version) ? SCHEDULER_CONFIGS[c.version] : undefined;
+    if (known) {
+      try {
+        if (canonicalJson(c.config) !== canonicalJson(known))
+          fail(`scheduler ${c.version}: stored configuration differs from this app's definition`);
+      } catch {
+        fail(`scheduler ${c.version}: stored configuration cannot be validated`);
+      }
+    }
   }
-  const knownVersion = (v: string) => !!SCHEDULER_CONFIGS[v] || configs.has(v);
+  const knownVersion = (v: string) => Object.hasOwn(SCHEDULER_CONFIGS, v) || configs.has(v);
   for (const c of data.cards) if (!knownVersion(c.schedulerVersion)) fail(`card ${c.taskId}: scheduler unknown`);
   for (const l of data.reviewLogs) {
     if (!knownVersion(l.schedulerVersion)) fail(`review log ${l.id}: scheduler unknown`);
@@ -112,6 +159,7 @@ export function checkDataSet(data: DataSet): string[] {
   for (const l of data.reviewLogs) logsByAttempt.set(l.attemptId, [...(logsByAttempt.get(l.attemptId) ?? []), l]);
 
   for (const a of data.attempts) {
+    if (a.revision >= Number.MAX_SAFE_INTEGER) fail(`attempt ${a.id}: revision has no safe headroom`);
     const snap = snapshots.get(a.snapshotHash);
     if (!snap) fail(`attempt ${a.id}: snapshot missing`);
     else if (snap.taskId !== a.taskId) fail(`attempt ${a.id}: snapshot belongs to ${snap.taskId}`);
@@ -178,8 +226,12 @@ export function checkDataSet(data: DataSet): string[] {
   // Invariant 2 from the request side, and invariant 7.
   const owner = new Map<string, string>();
   for (const r of data.requests) {
+    if (!REQUEST_UUID.test(r.id)) fail(`request ${r.id}: ID is not a score-parser UUID`);
     const rowIds = Object.keys(r.rows);
     if (rowIds.length === 0) fail(`request ${r.id}: no rows`);
+    if (rowIds.length > MAX_BATCH_SIZE || rowIds.some((id, i) => id !== rowId(i))) {
+      fail(`request ${r.id}: row IDs are not the ordered request rows`);
+    }
     if (rowIds.sort().join() !== Object.keys(r.snapshots).sort().join())
       fail(`request ${r.id}: rows and snapshots differ`);
     for (const [rowId, attemptId] of Object.entries(r.rows)) {
@@ -195,6 +247,37 @@ export function checkDataSet(data: DataSet): string[] {
     }
     const expected = requestStatus(r.rows, attempts, gradings, r.status === 'abandoned');
     if (expected !== r.status) fail(`request ${r.id}: status ${r.status} should be ${expected}`);
+
+    // A stored clipboard prompt must be exactly what the frozen attempts and snapshots produced.
+    // Keep v2's renderer for backups created before the current prompt version.
+    if (!SUPPORTED_PROMPT_VERSIONS.includes(r.promptVersion as PromptVersion)) {
+      fail(`request ${r.id}: unsupported prompt version ${r.promptVersion}`);
+      continue;
+    }
+    if (!/^[0-9ABCDEFGHJKMNPQRSTVWXYZ]{6}$/.test(r.fence)) fail(`request ${r.id}: invalid fence`);
+    const promptRows: PromptRow[] = [];
+    for (const id of Object.keys(r.rows)) {
+      const attemptId = r.rows[id]!;
+      const attempt = attempts.get(attemptId);
+      const snapshot = snapshots.get(r.snapshots[id]!);
+      if (attempt && snapshot) {
+        if (attempt.answer.includes(r.fence) || snapshot.stimulus.includes(r.fence)) {
+          fail(`request ${r.id}: fence occurs in an answer or stimulus`);
+        }
+        promptRows.push({ rowId: id, attemptId, snapshot, answer: attempt.answer });
+      }
+    }
+    if (promptRows.length === rowIds.length) {
+      const rendered = renderPromptForVersion(r.promptVersion as PromptVersion, r.id, r.fence, promptRows);
+      if (r.promptText === null) {
+        if (promptRows.length !== 1) fail(`request ${r.id}: self-grading request has more than one row`);
+        if (rendered.length <= PROMPT_BUDGET) fail(`request ${r.id}: null prompt is within the prompt budget`);
+      } else if (r.promptText !== rendered) {
+        fail(`request ${r.id}: prompt differs from its frozen answers and snapshots`);
+      } else if (rendered.length > PROMPT_BUDGET) {
+        fail(`request ${r.id}: stored prompt exceeds the prompt budget`);
+      }
+    }
   }
 
   // Invariants 5 and 8 through the shared grade validator, for every revision.
@@ -230,6 +313,9 @@ export function checkDataSet(data: DataSet): string[] {
     logs.sort((x, y) => x.seq - y.seq);
     let previous: VersionedCard | null = null;
     for (const l of logs) {
+      for (const p of usableCardProblems({ ...l.cardAfter, schedulerVersion: l.schedulerVersion })) {
+        fail(`review log ${l.id}: ${p}`);
+      }
       if (l.cardBefore === null ? previous !== null : previous === null || !sameCard(l.cardBefore, previous)) {
         fail(`review log ${l.id}: cardBefore is not the card the previous active review left`);
       }
@@ -240,6 +326,7 @@ export function checkDataSet(data: DataSet): string[] {
     else if (!sameCard(c, previous!)) fail(`card ${taskId}: differs from its latest active review`);
   }
   for (const c of data.cards) {
+    for (const p of usableCardProblems(c)) fail(`card ${c.taskId}: ${p}`);
     if (!activeByTask.has(c.taskId)) fail(`card ${c.taskId}: no active review produced it`);
     if (!Number.isFinite(c.stability) || !Number.isFinite(c.difficulty)) fail(`card ${c.taskId}: non-finite number`);
   }

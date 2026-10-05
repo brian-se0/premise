@@ -251,7 +251,7 @@ describe('planner repair loop', () => {
     const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-01');
     const familiar = graded('arg-0001.flaw', 2, 2, [], '2026-10-02', { stimulusSeenBefore: true });
     const coached = graded('arg-0004.flaw', 2, 2, [], '2026-10-02', { kind: 'coached' });
-    const fresh = graded('arg-0005.flaw', 2, 2, [], '2026-10-03');
+    const fresh = graded('arg-0005.flaw', 2, 2, [], '2026-10-03', { sessionId: 'later' });
     const open = (xs: (typeof miss)[]) =>
       openMisses(state({ attempts: xs.map((x) => x.attempt), gradings: xs.map((x) => x.grading) })).map(
         (m) => m.taskId,
@@ -259,6 +259,76 @@ describe('planner repair loop', () => {
     expect(open([miss, familiar])).toEqual(['arg-0003.flaw']);
     expect(open([miss, coached])).toEqual(['arg-0003.flaw']);
     expect(open([miss, familiar, fresh])).toEqual([]);
+  });
+
+  it('does not count a fresh success in the miss session as a later-session repair', () => {
+    const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-01');
+    const successAt = '2026-10-01T13:00:00.000Z';
+    const success = graded('arg-0005.flaw', 2, 2, [], '2026-10-01', {
+      submittedAt: successAt,
+      updatedAt: successAt,
+    });
+    const successGrading = { ...success.grading, createdAt: successAt };
+    const sameSession = state({
+      attempts: [miss.attempt, success.attempt],
+      gradings: [miss.grading, successGrading],
+    });
+    expect(openMisses(sameSession).map((m) => m.taskId)).toEqual(['arg-0003.flaw']);
+
+    const laterSession = state({
+      attempts: [miss.attempt, { ...success.attempt, sessionId: 'later' }],
+      gradings: [miss.grading, successGrading],
+    });
+    expect(openMisses(laterSession)).toEqual([]);
+  });
+
+  it('a fresh success at the exact miss submission time cannot clear the miss', () => {
+    const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-09');
+    const success = graded('arg-0001.flaw', 2, 2, [], '2026-10-09');
+    const base = { attempts: [miss.attempt, success.attempt] };
+    for (const gradings of [
+      [miss.grading, success.grading],
+      [success.grading, miss.grading],
+    ]) {
+      expect(openMisses(state({ ...base, gradings })).map((m) => m.taskId)).toEqual(['arg-0003.flaw']);
+    }
+  });
+
+  it('tracks separate misses on one task and holds its repeat until both fresh checks fit', () => {
+    const tailored = exercises.map((e) => ({
+      ...e,
+      tasks: e.tasks.map((t) => ({
+        ...t,
+        likely_errors:
+          t.key !== 'flaw'
+            ? t.likely_errors
+            : e.id === 'arg-0001'
+              ? ['x', 'y']
+              : e.id === 'arg-0003'
+                ? ['x']
+                : e.id === 'arg-0004'
+                  ? ['y']
+                  : t.likely_errors,
+      })),
+    }));
+    const older = graded('arg-0001.flaw', 0, 2, ['y'], '2026-10-08');
+    const newer = graded('arg-0001.flaw', 0, 2, ['x'], '2026-10-09');
+    const s = state({
+      exercises: tailored,
+      attempts: [older.attempt, newer.attempt],
+      gradings: [older.grading, newer.grading],
+      cards: [dueYesterday(older.card)],
+    });
+    expect(openMisses(s)).toHaveLength(2);
+    expect(planToday(s, 2)).toEqual([
+      { taskId: 'arg-0004.flaw', reason: 'repair', repairs: 'arg-0001.flaw' },
+      { taskId: 'arg-0003.flaw', reason: 'repair', repairs: 'arg-0001.flaw' },
+    ]);
+    expect(planToday(s, 4).slice(0, 3)).toEqual([
+      { taskId: 'arg-0004.flaw', reason: 'repair', repairs: 'arg-0001.flaw' },
+      { taskId: 'arg-0003.flaw', reason: 'repair', repairs: 'arg-0001.flaw' },
+      { taskId: 'arg-0001.flaw', reason: 'review' },
+    ]);
   });
 
   it('repairs only from unseen exercises, and says so when none is left', () => {

@@ -1,5 +1,5 @@
-// IndexedDB schema v1 (ARCHITECTURE.md §5) via Dexie. v1 is not frozen yet and holds no user
-// data, so it is still edited in place without a version bump.
+// IndexedDB schema v1 (ARCHITECTURE.md §5) via Dexie. v1 is frozen; future table or index
+// changes need a new Dexie version and a migration for existing practice data.
 
 import Dexie, { type EntityTable } from 'dexie';
 import type {

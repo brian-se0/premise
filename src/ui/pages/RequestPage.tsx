@@ -12,7 +12,13 @@ import type {
   RequestRecord,
   SnapshotRecord,
 } from '../../domain/records.ts';
-import { parseReply, PARSER_VERSION, type ParsedBlock, type ParseResult } from '../../domain/scoreParser.ts';
+import {
+  MAX_REPLY_LENGTH,
+  parseReply,
+  PARSER_VERSION,
+  type ParsedBlock,
+  type ParseResult,
+} from '../../domain/scoreParser.ts';
 import {
   abandonRequest,
   addFlag,
@@ -58,6 +64,7 @@ interface Row {
 interface Loaded {
   request: RequestRecord;
   rows: Row[];
+  replies: ReplyRecord[];
 }
 
 async function load(id: string): Promise<Loaded | null> {
@@ -81,7 +88,10 @@ async function load(id: string): Promise<Loaded | null> {
       suspended: (await db.taskStates.get(attempt.taskId))?.suspended ?? false,
     });
   }
-  return { request, rows };
+  const replies = (await db.replies.where('requestId').equals(id).toArray()).sort((a, b) =>
+    a.pastedAt < b.pastedAt ? 1 : -1,
+  );
+  return { request, rows, replies };
 }
 
 function errorText(e: unknown): string {
@@ -111,12 +121,13 @@ function RequestBody({ id }: { id: string }) {
   );
   const settings = useSettings();
   const [notice, setNotice] = useState('');
-  // A pasted reply with no usable scores, kept so grades entered by hand link back to it.
+  // The reply most recently read in this mounted request. A reloaded manual form defaults to
+  // no reply until the student explicitly chooses one from the saved replies.
   const [keptReplyId, setKeptReplyId] = useState<string | null>(null);
 
   if (data === undefined || !settings) return <p>Loading…</p>;
   if (data === null) return <NotFoundPage />;
-  const { request, rows } = data;
+  const { request, rows, replies } = data;
   const waiting = rows.filter((r) => r.state === 'pending' || r.state === 'needs-review');
 
   return (
@@ -153,6 +164,7 @@ function RequestBody({ id }: { id: string }) {
             request={request}
             onNotice={setNotice}
             keptReplyId={keptReplyId}
+            savedReplies={replies}
             freshCheck={freshChecks?.has(r.attempt.taskId) ?? false}
           />
         ))}
@@ -279,12 +291,13 @@ function CopySection({
 interface Preview {
   /** What the preview was read against; Confirm refuses if any of it has changed. */
   requestId: string;
-  bound: Record<string, { attemptId: string; snapshotHash: string }>;
+  bound: Record<string, { attemptId: string; snapshotHash: string; answer: string }>;
   raw: string;
   result: ParseResult;
   chosen: ParsedBlock | null;
   opId: string;
   revisions: Record<string, number>;
+  replyId: string;
 }
 
 function PasteSection({
@@ -296,40 +309,81 @@ function PasteSection({
   request: RequestRecord;
   rows: Row[];
   onNotice: (s: string) => void;
-  onKept: (replyId: string) => void;
+  onKept: (replyId: string | null) => void;
 }) {
   const [raw, setRaw] = useState('');
   const [preview, setPreview] = useState<Preview | null>(null);
   const [ratings, setRatings] = useState<Record<string, RatingChoice>>({});
   const [busy, setBusy] = useState(false);
   const confirming = useRef(false);
+  const readGeneration = useRef(0);
 
-  const read = () => {
+  const read = async () => {
+    const generation = ++readGeneration.current;
+    setPreview(null);
+    onKept(null);
+    if (raw.length > MAX_REPLY_LENGTH) {
+      onNotice(`The reply is too long (${raw.length} characters; limit ${MAX_REPLY_LENGTH}). Nothing was kept.`);
+      return;
+    }
+    setBusy(true);
     const result = parseReply(raw, {
       id: request.id,
       rows: rows.map((r) => ({ rowId: r.rowId, max: r.snapshot.max, allowedTags: r.snapshot.allowedTags })),
+      promptVersion: request.promptVersion,
     });
-    setPreview({
-      requestId: request.id,
-      bound: Object.fromEntries(
-        rows.map((r) => [r.rowId, { attemptId: r.attempt.id, snapshotHash: r.attempt.snapshotHash }]),
-      ),
-      raw,
-      result,
-      chosen: result.kind === 'parsed' ? result.block : null,
-      opId: newOpId(),
-      revisions: Object.fromEntries(rows.map((r) => [r.rowId, r.attempt.revision])),
-    });
-    setRatings({});
-    if (result.kind === 'none') {
-      saveReply(db, ctx(), newOpId(), request.id, {
+    try {
+      const saved = await saveReply(db, ctx(), newOpId(), request.id, {
         raw,
         parserVersion: PARSER_VERSION,
-        selectedBlock: null,
-        parseOutcome: 'manual',
-      })
-        .then((r) => onKept(r.replyId))
-        .catch((e: unknown) => onNotice(errorText(e)));
+        selectedBlock: result.kind === 'parsed' ? result.block.range : null,
+        parseOutcome: result.kind === 'parsed' ? result.block.outcome : 'manual',
+      });
+      if (generation !== readGeneration.current) return;
+      setPreview({
+        requestId: request.id,
+        bound: Object.fromEntries(
+          rows.map((r) => [
+            r.rowId,
+            { attemptId: r.attempt.id, snapshotHash: r.attempt.snapshotHash, answer: r.attempt.answer },
+          ]),
+        ),
+        raw,
+        result,
+        chosen: result.kind === 'parsed' ? result.block : null,
+        opId: newOpId(),
+        revisions: Object.fromEntries(rows.map((r) => [r.rowId, r.attempt.revision])),
+        replyId: saved.replyId,
+      });
+      setRatings({});
+      onKept(saved.replyId);
+      onNotice('');
+    } catch (e) {
+      if (generation === readGeneration.current) onNotice(`The reply could not be kept. ${errorText(e)}`);
+    } finally {
+      if (generation === readGeneration.current) setBusy(false);
+    }
+  };
+
+  const choose = async (block: ParsedBlock) => {
+    if (!preview || busy) return;
+    const generation = readGeneration.current;
+    setBusy(true);
+    try {
+      const saved = await saveReply(db, ctx(), newOpId(), request.id, {
+        raw: preview.raw,
+        parserVersion: PARSER_VERSION,
+        selectedBlock: block.range,
+        parseOutcome: block.outcome,
+      });
+      if (generation !== readGeneration.current) return;
+      setPreview({ ...preview, chosen: block, replyId: saved.replyId });
+      onKept(saved.replyId);
+      onNotice('');
+    } catch (e) {
+      if (generation === readGeneration.current) onNotice(`The chosen reply could not be kept. ${errorText(e)}`);
+    } finally {
+      if (generation === readGeneration.current) setBusy(false);
     }
   };
 
@@ -352,7 +406,12 @@ function PasteSection({
       toSave.some((pr) => {
         const row = byRow.get(pr.rowId)!;
         const b = preview.bound[pr.rowId];
-        return !b || b.attemptId !== row.attempt.id || b.snapshotHash !== row.attempt.snapshotHash;
+        return (
+          !b ||
+          b.attemptId !== row.attempt.id ||
+          b.snapshotHash !== row.attempt.snapshotHash ||
+          b.answer !== row.attempt.answer
+        );
       });
     if (unbound) {
       setPreview(null);
@@ -368,20 +427,18 @@ function PasteSection({
         return {
           attemptId: row.attempt.id,
           revision: preview.revisions[pr.rowId]!,
+          expectedAnswer: preview.bound[pr.rowId]!.answer,
+          expectedSnapshotHash: preview.bound[pr.rowId]!.snapshotHash,
           score: valid.score,
           tags: valid.tags,
           source: 'parsed',
           disqualified: false,
           feedbackRange: valid.feedback,
+          replyId: preview.replyId,
           ratingChoice: ratings[pr.rowId] ?? 'good',
         };
       });
-      await confirmRows(db, ctx(), preview.opId, request.id, gradeRows, {
-        raw: preview.raw,
-        parserVersion: PARSER_VERSION,
-        selectedBlock: block.range,
-        parseOutcome: block.outcome,
-      });
+      await confirmRows(db, ctx(), preview.opId, request.id, gradeRows, null);
       setPreview(null);
       setRaw('');
       onNotice('');
@@ -407,10 +464,13 @@ function PasteSection({
         onChange={(e) => {
           setRaw(e.target.value);
           // An edit makes the scores read from the old text meaningless.
+          readGeneration.current += 1;
           setPreview(null);
+          onKept(null);
+          setBusy(false);
         }}
       />
-      <button onClick={read} disabled={raw.trim() === ''}>
+      <button onClick={() => void read()} disabled={busy || raw.trim() === ''}>
         Read scores
       </button>
 
@@ -427,7 +487,9 @@ function PasteSection({
           {preview.result.options.map((o, i) => (
             <div key={i} className="choice">
               <pre className="plain">{preview.raw.slice(o.range.start, o.range.end)}</pre>
-              <button onClick={() => setPreview({ ...preview, chosen: o })}>Use block {i + 1}</button>
+              <button disabled={busy} onClick={() => void choose(o)}>
+                Use block {i + 1}
+              </button>
             </div>
           ))}
         </div>
@@ -541,12 +603,14 @@ function RowView({
   request,
   onNotice,
   keptReplyId,
+  savedReplies,
   freshCheck,
 }: {
   row: Row;
   request: RequestRecord;
   onNotice: (s: string) => void;
   keptReplyId: string | null;
+  savedReplies: ReplyRecord[];
   freshCheck: boolean;
 }) {
   const navigate = useNavigate();
@@ -555,8 +619,16 @@ function RowView({
   // The revision the student saw when they opened a form. Saving checks against it, so a change made
   // in another tab meanwhile is reported as stale instead of being silently overwritten.
   const [seen, setSeen] = useState(attempt.revision);
+  const [seenAnswer, setSeenAnswer] = useState(attempt.answer);
+  const [seenSnapshotHash, setSeenSnapshotHash] = useState(attempt.snapshotHash);
+  const [selectedReplyId, setSelectedReplyId] = useState<string | null>(null);
   const toggle = (m: typeof mode) => {
     setSeen(attempt.revision);
+    setSeenAnswer(attempt.answer);
+    setSeenSnapshotHash(attempt.snapshotHash);
+    if (m === 'manual' || m === 'self') {
+      setSelectedReplyId(state === 'needs-review' ? (grading?.replyId ?? null) : keptReplyId);
+    }
     setMode(mode === m ? 'none' : m);
   };
   const feedback = feedbackText(row);
@@ -683,60 +755,121 @@ function RowView({
       )}
 
       {mode === 'self' && (
-        <SelfGrade
-          snapshot={snapshot}
-          onSave={(score, disqualified, ratingChoice) =>
-            act(
-              confirmRows(
-                db,
-                ctx(),
-                newOpId(),
-                request.id,
-                [
-                  {
-                    attemptId: attempt.id,
-                    revision: seen,
-                    score,
-                    tags: [],
-                    source: 'self',
-                    disqualified,
-                    feedbackRange: null,
-                    ...(state === 'pending' && keptReplyId ? { replyId: keptReplyId } : {}),
-                    ratingChoice,
-                  },
-                ],
-                null,
-              ),
-            )
-          }
-        />
+        <>
+          <ReplySourcePicker
+            replies={savedReplies}
+            value={selectedReplyId}
+            onChange={setSelectedReplyId}
+            rowId={row.rowId}
+          />
+          <SelfGrade
+            snapshot={snapshot}
+            onSave={(score, disqualified, ratingChoice) =>
+              act(
+                confirmRows(
+                  db,
+                  ctx(),
+                  newOpId(),
+                  request.id,
+                  [
+                    {
+                      attemptId: attempt.id,
+                      revision: seen,
+                      expectedAnswer: seenAnswer,
+                      expectedSnapshotHash: seenSnapshotHash,
+                      score,
+                      tags: [],
+                      source: 'self',
+                      disqualified,
+                      feedbackRange: selectedReplyId === grading?.replyId ? (grading?.feedbackRange ?? null) : null,
+                      replyId: selectedReplyId,
+                      ratingChoice,
+                    },
+                  ],
+                  null,
+                ),
+              )
+            }
+          />
+        </>
       )}
       {(mode === 'manual' || mode === 'correct') && (
-        <ManualScore
-          max={snapshot.max}
-          label={mode === 'correct' ? 'Save corrected grade' : 'Save score'}
-          onSave={(score, ratingChoice) => {
-            const r: GradeRow = {
-              attemptId: attempt.id,
-              revision: seen,
-              score,
-              tags: mode === 'correct' ? (grading?.tags ?? []) : [],
-              source: 'manual',
-              disqualified: false,
-              feedbackRange: mode === 'correct' ? (grading?.feedbackRange ?? null) : null,
-              ...(mode === 'manual' && state === 'pending' && keptReplyId ? { replyId: keptReplyId } : {}),
-              ratingChoice,
-            };
-            return act(
-              mode === 'correct'
-                ? correctGrade(db, ctx(), newOpId(), r)
-                : confirmRows(db, ctx(), newOpId(), request.id, [r], null),
-            );
-          }}
-        />
+        <>
+          {mode === 'manual' && (
+            <ReplySourcePicker
+              replies={savedReplies}
+              value={selectedReplyId}
+              onChange={setSelectedReplyId}
+              rowId={row.rowId}
+            />
+          )}
+          <ManualScore
+            max={snapshot.max}
+            label={mode === 'correct' ? 'Save corrected grade' : 'Save score'}
+            onSave={(score, ratingChoice) => {
+              const r: GradeRow = {
+                attemptId: attempt.id,
+                revision: seen,
+                expectedAnswer: seenAnswer,
+                expectedSnapshotHash: seenSnapshotHash,
+                score,
+                tags: mode === 'correct' ? (grading?.tags ?? []) : [],
+                source: 'manual',
+                disqualified: false,
+                feedbackRange:
+                  mode === 'correct' || (mode === 'manual' && selectedReplyId === grading?.replyId)
+                    ? (grading?.feedbackRange ?? null)
+                    : null,
+                ...(mode === 'manual' ? { replyId: selectedReplyId } : {}),
+                ratingChoice,
+              };
+              return act(
+                mode === 'correct'
+                  ? correctGrade(db, ctx(), newOpId(), r)
+                  : confirmRows(db, ctx(), newOpId(), request.id, [r], null),
+              );
+            }}
+          />
+        </>
       )}
       {mode === 'flag' && <FlagForm onSave={(category, note) => act(addFlag(db, ctx(), attempt.id, category, note))} />}
     </li>
+  );
+}
+
+function ReplySourcePicker({
+  replies,
+  value,
+  onChange,
+  rowId,
+}: {
+  replies: ReplyRecord[];
+  value: string | null;
+  onChange: (id: string | null) => void;
+  rowId: string;
+}) {
+  const selected = replies.find((r) => r.id === value);
+  return (
+    <div className="panel">
+      <label>
+        Chatbot reply used for {rowId}{' '}
+        <select value={value ?? ''} onChange={(e) => onChange(e.target.value || null)}>
+          <option value="">No chatbot reply</option>
+          {value && !selected && <option value={value}>Reply just read (saved)</option>}
+          {replies.map((r) => (
+            <option key={r.id} value={r.id}>
+              Saved {new Date(r.pastedAt).toLocaleString()} · {r.id.slice(0, 8)}
+            </option>
+          ))}
+        </select>
+      </label>
+      {selected && (
+        <details>
+          <summary>Review selected reply</summary>
+          <pre className="plain">{selected.raw}</pre>
+        </details>
+      )}
+    </div>
   );
 }
 

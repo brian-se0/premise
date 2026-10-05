@@ -34,7 +34,7 @@ export interface PlannedEntry {
   repairs?: string;
 }
 
-/** An accepted, uncoached miss that no later fresh-stimulus success has repaired. */
+/** An accepted, uncoached miss that no later-session fresh-stimulus success has repaired. */
 export interface OpenMiss {
   taskId: string;
   skill: string;
@@ -104,7 +104,17 @@ function acceptedHistory(state: PlannerState): { g: GradingRecord; a: AttemptRec
     .filter((g) => g.status === 'accepted' && g.score !== null)
     .map((g) => ({ g, a: attemptById.get(g.attemptId) }))
     .filter((x): x is { g: GradingRecord; a: AttemptRecord } => !!x.a?.submittedAt)
-    .sort((x, y) => (x.a.submittedAt! < y.a.submittedAt! ? -1 : x.a.submittedAt! > y.a.submittedAt! ? 1 : 0));
+    .sort((x, y) =>
+      x.a.submittedAt! < y.a.submittedAt!
+        ? -1
+        : x.a.submittedAt! > y.a.submittedAt!
+          ? 1
+          : x.a.id < y.a.id
+            ? -1
+            : x.a.id > y.a.id
+              ? 1
+              : 0,
+    );
 }
 
 /**
@@ -194,16 +204,17 @@ function repairCandidates(
 
 /**
  * Accepted, uncoached misses in the last 30 days that no later fresh-stimulus success repaired.
- * A miss clears only on full credit from an uncoached attempt on a stimulus the student had not
- * seen before (stimulusSeenBefore false), on a different exercise with the same skill and a
- * shared likely error. Success on a familiar stimulus is not transfer, so it leaves the miss open.
+ * A miss clears only on full credit from an uncoached attempt in a later session on a stimulus
+ * the student had not seen before (stimulusSeenBefore false), on a different exercise with the
+ * same skill and a shared likely error. Success in the same session or on a familiar stimulus
+ * is not transfer, so it leaves the miss open.
  */
 export function openMisses(state: PlannerState, tasks = availableTasks(state.exercises)): OpenMiss[] {
   const taskById = new Map(tasks.map((t) => [t.taskId, t]));
   const cutoff = new Date(`${state.today}T00:00:00`);
   cutoff.setDate(cutoff.getDate() - REPAIR_WINDOW_DAYS);
 
-  const misses: Omit<OpenMiss, 'freshRepair'>[] = [];
+  const misses: (Omit<OpenMiss, 'freshRepair'> & { sessionId: string })[] = [];
   for (const { g, a } of acceptedHistory(state)) {
     const task = taskById.get(a.taskId);
     if (!task || a.kind === 'coached' || new Date(a.submittedAt!) < cutoff) continue;
@@ -213,6 +224,7 @@ export function openMisses(state: PlannerState, tasks = availableTasks(state.exe
         skill: task.skill,
         tags: g.tags.length ? g.tags : task.likelyErrors,
         at: a.submittedAt!,
+        sessionId: a.sessionId,
       });
       continue;
     }
@@ -220,6 +232,8 @@ export function openMisses(state: PlannerState, tasks = availableTasks(state.exe
     for (let i = misses.length - 1; i >= 0; i--) {
       const m = misses[i]!;
       if (
+        a.submittedAt! > m.at &&
+        a.sessionId !== m.sessionId &&
         exerciseOf(m.taskId) !== task.exerciseId &&
         m.skill === task.skill &&
         m.tags.some((t) => task.likelyErrors.includes(t))
@@ -229,7 +243,13 @@ export function openMisses(state: PlannerState, tasks = availableTasks(state.exe
     }
   }
   const seen = seenExercises(state);
-  return misses.map((m) => ({ ...m, freshRepair: repairCandidates(state, tasks, m, seen).length > 0 }));
+  return misses.map((m) => ({
+    taskId: m.taskId,
+    skill: m.skill,
+    tags: m.tags,
+    at: m.at,
+    freshRepair: repairCandidates(state, tasks, m, seen).length > 0,
+  }));
 }
 
 /**
@@ -264,8 +284,9 @@ class DailyExposure {
  * Today's session, up to the session size:
  * 1. one slot is reserved for a fresh repair when any open miss has one, even under a full review load;
  * 2. due reviews (final-weeks floor and conclusion policy applied; in final-weeks mode capped per
- *    day, open misses first). A missed task is repeated only after its fresh repair, in the same
- *    session; if both do not fit, the repeat waits. A miss with no fresh repair is repeated as usual;
+ *    day, open misses first). A missed task is repeated only after every available fresh repair for
+ *    its open misses, in the same session; if they do not fit, the repeat waits. A miss with no fresh
+ *    repair is repeated as usual;
  * 3. fresh repairs for remaining open misses;
  * 4. new tasks (generic fallback; never labelled a repair).
  * Repairs come first in the returned order, then the rest grouped by stimulus. The daily
@@ -293,7 +314,8 @@ export function planToday(state: PlannerState, size = SESSION_SIZE): PlannedEntr
   const byPriority = [...misses.filter((m) => dueSet.has(m.taskId)), ...misses.filter((m) => !dueSet.has(m.taskId))];
 
   const entries: PlannedEntry[] = [];
-  const repaired = new Set<string>();
+  // Each accepted miss is a separate check, even when several misses name the same task.
+  const repaired = new Set<OpenMiss>();
   const take = (taskId: string, reason: PlannedEntry['reason'], repairs?: string) => {
     entries.push(repairs ? { taskId, reason, repairs } : { taskId, reason });
     exposure.add(exerciseOf(taskId), reason === 'review');
@@ -301,11 +323,11 @@ export function planToday(state: PlannerState, size = SESSION_SIZE): PlannedEntr
   const repairFor = (m: OpenMiss) =>
     m.freshRepair ? repairCandidates(state, tasks, m, seen).find((t) => exposure.fits(t.exerciseId, false)) : undefined;
   const placeRepair = (m: OpenMiss): boolean => {
-    if (repaired.has(m.taskId)) return true;
+    if (repaired.has(m)) return true;
     const fix = repairFor(m);
     if (!fix) return false;
     take(fix.taskId, 'repair', m.taskId);
-    repaired.add(m.taskId);
+    repaired.add(m);
     return true;
   };
 
@@ -318,9 +340,9 @@ export function planToday(state: PlannerState, size = SESSION_SIZE): PlannedEntr
   for (const taskId of due) {
     if (entries.length >= size) break;
     if (!exposure.fits(exerciseOf(taskId), true)) continue;
-    const needs = misses.filter((m) => m.taskId === taskId && m.freshRepair);
-    if (needs.length > 0 && !repaired.has(taskId)) {
-      if (entries.length + 2 > size || !needs.some(placeRepair)) continue;
+    const needs = misses.filter((m) => m.taskId === taskId && m.freshRepair && !repaired.has(m));
+    if (needs.length > 0) {
+      if (entries.length + needs.length + 1 > size || !needs.every(placeRepair)) continue;
     }
     take(taskId, 'review');
   }
