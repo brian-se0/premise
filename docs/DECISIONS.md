@@ -2,6 +2,10 @@
 
 Newest first. Each entry: date, decision, why, and what it rules out. Reopening a decision needs a new entry, not an edit.
 
+## 2026-10-05 — Rubric wording fixes to published exercises keep their task keys
+
+The owner re-approved 14 published exercises in place after their rubrics were brought in line with GPT-6 Pro's batch 2 key check (`reviews/2026-10-05-rubric-wording.md`): strengthen and weaken criterion 1 now asks for a fact that points the right way with a material effect, and premise-only disqualifiers apply only to answers that offer nothing else. These count as wording fixes under `EXERCISE_FORMAT.md` §6, although they change the score of some answers that are not anchors, because each task's prompt and `accept` text already called for that scoring. **Why:** the fix makes the rubric say what the key already meant, and keeping the task keys keeps study history attached. **Rules out:** treating every score-changing rubric edit as a wording fix; one that changes what the prompt or `accept` text asks for still needs a new task key.
+
 ## 2026-10-05 — Preview recovery reads the historical schema without upgrading it
 
 Settings opens the old `premise-preview` database without declaring a current Dexie version, reads the stores that exist, and writes any missing current export fields only into the recovery file. The deployed preview only ever ran the frozen v1 store and index layout; filling fields absent from an earlier, undeployed v1 layout is defensive. Those early review logs gain a sequence derived from their saved card chain, the missing `cardBefore` scheduler version, and the answer's submission time as `reviewedAt`; scores, statuses and effective card times remain unchanged. The old database keeps its version, stores, indexes and records. Normal backup export remains strict. **Why:** declaring the current schema during an availability check could upgrade an older preview database before the student chose to recover it, while real deployed v1 data should export exactly as a normal backup does. **Rules out:** migrating or mutating preview data as a side effect of checking for it or exporting a recovery file.
