@@ -2,10 +2,17 @@ import { useEffect, useRef, useState } from 'react';
 import Dexie from 'dexie';
 import { content } from '../../content.ts';
 import { MAX_BATCH_SIZE } from '../../domain/prompt.ts';
-import { checkImportFile, exportData, replaceAll, type ImportSummary } from '../../storage/backup.ts';
-import type { DataSet } from '../../domain/records.ts';
+import {
+  checkImportFile,
+  exportData,
+  EXPORT_SCHEMA_VERSION,
+  replaceAll,
+  type ImportSummary,
+} from '../../storage/backup.ts';
+import { DEVICE_SETTINGS, type DataSet, type ReviewLogRecord, type VersionedCard } from '../../domain/records.ts';
+import { SCHEDULER_CONFIGS } from '../../domain/schedulerConfig.ts';
 import { setTaskControls } from '../../storage/ops.ts';
-import { openDb } from '../../storage/db.ts';
+import { TABLES } from '../../storage/db.ts';
 import { ctx, db, findTask, newOpId, saveSetting, useLive, useSettings } from '../runtime.ts';
 
 export function SettingsPage() {
@@ -169,11 +176,106 @@ async function exportNow() {
 
 const LEGACY_PREVIEW_DB = 'premise-preview';
 
+const CARD_KEYS = [
+  'schedulerVersion',
+  'due',
+  'stability',
+  'difficulty',
+  'elapsed_days',
+  'scheduled_days',
+  'learning_steps',
+  'reps',
+  'lapses',
+  'state',
+  'last_review',
+] as const satisfies readonly (keyof VersionedCard)[];
+
+function sameCard(a: VersionedCard | null, b: VersionedCard | null): boolean {
+  return a === null || b === null ? a === b : CARD_KEYS.every((key) => a[key] === b[key]);
+}
+
+function cardKey(card: VersionedCard | null): string {
+  return card === null ? 'null' : JSON.stringify(CARD_KEYS.map((key) => card[key]));
+}
+
+/** Early preview v1 omitted review sequence numbers and the version of cardBefore. */
+function normalizeLegacyReviewHistory(data: DataSet): DataSet {
+  const missingSeq = data.reviewLogs.filter((log) => log.seq === undefined);
+  if (missingSeq.length > 0 && missingSeq.length !== data.reviewLogs.length) {
+    throw new Error('Old preview data mixes review logs with and without sequence numbers.');
+  }
+  const historical = missingSeq.length > 0;
+  if (!historical && data.reviewLogs.every((log) => !log.cardBefore || log.cardBefore.schedulerVersion)) return data;
+
+  const attempts = new Map(data.attempts.map((attempt) => [attempt.id, attempt]));
+  const logs = data.reviewLogs.map((log) => {
+    const attempt = attempts.get(log.attemptId);
+    if (historical && !attempt?.submittedAt) throw new Error(`Review ${log.id} has no submitted answer.`);
+    return {
+      ...log,
+      // Old undo always restored cardBefore under this log's scheduler version.
+      cardBefore: log.cardBefore
+        ? { ...log.cardBefore, schedulerVersion: log.cardBefore.schedulerVersion ?? log.schedulerVersion }
+        : null,
+      // Before seq existed, reviewedAt held the effective scheduler time. The attempt preserves
+      // the student's actual submission time; cardAfter.last_review preserves the effective time.
+      reviewedAt: historical ? attempt!.submittedAt! : log.reviewedAt,
+    };
+  });
+  if (!historical) return { ...data, reviewLogs: logs };
+
+  const activeByTask = new Map<string, ReviewLogRecord[]>();
+  for (const log of logs) {
+    if (log.undone) continue;
+    const active = activeByTask.get(log.taskId) ?? [];
+    active.push(log);
+    activeByTask.set(log.taskId, active);
+  }
+  const chainByTask = new Map<string, ReviewLogRecord[]>();
+  for (const [taskId, active] of activeByTask) {
+    const byPrevious = new Map<string, ReviewLogRecord[]>();
+    for (const log of active) {
+      const key = cardKey(log.cardBefore);
+      const candidates = byPrevious.get(key) ?? [];
+      candidates.push(log);
+      byPrevious.set(key, candidates);
+    }
+    const chain: ReviewLogRecord[] = [];
+    let prior: VersionedCard | null = null;
+    while (chain.length < active.length) {
+      const key = cardKey(prior);
+      const matches = byPrevious.get(key);
+      if (matches?.length !== 1 || !sameCard(matches[0]!.cardBefore, prior)) {
+        throw new Error(`Cannot determine the old review order for ${taskId}.`);
+      }
+      const log = matches[0]!;
+      chain.push(log);
+      byPrevious.delete(key);
+      prior = { ...log.cardAfter, schedulerVersion: log.schedulerVersion };
+    }
+    chainByTask.set(taskId, chain);
+  }
+
+  // Preserve the approximate cross-task application order. Within a task the saved card chain,
+  // rather than wall-clock timestamps or random IDs, determines which review came first.
+  const chronological = [...logs].sort((a, b) => a.appliedAt.localeCompare(b.appliedAt) || a.id.localeCompare(b.id));
+  const cursor = new Map<string, number>();
+  const ordered = chronological.map((log) => {
+    if (log.undone) return log;
+    const index = cursor.get(log.taskId) ?? 0;
+    cursor.set(log.taskId, index + 1);
+    return chainByTask.get(log.taskId)![index]!;
+  });
+  return { ...data, reviewLogs: ordered.map((log, index) => ({ ...log, seq: index + 1 })) };
+}
+
 /** The removed public preview used its own database on the same origin. Inspect it without creating it. */
 async function hasLegacyPreviewData(): Promise<boolean> {
   if (__PREVIEW__ || !(await Dexie.exists(LEGACY_PREVIEW_DB))) return false;
-  const legacy = openDb(LEGACY_PREVIEW_DB);
+  // No declared version: declaring today's schema would upgrade an earlier v1 preview database.
+  const legacy = new Dexie(LEGACY_PREVIEW_DB);
   try {
+    await legacy.open();
     // Include settings and other records too: a focus note may be the only data worth recovering.
     return (await Promise.all(legacy.tables.map((table) => table.count()))).some((count) => count > 0);
   } catch {
@@ -186,10 +288,41 @@ async function hasLegacyPreviewData(): Promise<boolean> {
 
 async function exportLegacyPreview(): Promise<void> {
   if (!(await Dexie.exists(LEGACY_PREVIEW_DB))) throw new Error('The old preview data is no longer present.');
-  const legacy = openDb(LEGACY_PREVIEW_DB);
+  const legacy = new Dexie(LEGACY_PREVIEW_DB);
   try {
+    await legacy.open();
     const now = new Date().toISOString();
-    const file = await exportData(legacy, now, __COMMIT__.slice(0, 7));
+    const present = new Set(legacy.tables.map((table) => table.name));
+    const data = (await legacy.transaction('r', legacy.tables, async () =>
+      Object.fromEntries(
+        await Promise.all(
+          TABLES.map(async (name) => [name, present.has(name) ? await legacy.table(name).toArray() : []] as const),
+        ),
+      ),
+    )) as unknown as DataSet;
+    const normalized = normalizeLegacyReviewHistory(data);
+    const versions = new Set(normalized.cards.map((card) => card.schedulerVersion));
+    for (const log of normalized.reviewLogs) {
+      versions.add(log.schedulerVersion);
+      if (log.cardBefore) versions.add(log.cardBefore.schedulerVersion);
+    }
+    const stored = new Map(normalized.schedulerConfigs.map((record) => [record.version, record.config]));
+    const schedulerConfigs = Object.create(null) as Record<string, Record<string, unknown>>;
+    for (const version of [...versions].sort()) {
+      const config = Object.hasOwn(SCHEDULER_CONFIGS, version) ? SCHEDULER_CONFIGS[version] : stored.get(version);
+      if (!config) throw new Error(`Scheduler version ${version} has no stored configuration.`);
+      schedulerConfigs[version] = JSON.parse(JSON.stringify(config)) as Record<string, unknown>;
+    }
+    const { schedulerConfigs: _table, settings, ...rest } = normalized;
+    const file = {
+      app: 'premise',
+      schemaVersion: EXPORT_SCHEMA_VERSION,
+      exportedAt: now,
+      appVersion: __COMMIT__.slice(0, 7),
+      schedulerConfigs,
+      ...rest,
+      settings: settings.filter((record) => !(DEVICE_SETTINGS as readonly string[]).includes(record.key)),
+    };
     download(`premise-preview-recovery-${now.slice(0, 10)}.json`, JSON.stringify(file));
   } finally {
     legacy.close();
