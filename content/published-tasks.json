@@ -13,7 +13,8 @@
       "max": 2,
       "status": "active",
       "revisions": [
-        "cb8c40b1b847dfea8ab7f1284ce6750605e46c71c530c6215c1451be396ec00b"
+        "cb8c40b1b847dfea8ab7f1284ce6750605e46c71c530c6215c1451be396ec00b",
+        "c4e2f22e01051fd00f4d594415863cbffa3d057ffbab2b1c76cd2565b789d696"
       ]
     },
     "arg-0010.weaken": {
@@ -21,7 +22,8 @@
       "max": 2,
       "status": "active",
       "revisions": [
-        "797eadcbd79704fc542132d3caac0a5f3781a1419de4bee7438854f2fd914e7d"
+        "797eadcbd79704fc542132d3caac0a5f3781a1419de4bee7438854f2fd914e7d",
+        "b9105c647b18547217cf6cf8e597d2bec84a0ffd790caef655c406e3d5de7c55"
       ]
     },
     "arg-0010.assumption": {
@@ -29,7 +31,8 @@
       "max": 2,
       "status": "active",
       "revisions": [
-        "e2ddbda67d3e81d458d74c10a86e6a0d8ea3713523d38e5e9195a9a1fbf0261e"
+        "e2ddbda67d3e81d458d74c10a86e6a0d8ea3713523d38e5e9195a9a1fbf0261e",
+        "855af9b8f30409549fc0f33b47076693014f6b62bf061fe789ddaee89bcc12b2"
       ]
     },
     "arg-0011.flaw": {
@@ -45,7 +48,8 @@
       "max": 2,
       "status": "active",
       "revisions": [
-        "efc20eeee666cc3d5511bd0f673599abc491cbde8259397ca0b0b2a1c80bf6fd"
+        "efc20eeee666cc3d5511bd0f673599abc491cbde8259397ca0b0b2a1c80bf6fd",
+        "23ee47a0fd60671baca0367dc8a457fba6b3437399c9df74f3cbe1b11ece700a"
       ]
     },
     "arg-0012.strengthen": {
@@ -53,7 +57,8 @@
       "max": 2,
       "status": "active",
       "revisions": [
-        "fc6d2f5de4f501d91efd8ebfbc9ab23ca449f6ad5d498bf5ab00be7d7d80f9d6"
+        "fc6d2f5de4f501d91efd8ebfbc9ab23ca449f6ad5d498bf5ab00be7d7d80f9d6",
+        "30fcea352ebdbb52d53a89a4cd742c6b175a24ba21403255e5832ff7f6c5162a"
       ]
     },
     "arg-0012.weaken": {
@@ -61,7 +66,8 @@
       "max": 2,
       "status": "active",
       "revisions": [
-        "65673b0f4e7b150ab1a3ea45d1461ae7a0dbdf6473e457a3a9f419f3416ad631"
+        "65673b0f4e7b150ab1a3ea45d1461ae7a0dbdf6473e457a3a9f419f3416ad631",
+        "00e7718a795953cc21294b2bd6918f370ea9905d2473b15f03b794468a613b08"
       ]
     },
     "arg-0013.conclusion": {
@@ -77,7 +83,8 @@
       "max": 2,
       "status": "active",
       "revisions": [
-        "87d34e2c8f417c3f13635d13fc9dd9ce743f85df3e9218b47081dfaea524f2c0"
+        "87d34e2c8f417c3f13635d13fc9dd9ce743f85df3e9218b47081dfaea524f2c0",
+        "94f0bdbc60efe40cd0565f1d244063da348358c55b6dcf537bbe27e2a78bb55c"
       ]
     },
     "arg-0014.flaw": {
@@ -93,7 +100,8 @@
       "max": 2,
       "status": "active",
       "revisions": [
-        "07f4e3764c295ca6123b51d37b0a81c491e2a79c63effa9003481a11e337d8a3"
+        "07f4e3764c295ca6123b51d37b0a81c491e2a79c63effa9003481a11e337d8a3",
+        "77f5b9f14cbed520161efbebe6390832360aa78008339acceb1274aa1eaa3636"
       ]
     },
     "arg-0015.assumption": {
@@ -101,7 +109,8 @@
       "max": 2,
       "status": "active",
       "revisions": [
-        "1719d64dbae84e69d1d4e5d957db62de946164a171f4ea0dd2a56a393f976ab1"
+        "1719d64dbae84e69d1d4e5d957db62de946164a171f4ea0dd2a56a393f976ab1",
+        "54b55746a1ef2570f58fb67ea23e6b15f3ec105ab8e6037e80ac96c59615752e"
       ]
     },
     "arg-0015.strengthen": {
@@ -109,7 +118,8 @@
       "max": 2,
       "status": "active",
       "revisions": [
-        "c13c9d23abb699949b853a23e302298c5c4698909f895e06bf3b5939a61c648c"
+        "c13c9d23abb699949b853a23e302298c5c4698909f895e06bf3b5939a61c648c",
+        "161fded308139ceb0c268d56a1f8aacfe8ab00f00f5708eaaa4841fdb86cf333"
       ]
     },
     "arg-0016.flaw": {
@@ -125,7 +135,8 @@
       "max": 2,
       "status": "active",
       "revisions": [
-        "150527bbad93c222180abdbaf1de6fe598071cce35d763222308b2bc23772442"
+        "150527bbad93c222180abdbaf1de6fe598071cce35d763222308b2bc23772442",
+        "33dd30bd51484d7593275ab76ec88de51a6af414a43adc2f0682a90c6f576d89"
       ]
     },
     "arg-0017.conclusion": {
@@ -157,7 +168,174 @@
       "max": 2,
       "status": "active",
       "revisions": [
-        "eaaf288314ee9c615feaf4fe4b836f5979363e46e46b4f1d46abf4ca00f8ef60"
+        "eaaf288314ee9c615feaf4fe4b836f5979363e46e46b4f1d46abf4ca00f8ef60",
+        "371ded0f4057be392149680c35f56c412150f241008bce0318ba4459b5134c6b"
+      ]
+    },
+    "arg-0019.assumption": {
+      "skill": "assumption",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "cc89fe651806fcfd5f93965c013ac369a577eb54aafc55c16c28b1d793c9728d"
+      ]
+    },
+    "arg-0019.strengthen": {
+      "skill": "strengthen",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "36ab1c5a68406a572bf23738764a63bbdd47fac80906734abd9dbe1efe1fa767",
+        "2aaf5463aeaa1e31e96226de50db1d4cabaaf136658a3a9e47df616735567ce8"
+      ]
+    },
+    "arg-0020.flaw": {
+      "skill": "flaw",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "14527d8e350cc40c01833387421f6f32ba61f7f9b784b82da1cc70eaacc525d1"
+      ]
+    },
+    "arg-0020.weaken": {
+      "skill": "weaken",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "429a6fce8fbec4bed3b3686bbbe2a563881a42cf481795460c34643ebe4b188e"
+      ]
+    },
+    "arg-0021.flaw": {
+      "skill": "flaw",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "3318cffc096cbfacf2fbea71619f125d575b3638ba47facf8bdc092a424161a3"
+      ]
+    },
+    "arg-0021.assumption": {
+      "skill": "assumption",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "8b6c862e69f579010aba6c67d6c91b8ad8fe70c369e3c89e7875a6297d9a848d"
+      ]
+    },
+    "arg-0022.strengthen": {
+      "skill": "strengthen",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "76f69ef17f51d1d36d7a4ba9359772bf64bb4ef3703bcbf160b1576b8da40113",
+        "07b5e722fcbb288854e88d563cca21a6f15ba3183d801636e14bd70bff370d62"
+      ]
+    },
+    "arg-0022.weaken": {
+      "skill": "weaken",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "64bb808752df9c21b2e11b16c5104416eeca2811c5913d9861594afd3507676b"
+      ]
+    },
+    "arg-0023.assumption": {
+      "skill": "assumption",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "11ee666fa05b933dabb57e11cf05585c4b249a47905d62d898693769076d2a35"
+      ]
+    },
+    "arg-0023.weaken": {
+      "skill": "weaken",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "328d12608bdf248e0ceb46e6bd0cd7f20572fa39ad842a703e546595ffea6362",
+        "5dffb94157e1a43324274f5a31469d4ae0ca9068b445bceea25835e48a118007"
+      ]
+    },
+    "arg-0024.conclusion": {
+      "skill": "conclusion",
+      "max": 1,
+      "status": "active",
+      "revisions": [
+        "28724fcca95f57247818dd0ccba2b39264faabf11b3e2e1ac09516b27af9f98f"
+      ]
+    },
+    "arg-0024.assumption": {
+      "skill": "assumption",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "171cfbdd8623334eeeb19ac30611bfcc9869bbc94d8990d2c5ae679cbf0e203e"
+      ]
+    },
+    "arg-0025.flaw": {
+      "skill": "flaw",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "360bdc48b2eda1e8e624434e61911d327ff82e4d3c7334bbf5b006d3512394c2"
+      ]
+    },
+    "arg-0025.weaken": {
+      "skill": "weaken",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "0cfbb5a3776b10958965bae36d64b5ee1eeec95e0580ae57405fb52aae0fa9d2"
+      ]
+    },
+    "arg-0026.strengthen": {
+      "skill": "strengthen",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "e2bb54cdad1e2434084f2966bba518ddc6b7913128309121b5f76ea993614188",
+        "09d00dd609193c0b0cf35f06c80911632d21796b9e884f902855e0ce52d9120f"
+      ]
+    },
+    "arg-0026.weaken": {
+      "skill": "weaken",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "b7ab184b339675ba6cdbf2e544acd8e93a6f68b11b711a5d4f80affb61612f73",
+        "7d49abd7f9db8af1ebf717c0c77c950662a9e17a109b002c848c0676b722ce7c"
+      ]
+    },
+    "arg-0027.assumption": {
+      "skill": "assumption",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "6dc447a7d8bac114e064e5211de1d483274ce1c47ea3554c77e50abb441ec1c7"
+      ]
+    },
+    "arg-0027.strengthen": {
+      "skill": "strengthen",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "6b35aedf57c8d4104817060dd8c83421b18076133fd10be3baeaf2122e87f563",
+        "198269e7d33a4153198a796b6acc7a50fc4f111d2a4178ba99c7ab9d10cb0fe1"
+      ]
+    },
+    "arg-0028.assumption": {
+      "skill": "assumption",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "8ed789460efd030adf80d51404048ac9f40439c875d6199b434ae261f4489dbd"
+      ]
+    },
+    "arg-0028.weaken": {
+      "skill": "weaken",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "2d88e386587d83e88a80d98c0b440d313024ef3bcb0adff521f4678ccd7f62ec"
       ]
     }
   }
