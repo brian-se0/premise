@@ -90,10 +90,11 @@ const HEADING_LINE = /^I\d{2}:/i;
 const BULLET = new RegExp(`^[-*•]${WS}+`);
 const UNFILLED_SCORE = new RegExp(`^__${WS}*/`);
 const FENCE_LINE = /^(`{3,}|~{3,})[\w+-]*$/;
-const FEEDBACK_FENCE_START = /^(`{3,}|~{3,})(.*)$/;
+// Backtick fence info strings cannot contain backticks; an inline code span is not an opener.
+const FEEDBACK_FENCE_START = /^(`{3,}(?=[^`]*$)|~{3,})(.*)$/;
 const MARKDOWN_HEADING = /#{1,6}[ \t]+/y;
 const HEADING_SCORE = new RegExp(`^(${WS}*(?:\\d+|\\?)${WS}*/${WS}*\\d+)(?=${WS}|$|[^\\w/])`);
-const FEEDBACK_LIST_MARKER = /^(?:[-*+•]|\d+[.)])[ \t]+/;
+const FEEDBACK_LIST_MARKER = new RegExp(`^(?:[-*+•]|\\d+[.)])${WS}+`);
 const HEADING_DECORATORS = /^[*_`~]*/;
 const HEADING_PREFIX_DECORATORS = /[*_`~]+/y;
 const BOUNDED_HEADING_ID = /^I\d+/i;
@@ -363,12 +364,30 @@ function skipScoreDecoration(text: string): string {
   return text.slice(i);
 }
 
+/** Only a heading's assessment, not its ID or score block, gets emphasis/code normalization. */
+function headingAssessment(text: string): string {
+  let assessment = skipScoreDecoration(text);
+  assessment = skipScoreDecoration(assessment.replace(/^Score\b(?:[ \t]*:)?[ \t]*/i, ''));
+  return assessment.replace(/[*_`]/g, '');
+}
+
 /** The bounded reader's single interpretation of a raw heading line, including its score. */
 function recognizeBoundedHeading(rawLine: string): BoundedHeading | null {
   let line = trimWs(rawLine);
-  const quoted = line.startsWith('>');
-  if (quoted) line = trimWs(line.replace(/^(?:>[ \t]*)+/, ''));
-  line = trimWs(line.replace(FEEDBACK_LIST_MARKER, ''));
+  let quoted = false;
+  // A quote can appear inside a list item, and lists and quotes can alternate at any depth.
+  while (line) {
+    if (line.startsWith('>')) {
+      quoted = true;
+      line = trimWs(line.slice(1));
+      continue;
+    }
+    const withoutList = line.replace(FEEDBACK_LIST_MARKER, '');
+    if (withoutList === line) break;
+    line = trimWs(withoutList);
+  }
+  // Match cleanLine's paired outer-pipe rule without changing shared score-block cleaning.
+  if (line.length >= 2 && line.startsWith('|') && line.endsWith('|')) line = trimWs(line.slice(1, -1));
   let offset = 0;
   let prefixHasTilde = false;
   let markedHeading = false;
@@ -397,12 +416,11 @@ function recognizeBoundedHeading(rawLine: string): BoundedHeading | null {
   const separator = BOUNDED_HEADING_SEPARATOR.exec(line)?.[0];
   // A bare marked ID or an ID followed by score/max is row-shaped but not an attributable label.
   // Ordinary prose such as "I02 is discussed below" is not a heading.
-  if (!separator && line !== '' && !markedHeading && !HEADING_SCORE.test(skipScoreDecoration(line))) return null;
+  if (!separator && line !== '' && !markedHeading && !HEADING_SCORE.test(headingAssessment(line))) return null;
 
   const attributable = separator === ':' && !prefixHasTilde && !suffix.includes('~');
-  let remainder = skipScoreDecoration(line.slice(separator?.length ?? 0));
-  remainder = skipScoreDecoration(remainder.replace(/^Score\b(?:[ \t]*:)?[ \t]*/i, ''));
-  const token = HEADING_SCORE.exec(remainder)?.[1];
+  const assessment = headingAssessment(line.slice(separator?.length ?? 0));
+  const token = HEADING_SCORE.exec(assessment)?.[1];
   let score: BoundedHeading['score'] = null;
   if (token) {
     const [points, max] = token.split('/').map(trimWs);
