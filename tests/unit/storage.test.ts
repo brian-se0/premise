@@ -118,9 +118,15 @@ async function prepared(taskIds: string[]) {
 
 async function row(attemptId: string, score: number | null, extra: Partial<GradeRow> = {}): Promise<GradeRow> {
   const a = (await db.attempts.get(attemptId))!;
+  const current = a.currentGradingId ? await db.gradings.get(a.currentGradingId) : undefined;
+  const namedReplyId = extra.replyId ?? current?.replyId;
+  const saved = namedReplyId ? await db.replies.get(namedReplyId) : undefined;
   return {
     attemptId,
     revision: a.revision,
+    expectedAnswer: a.answer,
+    expectedSnapshotHash: a.snapshotHash,
+    ...(extra.source === 'parsed' ? { expectedReplyRaw: saved?.raw ?? '' } : {}),
     score,
     tags: [],
     source: 'manual',
@@ -128,7 +134,7 @@ async function row(attemptId: string, score: number | null, extra: Partial<Grade
     feedbackRange: null,
     ratingChoice: 'good',
     ...extra,
-  };
+  } as GradeRow;
 }
 
 /** A real parsed row and its immutable saved reply for provenance-sensitive tests. */
@@ -161,7 +167,13 @@ async function parsedGradeRow(
     selectedBlock: parsed.block.range,
     parseOutcome: parsed.block.outcome,
   });
-  return row(attemptId, score, { source: 'parsed', replyId, feedbackRange: result.feedback });
+  const attempt = (await db.attempts.get(attemptId))!;
+  return {
+    ...(await row(attemptId, score, { source: 'parsed', replyId, feedbackRange: result.feedback })),
+    expectedAnswer: attempt.answer,
+    expectedSnapshotHash: attempt.snapshotHash,
+    expectedReplyRaw: raw,
+  } as GradeRow;
 }
 
 async function rev(attemptId: string): Promise<number> {
@@ -451,6 +463,27 @@ describe('drafts and submission', () => {
     );
   });
 
+  it('keeps the final allowed draft revision importable and refuses the next increment', async () => {
+    const s = await startSession(db, ctx(), 'today', ['arg-0001.flaw']);
+    const a = await open(s.id, 0, 'arg-0001.flaw');
+    const penultimate = Number.MAX_SAFE_INTEGER - 2;
+    await db.attempts.update(a.id, { revision: penultimate });
+    const saved = await saveDraft(db, ctx(), await expectedDraft(a, 0, penultimate), 'last safe draft');
+    expect(saved.revision).toBe(Number.MAX_SAFE_INTEGER - 1);
+    expect(checkDataSet(await dump())).toEqual([]);
+    const file = await exportData(db, now, 'test');
+    const checked = await checkImport(JSON.stringify(file));
+    expect(checked.ok ? [] : checked.problems).toEqual([]);
+    if (!checked.ok) throw new Error(checked.problems.join('\n'));
+    const fresh = openDb(`test-${Math.random()}`);
+    await replaceAll(fresh, checked.data);
+    expect((await fresh.attempts.get(a.id))?.revision).toBe(Number.MAX_SAFE_INTEGER - 1);
+    await expectUnchanged(
+      async () => saveDraft(db, ctx(), await expectedDraft(a, 0, saved.revision, 'last safe draft'), 'too far'),
+      OpError,
+    );
+  });
+
   it('keeps submitted fields frozen through every operation', async () => {
     const { attemptIds, requestId } = await prepared(['arg-0001.flaw']);
     const id = attemptIds[0]!;
@@ -611,14 +644,24 @@ describe('review order', () => {
     await expectBLatest(await twoReviews('2026-10-25T15:00:00.000Z', '2026-10-25T15:00:00.000Z'));
   });
 
-  it('refuses a review sequence increment beyond safe integer precision atomically', async () => {
+  it('keeps the last allowed review sequence importable and refuses the next atomically', async () => {
     const first = await prepared(['arg-0001.flaw']);
     await confirmRows(db, ctx(), 'first-grade', first.requestId, [await row(first.attemptIds[0]!, 2)], null);
     const log = (await db.reviewLogs.toArray())[0]!;
-    await db.reviewLogs.update(log.id, { seq: Number.MAX_SAFE_INTEGER });
+    await db.reviewLogs.update(log.id, { seq: Number.MAX_SAFE_INTEGER - 2 });
     const second = await prepared(['arg-0002.assumption']);
+    await confirmRows(db, ctx(), 'second-grade', second.requestId, [await row(second.attemptIds[0]!, 2)], null);
+    expect((await db.reviewLogs.toArray()).map((item) => item.seq)).toContain(Number.MAX_SAFE_INTEGER - 1);
+    expect(checkDataSet(await dump())).toEqual([]);
+    const checked = await checkImport(JSON.stringify(await exportData(db, now, 'test')));
+    expect(checked.ok ? [] : checked.problems).toEqual([]);
+    if (!checked.ok) throw new Error(checked.problems.join('\n'));
+    const restored = openDb(`test-${Math.random()}`);
+    await replaceAll(restored, checked.data);
+    expect((await restored.reviewLogs.toArray()).map((item) => item.seq)).toContain(Number.MAX_SAFE_INTEGER - 1);
+    const third = await prepared(['arg-0003.flaw']);
     await expectUnchanged(
-      async () => confirmRows(db, ctx(), 'second-grade', second.requestId, [await row(second.attemptIds[0]!, 2)], null),
+      async () => confirmRows(db, ctx(), 'third-grade', third.requestId, [await row(third.attemptIds[0]!, 2)], null),
       OpError,
     );
   });
@@ -894,6 +937,39 @@ describe('replies and provenance', () => {
       null,
     );
     expect((await db.gradings.toArray())[0]).toMatchObject({ score: 1, replyId });
+  });
+
+  it('rejects a same-length replacement of the reply text previewed for a parsed grade', async () => {
+    const { attemptIds, requestId } = await prepared(['arg-0001.flaw']);
+    const parsed = await parsedGradeRow(requestId, attemptIds[0]!, 1, 'saved-preview');
+    const file = await exportData(db, now, 'test');
+    const saved = file.replies.find((reply) => reply.id === parsed.replyId)!;
+    const original = saved.raw;
+    saved.raw = saved.raw.replace('Check the reasoning.', 'Probe the reasoning.');
+    expect(saved.raw).not.toBe(original);
+    expect(saved.raw.length).toBe(original.length);
+    const checked = await checkImport(JSON.stringify(file));
+    expect(checked.ok ? [] : checked.problems).toEqual([]);
+    if (!checked.ok) throw new Error(checked.problems.join('\n'));
+    await replaceAll(db, checked.data);
+    await expectUnchanged(() => confirmRows(db, ctx(), 'changed-preview-reply', requestId, [parsed], null), OpError);
+    expect(await db.gradings.count()).toBe(0);
+    expect(await db.reviewLogs.count()).toBe(0);
+    expect(await db.cards.count()).toBe(0);
+    expect(await db.operations.get('changed-preview-reply')).toBeUndefined();
+  });
+
+  it('requires every parsed preview expectation at the storage boundary', async () => {
+    const { attemptIds, requestId } = await prepared(['arg-0001.flaw']);
+    const parsed = await parsedGradeRow(requestId, attemptIds[0]!, 1, 'saved-expectations');
+    for (const field of ['expectedAnswer', 'expectedSnapshotHash', 'expectedReplyRaw'] as const) {
+      const missing = { ...parsed } as Record<string, unknown>;
+      delete missing[field];
+      await expectUnchanged(
+        () => confirmRows(db, ctx(), `missing-${field}`, requestId, [missing as unknown as GradeRow], null),
+        OpError,
+      );
+    }
   });
 
   it('refuses a parsed grade without a reply or with an older parser, without writing', async () => {

@@ -143,8 +143,8 @@ async function draftRow(
 /** Counters must advance exactly; rounded integers would defeat revision checks and review ordering. */
 function nextCounter(current: number, name: string): number {
   const next = current + 1;
-  if (!Number.isSafeInteger(current) || current < 0 || !Number.isSafeInteger(next) || next <= current) {
-    throw new OpError(`${name} has reached the safe integer limit. Export your data before continuing.`);
+  if (!Number.isSafeInteger(current) || current < 0 || !Number.isSafeInteger(next) || next >= Number.MAX_SAFE_INTEGER) {
+    throw new OpError(`${name} has reached the limit for safe, importable data.`);
   }
   return next;
 }
@@ -546,16 +546,12 @@ export async function saveReply(
 
 // ---------- Applying grades ----------
 
-export interface GradeRow {
+interface GradeRowBase {
   attemptId: string;
   /** The attempt revision the UI last read. */
   revision: number;
-  /** When supplied, guards against a backup replacement that reuses an id and revision. */
-  expectedAnswer?: string;
-  expectedSnapshotHash?: string;
   score: number | null;
   tags: string[];
-  source: GradingSource;
   disqualified: boolean;
   /** Offsets into the linked reply's raw text; needs a reply. */
   feedbackRange: Range | null;
@@ -567,6 +563,23 @@ export interface GradeRow {
    */
   replyId?: string | null;
 }
+
+export type GradeRow = GradeRowBase &
+  (
+    | {
+        source: 'parsed';
+        /** The frozen answer, snapshot, and reply text shown in this preview. */
+        expectedAnswer: string;
+        expectedSnapshotHash: string;
+        expectedReplyRaw: string;
+      }
+    | {
+        source: Exclude<GradingSource, 'parsed'>;
+        expectedAnswer?: string;
+        expectedSnapshotHash?: string;
+        expectedReplyRaw?: never;
+      }
+  );
 
 interface Provenance {
   replyId: string | null;
@@ -716,8 +729,26 @@ async function applyGrade(
 
 async function loadFresh(
   db: Tx,
-  rows: { attemptId: string; revision: number; expectedAnswer?: string; expectedSnapshotHash?: string }[],
+  rows: {
+    attemptId: string;
+    revision: number;
+    source?: GradingSource;
+    expectedAnswer?: string;
+    expectedSnapshotHash?: string;
+    expectedReplyRaw?: string;
+  }[],
 ): Promise<AttemptRecord[]> {
+  if (
+    rows.some(
+      (r) =>
+        r.source === 'parsed' &&
+        (typeof r.expectedAnswer !== 'string' ||
+          typeof r.expectedSnapshotHash !== 'string' ||
+          typeof r.expectedReplyRaw !== 'string'),
+    )
+  ) {
+    throw new OpError('A parsed grade needs the answer, snapshot and saved reply text shown in its preview.');
+  }
   const attempts = await db.attempts.bulkGet(rows.map((r) => r.attemptId));
   const stale = rows
     .filter(
@@ -789,7 +820,7 @@ export async function confirmRows(
       replyId = ctx.newId();
       await db.replies.add({ ...reply, id: replyId, requestId, pastedAt: ctx.now });
     }
-    const parsedBlocks = new Map<string, ParsedBlock>();
+    const parsedBlocks = new Map<string, { block: ParsedBlock; raw: string }>();
     const rowIdByAttempt = new Map(Object.entries(request.rows).map(([rowId, attemptId]) => [attemptId, rowId]));
     const changed: AttemptRecord[] = [];
     const gradingIds: Record<string, string> = {};
@@ -807,8 +838,11 @@ export async function confirmRows(
         if (!saved || saved.requestId !== requestId || saved.parserVersion !== PARSER_VERSION) {
           throw new OpError('This parsed grade needs a reply read by the current parser. Read it again.');
         }
-        let block = parsedBlocks.get(saved.id);
-        if (!block) {
+        let checked = parsedBlocks.get(saved.id);
+        if (!checked) {
+          if (saved.raw !== row.expectedReplyRaw) {
+            throw new OpError('The stored reply changed since the preview. Read the scores again.');
+          }
           const parserRows = await Promise.all(
             Object.entries(request.rows).map(async ([rowId, attemptId]) => {
               const owned = await db.attempts.get(attemptId);
@@ -823,13 +857,16 @@ export async function confirmRows(
             promptVersion: request.promptVersion,
           });
           const candidates = parsed.kind === 'parsed' ? [parsed.block] : parsed.kind === 'choose' ? parsed.options : [];
-          block = candidates.find((candidate) => sameRange(candidate.range, saved.selectedBlock));
+          const block = candidates.find((candidate) => sameRange(candidate.range, saved.selectedBlock));
           if (!block || block.outcome !== saved.parseOutcome) {
             throw new OpError('The stored reply no longer matches the selected score block. Read it again.');
           }
-          parsedBlocks.set(saved.id, block);
+          checked = { block, raw: saved.raw };
+          parsedBlocks.set(saved.id, checked);
+        } else if (row.expectedReplyRaw !== checked.raw) {
+          throw new OpError('The parsed rows came from different previews of the same reply. Read the scores again.');
         }
-        const parsedRow = block.rows.find((candidate) => candidate.rowId === rowIdByAttempt.get(row.attemptId));
+        const parsedRow = checked.block.rows.find((candidate) => candidate.rowId === rowIdByAttempt.get(row.attemptId));
         if (
           parsedRow?.status !== 'valid' ||
           parsedRow.score !== row.score ||
