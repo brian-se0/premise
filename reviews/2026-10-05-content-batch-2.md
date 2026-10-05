@@ -1346,3 +1346,700 @@ the Ledger was given a leaked city memo showing that officials knew for six mont
 Elm Street School were faulty and put off repairing them. The paper's editor concludes that, under its own
 code, the Ledger should publish the memo.
 ````
+
+## Reviewer response
+
+GPT-6 Pro (thinking effort 5 of 5) in the owner's ChatGPT account, 2026-10-05, sent by the device session in Brave as one attachment; it worked for 28 minutes. The reply follows verbatim, from the first rule below to the last rule before `## Triage` (SHA-256 of the text between them: `1aaf4dab70a45f94d5fd0fd896da566538607aecbd96d64225448228715c5361`, 35,591 bytes, matching the copy saved on the owner's PC). "premise-batch2-packet" is ChatGPT's citation chip for the packet.
+
+---
+
+## arg-0019 — fix
+
+### `arg-0019:assumption`
+
+**Problem:** The disqualifier can be read as imposing a zero whenever an answer mentions a stated premise—even when it also supplies a valid assumption. For example, an answer can correctly acknowledge the matching earlier trends before excluding a complete alternative explanation. Mentioning a premise is not the same as offering that premise as the assumption. This wording recurs in all six assumption tasks. premise-batch2-packet
+
+**Replace `disqualifiers` with the following text. Apply this same replacement to the assumption tasks in arg-0021, arg-0023, arg-0024, arg-0027 and arg-0028:**
+
+```yaml
+disqualifiers:
+  - Offers only a stated premise, a stated intermediate conclusion, or a restatement of the main conclusion as the proposed assumption, without a distinct unstated assumption. Mentioning a stated claim while giving a distinct assumption does not by itself trigger this cap.
+```
+
+### `arg-0019:strengthen`
+
+**Problems:** The reference moves from “fields on the same farm” to shared seed and equipment without clearly making those controls part of the proposed fact. Same-farm comparisons do not inherently hold every treatment fixed. Also, rubric criterion 1 requires only relevance: a fact attributing the extra rise to a new seed would satisfy “bears on whether,” despite pointing in the wrong direction. That permits an evidence point for a weakener in a strengthen task. premise-batch2-packet
+
+**Replace `reference`:**
+
+```yaml
+reference: >-
+  On farms that planted cover crops on only some fields, the fields with and
+  without cover crops used the same corn seed, fertilizer and irrigation during
+  the five years, and the cover-crop fields had the larger rise in yield. This
+  comparison holds several rival causes steady and makes a contribution from
+  the cover crops more likely.
+```
+
+**Replace rubric criterion 1:**
+
+> Gives a new fact, consistent with the stated premises and not already stated in them, that materially strengthens the inference that the cover crops raised yields on the adopting farms.
+
+## arg-0020 — fix
+
+### `arg-0020:flaw`
+
+**Problem:** The key excludes an alternative the stimulus leaves open. The stimulus matches hours **on the app** and excludes outside classes or lessons; it does not match informal practice outside the app. The difficulty note and acceptance text nevertheless claim that total practice time is fixed. This also conflicts with accepting a Spanish-speaking partner or time spent where Spanish is spoken as possible alternatives. premise-batch2-packet premise-batch2-packet
+
+**Replace `difficulty_note`:**
+
+```yaml
+difficulty_note: >-
+  Causes: the stimulus matches the groups' approximate duration of app use and
+  their total hours practicing on the app, and rules out outside classes or
+  lessons. It does not match starting proficiency or informal practice outside
+  the app. A full-credit answer applies the causal error to the streaks and
+  scores and identifies an alternative that remains open.
+```
+
+**Replace `accept`:**
+
+```yaml
+accept: >-
+  Accept an answer that identifies the inference from the long-streak users'
+  higher speaking-test scores to the claim that keeping a streak makes learners
+  far better speakers, and explains why it is not established by naming a
+  possible alternative consistent with the premises. Examples include better
+  starting Spanish, better speakers finding streaks easier to maintain, or more
+  informal Spanish practice outside the app. Offer alternatives as possibilities,
+  not invented established facts. Do not credit an explanation that depends on
+  substantially different durations of app use, more total hours on the app,
+  or outside classes or lessons. Extra informal practice outside the app is not
+  excluded. A bare, unapplied label such as "correlation is not causation"
+  earns 0.
+```
+
+### `arg-0020:weaken`
+
+**Problems:** The constrained prompt identifies the missing baseline comparison almost completely, so my difficulty estimate is **2**, not 3. Rubric criterion 1 also admits the opposite-direction fact that the eventual streak holders started substantially *behind*. Finally, the acceptance text and full-credit note overinterpret an unchanged observed gap as showing that the streaks added nothing: maintaining a gap and causing no advantage are not equivalent. The unchanged gap is a weakener, not proof of no causal effect. premise-batch2-packet
+
+**Set task `difficulty` to `2` and exercise-level `difficulty` to `2`. Replace `difficulty_note`:**
+
+```yaml
+difficulty_note: >-
+  The prompt identifies the missing baseline comparison: how well the two groups
+  spoke Spanish before using the app. The remaining demands are choosing a
+  baseline difference that weakens rather than strengthens the causal inference,
+  and explaining its bearing on the later score gap. An unchanged observed gap
+  weakens the evidence for a streak-caused advantage but does not prove that the
+  streaks had no effect.
+```
+
+**In `accept`, replace the example beginning “the gap at the start was as large” with:**
+
+> The gap at the start was as large as the later gap, making the later comparison less persuasive as evidence that the streaks produced the advantage.
+
+**Replace rubric criterion 1:**
+
+> Gives a new fact about the two groups’ Spanish when they began using Lingora, consistent with the premises, that provides a material reason to doubt that the streaks account for the later score gap.
+
+**Replace the 2-point anchor:**
+
+```yaml
+- points: 2
+  answer: >-
+    Lingora uses comparable speaking assessments at sign-up and after a year.
+    The eventual streak holders led the other group by the same average amount
+    on both assessments. Because the observed gap did not grow, the later test
+    comparison gives less support to the claim that the streaks produced the
+    advantage.
+  note: >-
+    A baseline gap as large as the later gap weakens the causal interpretation
+    of that later comparison. It does not establish that the streaks had no
+    effect.
+```
+
+## arg-0021 — fix
+
+### `arg-0021:assumption`
+
+**Problem:** Money in the city’s **arts budget** is not established as necessary for renewal. Negate the reference: that budget is insufficient, but the council can renew the grant using a different authorized funding source. Every premise survives, and the claimed obstacle need not prevent renewal. The reference therefore imposes an unstated funding mechanism rather than identifying a necessary condition. The acceptance examples should concern actual barriers, not a particular account or a decision that could be reversed. premise-batch2-packet
+
+**Replace `reference`:**
+
+```yaml
+reference: >-
+  No binding funding restriction will prevent the council from renewing this
+  museum's grant this year.
+```
+
+**Replace `accept`:**
+
+```yaml
+accept: >-
+  Accept an unstated claim ruling out a particular obstacle that would prevent
+  this museum's renewal this year if the claim were false. Examples include
+  the absence of a binding funding restriction barring this renewal, the
+  museum's satisfaction of any additional mandatory renewal condition, or the
+  absence of an applicable policy making this museum ineligible. The stimulus
+  does not make a particular budget the sole funding source. A relevant claim
+  stronger than necessary earns 1, including a requirement for adequate money
+  in a particular account or a general rule that every museum with rising
+  attendance receives renewal. A premise or a restatement of the conclusion
+  offered as the assumption earns 0.
+```
+
+**Replace rubric criterion 1:**
+
+> States an unstated claim ruling out a particular obstacle to this museum’s renewal, such as a binding funding restriction or failure of another mandatory renewal condition, rather than a premise or a restatement of the conclusion.
+
+Apply the premise-only disqualifier replacement printed under `arg-0019:assumption`.
+
+## arg-0022 — fix
+
+### `arg-0022:strengthen`
+
+**Problems:** Rubric criterion 1 awards a point for mere relevance, including facts that make a sales increase less likely. The full-credit anchor also turns availability into guaranteed retention: being free on Thursday does not establish that customers would continue shopping or spending as much. The fact can strengthen the argument without supporting that certainty. premise-batch2-packet
+
+**Replace rubric criterion 1:**
+
+> Gives a new fact, consistent with the premises and not already stated in them, that materially increases support for the claim that moving Ardley’s market to Thursday evenings would raise its sales.
+
+**Replace the 2-point anchor:**
+
+```yaml
+- points: 2
+  answer: >-
+    Nearly all of the Ardley market's regular Saturday shoppers are free on
+    Thursday evenings. That makes it more likely that the market could retain
+    its existing customers, so new evening shoppers could produce a net sales
+    increase rather than merely replace lost Saturday trade.
+  note: >-
+    A different strengthener from the reference: it reduces a reason to expect
+    losses among current shoppers. Availability supports retention but does
+    not guarantee it.
+```
+
+## arg-0023 — fix
+
+### `arg-0023:assumption`
+
+**Problems:** The current 2-point anchor earns **1**, not 2. Negating it establishes that one family supplied most of the 2020 photographs; it does not establish that this distorted the **change between years**. The family could also supply most of the 2025 photographs, with comparable photographs per animal and a genuine population decline. The negation note silently adds a temporal distortion that the answer does not state. The behavior examples also need magnitude qualifications: some avoidance or range change is not automatically fatal. premise-batch2-packet premise-batch2-packet
+
+**Replace `reference`:**
+
+```yaml
+reference: >-
+  Changes in the lynx's use of the camera trails did not reduce photographs per
+  animal enough to explain the drop from 120 to 58 without a substantial fall
+  in the forest's lynx population.
+```
+
+**Replace `accept`:**
+
+```yaml
+accept: >-
+  Accept an unstated claim whose denial would remove the link between the
+  photograph decline and a substantial population decline while preserving
+  the camera premises. Relevant bridges concern a sufficiently large reduction
+  in photographs per animal, whether from changed trail use, movement within
+  the forest, or a disproportionate contribution from repeatedly photographed
+  animals in 2020 relative to 2025. A claim excluding one of these explanations
+  must address its size and its effect on the comparison between years.
+  Requiring no behavioral change at all, or excluding a family that supplied
+  most of the 2020 photographs without addressing the comparison with 2025,
+  is stronger than necessary and earns 1. A stated camera premise or a
+  restatement of the population conclusion offered as the assumption earns 0.
+```
+
+**Replace the 2-point anchor:**
+
+```yaml
+- points: 2
+  answer: >-
+    Repeated photographs of lynx denning beside a camera did not inflate the
+    2020 count relative to the 2025 count enough to explain the recorded drop
+    without a substantial decline in the forest's lynx population.
+  note: >-
+    Negating this claim supplies a sufficiently large distortion of the
+    between-year comparison, not merely a high repeat-photograph count in
+    one year. The photograph decline would then cease to establish the
+    claimed substantial population decline.
+```
+
+Apply the premise-only disqualifier replacement.
+
+### `arg-0023:weaken`
+
+**Problems:** The current 2-point anchor earns **1**, not 2. After removing 60 family photographs from 2020, the baseline is 60. A corrected 2025 count of **at most 58** could be 58, 8 or 0; “hardly a drop” does not follow. For example, if 50 of the 2025 photographs were of that family, removing them would leave a decline from 60 to 8. Rubric criterion 1 also lacks weakening direction. The 1-point hiking-route anchor should state the behavioral effect rather than depend on unstated knowledge of lynx behavior. premise-batch2-packet
+
+**Replace rubric criterion 1:**
+
+> Gives a new fact, consistent with the premises and not already stated in them, that provides a material reason to doubt that the photograph decline reflects a substantial decline in the forest’s lynx population.
+
+**Replace the 2-point anchor:**
+
+```yaml
+- points: 2
+  answer: >-
+    Sixty of the 2020 photographs were of one lynx family denning beside a
+    camera. In 2025 that same family still lived in the forest but denned away
+    from all the cameras and was not photographed. Excluding that family in
+    both years leaves 60 photographs in 2020 and 58 in 2025, so almost all of
+    the recorded drop could reflect that family's relocation rather than
+    fewer lynx.
+  note: >-
+    The comparable adjusted counts are 120 minus 60, or 60, and 58 minus 0,
+    or 58: a decline of about 3.3 percent. This weakens the population inference;
+    it does not establish that the population was unchanged.
+```
+
+**Replace the 1-point anchor:**
+
+```yaml
+- points: 1
+  answer: >-
+    A popular hiking route opened along most of the camera trails in 2022,
+    and lynx have since begun avoiding those trails.
+  note: >-
+    Supplies a change that could reduce camera encounters, but does not explain
+    why that makes the photograph decline less reliable evidence of a
+    population decline.
+```
+
+## arg-0024 — fix
+
+### `arg-0024:conclusion`
+
+**Problem:** My difficulty estimate is **3**, not 4. The recommendation is explicitly stated at the opening, the opposing view is attributed, and the final intermediate conclusion is signposted. Distinguishing its supporting role and preserving “not oppose” requires care, but the task does not have the interacting complexity expected at level 4 under the packet’s own guidance. premise-batch2-packet premise-batch2-packet
+
+**Exact replacements:** Set task `difficulty` to `3` and exercise-level `difficulty` to `3`.
+
+### `arg-0024:assumption`
+
+**Problems:** The reference is too strong. Negating it means the removed interior supplies **some additional information** about people’s lives or work—not necessarily information essential to the silo’s historical importance. The charter protects buildings; it does not explicitly require preserving every informative detail. The inference need not fail merely because a minor additional detail is lost. premise-batch2-packet
+
+The current 2-point anchor also needs qualification. A rule or duty can be defeasible or outweighed; its existence alone does not establish that the society must oppose this conversion. Under the stated negation gate, I would give the unqualified anchor **1**, not 2. premise-batch2-packet
+
+**Replace `reference`:**
+
+```yaml
+reference: >-
+  None of the interior features the conversion would remove is indispensable
+  to the silo's historical importance under the society's charter.
+```
+
+**Replace `difficulty_note`:**
+
+```yaml
+difficulty_note: >-
+  Two links are available: from retaining the walls and machinery to preserving
+  the silo's charter-relevant historical importance, and from that preservation
+  to the recommendation not to oppose the plan. Losing some additional
+  historical information need not destroy that importance, and a competing
+  consideration need not be an overriding obligation to oppose the plan.
+  Necessary assumptions must address what would defeat one of these links,
+  not require preservation of every informative detail or absence of every
+  competing consideration.
+```
+
+**Replace `accept`:**
+
+```yaml
+accept: >-
+  Accept an unstated claim whose denial would break either the preservation
+  inference or the recommendation based on it. Relevant bridges include that
+  the removed interior features are not indispensable to the silo's
+  charter-relevant historical importance, or that the society has no overriding
+  obligation to keep this particular silo unaltered even when its historical
+  importance would be preserved. Do not require that the interior supplies
+  no additional information or has no value of any kind. Do not treat every
+  competing duty as an automatic veto. Relevant claims stronger than necessary
+  earn 1. A stated premise, the stated intermediate conclusion, or the main
+  recommendation offered as the assumption earns 0.
+```
+
+**Replace `rubric`:**
+
+```yaml
+rubric:
+  - States an unstated claim about the importance of the removed features or an obligation bearing on opposition that bridges one of the argument's two inferences, rather than a premise or either stated conclusion.
+  - Limits the claim to what the inference requires, so that its denial would defeat the claimed preservation of historical importance or introduce an overriding obligation to oppose this plan, rather than merely establish some lost information or a competing consideration.
+```
+
+**Replace the 2-point anchor:**
+
+```yaml
+- points: 2
+  answer: >-
+    The society has no binding, overriding obligation to keep the county's
+    last wooden silo exactly as it stands.
+  note: >-
+    If false, an overriding obligation to preserve this silo unaltered would
+    defeat the recommendation even if the conversion preserved its historical
+    importance. A merely defeasible preference or duty would not establish
+    that result.
+```
+
+Apply the premise-only disqualifier replacement.
+
+## arg-0025 — keep
+
+## arg-0026 — fix
+
+### `arg-0026:strengthen`
+
+**Problems:** The reference multiplies a share of discarded plastic by a reduction in the **number of bags issued**. Those are not necessarily comparable quantities: bag weight and the relationship between local shop distribution and local household disposal can change. The reported 80 percent count reduction does not establish an 80 percent reduction in household bag-waste weight. “Amount” should also be specified because the replacement-bag anchors rely on weight. premise-batch2-packet premise-batch2-packet
+
+Rubric criterion 1 again admits opposite-direction evidence. The full-credit anchor also overstates its controls: unchanged sales of two replacement categories do not establish that no replacement plastic increased. premise-batch2-packet
+
+**Replace the shared stimulus’s final sentence:**
+
+> The town’s environmental officer concludes that the fee has greatly reduced the total weight of plastic that Brannock’s households throw away each year.
+
+**Replace `reference`:**
+
+```yaml
+reference: >-
+  Before the fee, checkout bags accounted for about one third, by weight, of
+  the plastic Brannock households discarded. That makes a large reduction in
+  checkout-bag waste potentially important to the total. An 80 percent reduction
+  in this component's weight, without offsetting replacement plastic, would
+  reduce the original total by about 27 percent. The reported reduction in
+  bags issued does not itself establish that same reduction in waste weight.
+```
+
+**Replace `difficulty_note`:**
+
+```yaml
+difficulty_note: >-
+  The premise measures the number of checkout bags issued by local shops;
+  the conclusion concerns the annual weight of all plastic discarded by local
+  households and attributes a large reduction to the fee. A strengthener may
+  support the quantity link, the household-disposal link, the bags' importance
+  in total waste, absence of replacement plastic, or causation. Multiplying
+  one third by 80 percent gives about 27 percent only if the relevant bag-waste
+  weight falls by 80 percent.
+```
+
+**Replace rubric criterion 1:**
+
+> Gives a new fact, consistent with the premises and not already stated in them, that materially strengthens the claim that the fee caused a large reduction in the annual weight of plastic discarded by Brannock households.
+
+**Replace the 2-point anchor:**
+
+```yaml
+- points: 2
+  answer: >-
+    Most Brannock shoppers now bring cloth bags, and the town's sales of plastic
+    bin liners and food bags haven't gone up. These facts make a compensating
+    increase in the named replacements less likely, strengthening the case
+    that fewer checkout bags meant less plastic waste.
+  note: >-
+    Reduces a replacement-plastic explanation without claiming that every
+    possible replacement has been ruled out or that a large total reduction
+    has been proved.
+```
+
+### `arg-0026:weaken`
+
+**Problems:** The reference should distinguish the maximum **direct contribution of eliminating bag waste** from the fee’s possible total effect. In addition, the supermarket example is not necessarily an independent alternative cause: a supermarket might stop offering bags **because of the fee**, in which case its decision is part of the fee’s effect. Rubric criterion 1 again needs weakening direction. premise-batch2-packet
+
+**Replace `reference`:**
+
+```yaml
+reference: >-
+  Before the fee, checkout bags made up only about 2 percent, by weight, of
+  Brannock households' discarded plastic. Even eliminating that category
+  entirely could directly remove only 2 percent of the original total.
+  Therefore the fall in bags issued provides little support for a great
+  reduction in total household plastic-waste weight.
+```
+
+**In `accept`, replace the supermarket example with:**
+
+> An independent change reduced bag distribution—for example, the largest supermarket stopped offering bags under a chain-wide policy adopted before the local fee and which would have taken effect without it. Merely saying that the supermarket stopped offering bags in the same month does not establish an alternative cause; its decision could have resulted from the fee.
+
+**Replace rubric criterion 1:**
+
+> Gives a new fact, consistent with the premises and not already stated in them, that provides a material reason to doubt that the fee caused a large reduction in the annual weight of plastic discarded by Brannock households.
+
+## arg-0027 — fix
+
+### `arg-0027:assumption`
+
+**Problems:** The current 2-point anchor earns **1**, not 2. It excludes early use of the mark by **every mill selling to Tarrant**, including suppliers that did not make this sheet. Another supplier could have used the mark in 1788 without defeating a dating inference correctly tied to this particular sheet’s manufacture at Holt. The necessary bridge must concern the actual sheet, not every possible supplier. premise-batch2-packet
+
+The rubric also tests the wrong boundary: the conclusion is **1801 or later**, not merely “not 1788.” Paper dating from 1790 would already defeat the proposed paper-based 1801 lower bound. This is a boundary error in the test, not a claim that every necessary assumption must independently prove the entire conclusion. premise-batch2-packet premise-batch2-packet
+
+**Replace `difficulty_note`:**
+
+```yaml
+difficulty_note: >-
+  The inference links the particular sheet's watermark to Holt's production
+  chronology, then uses the paper's manufacture to set a lower bound on the
+  letter's writing. The relevant boundary is 1801, not merely a date later
+  than 1788; 1801 minus 1788 is thirteen years. Restrictions on all suppliers
+  or all watermark users are stronger than restrictions on the actual sheet.
+```
+
+**Replace `accept`:**
+
+```yaml
+accept: >-
+  Accept an unstated claim whose denial would defeat the use of Holt's
+  production chronology to establish an 1801-or-later lower bound for this
+  particular sheet and hence for the letter's writing. Relevant claims concern
+  this sheet's Holt provenance or exclude an earlier origin for this sheet
+  at another maker using a running-hare mark. The denial need not establish
+  that the letter really was written in 1788; it must defeat the cited dating
+  inference. Excluding early use by every supplier to Tarrant, including
+  suppliers that did not make this sheet, is stronger than necessary and
+  earns 1. A stated production-date premise or a restatement of the letter's
+  writing-date conclusion offered as the assumption earns 0.
+```
+
+**Replace rubric criterion 2:**
+
+> States the claim no more strongly than this dating inference requires, so that its denial would defeat the use of Holt’s 1801 start date to establish the lower bound for this sheet, without imposing unnecessary restrictions on unrelated makers or suppliers.
+
+**Replace the 2-point anchor:**
+
+```yaml
+- points: 2
+  answer: >-
+    The letter's sheet is not paper made before 1801 by another papermaker
+    who also used a running-hare mark.
+  note: >-
+    Negation gives this actual sheet an earlier, non-Holt origin, making
+    Holt's start date inapplicable to its manufacture. The letter could still
+    have been written later on older paper, but this paper-based dating
+    inference would fail. Unlike the reference, this answer does not require
+    that the sheet came from Holt; it excludes the relevant earlier origin.
+```
+
+Apply the premise-only disqualifier replacement.
+
+### `arg-0027:strengthen`
+
+**Problems:** The current 2-point anchor earns **1**, not 2. A bridge’s opening date is not necessarily its construction date, and a letter can mention a bridge while it is planned or being built. “Mentions the new bridge” therefore does not license the claimed 1806 lower bound. The acceptance example similarly needs to distinguish describing a later event as completed from merely mentioning it. Rubric criterion 1 also admits evidence for an earlier date. premise-batch2-packet
+
+**Replace the separate-evidence example in `accept`:**
+
+> Separate evidence of a later date, such as the letter describing a documented post-1800 event as having already occurred, or the ink used to write the letter’s text first being produced after 1800. Merely mentioning a project that was completed later does not establish that the letter postdates its completion.
+
+**Replace rubric criterion 1:**
+
+> Gives a new fact, consistent with the premises and not already stated in them, that materially increases support for dating the letter’s writing to 1801 or later.
+
+**Replace the 2-point anchor:**
+
+```yaml
+- points: 2
+  answer: >-
+    The letter describes the Tarrant bridge's public opening as an event that
+    has already occurred, and independent town records date that opening to
+    1806. This is separate evidence for writing in 1806 or later, supporting
+    the curator's conclusion without relying on the watermark.
+  note: >-
+    The relevant evidence is a retrospective description of a dated event,
+    not merely a mention of a bridge that opened later.
+```
+
+## arg-0028 — fix
+
+### `arg-0028:assumption`
+
+**Problems:** The reference excludes every other way of learning about the **delay**, whereas the code concerns learning about **wrongdoing**. Negate the reference: the public can already learn that repairs were postponed, but only the memo reveals the officials’ knowledge and circumstances that make the postponement wrongful. The cited rule can still apply. The reference is therefore too strong. premise-batch2-packet premise-batch2-packet
+
+The current 2-point anchor also earns **1** under a literal negation test: “wrongdoing” and “no good reason” are not equivalent. A reason favoring delay can exist yet be outweighed by stronger reasons against it. Negating the complete anchor need not negate wrongdoing. Finally, failure of one sufficient publishing rule removes **that rule’s justification**; it does not establish that the whole code supplies no other justification. premise-batch2-packet
+
+**Replace `reference`:**
+
+```yaml
+reference: >-
+  The public could not otherwise learn that officials knowingly left the
+  faulty alarms unrepaired for those six months in circumstances that made
+  the delay wrongful.
+```
+
+**Replace `difficulty_note`:**
+
+```yaml
+difficulty_note: >-
+  The editor invokes a sufficient publishing rule whose conditions concern
+  public-official wrongdoing and the public's inability to learn that
+  wrongdoing another way. Learning a repair schedule is not necessarily
+  learning wrongdoing. An adequate justification would defeat the wrongdoing
+  condition, but the existence of some reason favoring delay need not do so.
+  Failure of a condition defeats this rule's application, not every possible
+  justification for publication.
+```
+
+**Replace `accept`:**
+
+```yaml
+accept: >-
+  Accept an unstated claim whose denial would defeat the editor's application
+  of the cited publishing rule while preserving the premises. Relevant claims
+  include that the conduct described constitutes wrongdoing, that the public
+  has no other way to learn that wrongdoing, or that the relevant officials
+  are public officials. Distinguish otherwise learning the wrongdoing from
+  otherwise learning isolated facts about the alarms or repair schedule.
+  A relevant claim stronger than necessary earns 1, including that no
+  alarm-related information is otherwise available, that every repair delay
+  is wrongdoing, or that there was no reason at all favoring delay. A stated
+  premise or a restatement of the publication conclusion offered as the
+  assumption earns 0. Failure of a condition removes the cited rule's
+  justification; it does not establish that publication is forbidden or
+  that no other provision could justify it.
+```
+
+**Replace `rubric`:**
+
+```yaml
+rubric:
+  - States an unstated claim about whether the memo reveals public-official wrongdoing or whether the public can learn that wrongdoing another way, rather than a premise or a restatement of the conclusion.
+  - States the claim no more strongly than needed for this rule's application, so that its denial defeats a condition of the cited rule rather than merely establishing another source of some alarm-related information or a consideration favoring delay.
+```
+
+**Replace the 2-point anchor:**
+
+```yaml
+- points: 2
+  answer: >-
+    In the circumstances, the officials' decision to postpone those repairs
+    constituted wrongdoing.
+  note: >-
+    Negation removes the wrongdoing condition needed for the editor's
+    application of the cited rule. It does not establish that publication
+    would be impermissible under every possible provision.
+```
+
+**Replace the 1-point anchor’s note:**
+
+> Too strong: the public could already know some facts about the alarms or repair schedule while the memo alone reveals the officials’ wrongdoing. Exclusive access to every alarm-related fact is unnecessary.
+
+Apply the premise-only disqualifier replacement.
+
+### `arg-0028:weaken`
+
+**Problems:** The reference and 1-point anchor again equate disclosure of a postponement with disclosure of the wrongdoing revealed by the memo. The full-credit anchor treats an unused, closed school as conclusive proof that the delay was not wrongful, although the stimulus supplies no such definition of wrongdoing. Closure can support a possible innocent explanation without settling the issue. The explanations must also distinguish defeating the cited rule from establishing what the entire code does or does not require. premise-batch2-packet
+
+**Replace `reference`:**
+
+```yaml
+reference: >-
+  A publicly available city report already discloses the same facts about the
+  officials' knowledge, the six-month delay and the circumstances making it
+  wrongful that the memo reveals. The public therefore has another way to
+  learn this wrongdoing, so the editor cannot use the cited rule's
+  otherwise-unavailable-information condition to justify publishing the memo.
+```
+
+**Replace `difficulty_note`:**
+
+```yaml
+difficulty_note: >-
+  A weakener can give a reason to doubt either wrongdoing or the absence of
+  another way for the public to learn that wrongdoing. Disclosure of a repair
+  schedule alone need not disclose wrongdoing. A possible justification for
+  delay can weaken without proving innocence. Defeating a condition removes
+  the cited rule's support, not every possible reason to publish.
+```
+
+**Replace `accept`:**
+
+```yaml
+accept: >-
+  Accept a new fact consistent with the premises that materially weakens the
+  editor's application of the cited rule, together with an explanation.
+  Relevant facts may show that the public can otherwise learn the same
+  wrongdoing revealed by the memo, or provide a plausible justification
+  making it less likely that the delay was wrongdoing. A public announcement
+  of a repair schedule need not reveal the same wrongdoing. School closure
+  or alternative protection may support a possible justification, but should
+  not be treated as automatically establishing that no wrongdoing occurred.
+  Harm or embarrassment from publication alone does not address the cited
+  rule's conditions. A qualifying fact without explanation earns 1; a fact
+  contradicting a premise earns 0. The answer need not establish that
+  publication is forbidden or unjustified under every possible code provision.
+```
+
+**Replace `rubric`:**
+
+```yaml
+rubric:
+  - Gives a new fact, consistent with the premises, that provides a material reason to doubt that the memo reveals wrongdoing which the public has no other way to learn about.
+  - Explains how that fact weakens the editor's application of the cited publishing rule, without inferring that failure of this sufficient rule necessarily forbids publication.
+```
+
+**Replace the 2-point anchor:**
+
+```yaml
+- points: 2
+  answer: >-
+    The school was unused and closed for rebuilding throughout those six
+    months, and the alarm repairs were completed before it reopened. This
+    gives a possible innocent explanation for the timing, making it less
+    certain that the postponement was wrongdoing and weakening the editor's
+    application of the cited rule.
+  note: >-
+    Weakens the wrongdoing inference without treating closure as conclusive
+    proof of innocence or claiming that the entire code forbids publication.
+```
+
+**Replace the 1-point anchor:**
+
+```yaml
+- points: 1
+  answer: >-
+    A publicly accessible council report already gives the same account of
+    the officials' knowledge, delay and wrongdoing that the memo gives.
+  note: >-
+    Supplies another public source of the same wrongdoing but does not
+    explain why that weakens the editor's application of the cited rule.
+```
+
+## Pattern to change in later batches
+
+The principal problem is that several negation notes test a **cleaned-up intended meaning rather than the actual answer**. Negating “no additional information” establishes some additional information, not loss of essential historical importance. Negating “no other supplier used the mark” establishes another supplier, not an earlier origin for this sheet. Negating a sentence containing two claims can falsify either claim—not just the one the note discusses. Write the literal negation first, then test whether the specified inference really fails.
+
+The strengthen/weaken keys need a consistent separation between **a relevant fact, evidence in the requested direction, and proof**. Make the evidence criterion directional. State controls explicitly. Do not turn availability into attendance, an unchanged score gap into no causal effect, school closure into innocence, or a coincident business decision into an independent cause.
+
+Finally, check the units, populations, dates and logical objects before writing arithmetic or exclusion notes. Bags issued are not household waste weight; an opening date is not a construction date; a corrected count “at most 58” does not establish a small decline; and public knowledge of a delay is not necessarily public knowledge of wrongdoing. Scope premise-only disqualifiers to premise-only answers, and lower difficulty when the prompt itself identifies the missing comparison.
+
+---
+
+## Triage
+
+Nine exercises were marked "fix" and arg-0025 "keep". Every finding is accepted. Three things apply across the batch:
+
+- Wording follows the content's plain style, and the reviewer's proposed anchors are rephrased as answers a student might write; the substance is the review's. Where the rewording changes a proposal's shape, the row says how.
+- The directional first criterion the review asks for in several strengthen and weaken tasks is applied to every strengthen and weaken task in the batch (arg-0022's weaken and arg-0025's weaken were already directional).
+- The premise-only disqualifier keeps an exercise-specific example in each task.
+
+| # | Task | Finding | Decision | Change |
+| --- | --- | --- | --- | --- |
+| B2-1 | all six assumption tasks | The disqualifier can zero an answer that mentions a stated claim while also giving a valid assumption. | accepted | Each disqualifier now caps only an answer that offers nothing but a premise, a stated conclusion or a restatement, and says that mentioning a stated claim does not trigger it. |
+| B2-2 | arg-0019.strengthen | The reference implies same-farm fields share seed and equipment without stating it. | accepted | The reference states that the fields got the same seed, fertilizer and irrigation. |
+| B2-3 | arg-0019.strengthen | Criterion 1 credits any relevant fact, including one pointing the wrong way. | accepted | Criterion 1 requires a fact that makes the conclusion more likely. |
+| B2-4 | arg-0020.flaw | The key treats total practice as fixed, but the stimulus matches only hours on the app. | accepted | Note and `accept` say what is matched (time on the app, hours on it, no outside classes) and credit informal practice outside the app as an open alternative. |
+| B2-5 | arg-0020.weaken | The prompt names the missing baseline, so difficulty 3 is too high. | accepted | Task and exercise difficulty 2; new difficulty note. |
+| B2-6 | arg-0020.weaken | Criterion 1 admits a starting deficit; an unchanged gap is read as proof the streaks did nothing. | accepted | Directional criterion 1; the `accept` example and the 2-point anchor say an unchanged gap weakens the causal reading without proving no effect. |
+| B2-7 | arg-0021.assumption | The arts-budget reference fails negation: the grant could come from another source. | accepted | Reference: no lack of money or binding spending limit will stop renewal. `accept` and criterion 1 name actual obstacles; a particular account is now a 1-point example. The reviewer's "binding funding restriction" is reworded. |
+| B2-8 | arg-0022.strengthen | Criterion 1 is not directional; the 2-point anchor turns being free on Thursdays into keeping every customer. | accepted | Directional criterion 1; the anchor says keeping current shoppers becomes more likely, and its note that it is not guaranteed. |
+| B2-9 | arg-0023.assumption | The 2-point anchor earns 1: a family dominating the 2020 count says nothing about 2025; behavior claims need a size. | accepted | New reference (photographs per animal did not fall enough to explain the drop), `accept`, rubric and 2-point anchor (repeat photographs did not distort the comparison between years); the old anchor's claim is a 1-point example. |
+| B2-10 | arg-0023.weaken | The 2-point anchor earns 1 ("at most 58" allows a large drop); criterion 1 is not directional; the 1-point anchor relies on outside knowledge of lynx. | accepted | New 2-point anchor (the family was not photographed in 2025: 60 against 58), directional criterion 1, and a 1-point anchor that states the lynx avoid the trails. |
+| B2-11 | arg-0024.conclusion | Difficulty 4 is too high: the recommendation opens the argument and the rival is signposted. | accepted | Task and exercise difficulty 3. |
+| B2-12 | arg-0024.assumption | The reference is too strong (any extra detail lost would falsify it); the 2-point anchor needs the duty to be overriding. | accepted | New reference (nothing removed is essential to the silo's importance under the charter), difficulty note, `accept`, rubric and 2-point anchor ("overriding duty"). The note and `accept` add that saying the conversion preserves the silo's importance is the intermediate conclusion. |
+| B2-13 | arg-0026 stimulus, strengthen | The reference multiplies a share of waste by a cut in bags handed out; "amount" should be weight; criterion 1 is not directional; the anchor overstates its controls. | accepted | The conclusion is now about the total weight thrown away each year. The reference is conditional on bag waste falling in line, with no replacement. The difficulty note is new, criterion 1 is directional, the 2-point anchor is softened and the 1-point anchor says "by weight". The reviewer's closing caveat in the reference is folded into the condition. |
+| B2-14 | arg-0026.weaken | The reference should be about the direct contribution; the supermarket example may be the fee's own effect; criterion 1 is not directional. | accepted | New reference (removing bags entirely could remove only 2 percent), an independent chain-wide policy as the example with a warning about same-month decisions, directional criterion 1. |
+| B2-15 | arg-0027.assumption | The 2-point anchor earns 1 (it restricts every supplier, not this sheet); the rubric tests 1788 instead of the 1801 boundary. | accepted | New 2-point anchor about this sheet, `accept` bridges about this sheet, criterion 2 on the 1801 lower bound, new difficulty note; restricting every supplier is a 1-point example. |
+| B2-16 | arg-0027.strengthen | Mentioning a bridge does not date a letter after the bridge opened; criterion 1 is not directional. | accepted | The 2-point anchor has the letter describe the opening as past; `accept` example rewritten; directional criterion 1. |
+| B2-17 | arg-0028.assumption | The reference concerns learning of the delay, not of the wrongdoing; "no good reason" is not the same as wrongdoing; a failed condition removes one rule, not the whole code. | accepted | New reference and 2-point anchor (the delay was wrongdoing in the circumstances), difficulty note, `accept` (adds the public-officials bridge and that "the memo is genuine" earns 0), rubric, and the 1-point anchor's note. |
+| B2-18 | arg-0028.weaken | The reference and 1-point anchor equate disclosure of the delay with disclosure of wrongdoing; the 2-point anchor treats closure as proof of innocence. | accepted | New reference and anchors, difficulty note, `accept` and rubric; criterion 2 no longer needs the answer to say the code forbids publishing. |
+
+### Carried forward
+
+The review's patterns also apply to published batch 1 exercises. Four of their assumption tasks use the unscoped disqualifier: arg-0010, arg-0011, arg-0013 and arg-0015. Eight strengthen and weaken tasks have a criterion 1 that is not directional: arg-0009, arg-0010, arg-0012 (both tasks), arg-0014, arg-0015, arg-0016 and arg-0018. Changing them needs the owner's re-approval, so they are left for a separate change. Pro's patterns for later batches are recorded with the content-batch notes and will go into `CONTENT_GUIDELINES.md` with batch 1's after PR #3 lands.
