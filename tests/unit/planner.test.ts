@@ -13,7 +13,8 @@ import type { AttemptRecord, CardRecord, GradingRecord } from '../../src/domain/
 import { DEFAULT_SETTINGS } from '../../src/domain/records.ts';
 import { ratingFor, review, Rating } from '../../src/domain/scheduler.ts';
 
-const exercises = await loadExercises();
+// The expected plans were worked out for the first eight exercises; pin them so new content can't change them.
+const exercises = (await loadExercises()).filter((e) => e.id <= 'arg-0008');
 const TODAY = '2026-10-10';
 
 function state(extra: Partial<PlannerState> = {}): PlannerState {
