@@ -288,16 +288,88 @@ describe('planner repair loop', () => {
     const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-09');
     const success = graded('arg-0001.flaw', 2, 2, [], '2026-10-09', { sessionId: 'later' });
     // Isolate the submission-order rule even if a legacy grading timestamp predates its
-    // submission. Both attempts tie, and the miss's id makes it sort first.
-    const firstGrading = { ...miss.grading, createdAt: '2026-10-09T11:59:59.999Z' };
-    const tied = state({ attempts: [miss.attempt, success.attempt], gradings: [firstGrading, success.grading] });
+    // submission. Pin IDs so future helper calls cannot reverse their sort order.
+    const missAttempt = { ...miss.attempt, id: 'a-tied-miss' };
+    const successAttempt = { ...success.attempt, id: 'z-tied-success' };
+    const firstGrading = {
+      ...miss.grading,
+      attemptId: missAttempt.id,
+      createdAt: '2026-10-09T11:59:59.999Z',
+    };
+    const successGrading = { ...success.grading, attemptId: successAttempt.id };
+    const tied = state({ attempts: [missAttempt, successAttempt], gradings: [firstGrading, successGrading] });
     expect(openMisses(tied).map((m) => m.taskId)).toEqual(['arg-0003.flaw']);
 
     const later = '2026-10-09T12:00:00.001Z';
-    const oneMillisecondLater = { ...success.attempt, startedAt: later, submittedAt: later, updatedAt: later };
+    const oneMillisecondLater = { ...successAttempt, startedAt: later, submittedAt: later, updatedAt: later };
     expect(
-      openMisses(state({ attempts: [miss.attempt, oneMillisecondLater], gradings: [firstGrading, success.grading] })),
+      openMisses(state({ attempts: [missAttempt, oneMillisecondLater], gradings: [firstGrading, successGrading] })),
     ).toEqual([]);
+  });
+
+  it('keeps a miss open when a full-credit grade was corrected after a fresh success', () => {
+    const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-01', { sessionId: 'miss' });
+    const success = graded('arg-0001.flaw', 2, 2, [], '2026-10-02', { sessionId: 'success' });
+    const firstFullCredit: GradingRecord = {
+      ...miss.grading,
+      id: 'first-full-credit',
+      score: 2,
+      tags: [],
+      status: 'superseded',
+      createdAt: '2026-10-01T15:00:00.000Z',
+    };
+    const correctedMiss = { ...miss.grading, createdAt: '2026-10-03T09:00:00.000Z' };
+    const s = state({
+      attempts: [miss.attempt, success.attempt],
+      gradings: [firstFullCredit, correctedMiss, success.grading],
+    });
+    expect(openMisses(s).map((m) => m.taskId)).toEqual(['arg-0003.flaw']);
+    expect(planToday(s, 1)).toEqual([expect.objectContaining({ reason: 'repair', repairs: 'arg-0003.flaw' })]);
+  });
+
+  it('keeps a miss open when a needs-review grade was resolved after a fresh success', () => {
+    const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-01', { sessionId: 'miss' });
+    const success = graded('arg-0001.flaw', 2, 2, [], '2026-10-02', { sessionId: 'success' });
+    const firstNeedsReview: GradingRecord = {
+      ...miss.grading,
+      id: 'first-needs-review',
+      score: null,
+      tags: [],
+      status: 'superseded',
+      createdAt: '2026-10-01T15:00:00.000Z',
+    };
+    const resolvedMiss = { ...miss.grading, createdAt: '2026-10-03T09:00:00.000Z' };
+    const s = state({
+      attempts: [miss.attempt, success.attempt],
+      gradings: [firstNeedsReview, resolvedMiss, success.grading],
+    });
+    expect(openMisses(s).map((m) => m.taskId)).toEqual(['arg-0003.flaw']);
+    expect(planToday(s, 1)).toEqual([expect.objectContaining({ reason: 'repair', repairs: 'arg-0003.flaw' })]);
+  });
+
+  it('lets a fresh success begun after the first miss grading clear a corrected miss', () => {
+    const miss = graded('arg-0003.flaw', 0, 2, ['wrong-gap'], '2026-10-01', { sessionId: 'miss' });
+    const success = graded('arg-0001.flaw', 2, 2, [], '2026-10-03', { sessionId: 'success' });
+    const firstFullCredit: GradingRecord = {
+      ...miss.grading,
+      id: 'first-full-credit',
+      score: 2,
+      tags: [],
+      status: 'superseded',
+      createdAt: '2026-10-01T15:00:00.000Z',
+    };
+    const firstMiss: GradingRecord = {
+      ...miss.grading,
+      id: 'first-miss',
+      status: 'superseded',
+      createdAt: '2026-10-02T09:00:00.000Z',
+    };
+    const correctedMiss = { ...miss.grading, createdAt: '2026-10-04T09:00:00.000Z' };
+    const s = state({
+      attempts: [miss.attempt, success.attempt],
+      gradings: [firstFullCredit, firstMiss, correctedMiss, success.grading],
+    });
+    expect(openMisses(s)).toEqual([]);
   });
 
   it('keeps a deferred miss open when the success began before the miss was first graded', () => {
