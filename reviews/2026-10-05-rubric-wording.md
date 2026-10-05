@@ -20,3 +20,7 @@ A separate Claude check graded all 36 anchors of the 12 changed batch 1 tasks ag
 ## Changing published tasks
 
 `docs/EXERCISE_FORMAT.md` §6 allows wording fixes that do not change what a task tests to be edited in place and re-approved, and requires a new task key for rubric changes that change scores. These changes do change the score of some answers that are not anchors: a wrong-direction fact no longer meets criterion 1, and an answer that mentions a premise alongside a real assumption is no longer zeroed. In each case the prompt and the `accept` text already called for that score, so the fix makes the rubric say what the key already meant. Whether that counts as a wording fix is the owner's call, recorded with the re-approval.
+
+## Decision
+
+The owner re-approved all 14 exercises in place on 2026-10-05 (decision card "Re-approve in place"), treating the changes as wording fixes under §6: the task keys stay, so any study history stays attached, and the 18 changed tasks have their new revisions recorded in `content/published-tasks.json`. **Why:** the prompts and `accept` text already asked for the scoring the rubric now states. **Rules out:** new task keys for these fixes. A rubric change that alters what the prompt or `accept` text asks for still needs a new task key. The entry joins `docs/DECISIONS.md` after the open security-hardening PR, which also edits that file, has merged.
