@@ -24,6 +24,32 @@ interface Loaded {
   attempts: (AttemptRecord | undefined)[];
 }
 
+/** Read-only checks ignore the rating choice, which grading may change after submission. */
+function matchesReadOnlyIdentity(
+  session: SessionRecord | null | undefined,
+  attempt: AttemptRecord | undefined,
+  expected: DraftPrecondition,
+): boolean {
+  const original = expected.attempt;
+  return (
+    !!session &&
+    !!attempt &&
+    session.id === expected.session.id &&
+    session.createdAt === expected.session.createdAt &&
+    session.mode === expected.session.mode &&
+    session.entries[expected.entryIndex]?.attemptId === original.id &&
+    session.entries[expected.entryIndex]?.taskId === original.taskId &&
+    attempt.id === original.id &&
+    attempt.sessionId === original.sessionId &&
+    attempt.sessionId === session.id &&
+    attempt.taskId === original.taskId &&
+    attempt.snapshotHash === original.snapshotHash &&
+    attempt.kind === original.kind &&
+    attempt.stimulusSeenBefore === original.stimulusSeenBefore &&
+    attempt.startedAt === original.startedAt
+  );
+}
+
 /** Freezes the answers into grading requests and opens the first one. */
 async function startGrading(attemptIds: string[], mode: 'copy' | 'self', go: (to: string) => void): Promise<void> {
   const settings = await loadSettings();
@@ -267,7 +293,7 @@ function EntryView({
   const takenElsewhere =
     !!attempt &&
     !leaving &&
-    matchesDraftIdentity(liveSession, live, precondition(attempt), true) &&
+    matchesReadOnlyIdentity(liveSession, live, precondition(attempt)) &&
     live?.state !== 'draft';
 
   // A live query may briefly publish a snapshot from before this tab's own save. Check a
@@ -289,7 +315,7 @@ function EntryView({
 
         const a = current.attempt;
         let message = '';
-        if (!a || !matchesDraftIdentity(current.session, a, precondition(attempt), true))
+        if (!a || !matchesReadOnlyIdentity(current.session, a, precondition(attempt)))
           message =
             'This session was replaced in another tab. Your text is still here; copy it before leaving this page.';
         else if (a.state !== 'draft' || a.revision < revision.current)

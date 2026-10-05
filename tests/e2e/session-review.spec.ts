@@ -31,11 +31,14 @@ async function sessionEnded(page: Page, sessionUrl: string): Promise<boolean> {
   }, id);
 }
 
-for (const { exerciseId, lastTask } of [
-  { exerciseId: 'arg-0007', lastTask: 1 },
-  { exerciseId: 'arg-0001', lastTask: 2 },
+for (const { exerciseId, lastTask, rating } of [
+  { exerciseId: 'arg-0007', lastTask: 1, rating: 'That was hard' },
+  { exerciseId: 'arg-0001', lastTask: 2, rating: 'Too easy' },
 ]) {
-  test(`another tab finishing task ${lastTask} of ${lastTask} offers a way forward`, async ({ page, context }) => {
+  test(`another tab finishing and grading task ${lastTask} of ${lastTask} with ${rating} offers a way forward`, async ({
+    page,
+    context,
+  }) => {
     const sessionUrl = await openExercise(page, exerciseId);
     if (lastTask === 2) {
       await page.getByLabel('Your answer').fill('My first answer.');
@@ -53,7 +56,25 @@ for (const { exerciseId, lastTask } of [
     await expect.poll(() => sessionEnded(other, sessionUrl)).toBe(true);
 
     await expect(page.getByText('This task was submitted in another tab.')).toBeVisible();
-    await expect(page.getByText('My local last answer.')).toBeVisible();
+    await expect(page.locator('blockquote.answer')).toHaveText('My local last answer.');
+
+    await other.getByRole('button', { name: 'Grade it myself' }).click();
+    const lastRow = other.locator('.row-card').filter({ hasText: 'The submitted last answer.' });
+    await lastRow.getByRole('button', { name: 'Enter a score' }).click();
+    const scoreInput = lastRow.getByLabel(/Score out of/);
+    const max = Number((await scoreInput.locator('..').textContent())?.match(/\d+/)?.[0]);
+    expect(max).toBeGreaterThan(0);
+    await scoreInput.fill(String(max));
+    await lastRow.getByRole('radio', { name: rating }).check();
+    await lastRow.getByRole('button', { name: 'Save score' }).click();
+    await expect(lastRow.getByText(`${max}/${max}`, { exact: true })).toBeVisible();
+
+    await expect(page.getByText('This task was submitted in another tab.')).toBeVisible();
+    await expect(page.locator('blockquote.answer')).toHaveText('My local last answer.');
+    await expect(page.getByRole('button', { name: 'Continue without this copy' })).toBeEnabled();
+    await expect(page.getByRole('alert').filter({ hasText: 'This session was replaced in another tab.' })).toHaveCount(
+      0,
+    );
     const confirmation = page.waitForEvent('dialog');
     const continueClick = page.getByRole('button', { name: 'Continue without this copy' }).click();
     expect((await confirmation).message()).toContain('Copy it before continuing');
