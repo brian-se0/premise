@@ -20,6 +20,24 @@ const EARLY_PREVIEW_V1 = {
   settings: { keyPath: 'key', indexes: [] },
 } as const;
 
+// Frozen from the preview deployed at d76cef5. Its v1 stores and indexes match the published
+// schema, including the unique review sequence and scheduler configuration stores.
+const DEPLOYED_PREVIEW_V1 = {
+  snapshots: { keyPath: 'hash', indexes: ['taskId'] },
+  sessions: { keyPath: 'id', indexes: ['createdAt'] },
+  attempts: { keyPath: 'id', indexes: ['sessionId', 'taskId', 'requestId', 'state'] },
+  requests: { keyPath: 'id', indexes: ['status', 'createdAt'] },
+  replies: { keyPath: 'id', indexes: ['requestId'] },
+  gradings: { keyPath: 'id', indexes: ['attemptId', 'requestId'] },
+  reviewLogs: { keyPath: 'id', indexes: ['taskId', 'attemptId', 'gradingId', '&seq'] },
+  cards: { keyPath: 'taskId', indexes: [] },
+  taskStates: { keyPath: 'taskId', indexes: [] },
+  flags: { keyPath: 'id', indexes: ['attemptId'] },
+  operations: { keyPath: 'opId', indexes: [] },
+  schedulerConfigs: { keyPath: 'version', indexes: [] },
+  settings: { keyPath: 'key', indexes: [] },
+} as const;
+
 async function snapshotLegacy(page: Page) {
   return page.evaluate(async () => {
     const request = indexedDB.open('premise-preview');
@@ -34,18 +52,38 @@ async function snapshotLegacy(page: Page) {
         names.map((name) => {
           const store = tx.objectStore(name);
           const get = store.getAll();
-          return new Promise<{ name: string; keyPath: string | string[] | null; indexes: string[]; rows: unknown[] }>(
-            (resolve, reject) => {
-              get.onsuccess = () =>
-                resolve({
-                  name,
-                  keyPath: store.keyPath,
-                  indexes: Array.from(store.indexNames).sort(),
-                  rows: (get.result as unknown[]).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))),
-                });
-              get.onerror = () => reject(get.error);
-            },
-          );
+          return new Promise<{
+            name: string;
+            keyPath: string | string[] | null;
+            autoIncrement: boolean;
+            indexes: string[];
+            indexDefinitions: {
+              name: string;
+              keyPath: string | string[];
+              unique: boolean;
+              multiEntry: boolean;
+            }[];
+            rows: unknown[];
+          }>((resolve, reject) => {
+            get.onsuccess = () =>
+              resolve({
+                name,
+                keyPath: store.keyPath,
+                autoIncrement: store.autoIncrement,
+                indexes: Array.from(store.indexNames).sort(),
+                indexDefinitions: Array.from(store.indexNames, (indexName) => {
+                  const index = store.index(indexName);
+                  return {
+                    name: indexName,
+                    keyPath: index.keyPath,
+                    unique: index.unique,
+                    multiEntry: index.multiEntry,
+                  };
+                }),
+                rows: (get.result as unknown[]).sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b))),
+              });
+            get.onerror = () => reject(get.error);
+          });
         }),
       );
       return { version: db.version, stores };
@@ -112,6 +150,100 @@ async function permitEarlyLibraryReview(page: Page) {
     db.close();
   });
 }
+
+test('Settings neither offers recovery nor creates a preview database when none exists', async ({ page }) => {
+  await page.goto('#/settings');
+  await expect(page.getByRole('button', { name: 'Download old preview backup' })).toHaveCount(0);
+  expect(
+    await page.evaluate(async () =>
+      (await indexedDB.databases()).some((database) => database.name === 'premise-preview'),
+    ),
+  ).toBe(false);
+});
+
+test('deployed v1 preview recovery matches a normal backup and leaves its database unchanged', async ({ page }) => {
+  const history = await makeAcceptedHistory(page, [
+    'The conclusion is qualified.',
+    'The premise does not establish causation.',
+  ]);
+  await page.goto('#/settings');
+  const normalDownload = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export a backup' }).click();
+  const normalFile = await normalDownload;
+  const normal = JSON.parse(Buffer.concat(await (await normalFile.createReadStream()).toArray()).toString()) as Record<
+    string,
+    unknown
+  >;
+
+  await page.evaluate(
+    async ({ schema, data }) => {
+      const activeOpen = indexedDB.open('premise');
+      const active = await new Promise<IDBDatabase>((resolve, reject) => {
+        activeOpen.onsuccess = () => resolve(activeOpen.result);
+        activeOpen.onerror = () => reject(activeOpen.error);
+      });
+      const version = active.version;
+      active.close();
+
+      const oldOpen = indexedDB.open('premise-preview', version);
+      oldOpen.onupgradeneeded = () => {
+        for (const [name, definition] of Object.entries(schema)) {
+          const store = oldOpen.result.createObjectStore(name, { keyPath: definition.keyPath });
+          for (const spec of definition.indexes) {
+            const unique = spec.startsWith('&');
+            const indexName = unique ? spec.slice(1) : spec;
+            store.createIndex(indexName, indexName, { unique });
+          }
+        }
+      };
+      const old = await new Promise<IDBDatabase>((resolve, reject) => {
+        oldOpen.onsuccess = () => resolve(oldOpen.result);
+        oldOpen.onerror = () => reject(oldOpen.error);
+      });
+      const names = Object.keys(schema);
+      const write = old.transaction(names, 'readwrite');
+      for (const name of names) {
+        const records = name === 'schedulerConfigs' ? [] : (data[name] as unknown[]);
+        for (const record of records) write.objectStore(name).put(record);
+      }
+      await new Promise<void>((resolve, reject) => {
+        write.oncomplete = () => resolve();
+        write.onerror = () => reject(write.error);
+      });
+      old.close();
+    },
+    { schema: DEPLOYED_PREVIEW_V1, data: normal },
+  );
+
+  const before = await snapshotLegacy(page);
+  expect(before.stores.map((store) => store.name)).toContain('schedulerConfigs');
+  expect(before.stores.find((store) => store.name === 'reviewLogs')?.indexDefinitions).toContainEqual(
+    expect.objectContaining({ name: 'seq', keyPath: 'seq', unique: true }),
+  );
+  await page.goto('#/');
+  await page.goto('#/settings');
+  const recover = page.getByRole('button', { name: 'Download old preview backup' });
+  await expect(recover).toBeVisible();
+  const recoveryDownload = page.waitForEvent('download');
+  await recover.click();
+  const recoveredFile = await recoveryDownload;
+  const buffer = Buffer.concat(await (await recoveredFile.createReadStream()).toArray());
+  const recovered = JSON.parse(buffer.toString()) as Record<string, unknown>;
+  const withoutExportTime = ({ exportedAt: _exportedAt, ...rest }: Record<string, unknown>) => rest;
+  expect((recovered.requests as { id: string }[]).map((request) => request.id)).toContain(history.requestId);
+  expect(recovered.replies as { requestId: string; raw: string }[]).toContainEqual(
+    expect.objectContaining({ requestId: history.requestId, raw: history.raw }),
+  );
+  expect(recovered.gradings as unknown[]).toHaveLength(2);
+  expect(withoutExportTime(recovered)).toEqual(withoutExportTime(normal));
+  await page.getByLabel('Backup file').setInputFiles({
+    name: recoveredFile.suggestedFilename(),
+    mimeType: 'application/json',
+    buffer,
+  });
+  await expect(page.getByRole('button', { name: 'Replace everything' })).toBeVisible();
+  expect(await snapshotLegacy(page)).toEqual(before);
+});
 
 test('old preview recovery exports accepted history without changing its database', async ({ page }) => {
   const first = await makeAcceptedHistory(page, [

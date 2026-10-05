@@ -959,6 +959,56 @@ describe('replies and provenance', () => {
     expect(await db.operations.get('changed-preview-reply')).toBeUndefined();
   });
 
+  it('refuses two parsed rows that claim different previews of the same reply', async () => {
+    const { attemptIds, requestId } = await prepared(['arg-0001.conclusion', 'arg-0001.flaw']);
+    const request = (await db.requests.get(requestId))!;
+    const parserRows = await Promise.all(
+      Object.entries(request.rows).map(async ([rowId, attemptId]) => {
+        const attempt = (await db.attempts.get(attemptId))!;
+        const snapshot = (await db.snapshots.get(attempt.snapshotHash))!;
+        return { rowId, max: snapshot.max, allowedTags: snapshot.allowedTags };
+      }),
+    );
+    const raw = [
+      `BEGIN FEEDBACK request=${requestId}`,
+      'I01: 1/1',
+      '- Tip: Keep the conclusion.',
+      'I02: 1/2',
+      '- Tip: Name the gap.',
+      'END FEEDBACK',
+      `BEGIN SCORES v2 request=${requestId}`,
+      'I01 | 1/1 | -',
+      'I02 | 1/2 | -',
+      'END SCORES',
+    ].join('\n');
+    const parsed = parseReply(raw, { id: requestId, promptVersion: request.promptVersion, rows: parserRows });
+    expect(parsed.kind).toBe('parsed');
+    if (parsed.kind !== 'parsed') throw new Error('Expected a parsed reply');
+    const { replyId } = await saveReply(db, ctx(), 'two-row-reply', requestId, {
+      raw,
+      parserVersion: PARSER_VERSION,
+      selectedBlock: parsed.block.range,
+      parseOutcome: parsed.block.outcome,
+    });
+    const grades = await Promise.all(
+      attemptIds.map(async (attemptId, index) => {
+        const parsedRow = parsed.block.rows[index]!;
+        if (parsedRow.status !== 'valid') throw new Error('Expected a valid row');
+        return row(attemptId, 1, {
+          source: 'parsed',
+          replyId,
+          feedbackRange: parsedRow.feedback,
+          expectedReplyRaw: index === 0 ? raw : raw.replace('Name the gap.', 'Hide the gap.'),
+        });
+      }),
+    );
+    await expectUnchanged(() => confirmRows(db, ctx(), 'mixed-previews', requestId, grades, null), OpError);
+    expect(await db.gradings.count()).toBe(0);
+    expect(await db.reviewLogs.count()).toBe(0);
+    expect(await db.cards.count()).toBe(0);
+    expect(await db.operations.get('mixed-previews')).toBeUndefined();
+  });
+
   it('requires every parsed preview expectation at the storage boundary', async () => {
     const { attemptIds, requestId } = await prepared(['arg-0001.flaw']);
     const parsed = await parsedGradeRow(requestId, attemptIds[0]!, 1, 'saved-expectations');
