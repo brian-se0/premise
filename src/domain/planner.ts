@@ -205,7 +205,7 @@ function repairCandidates(
 /**
  * Accepted, uncoached misses in the last 30 days that no later fresh-stimulus success repaired.
  * A miss clears only on full credit from an uncoached attempt started after the miss was first
- * graded as a miss, submitted later, in a later session on a stimulus the student had not seen before
+ * graded as a miss, submitted later, in a different session on a stimulus the student had not seen before
  * (stimulusSeenBefore false), on a different exercise with the same skill and a shared likely
  * error. Success before the student received the correction is not transfer.
  */
