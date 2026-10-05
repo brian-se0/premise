@@ -95,7 +95,7 @@ const FEEDBACK_FENCE_START = /^(`{3,}(?=[^`]*$)|~{3,})(.*)$/;
 const MARKDOWN_HEADING = /#{1,6}[ \t]+/y;
 const HEADING_SCORE = new RegExp(`^(${WS}*(?:\\d+|\\?)${WS}*/${WS}*\\d+)(?=${WS}|$|[^\\w/])`);
 const FEEDBACK_LIST_MARKER = new RegExp(`^(?:[-*+•]|\\d+[.)])${WS}+`);
-const BOUNDED_OUTER_PIPES = new RegExp(`^([*_\\x60~]+)?${WS}*\\|(.+)\\|${WS}*([*_\\x60~]+)?$`);
+const BOUNDED_OUTER_PIPES = new RegExp(`^([*_\\x60~]+)?${WS}*\\|([^]+)\\|${WS}*([*_\\x60~]+)?$`);
 const HEADING_DECORATORS = /^[*_`~]*/;
 const HEADING_PREFIX_DECORATORS = /[*_`~]+/y;
 const BOUNDED_HEADING_ID = /^I\d+/i;
