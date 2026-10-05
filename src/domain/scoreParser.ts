@@ -95,6 +95,7 @@ const FEEDBACK_FENCE_START = /^(`{3,}(?=[^`]*$)|~{3,})(.*)$/;
 const MARKDOWN_HEADING = /#{1,6}[ \t]+/y;
 const HEADING_SCORE = new RegExp(`^(${WS}*(?:\\d+|\\?)${WS}*/${WS}*\\d+)(?=${WS}|$|[^\\w/])`);
 const FEEDBACK_LIST_MARKER = new RegExp(`^(?:[-*+•]|\\d+[.)])${WS}+`);
+const BOUNDED_OUTER_PIPES = new RegExp(`^([*_\\x60~]+)?${WS}*\\|(.+)\\|${WS}*([*_\\x60~]+)?$`);
 const HEADING_DECORATORS = /^[*_`~]*/;
 const HEADING_PREFIX_DECORATORS = /[*_`~]+/y;
 const BOUNDED_HEADING_ID = /^I\d+/i;
@@ -351,6 +352,8 @@ interface BoundedHeading {
   quoted: boolean;
   /** An unsupported heading still bounds the preceding row, but cannot start its own feedback. */
   attributable: boolean;
+  /** A nested list heading also counts toward ambiguity for its own row. */
+  nestedList: boolean;
   score: { points: string; max: string } | null;
 }
 
@@ -366,15 +369,18 @@ function skipScoreDecoration(text: string): string {
 
 /** Only a heading's assessment, not its ID or score block, gets emphasis/code normalization. */
 function headingAssessment(text: string): string {
-  let assessment = skipScoreDecoration(text);
+  // Keep a mark between digits inside the number, but make every other mark a token boundary.
+  let assessment = text.replace(/(\d)[*_`]+(?=\d)/g, '$1').replace(/[*_`]/g, ' ');
+  assessment = skipScoreDecoration(assessment);
   assessment = skipScoreDecoration(assessment.replace(/^Score\b(?:[ \t]*:)?[ \t]*/i, ''));
-  return assessment.replace(/[*_`]/g, '');
+  return assessment;
 }
 
 /** The bounded reader's single interpretation of a raw heading line, including its score. */
 function recognizeBoundedHeading(rawLine: string): BoundedHeading | null {
   let line = trimWs(rawLine);
   let quoted = false;
+  let listMarkers = 0;
   // A quote can appear inside a list item, and lists and quotes can alternate at any depth.
   while (line) {
     if (line.startsWith('>')) {
@@ -384,10 +390,13 @@ function recognizeBoundedHeading(rawLine: string): BoundedHeading | null {
     }
     const withoutList = line.replace(FEEDBACK_LIST_MARKER, '');
     if (withoutList === line) break;
+    listMarkers++;
     line = trimWs(withoutList);
   }
-  // Match cleanLine's paired outer-pipe rule without changing shared score-block cleaning.
-  if (line.length >= 2 && line.startsWith('|') && line.endsWith('|')) line = trimWs(line.slice(1, -1));
+  // Presentation marks outside a pipe pair identify a boundary, never a feedback start.
+  const outerPipes = BOUNDED_OUTER_PIPES.exec(line);
+  const outsidePipeMarks = !!outerPipes?.[1] || !!outerPipes?.[3];
+  if (outerPipes) line = trimWs(outerPipes[2]!);
   let offset = 0;
   let prefixHasTilde = false;
   let markedHeading = false;
@@ -418,7 +427,7 @@ function recognizeBoundedHeading(rawLine: string): BoundedHeading | null {
   // Ordinary prose such as "I02 is discussed below" is not a heading.
   if (!separator && line !== '' && !markedHeading && !HEADING_SCORE.test(headingAssessment(line))) return null;
 
-  const attributable = separator === ':' && !prefixHasTilde && !suffix.includes('~');
+  const attributable = separator === ':' && !prefixHasTilde && !suffix.includes('~') && !outsidePipeMarks;
   const assessment = headingAssessment(line.slice(separator?.length ?? 0));
   const token = HEADING_SCORE.exec(assessment)?.[1];
   let score: BoundedHeading['score'] = null;
@@ -426,7 +435,7 @@ function recognizeBoundedHeading(rawLine: string): BoundedHeading | null {
     const [points, max] = token.split('/').map(trimWs);
     score = { points: points!, max: max! };
   }
-  return { id: id.toUpperCase(), quoted, attributable, score };
+  return { id: id.toUpperCase(), quoted, attributable, nestedList: listMarkers > 1 && separator === ':', score };
 }
 
 /**
@@ -473,7 +482,7 @@ function attachBoundedFeedback(
     return block;
   }
 
-  const headings: { line: Line; heading: BoundedHeading; eligible: boolean }[] = [];
+  const headings: { line: Line; heading: BoundedHeading; eligible: boolean; countsTowardRow: boolean }[] = [];
   let fence: { mark: string; length: number } | null = null;
   for (const l of lines) {
     if (l.start <= begin.start || l.start >= end.start) continue;
@@ -483,8 +492,15 @@ function attachBoundedFeedback(
     const heading = recognizeBoundedHeading(original);
     const quoted = original.startsWith('>');
     const fenceStart = FEEDBACK_FENCE_START.exec(original.replace(FEEDBACK_LIST_MARKER, ''));
-    if (heading && !fenceStart)
-      headings.push({ line: l, heading, eligible: heading.attributable && !heading.quoted && !fence });
+    if (heading && !fenceStart) {
+      const unquoted = heading.attributable && !heading.quoted && !fence;
+      headings.push({
+        line: l,
+        heading,
+        eligible: unquoted && !heading.nestedList,
+        countsTowardRow: !!unquoted,
+      });
+    }
     if (quoted) continue;
     if (fence) {
       let runLength = 0;
@@ -501,8 +517,8 @@ function attachBoundedFeedback(
   if (fence) return block;
 
   const rows = block.rows.map((r) => {
-    const own = headings.filter((h) => h.eligible && h.heading.id === r.rowId.toUpperCase());
-    if (own.length !== 1) return r;
+    const own = headings.filter((h) => h.countsTowardRow && h.heading.id === r.rowId.toUpperCase());
+    if (own.length !== 1 || !own[0]!.eligible) return r;
     const score = own[0]!.heading.score;
     if (score) {
       if (r.status !== 'valid') return r;
