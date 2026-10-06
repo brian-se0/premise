@@ -48,6 +48,7 @@ const CHATBOTS = [
   { name: 'ChatGPT', url: 'https://chatgpt.com/' },
   { name: 'Claude', url: 'https://claude.ai/new' },
   { name: 'Gemini', url: 'https://gemini.google.com/app' },
+  { name: 'Grok', url: 'https://grok.com/' },
 ];
 
 interface Row {

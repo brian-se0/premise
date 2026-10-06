@@ -4,7 +4,7 @@ Status: draft v0.6 (2026-10-04, security audit alignment). Working name: **Premi
 
 ## 1. Purpose
 
-Premise is a free, open-source trainer for the reasoning skills tested by law school admission exams. Students read short arguments and passages, **write** their analysis in their own words, and have it graded by any AI chatbot they already use, or grade it themselves against a rubric. The app tracks results and schedules reviews.
+Premise is a free, open-source trainer for the reasoning skills tested by law school admission exams. Students read short arguments and passages, **write** their analysis in their own words, and have it graded by the free version of a frontier AI chatbot (OpenAI's ChatGPT, Anthropic's Claude, Google's Gemini or xAI's Grok), or grade it themselves against a rubric. Local models running on the student's own computer are the second target; other closed models are not a target for now. The app tracks results and schedules reviews.
 
 **Positioning: targeted reasoning repair.** Premise is for the student who understands an explanation after reading it but still misses the reasoning move on the next unfamiliar argument. It finds the step a student keeps missing, gives one precise correction, then checks the same point on a fresh argument. A time-capped **final-weeks mode** serves the last stretch before the exam.
 
@@ -55,7 +55,7 @@ It does not simulate the official test. Students keep taking official practice t
 
 1. The Grade screen lists the submitted answers and offers **Copy for grading** and **Grade it myself**. Either one first saves the frozen grading request (more than one if the answers don't fit in one prompt). Each answer belongs to one request only.
 2. Copying puts the request's prompt on the clipboard; copying again gives the same prompt. If the clipboard write fails, the prompt appears in a selectable box. Requests with any row still waiting for a grade, including "needs review" rows, appear in an **Awaiting grading** list on Home and can be resumed any time.
-3. Links open common chatbots in a new tab. Links never carry the prompt.
+3. Links open the four frontier chatbots (ChatGPT, Claude, Gemini, Grok) in a new tab. Links never carry the prompt.
 4. The student pastes the chatbot's whole reply. The app shows, per row: the score or the reason it is invalid, the tags, and the matched feedback. Warnings and the full raw reply are one tap away.
 5. Before confirming, a full-credit row can be marked "That was hard" or "Too easy".
 6. **Confirm** saves valid rows exactly once and schedules them. Invalid, missing or "needs review" rows stay unresolved; the student can re-paste, enter a score manually, or self-grade them. Confirming twice, from two tabs, or after the grade was undone never schedules a task twice.
