@@ -4,25 +4,26 @@
 // Usage: npm run pilot:prompt -- pilot/runs/<run>.yaml
 //
 // Run file:
-//   run: dev-chatgpt-1          # fixture folder name
+//   run: dev-a                  # fixture folder name
 //   batchSize: 4                # optional
-//   items:
-//     - id: a001                # answer id from pilot/answers
+//   items:                      # in row order
+//     - con03                   # an answer id from pilot/answers, or a whole item:
+//     - id: a001
 //       task: arg-0001.flaw
 //       answer: The author assumes ...
 
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { parse } from 'yaml';
-import { loadExercises } from '../scripts/content.ts';
 import { planRequests, type GradingItem } from '../src/domain/prompt.ts';
-import { buildSnapshot } from '../src/domain/snapshot.ts';
-import type { Snapshot } from '../src/domain/types.ts';
+import { loadAnswers, loadSnapshots } from './load.ts';
+
+type RunItem = string | { id: string; task: string; answer: string };
 
 interface RunFile {
   run: string;
   batchSize?: number;
-  items: { id: string; task: string; answer: string }[];
+  items: RunItem[];
 }
 
 const runPath = process.argv[2];
@@ -32,18 +33,15 @@ if (!runPath) {
 }
 const runFile = parse(readFileSync(runPath, 'utf8')) as RunFile;
 
-const snapshots = new Map<string, Snapshot>();
-for (const exercise of await loadExercises()) {
-  for (const task of exercise.tasks) {
-    const snap = await buildSnapshot(exercise, task);
-    snapshots.set(snap.taskId, snap);
-  }
-}
+const snapshots = await loadSnapshots();
+const answers = runFile.items.some((i) => typeof i === 'string') ? loadAnswers(snapshots) : new Map();
 
 const items: GradingItem[] = runFile.items.map((i) => {
-  const snapshot = snapshots.get(i.task);
-  if (!snapshot) throw new Error(`Unknown task ${i.task} for answer ${i.id}`);
-  return { attemptId: i.id, snapshot, answer: i.answer };
+  const item = typeof i === 'string' ? answers.get(i) : i;
+  if (!item) throw new Error(`Unknown answer id ${String(i)}`);
+  const snapshot = snapshots.get(item.task);
+  if (!snapshot) throw new Error(`Unknown task ${item.task} for answer ${item.id}`);
+  return { attemptId: item.id, snapshot, answer: item.answer };
 });
 
 const requests = planRequests(items, {

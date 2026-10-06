@@ -1,0 +1,36 @@
+{
+  "id": "72e77090-69d3-452b-9a19-047a210ece12",
+  "fence": "AN21W4",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "asm05",
+      "taskId": "arg-0015.assumption",
+      "snapshotHash": "88c1ac972a38cbd97e4e94ec89e8196b18185ab034c22c4a4464b7b61ca161db",
+      "answer": "basically it assumes that if they get rid of the goats on the other four islands the saltbush will grow back there too"
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "asm06",
+      "taskId": "arg-0015.assumption",
+      "snapshotHash": "88c1ac972a38cbd97e4e94ec89e8196b18185ab034c22c4a4464b7b61ca161db",
+      "answer": "the biologists are assuming that taking the goats off is at least part of why the saltbush came back on those 3 islands. like if it was really all down to something else that only happened there, say rabbits or some other saltbush eater dying out on just those 3, then the recovery wouldnt tell you anything about what removing goats would do on the other 4"
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "con10",
+      "taskId": "arg-0017.conclusion",
+      "snapshotHash": "d329e18d41fb8f8fe4e4a00941e9230388300b6eddbeb14f5275fa1bba5250e7",
+      "answer": "The author's conclusion is that the Dunmore council should vote against the protected bike lanes on Harbor Street, since the only evidence for them came from a study the bicycle makers paid for."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "fla01",
+      "taskId": "arg-0009.flaw",
+      "snapshotHash": "99089536385814080f5e0a6d9f3d251766ffcfd5c2a104120dfb80bd6cd649a5",
+      "answer": "i think maybe the schools near those 5 branches started some kind of reading challenge or assigned way more books that year, which could be why teens there were checking out more"
+    }
+  ],
+  "selfGradeOnly": false
+}

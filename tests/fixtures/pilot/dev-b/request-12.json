@@ -1,0 +1,36 @@
+{
+  "id": "ca3e0e4d-11c0-4fc7-a566-148ee7281052",
+  "fence": "M6BHFS",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "con04",
+      "taskId": "arg-0013.conclusion",
+      "snapshotHash": "837020b094efbf9c46f24efe2af1c0481bea3118fbebf395c43c7f33dfd33593",
+      "answer": "The author's main conclusion is that the Ardent Quartet's version isn't the recording a first-time listener to Beethoven's late quartets should begin with; they should pick a different one."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "con07",
+      "taskId": "arg-0017.conclusion",
+      "snapshotHash": "d329e18d41fb8f8fe4e4a00941e9230388300b6eddbeb14f5275fa1bba5250e7",
+      "answer": "However its vote on the Harbor Street lanes turns out, the Dunmore council should leave the bicycle makers' study out of the case for them."
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "fla04",
+      "taskId": "arg-0011.flaw",
+      "snapshotHash": "c27186b0b32050ef2ed66267e92491b495fdb3cebbd513f3d46eaeaf75653662",
+      "answer": "ok so the argument is basically big settlements needed a reliable water source in the dry season, kessel ridge had one, so the ruins were probably a big settlement. but a lot of places with springs and good soil couldve just stayed small villages, so meeting the water requirement doesnt mean it was big."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "con01",
+      "taskId": "arg-0013.conclusion",
+      "snapshotHash": "837020b094efbf9c46f24efe2af1c0481bea3118fbebf395c43c7f33dfd33593",
+      "answer": "i think the main point is basically that the ardent recording isnt a good one to start out on"
+    }
+  ],
+  "selfGradeOnly": false
+}

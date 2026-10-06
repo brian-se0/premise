@@ -1,0 +1,22 @@
+{
+  "id": "91f61859-2550-4260-958e-bdfc13c4cfc9",
+  "fence": "PVB6X7",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "wea08",
+      "taskId": "arg-0025.weaken",
+      "snapshotHash": "4f7c64ed97b81d5634f5a0941a1e3c054bbfd1839bc5847caff4ae9ca60424e9",
+      "answer": "the health dept's list of restaurants that had at least one serious violation last year has 340 names on it. thats 34% of the 1000 restaurants, way more than 1 in 10. the writer basically took the inspection rate and treated it like it was the restaurant rate"
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "asm07",
+      "taskId": "arg-0019.assumption",
+      "snapshotHash": "cc89fe651806fcfd5f93965c013ac369a577eb54aafc55c16c28b1d793c9728d",
+      "answer": "The hidden assumption is that the two groups of farms had everything else in common over the last five years: same seed, same fertilizer, same irrigation, same weather, so that the cover crops were the only difference. That is the only way the 12 percent versus 3 percent comparison can be pinned on the cover crops."
+    }
+  ],
+  "selfGradeOnly": false
+}

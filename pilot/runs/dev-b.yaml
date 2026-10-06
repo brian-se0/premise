@@ -1,0 +1,54 @@
+# Development exercises. Every chatbot under test grades both development orders (docs/GRADING_PROTOCOL.md §9).
+# Row order: a seeded shuffle (seed 202) of the answer ids. Answers: pilot/answers/.
+run: dev-b
+items:
+  - str03
+  - fla01
+  - fla08
+  - con10
+  - fla05
+  - asm09
+  - asm01
+  - wea03
+  - fla10
+  - str10
+  - wea10
+  - str06
+  - str09
+  - str05
+  - wea01
+  - asm02
+  - wea06
+  - str01
+  - wea09
+  - str04
+  - fla03
+  - con05
+  - str07
+  - wea04
+  - fla09
+  - con09
+  - con03
+  - wea05
+  - asm03
+  - str08
+  - asm06
+  - wea02
+  - str02
+  - asm04
+  - con08
+  - asm10
+  - fla06
+  - wea07
+  - fla07
+  - asm08
+  - asm05
+  - con02
+  - con06
+  - fla02
+  - con04
+  - con07
+  - fla04
+  - con01
+  - wea08
+  - asm07

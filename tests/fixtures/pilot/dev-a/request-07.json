@@ -1,0 +1,36 @@
+{
+  "id": "954c1c55-7f84-4260-ad41-02b4aa63072c",
+  "fence": "1133PX",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "wea09",
+      "taskId": "arg-0028.weaken",
+      "snapshotHash": "2d88e386587d83e88a80d98c0b440d313024ef3bcb0adff521f4678ccd7f62ec",
+      "answer": "In April the state auditor posted a report online, free for anyone to read, saying that city officials knew the Elm Street alarms were faulty and let the repairs slide for six months while the school stayed open. The public could already learn about the wrongdoing from that report, so the memo isn't the only way to find out, and the code's condition isn't met. So under its own code the Ledger shouldn't publish it."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "fla08",
+      "taskId": "arg-0021.flaw",
+      "snapshotHash": "ec841b58e2a745d8cc3f643f981ea47b57ac40989e2ccc25a16f0df8d99439de",
+      "answer": "Necessary vs. sufficient condition error."
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "str06",
+      "taskId": "arg-0015.strengthen",
+      "snapshotHash": "bd4b45d1c7b55e2d69d5f8d83f40b25d9ffc78a5cae38ee80bc717eb717e7496",
+      "answer": "On the three goat-free islands, the saltbush only started coming back about fifteen years after the goats were taken off, in the same year a replanting program started there. This ties the recovery to the goats' removal, so it makes it more likely that removing the goats from the other four would work too."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "asm02",
+      "taskId": "arg-0010.assumption",
+      "snapshotHash": "855af9b8f30409549fc0f33b47076693014f6b62bf061fe789ddaee89bcc12b2",
+      "answer": "The head of support has to assume the jump from 3.6 to 4.3 isn't wholly a matter of who ended up answering the survey. The survey only reaches people who stay until the agent closes the chat, so if the script made frustrated customers give up and leave early, the ones left would rate higher even if nobody got better help. The argument survives as long as at least some of the rise is people actually being more satisfied. (Six months on each side seems like a fair window, so I don't think the time period is the problem.)"
+    }
+  ],
+  "selfGradeOnly": false
+}

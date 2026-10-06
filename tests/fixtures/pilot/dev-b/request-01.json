@@ -1,0 +1,36 @@
+{
+  "id": "3662d56b-0760-465a-85f3-607348a79c62",
+  "fence": "3DHXHP",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "str03",
+      "taskId": "arg-0012.strengthen",
+      "snapshotHash": "dfea401269e5c12430a40dec1356f060ce1775ab06d8a3bb9d7dc2345633b6c9",
+      "answer": "In the two years since the cameras went in, the city made no other safety changes on those eight streets: no new traffic lights, speed bumps, crosswalks or lower speed limits."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "fla01",
+      "taskId": "arg-0009.flaw",
+      "snapshotHash": "99089536385814080f5e0a6d9f3d251766ffcfd5c2a104120dfb80bd6cd649a5",
+      "answer": "i think maybe the schools near those 5 branches started some kind of reading challenge or assigned way more books that year, which could be why teens there were checking out more"
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "fla08",
+      "taskId": "arg-0021.flaw",
+      "snapshotHash": "ec841b58e2a745d8cc3f643f981ea47b57ac40989e2ccc25a16f0df8d99439de",
+      "answer": "Necessary vs. sufficient condition error."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "con10",
+      "taskId": "arg-0017.conclusion",
+      "snapshotHash": "d329e18d41fb8f8fe4e4a00941e9230388300b6eddbeb14f5275fa1bba5250e7",
+      "answer": "The author's conclusion is that the Dunmore council should vote against the protected bike lanes on Harbor Street, since the only evidence for them came from a study the bicycle makers paid for."
+    }
+  ],
+  "selfGradeOnly": false
+}

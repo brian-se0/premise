@@ -1,0 +1,36 @@
+{
+  "id": "a2f892e7-8a19-41cf-88cc-3c686c3e5d3d",
+  "fence": "CHCF1Z",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "str03",
+      "taskId": "arg-0012.strengthen",
+      "snapshotHash": "dfea401269e5c12430a40dec1356f060ce1775ab06d8a3bb9d7dc2345633b6c9",
+      "answer": "In the two years since the cameras went in, the city made no other safety changes on those eight streets: no new traffic lights, speed bumps, crosswalks or lower speed limits."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "con05",
+      "taskId": "arg-0013.conclusion",
+      "snapshotHash": "837020b094efbf9c46f24efe2af1c0481bea3118fbebf395c43c7f33dfd33593",
+      "answer": "the author is saying people new to the late quartets should start with the ardent recording since the playing is technically flawless, and the critics who brought up the cellists pop band past are being unfair"
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "wea07",
+      "taskId": "arg-0025.weaken",
+      "snapshotHash": "4f7c64ed97b81d5634f5a0941a1e3c054bbfd1839bc5847caff4ae9ca60424e9",
+      "answer": "Not every restaurant that failed did so all four times."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "con06",
+      "taskId": "arg-0017.conclusion",
+      "snapshotHash": "d329e18d41fb8f8fe4e4a00941e9230388300b6eddbeb14f5275fa1bba5250e7",
+      "answer": "The main conclusion is that the study's finding about shop sales can't be trusted, since the Association of Bicycle Makers paid for it. The statement that the council should not count the study in favor of the lanes is one of the reasons the author gives for that."
+    }
+  ],
+  "selfGradeOnly": false
+}
