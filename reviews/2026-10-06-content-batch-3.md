@@ -1508,3 +1508,307 @@ other change, caused the rise. The resident fare on Lissay, a nearby island, is 
 before the cut. Lissay's council concludes that halving its residents' fare would also bring a large rise
 in the number of crossings they make.
 ````
+
+## Reviewer response
+
+An independent Claude Opus 5.5 session at maximum effort (the project thread "Independent review of batch 3"), started for this check with no part in writing the keys or in the two earlier Claude checks, 2026-10-06. It reviewed this packet at `21664a68465f947f3331926381d26b014843b1d7` and changed nothing in the repository. The review follows verbatim between the two rules below, except that each heading is one level lower (headings inside code blocks are YAML comments and are unchanged). With the headings restored, the text is the review file as delivered: 23,038 bytes, SHA-256 `d264e183c75e0f288f4985fb2a60de69525e7d454f6822803dd7d5b867ba2565`.
+
+---
+
+## Batch 3 answer key check (arg-0029 to arg-0038)
+
+Reviewer: an independent Claude Opus 5.5 session at maximum effort, started for this check, with no part in writing these keys or in the two earlier Claude checks. It replaces GPT-6 Pro for this batch. Date: 2026-10-06.
+
+Packet: `reviews/2026-10-06-content-batch-3.md` at `21664a68465f947f3331926381d26b014843b1d7` (branch `content-batch-3`), SHA-256 `0ab28c57ccda15e9a704e1a49e307fe5236590a5efb73228bc5054205790021a`, matching the brief. The ten exercise files at that commit are byte-identical to the packet's copies, and the branch differs from `main` (`72888ad`) only by those ten files and the packet.
+
+What was checked: sections 3 and 4 of the packet, for all 20 tasks and their form lines, against `CONTENT_GUIDELINES.md` §3.1, §3.2 and §5 and `METHOD.md` §3 and §5, with the batch 2 review and the schema 4 key audit as precedent. Every assumption reference and full-credit anchor was negated literally, every anchor was graded against its rubric and `accept` text, and every number was recomputed (48 of 60 is 80 percent, so the threshold falls at 80 percent of climbs; 1 percent of about 180 seconds is 1.8 seconds; 9 of 11 and 41 of 50 strikes found dead are both about 82 percent; 10 of 12 against about 1 in 5). All replacement text below was applied together to a scratch copy of the commit: `npm run content` accepts all 38 exercises and the 393 unit tests pass. Nothing in the repository was changed.
+
+Severity: **must fix** means a key scores a listed or common kind of answer wrongly. **Minor** means a less common answer is scored wrongly, or a reference, label, anchor, stimulus or form line teaches something slightly wrong. The optional **nits** at the end are clarity only and do not count toward the verdicts.
+
+### Verdicts
+
+| Exercise | Verdict |
+| --- | --- |
+| arg-0029 | fix (minor: stimulus timing; strengthen 0-point anchor and form line) |
+| arg-0030 | fix (minor: assumption, a limit in the wrong unit) |
+| arg-0031 | fix (minor: the weaken reference overstates) |
+| arg-0032 | fix (minor: strengthen, the score of a premise-denying fact) |
+| arg-0033 | fix (must fix: the weaken key credits a fact that leaves the trend intact) |
+| arg-0034 | keep |
+| arg-0035 | fix (minor: weaken criterion 2 shuts out a valid route) |
+| arg-0036 | fix (minor: the assumption key misses the experienced-staff bridge) |
+| arg-0037 | fix (minor: strengthen labels overstate their examples) |
+| arg-0038 | keep |
+
+### Findings
+
+#### arg-0029 stimulus, affecting both tasks (minor)
+
+**Problem.** "Recipes handed down in the owner's family" lets the outcome create the property being tested. A restaurant that lasts twenty years often passes to the founder's children, and its own recipes then become recipes handed down in the owner's family. Lasting can therefore make a restaurant count as a family-recipe restaurant: a reversed rival that no key mentions. It also undercuts the strengthen reference, because restaurants that closed young never reached a second generation, so a low share of family recipes among them would be expected even if the recipes did nothing. Fixing the timing removes the rival without touching any key text.
+
+**Replacement.** The stimulus's second sentence becomes (same length, 65 words in all):
+
+> A food magazine interviewed the owners of all twelve and found that ten of the restaurants have cooked mainly from family recipes ever since they opened.
+
+#### arg-0029.strengthen (minor)
+
+**Problem 1, the 0-point anchor.** "Several new Dunmore restaurants that cooked from family recipes closed within a year." earns 0 correctly, but its note says it "gives a reason to doubt the conclusion". A few failures with no comparison is the survivorship error run backwards: it says nothing about whether family-recipe restaurants close more or less often than others, which is the lesson of this exercise. The `accept` example "family-recipe restaurants often closing within a few years" has the same gap. A comparative fact keeps the anchor at 0 for the stated reason and agrees with the lesson. It is consistent with the premises as long as most restaurants that opened used family recipes (for example, 100 family-recipe openings with 10 survivors against 10 other openings with 2).
+
+**Replacement.** The 0-point anchor:
+
+```yaml
+      - points: 0
+        answer: >-
+          Among Dunmore restaurants that opened in the same years as these twelve, those cooking mainly from
+          family recipes closed more often than the others.
+        note: >-
+          points the other way: family-recipe restaurants closing more often than others (possible if most of
+          the restaurants that opened used family recipes) is a reason to doubt that the recipes help a
+          restaurant last
+```
+
+In `accept`, replace "such as family-recipe restaurants often closing within a few years, earns 0." with "such as family-recipe restaurants closing more often than other restaurants, earns 0."
+
+**Problem 2, the form line.** "Reduces the survivors-only rival" uses a term the Method does not define, and the fact does more than reduce a rival: it supplies the missing comparison, while a third factor behind both (family ownership, say) stays open.
+
+**Replacement** (219 characters):
+
+```yaml
+    form: >-
+      Missing comparison: how common family recipes were among the restaurants that closed. A fact showing
+      they were much rarer there supplies it: the recipes went with lasting, though that alone does not show
+      they caused it.
+```
+
+#### arg-0030.assumption (minor)
+
+**Problem.** The conclusion is about risk per climb, so the limit has to be on the share of climbs. A student who limits the share of climbers, or of climbing time, has the right idea in the wrong unit (`METHOD.md` §3.2, unit of analysis), and the claim fails negation: if 80 percent of the gym's climbers used the beginner walls, the climbers on the harder walls could still have made enough climbs to keep the beginner walls under 80 percent of all climbs, and the argument survives. Criterion 2 already fails such an answer, but nothing tells the grader so, and criterion 1's "how much of the gym's climbing" reads as covering time.
+
+**Replacement.** In `accept`, after "or that the beginner walls did not carry nearly all of the climbs, counts." insert:
+
+> A limit in another unit, such as the share of the gym's climbers who used the beginner walls or the share of climbing time spent there, misses that the conclusion is about the risk per climb and earns at most 1.
+
+#### arg-0031.weaken (minor)
+
+**Problem.** The reference ends "so switching would not make a significant difference to how quickly people read". That denies the conclusion, which the fact does not establish (it concerns three-minute passages in a study, not newspapers), and a weakener need not refute (`CONTENT_GUIDELINES.md` §3.1; the batch 2 review's "hardly a drop"). "Real" also says more than the stimulus's own definition of statistical significance.
+
+**Replacement:**
+
+```yaml
+    reference: >-
+      On average, readers were only about one percent faster in Clearline, saving under two seconds on
+      passages that took about three minutes to read. A difference that small is unlikely to be chance but
+      trivial in size, so the study gives little reason to think switching would make a significant difference
+      to how quickly people read.
+```
+
+#### arg-0032.strengthen (minor)
+
+**Problem.** `accept` names the premise-denying answer ("the maker's three trials tested the liver") but not its score, and strengthen tasks have no disqualifier. A grader taking the criteria one at a time can give criterion 2 to an explained fact of that kind and award 1. The weaken tasks prevent this with their disqualifier, and the published arg-0012 and arg-0022 strengthen tasks with "earns 0".
+
+**Replacement.** In `accept`, replace "denies the premise that they measured only sleep." with "denies the premise that they measured only sleep and earns 0."
+
+#### arg-0033.weaken (must fix)
+
+**Problem.** The conclusion is a trend: delays "are bound to keep getting worse". `accept` lists "an affordable measure that would reduce the delays or slow their growth" as a main kind, and the difficulty note repeats "or slow their growth". A measure that only slows the growth leaves the delays getting worse every year, so the conclusion stays true and the fact gives no reason to doubt it. `accept` therefore invites 2 points for an answer such as "More buses would slow the growth of the delays, so something can still be done", which criterion 1 rejects, while criterion 2 as written ("why it means something could still be done about the delays") rewards its explanation. The fix keeps every current anchor at its score: a cut, as in the 1-point anchor, does interrupt the trend.
+
+**Replacement.** `accept`:
+
+```yaml
+    accept: >-
+      Any new fact, consistent with every premise (a decade of growing traffic, the engineer's forecast that
+      delays will worsen unless something is done, and both studied remedies costing far more than the town
+      can afford), that gives a real reason to doubt that the delays are bound to keep getting worse, plus an
+      explanation of how. Main kinds: an affordable measure that would cut the delays or stop them from
+      growing (retimed lights, more buses, staggered working hours); money from outside the town that would
+      pay for widening the street or the bypass; something already planned that would take traffic off Bridge
+      Street. A measure that would only slow the growth of the delays does not count, since they would still
+      keep getting worse. A qualifying fact whose effect is not explained earns 1. A fact that denies a
+      premise, such as one of the remedies costing little, earns 0.
+```
+
+Rubric criterion 2:
+
+> Explains how the fact weakens the argument, namely why it means the delays could still be kept from getting worse (for example, by an affordable measure that would cut them or stop them from growing, by outside money for one of the studied remedies, or by something already planned that would take traffic off Bridge Street).
+
+`difficulty_note` (not in the grading payload):
+
+```yaml
+    difficulty_note: >-
+      The conclusion that delays are bound to keep getting worse needs nothing to be done, and it is a claim
+      about a trend. A weakener shows that something could still keep the delays from getting worse: an
+      affordable measure that would cut them or stop them from growing, or money from outside the town for one
+      of the studied remedies. A measure that would only slow their growth leaves them getting worse, so it
+      does not weaken. Saying a remedy is cheaper than the council was told denies a premise.
+```
+
+**Recommended with it.** The reference's one-time cut of a fifth, with traffic still growing every year, invites the objection that the delays start worsening again from the lower level. A cut does interrupt "keep getting worse", so the reference is not wrong, but the model answer should meet the Method's period question (§3.2: over what period?). The 1-point anchor can stay as it is, since a cut qualifies under the new `accept`.
+
+```yaml
+    reference: >-
+      The engineer estimates that retiming the traffic lights along Bridge Street, which would cost the town
+      little, would cut rush-hour delays there by a fifth, enough to keep them below today's level for at
+      least five years as traffic grows. Something affordable can still be done, which gives reason to doubt
+      that the delays are bound to keep getting worse.
+```
+
+And the form line, so it carries the same lesson (238 characters):
+
+```yaml
+    form: >-
+      Rule: nothing done → worse. An affordable measure that would cut the delays or stop their growth means
+      something can be done, so the rule no longer supports "bound to get worse". One that only slows their
+      growth leaves them getting worse.
+```
+
+#### arg-0035.weaken (minor)
+
+**Problem.** Criterion 2 accepts only two routes ("namely why it makes it more plausible that the schools would keep their stargazing evenings if the observatory stopped being one, or why keeping it open carries a cost the argument does not weigh"), while the prompt, criterion 1 and the opening of `accept` credit any material reason to doubt the recommendation. A valid weakener that works another way fails criterion 2, for example: "The district has already cut all evening school trips from next year, whatever happens to the observatory, so closing it would take nothing more away from the schools." It keeps every premise and removes the argument's only reason, yet scores 1.
+
+**Replacement.** Rubric criterion 2:
+
+> Explains how the fact weakens the argument, namely why it gives reason to doubt that the town should keep the observatory open as an observatory (for example, because the schools would keep their stargazing evenings anyway, because closing it would take away less than the argument says, or because keeping it open carries a cost the argument does not weigh).
+
+In `accept`, after "(another provider would run them, or the café plan would keep the telescope and the school visits);" insert "closing it would take away less than the argument says (the district has already cut all evening school trips from next year, whatever happens to the observatory);". All three anchors keep their scores.
+
+#### arg-0036.assumption (minor)
+
+**Problem.** The premise counts staff who left; the reason that weighs the trial counts experienced staff ("keeping experienced staff matters more to the company's success than how quickly customers get replies on one day a week"). Take the claim "the fall in departures was not entirely among staff who were not yet experienced" and negate it literally: the whole fall was among staff who were not yet experienced. Every premise stands, the trial shows no gain in what the argument says outweighs the cost, and the step to "the trial's benefits outweigh its cost" collapses, so the claim is necessary. It is probably the gap a strong student spots first, yet `accept` does not list it, and criterion 2's account of how the argument fails ("its benefits would not be due to it, would not last, or would be outweighed") does not cover it, so a grader may give it 1.
+
+**Replacement.** `accept`:
+
+```yaml
+    accept: >-
+      The inference under test runs from "during the trial the company finished as many projects as before and
+      the number of staff who left fell by half; keeping experienced staff matters more than how quickly
+      customers get replies on one day a week" through "the trial's benefits outweigh its cost" to "Brindle
+      should make the four-day week permanent". Any unstated claim counts whose denial, with every premise
+      kept, would break either step. Main bridges: (a) the fall in departures was not entirely due to
+      something other than the four-day week, such as a pay rise or fewer jobs on offer elsewhere; (b) the
+      benefits would not all disappear once the four-day week was permanent and no longer new; (c) making it
+      permanent would not bring a cost the trial did not show, such as losing customers over time, large
+      enough to outweigh the benefits; (d) the fall in departures was not entirely among staff who were not
+      yet experienced, since the argument weighs the trial by the value of keeping experienced staff. Claims
+      stronger than needed earn 1, such as that the four-day week was the only reason fewer staff left, that
+      its benefits will stay exactly as large, or that it has no costs beyond slower Friday replies. A stated
+      premise, the intermediate conclusion or the recommendation offered as the assumption earns 0.
+```
+
+Rubric criterion 2:
+
+> States it no more strongly than the argument needs, so that if it were false the trial's results would no longer support making the four-day week permanent (its benefits would not be due to it, would not include keeping experienced staff, would not last, or would be outweighed), rather than a claim that the four-day week was the only reason fewer staff left or that its benefits will stay exactly as large.
+
+Optional, not in the grading payload, `difficulty_note`:
+
+```yaml
+    difficulty_note: >-
+      Two links: from the trial's results to the intermediate conclusion that its benefits outweigh its cost,
+      and from that to making the four-day week permanent. The benefits must be due to the four-day week at
+      least in part, must include keeping some experienced staff (the premise counts all staff who left, but
+      the reason given values experienced staff), must not vanish once it is no longer new, and must not be
+      outweighed by a cost the trial did not show. Requiring that the four-day week was the only reason fewer
+      staff left, or that its benefits will stay exactly as large, is stronger than needed. Saying that the
+      benefits outweigh the cost is the intermediate conclusion.
+```
+
+#### arg-0037.strengthen (minor)
+
+**Problem.** The `accept` label "evidence that nothing else changed on the east side" and criterion 2's example "because nothing else changed on the east side" claim more than their examples show. As many birds flying past each side, and no new trees, lights or building work, make another change on the east side less likely; they do not show that nothing else changed. This is the label-and-example overstatement fixed in the published keys (audit finding B10), and the companion assumption task itself scores "Nothing besides the film changed on the east side" as too strong.
+
+**Replacement.** In `accept`, replace "evidence that nothing else changed on the east side (as many birds flew past each side, and no new trees, lights or building work appeared there)" with "facts making another change on the east side less likely (as many birds flew past each side; no new trees, lights or building work appeared there)".
+
+Rubric criterion 2:
+
+> Explains how the fact strengthens the argument, namely why it makes it more likely that the film caused much of the gap in dead birds, or that the gap reflects fewer birds hitting the windows (for example, because strikes were counted directly, because another change on the east side became less likely, or because the result was repeated).
+
+In `difficulty_note` (not in the payload), replace "show that nothing else changed on the east side" with "make another change on the east side less likely".
+
+### Optional nits
+
+**N1. Flaw 0-point anchors (all six flaw tasks).** Each 0-point anchor is a wrong-gap answer that also names no inference, and each note gives only the wrong-gap reason. The `accept` texts say such answers "earn at most 1, for naming the inference", so the 0 comes from criterion 1, and the note should say so; otherwise a grader can match a student's wrong-gap answer that does name the inference to the 0 anchor. This matters most for arg-0034, whose anchor ("which would explain why their staff are happier") comes close to naming the finding. Replacement notes:
+
+```yaml
+# arg-0029.flaw
+        note: >-
+          near miss: all twelve long-lasting restaurants were surveyed, so the problem is not the number
+          surveyed but the missing comparison with restaurants that closed; it also names neither the finding
+          nor the conclusion
+# arg-0030.flaw
+        note: >-
+          near miss: a reason the conclusion might be true, not an error in the reasoning; it also does not
+          name the evidence (48 of the 60 injuries)
+# arg-0031.flaw
+        note: >-
+          near miss: half the readers read their Clearline passage first, so the order was balanced and does
+          not explain the result; it also names neither the statistically significant result nor the blog's
+          conclusion
+# arg-0032.flaw
+        note: >-
+          near miss: an attack on the source's motives, not an error in the argument's reasoning; it also
+          names neither the trials' silence about the liver nor the conclusion
+# arg-0033.flaw
+        note: >-
+          near miss: it disputes the engineer's forecast, a premise, instead of identifying the error in the
+          councillor's reasoning; it also names neither the unaffordable remedies nor the councillor's
+          conclusion
+# arg-0034.flaw
+        note: >-
+          near miss: the stimulus says the two groups of companies had similar average pay, so this
+          alternative conflicts with a premise; it also does not name the columnist's conclusion
+```
+
+Also, arg-0029.flaw's `accept`, unlike the other five, gives no score for its wrong-gap answer: replace "since all twelve long-lasting restaurants were surveyed." with "since all twelve long-lasting restaurants were surveyed, and earns at most 1, for naming the inference."
+
+**N2. arg-0035.conclusion `accept`.** "Saying only that the town should not turn the observatory into a café is weaker than the conclusion, since the building could still close or be put to another use" gives no score: add ", and earns 0" before its full stop.
+
+**N3. arg-0038.weaken `accept`.** In an analogy a weakener has to be a difference from Corran, as criterion 2 says. Replace "such as the ferry landing far from any mainland town" with "such as Lissay's ferry landing far from any mainland town, unlike Corran's".
+
+### Patterns for later batches
+
+1. **Check a conclusion's shape over time as carefully as its units.** "Keeps getting worse" is a trend: a fact that only slows the growth leaves it true, and a one-time cut leaves the period open. For every strengthener and weakener, ask whether the fact changes the trend, the level or only the rate (arg-0033).
+2. **Write criterion 2 as the target with examples, not as a closed list of routes**: "namely why it gives reason to doubt X (for example, A, B or C)". Routes joined by "or" with no "for example" fail a valid route that the prompt and criterion 1 allow (arg-0035; arg-0036's account of how the argument fails).
+3. **Make each label as strong as its examples, and stop each weaken reference at a reason to doubt**: "facts making another change less likely", not "evidence that nothing else changed"; "gives little reason to think", not "would not" (arg-0037, arg-0031). This repeats audit finding B10 and Pro's batch 2 lesson that a weakener need not refute.
+4. **Say in every strengthen task's `accept` what a premise-denying fact earns**, as the weaken tasks do with their disqualifier (arg-0032; arg-0029, arg-0034 and arg-0037 are silent on it too).
+5. **Let anchors and stimuli practise the exercise's own lesson.** In a survivorship exercise, a "points the other way" anchor needs a comparison, not a handful of failures; and when the outcome can create the property being tested (restaurants that last come to have handed-down recipes), fix the property's timing in the stimulus (arg-0029).
+6. **In flaw tasks, say in each 0-point note which criterion fails**, so that it agrees with `accept`'s "at most 1, for naming the inference" (N1).
+
+---
+
+## Triage
+
+Eight exercises were marked "fix" (arg-0033 with one must-fix) and arg-0034 and arg-0038 "keep". Every finding and all three optional nits are accepted, and the review's replacement text is used word for word. Two changes go beyond it:
+
+- arg-0029's flaw form line now says the restaurants "have cooked mainly from family recipes since opening", to match the new stimulus sentence.
+- The review's pattern 4 names arg-0029, arg-0034 and arg-0037 as silent on a premise-denying fact without giving replacement text. Each of their strengthen `accept` texts now ends its list of 0-point answers with "A fact that denies a premise earns 0.", so all four strengthen tasks in the batch say it.
+
+| # | Task | Finding | Decision | Change |
+| --- | --- | --- | --- | --- |
+| B3-1 | arg-0029 stimulus | "Recipes handed down in the owner's family" lets lasting create the property: a restaurant that lasts passes to the next generation. | accepted | The second sentence says the ten restaurants have cooked mainly from family recipes ever since they opened; the flaw form line follows it. |
+| B3-2 | arg-0029.strengthen | The 0-point anchor (a few family-recipe restaurants closing) has no comparison, the survivorship error run backwards; the `accept` example has the same gap. | accepted | New 0-point anchor and note (family-recipe restaurants closed more often than others that opened in the same years); the `accept` example says "closing more often than other restaurants". |
+| B3-3 | arg-0029.strengthen | The form line's "survivors-only rival" is not a Method term, and the fact supplies the missing comparison rather than reducing a rival. | accepted | New form line: the fact supplies the comparison, which shows the recipes went with lasting but not that they caused it. |
+| B3-4 | arg-0030.assumption | A limit on the share of climbers or of climbing time is in the wrong unit and fails negation, but nothing tells the grader so. | accepted | `accept` says such a limit misses that the conclusion is about risk per climb and earns at most 1. |
+| B3-5 | arg-0031.weaken | The reference denies the conclusion ("would not make a significant difference") and says "real". | accepted | The reference stops at a reason to doubt: the difference is unlikely to be chance but trivial, so the study gives little reason to think switching would matter. |
+| B3-6 | arg-0032.strengthen | `accept` names the premise-denying answer but not its score, and strengthen tasks have no disqualifier. | accepted | "…measured only sleep and earns 0." |
+| B3-7 | arg-0033.weaken (must fix) | The conclusion is a trend, so a measure that only slows the growth of the delays leaves it true, yet `accept` and the difficulty note credited one. | accepted | New `accept` (a cut or a stop to the growth counts; slowing it does not), criterion 2 and difficulty note; the recommended reference (the cut keeps delays below today's level for at least five years) and form line are also taken. All anchors keep their scores. |
+| B3-8 | arg-0035.weaken | Criterion 2 lists two routes with no "for example", so a valid third route (closing would take away less than the argument says) scores 1. | accepted | Criterion 2 names the target with three examples; `accept` adds the third route with the district's cut to evening trips as its example. |
+| B3-9 | arg-0036.assumption | The premise counts all staff who left, but the argument values experienced staff; "the fall was not entirely among staff who were not yet experienced" is necessary and unlisted. | accepted | `accept` adds bridge (d), criterion 2 adds "would not include keeping experienced staff", and the optional difficulty note is taken. |
+| B3-10 | arg-0037.strengthen | "Evidence that nothing else changed on the east side" claims more than its examples show (audit finding B10). | accepted | `accept`, criterion 2 and the difficulty note say the facts make another change on the east side less likely. |
+| N1 | all six flaw tasks | Each 0-point note gives only the wrong-gap reason, though `accept` caps a wrong-gap answer that names the inference at 1; arg-0029's `accept` gives no score for the sample-size answer. | accepted | Each note adds what the answer also fails to name (the evidence, the conclusion or both), which is why criterion 1 fails; arg-0029's `accept` adds "and earns at most 1, for naming the inference". |
+| N2 | arg-0035.conclusion | The weaker "should not become a café" answer has no score. | accepted | ", and earns 0" added. |
+| N3 | arg-0038.weaken | An analogy weakener must be a difference from Corran. | accepted | The example now reads "Lissay's ferry landing far from any mainland town, unlike Corran's". |
+
+### Follow-up check
+
+After the fixes, a separate Claude check confirmed that every replacement landed word for word, graded every anchor of every changed task against its current rubric and `accept` text (each earns its stated score), and found two problems and one optional gap, all fixed:
+
+| # | Task | Finding | Fix |
+| --- | --- | --- | --- |
+| F-1 | arg-0029.strengthen | The 0-point note's threshold is wrong (it comes from the review). With 10 of the 12 survivors using family recipes, family-recipe restaurants close more often only if more than five in six of all openings used them; "most" is not enough (60 and 40 openings give survival rates of 10 in 60 against 2 in 40). | The note says "possible only if more than five in six of the restaurants that opened used family recipes, a higher share than among the twelve that lasted". |
+| F-2 | arg-0035.weaken | The difficulty note still lists only the two old routes, against the new criterion 2. | The note gives the three routes as examples. |
+| F-3 | arg-0038.weaken (optional) | The difficulty note leaves out the `accept` kind "little reason to cross more often", which N3 rewrote. | Added to the note's list. |
+
+After all of these, `npm run content` accepts all 38 exercises, `npm run check` passes (393 unit tests), and the 36 browser tests pass with the drafts included.
+
+### Carried forward
+
+The review's six patterns for later batches go into the content lessons for the next batch and, with them, into `CONTENT_GUIDELINES.md` in a separate change. Two of them also apply to published exercises, which need the owner's re-approval to change and so are left for that change: five published strengthen tasks say nothing about a premise-denying fact (arg-0009, arg-0015, arg-0018, arg-0019 and arg-0027; pattern 4), and seven published flaw tasks have a 0-point note that gives only the wrong-gap reason (arg-0011, arg-0014, arg-0016, arg-0017, arg-0018, arg-0021 and arg-0025; pattern 6, which needs a change only where `accept` caps a wrong-gap answer at 1).
