@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { stringify } from 'yaml';
 import { PROMPT_BUDGET, MAX_ANSWER_LENGTH, renderPrompt } from '../../src/domain/prompt.ts';
-import { buildSnapshot } from '../../src/domain/snapshot.ts';
+import { buildSnapshot, formLineFor } from '../../src/domain/snapshot.ts';
 import type { BuiltExercise, Exercise } from '../../src/domain/types.ts';
 import {
   bundleExercises,
@@ -366,6 +366,89 @@ describe('content validation', () => {
     expect(bundleExercises(all, false)).toHaveLength(3);
   });
 
+  it('schema 4: form lines are single lines of at most 300 characters, and need schema 4', async () => {
+    const ok = baseDoc();
+    ok.schema = 4;
+    task(ok).form = 'Evidence: attendance is low. Claim: no one is harmed. Gap: low is not zero.';
+    expect(await errorsFor([ok])).toEqual([]);
+    expect(await errorsFor([{ ...baseDoc(), schema: 4 }])).toEqual([]);
+
+    const old = baseDoc();
+    task(old).form = 'Evidence: attendance is low.';
+    expect((await errorsFor([old])).join()).toMatch(/tasks\.0\.form: form lines need schema 4/);
+
+    const multi = structuredClone(ok);
+    task(multi).form = 'Evidence: attendance is low.\nClaim: no one is harmed.';
+    expect((await errorsFor([multi])).join()).toMatch(/tasks\.0\.form: a single line/);
+    const long = structuredClone(ok);
+    task(long).form = 'x'.repeat(301);
+    expect((await errorsFor([long])).join()).toMatch(/tasks\.0\.form/);
+    expect((await errorsFor([{ ...baseDoc(), schema: 5 }])).join()).toMatch(/schema/);
+  });
+
+  it('schema 4: a form line changes the content revision but never the snapshot or the grading prompt', async () => {
+    // A schema 3 file moved to schema 4 with a form line: the same grading text, compared byte for byte.
+    const plain = baseDoc();
+    const withForm = { ...structuredClone(plain), schema: 4 };
+    const form = 'FORM-LINE-MARKER: rule renew -> rose; the director infers rose -> renew.';
+    task(withForm).form = form;
+    const body = normalizeBody(BODY);
+    // Approval covers form lines, so a key check reviews them with the keys.
+    expect(await contentRevision(withForm, body)).not.toBe(await contentRevision(plain, body));
+
+    const built = async (d: Doc) => {
+      const e = { ...d, stimulus: body } as unknown as BuiltExercise;
+      return Promise.all(e.tasks.map((t) => buildSnapshot(e, t)));
+    };
+    const [a, b] = [await built(plain), await built(withForm)];
+    expect(b).toEqual(a);
+    expect(JSON.stringify(b)).not.toContain('FORM-LINE-MARKER');
+    const prompt = (snapshots: typeof a) =>
+      renderPrompt(
+        '00000000-0000-4000-8000-000000000000',
+        'ZZZZZZ',
+        snapshots.map((snapshot, i) => ({ rowId: `I0${i + 1}`, attemptId: `a${i}`, snapshot, answer: 'An answer.' })),
+      );
+    expect(prompt(b)).toBe(prompt(a));
+    expect(prompt(b)).not.toContain('FORM-LINE-MARKER');
+  });
+
+  it('schema 4: adding a form line to a published exercise needs re-approval, and nothing else', async () => {
+    const published = await approve(baseDoc());
+    const ledger = await lock([published]);
+    const edited = { ...structuredClone(published), schema: 4 };
+    task(edited).form = 'Evidence: attendance is low. Claim: no one is harmed. Gap: low is not zero.';
+    const errors = await errorsFor([edited], { ledger });
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toMatch(/approved_revision does not match .* needs re-approval/);
+    // The grading payload is unchanged, so the ledger needs no new revision.
+    expect(await errorsFor([await approve(edited)], { ledger })).toEqual([]);
+  });
+
+  it('schema 4: a form line shows for a snapshot only while the task still grades the same way', async () => {
+    const doc = { ...baseDoc(), schema: 4 };
+    task(doc).form = 'Rule: low attendance. Claim: nobody harmed. Gap: low is not zero.';
+    const exercise = (d: Doc) => ({ ...d, stimulus: normalizeBody(BODY) }) as unknown as Exercise;
+    const e = exercise(doc);
+    const [flaw, assumption] = await Promise.all(e.tasks.map((t) => buildSnapshot(e, t)));
+
+    expect(await formLineFor([e], flaw!)).toBe(task(doc).form);
+    expect(await formLineFor([e], assumption!)).toBeNull();
+    expect(await formLineFor([], flaw!)).toBeNull();
+
+    // A form-only edit keeps the grading payload, so the corrected line shows for earlier attempts too.
+    const formOnly = structuredClone(doc);
+    task(formOnly).form = 'Rule: low attendance. Claim: nobody harmed. Gap: few is not none.';
+    expect(await formLineFor([exercise(formOnly)], flaw!)).toBe(task(formOnly).form);
+
+    // A key correction under the same task key changes the payload: the old snapshot shows no line.
+    const corrected = structuredClone(formOnly);
+    task(corrected).reference = 'Low attendance does not show that no one relies on Sunday hours.';
+    expect(await formLineFor([exercise(corrected)], flaw!)).toBeNull();
+    const current = await buildSnapshot(exercise(corrected), exercise(corrected).tasks[0]!);
+    expect(await formLineFor([exercise(corrected)], current)).toBe(task(corrected).form);
+  });
+
   it('rule 13: word counts outside the range warn', async () => {
     const short = await validateContent({ ...files([]), exercises: [file(baseDoc(), 'Too short.')] });
     expect(short.errors).toEqual([]);
@@ -388,6 +471,7 @@ describe('content validation', () => {
       'Law School Admission',
     ],
     ['acceptance notes', (d: Doc) => void (task(d, 1).accept = 'Like an LSAT key.'), BODY, 'LSAT'],
+    ['a form line', (d: Doc) => void ((d.schema = 4), (task(d).form = 'As in an LSAT flaw.')), BODY, 'LSAT'],
   ])('rule 14: blocked strings are rejected in %s', async (_, edit, body, blocked) => {
     const d = baseDoc();
     edit(d);

@@ -6,7 +6,7 @@ Rules for any AI coding agent working in this repository (Claude Code, Codex, ot
 
 1. `docs/SPEC.md`: what we are building and what we are not.
 2. `docs/DECISIONS.md`: settled decisions. Do not reopen them in code; propose a new entry instead.
-3. The doc for the area you are touching: `ARCHITECTURE.md`, `EXERCISE_FORMAT.md`, `GRADING_PROTOCOL.md`, `CONTENT_GUIDELINES.md`.
+3. The doc for the area you are touching: `ARCHITECTURE.md`, `EXERCISE_FORMAT.md`, `GRADING_PROTOCOL.md`, `CONTENT_GUIDELINES.md`, `METHOD.md` (the reasoning method answer keys and form lines follow).
 4. `docs/ROADMAP.md`: work on the current milestone only.
 5. `reviews/`: the latest peer review and its triage, for the reasoning behind current rules.
 

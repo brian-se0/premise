@@ -133,6 +133,56 @@ test('answer, autosave, resume after reload, grade by paste, results', async ({ 
   await expect(page.getByText(/0 waiting · closed/)).toBeVisible();
 });
 
+test('a form line shows only with the reference of an accepted grade, never earlier or in the prompt', async ({
+  page,
+}) => {
+  // arg-0001's flaw task (I02) has a form line; its conclusion task (I01) has none.
+  const form = /money problems behind the switch/;
+  await page.goto('#/library/arg-0001');
+  await expect(page.getByText(form)).toHaveCount(0);
+  await page.getByRole('button', { name: 'Practice this exercise' }).click();
+  await page.getByLabel('Your answer').fill('Harlow should keep its five-day week.');
+  await page.getByRole('button', { name: 'Submit', exact: true }).click();
+  await expect(page.getByText('Task 2 of 2')).toBeVisible();
+  await expect(page.getByText(form)).toHaveCount(0);
+  await page.getByLabel('Your answer').fill('Correlation is not causation.');
+  await page.getByRole('button', { name: 'Submit', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Session done' })).toBeVisible();
+  await expect(page.getByText(form)).toHaveCount(0);
+
+  await toRequest(page);
+  const prompt = await promptText(page);
+  expect(prompt).not.toMatch(form);
+  await paste(page, reply(prompt, { I01: '1', I02: '?' }));
+  await expect(page.getByText(form)).toHaveCount(0);
+  await confirmButton(page).click();
+  const flaw = card(page, 'I02');
+
+  // Needs review, and while grading it by hand: no form line.
+  await expect(flaw.getByText('The grader could not decide.')).toBeVisible();
+  await flaw.getByRole('button', { name: 'Grade it myself' }).click();
+  await expect(page.getByText(form)).toHaveCount(0);
+  await flaw.getByRole('button', { name: 'Enter a score' }).click();
+  await flaw.getByLabel(/Score out of/).fill('1');
+  await flaw.getByRole('button', { name: 'Save score' }).click();
+
+  // Accepted (a score entered by hand counts): the line is under the reference, and only there.
+  await expect(page.getByText(/0 waiting · closed/)).toBeVisible();
+  await expect(flaw.getByText(form)).toBeHidden();
+  await flaw.getByText('Reference answer').click();
+  await expect(flaw.getByText(form)).toBeVisible();
+  await card(page, 'I01').getByText('Reference answer').click();
+  await expect(card(page, 'I01').getByText('Form:')).toHaveCount(0);
+
+  // Undone back to waiting, then discarded: gone again.
+  await flaw.getByRole('button', { name: 'Undo' }).click();
+  await expect(flaw.getByRole('button', { name: 'Grade it myself' })).toBeVisible();
+  await expect(page.getByText(form)).toHaveCount(0);
+  await flaw.getByRole('button', { name: 'Discard' }).click();
+  await expect(flaw.getByText('Discarded: this answer counts for nothing.')).toBeVisible();
+  await expect(page.getByText(form)).toHaveCount(0);
+});
+
 test('double confirm and confirm from two tabs schedule once', async ({ page, context }) => {
   await practice(page, 'arg-0001', ['Harlow should keep its five-day week.', 'Correlation is not causation.']);
   const url = await toRequest(page);
