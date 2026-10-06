@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
 import { content } from '../../content.ts';
 import { formatLocalDate, localDateOf } from '../../domain/dates.ts';
@@ -37,6 +37,7 @@ import {
   type RowState,
 } from '../../storage/ops.ts';
 import { openMisses } from '../../domain/planner.ts';
+import { formLineFor } from '../../domain/snapshot.ts';
 import { ctx, db, loadPlannerState, newOpId, saveSetting, useLive, useSettings } from '../runtime.ts';
 import { NotFoundPage } from './NotFoundPage.tsx';
 
@@ -590,6 +591,22 @@ function taskLabel(s: SnapshotRecord): string {
   return content.taxonomy.skills[s.skill]?.label ?? s.skill;
 }
 
+/** The task's form line (docs/METHOD.md §5) for an accepted row. Display only: never part of a snapshot or prompt. */
+function useFormLine(s: SnapshotRecord, accepted: boolean): string | null {
+  const [found, setFound] = useState<{ hash: string; line: string | null } | null>(null);
+  const { exerciseId, taskId, hash } = s;
+  useEffect(() => {
+    let live = true;
+    void formLineFor(content.exercises, { exerciseId, taskId, hash }).then((line) => {
+      if (live) setFound({ hash, line });
+    });
+    return () => {
+      live = false;
+    };
+  }, [exerciseId, taskId, hash]);
+  return accepted && found?.hash === hash ? found.line : null;
+}
+
 function feedbackText(row: Row): string | null {
   const range = row.grading?.feedbackRange;
   if (!range || !row.reply) return null;
@@ -642,6 +659,7 @@ function RowView({
   const feedback = feedbackText(row);
   const tip = feedback ? tipOf(feedback) : null;
   const missed = state === 'accepted' && grading!.score! < grading!.max;
+  const form = useFormLine(snapshot, state === 'accepted');
 
   const act = (p: Promise<unknown>) => p.then(() => setMode('none')).catch((e: unknown) => onNotice(errorText(e)));
 
@@ -703,6 +721,11 @@ function RowView({
           <details className="reference">
             <summary>Reference answer</summary>
             <p>{snapshot.reference}</p>
+            {form && (
+              <p className="meta">
+                <strong>Form:</strong> {form}
+              </p>
+            )}
             {snapshot.accept && <p className="meta">Counts as correct: {snapshot.accept}</p>}
           </details>
           <div className="row">

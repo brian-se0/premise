@@ -1,4 +1,4 @@
-// Content types for exercise schema 3 (docs/EXERCISE_FORMAT.md §3).
+// Content types for exercise schemas 3 and 4 (docs/EXERCISE_FORMAT.md §3).
 
 export type SourceType = 'original' | 'public-domain' | 'cc-by';
 
@@ -35,10 +35,12 @@ export interface Task {
   rubric: string[];
   anchors: Anchor[];
   likely_errors: string[];
+  /** Schema 4: the reasoning skeleton shown after grading (docs/METHOD.md §5). Never in a snapshot. */
+  form?: string;
 }
 
 export interface Exercise {
-  schema: 3;
+  schema: 3 | 4;
   id: string;
   status: 'draft' | 'published' | 'retired';
   kind: 'argument' | 'passage';

@@ -31,6 +31,7 @@ No account, no server, no AI bill. Premise keeps your answers and progress on yo
 - [Exercise format](docs/EXERCISE_FORMAT.md)
 - [Grading protocol](docs/GRADING_PROTOCOL.md)
 - [Content guidelines](docs/CONTENT_GUIDELINES.md)
+- [Method](docs/METHOD.md)
 - [Roadmap](docs/ROADMAP.md)
 - [Decision log](docs/DECISIONS.md)
 - [Peer review process](docs/PEER_REVIEW.md) and [reviews](reviews/)

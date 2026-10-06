@@ -58,3 +58,19 @@ export async function buildSnapshot(exercise: Exercise, task: Task): Promise<Sna
   const payload = buildSnapshotPayload(exercise, task);
   return { ...payload, hash: await sha256Hex(canonicalJson(payload)) };
 }
+
+/**
+ * The current form line for a frozen snapshot (docs/EXERCISE_FORMAT.md §3.1), or null. Form lines are
+ * never in a snapshot, so the line comes from the current content, and only while the task's current
+ * grading payload still hashes to the snapshot: after a key correction, an older reference never gets
+ * the newer explanation beside it. A form-only edit leaves the hash unchanged, so it still shows.
+ */
+export async function formLineFor(
+  exercises: readonly Exercise[],
+  snapshot: Pick<Snapshot, 'exerciseId' | 'taskId' | 'hash'>,
+): Promise<string | null> {
+  const exercise = exercises.find((e) => e.id === snapshot.exerciseId);
+  const task = exercise?.tasks.find((t) => taskId(exercise, t) === snapshot.taskId);
+  if (!exercise || !task?.form) return null;
+  return (await buildSnapshot(exercise, task)).hash === snapshot.hash ? task.form : null;
+}
