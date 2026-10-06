@@ -82,4 +82,5 @@ For every assumption task, negate the reference and each full-credit anchor, kee
 - [ ] Every rubric requirement is asked for in the task prompt.
 - [ ] Counterexamples, graded against the rubric: a correct concise answer gets full credit; an accurate answer with extra explanation gets the score the prompt implies; a self-contradictory answer using the expected keywords does not get full credit; a wholly wrong answer cannot get full credit; each disqualifier overrides any points earned.
 - [ ] For open-ended tasks, at least one full-credit anchor differs substantially from the reference.
+- [ ] Each key passes the method's key checks (`METHOD.md` §5): modality and scope kept, negations literal, quantifier shapes exact, arithmetic with its denominator, rivals ruled out or reduced, no causal claim treated as a conditional.
 - [ ] Difficulty is plausible relative to existing exercises.

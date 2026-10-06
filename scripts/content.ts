@@ -109,6 +109,7 @@ function taskTexts(t: Exercise['tasks'][number]): string[] {
     t.reference,
     t.accept ?? '',
     t.difficulty_note ?? '',
+    t.form ?? '',
     ...(t.disqualifiers ?? []),
     ...t.rubric,
     ...t.anchors.flatMap((a) => [a.answer, a.note ?? '']),

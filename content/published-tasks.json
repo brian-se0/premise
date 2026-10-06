@@ -23,7 +23,8 @@
       "status": "active",
       "revisions": [
         "797eadcbd79704fc542132d3caac0a5f3781a1419de4bee7438854f2fd914e7d",
-        "b9105c647b18547217cf6cf8e597d2bec84a0ffd790caef655c406e3d5de7c55"
+        "b9105c647b18547217cf6cf8e597d2bec84a0ffd790caef655c406e3d5de7c55",
+        "ba63b140852912120b880dbb33c3d554355598d675fe6920c970ffb7d1b513d2"
       ]
     },
     "arg-0010.assumption": {
@@ -49,7 +50,8 @@
       "status": "active",
       "revisions": [
         "efc20eeee666cc3d5511bd0f673599abc491cbde8259397ca0b0b2a1c80bf6fd",
-        "23ee47a0fd60671baca0367dc8a457fba6b3437399c9df74f3cbe1b11ece700a"
+        "23ee47a0fd60671baca0367dc8a457fba6b3437399c9df74f3cbe1b11ece700a",
+        "a0c6bbf36b8f1bf91aaf0c3f61dd8fd02a2d7e81256d51ab8891af10b918197a"
       ]
     },
     "arg-0012.strengthen": {
@@ -58,7 +60,8 @@
       "status": "active",
       "revisions": [
         "fc6d2f5de4f501d91efd8ebfbc9ab23ca449f6ad5d498bf5ab00be7d7d80f9d6",
-        "30fcea352ebdbb52d53a89a4cd742c6b175a24ba21403255e5832ff7f6c5162a"
+        "30fcea352ebdbb52d53a89a4cd742c6b175a24ba21403255e5832ff7f6c5162a",
+        "dfea401269e5c12430a40dec1356f060ce1775ab06d8a3bb9d7dc2345633b6c9"
       ]
     },
     "arg-0012.weaken": {
@@ -110,7 +113,8 @@
       "status": "active",
       "revisions": [
         "1719d64dbae84e69d1d4e5d957db62de946164a171f4ea0dd2a56a393f976ab1",
-        "54b55746a1ef2570f58fb67ea23e6b15f3ec105ab8e6037e80ac96c59615752e"
+        "54b55746a1ef2570f58fb67ea23e6b15f3ec105ab8e6037e80ac96c59615752e",
+        "88c1ac972a38cbd97e4e94ec89e8196b18185ab034c22c4a4464b7b61ca161db"
       ]
     },
     "arg-0015.strengthen": {
@@ -119,7 +123,8 @@
       "status": "active",
       "revisions": [
         "c13c9d23abb699949b853a23e302298c5c4698909f895e06bf3b5939a61c648c",
-        "161fded308139ceb0c268d56a1f8aacfe8ab00f00f5708eaaa4841fdb86cf333"
+        "161fded308139ceb0c268d56a1f8aacfe8ab00f00f5708eaaa4841fdb86cf333",
+        "bd4b45d1c7b55e2d69d5f8d83f40b25d9ffc78a5cae38ee80bc717eb717e7496"
       ]
     },
     "arg-0016.flaw": {
@@ -210,7 +215,8 @@
       "max": 2,
       "status": "active",
       "revisions": [
-        "3318cffc096cbfacf2fbea71619f125d575b3638ba47facf8bdc092a424161a3"
+        "3318cffc096cbfacf2fbea71619f125d575b3638ba47facf8bdc092a424161a3",
+        "ec841b58e2a745d8cc3f643f981ea47b57ac40989e2ccc25a16f0df8d99439de"
       ]
     },
     "arg-0021.assumption": {
@@ -227,7 +233,8 @@
       "status": "active",
       "revisions": [
         "76f69ef17f51d1d36d7a4ba9359772bf64bb4ef3703bcbf160b1576b8da40113",
-        "07b5e722fcbb288854e88d563cca21a6f15ba3183d801636e14bd70bff370d62"
+        "07b5e722fcbb288854e88d563cca21a6f15ba3183d801636e14bd70bff370d62",
+        "0bec2ed71823e6bf39b0b7c7ef93d08fe167894fd93d1b9419acf59aae3d237e"
       ]
     },
     "arg-0022.weaken": {
@@ -235,7 +242,8 @@
       "max": 2,
       "status": "active",
       "revisions": [
-        "64bb808752df9c21b2e11b16c5104416eeca2811c5913d9861594afd3507676b"
+        "64bb808752df9c21b2e11b16c5104416eeca2811c5913d9861594afd3507676b",
+        "b60a48eb32c84b6c869a4b73d2ff6b55161477d31b3003b0fce5f1e4d2183374"
       ]
     },
     "arg-0023.assumption": {
@@ -284,7 +292,8 @@
       "max": 2,
       "status": "active",
       "revisions": [
-        "0cfbb5a3776b10958965bae36d64b5ee1eeec95e0580ae57405fb52aae0fa9d2"
+        "0cfbb5a3776b10958965bae36d64b5ee1eeec95e0580ae57405fb52aae0fa9d2",
+        "4f7c64ed97b81d5634f5a0941a1e3c054bbfd1839bc5847caff4ae9ca60424e9"
       ]
     },
     "arg-0026.strengthen": {
@@ -293,7 +302,8 @@
       "status": "active",
       "revisions": [
         "e2bb54cdad1e2434084f2966bba518ddc6b7913128309121b5f76ea993614188",
-        "09d00dd609193c0b0cf35f06c80911632d21796b9e884f902855e0ce52d9120f"
+        "09d00dd609193c0b0cf35f06c80911632d21796b9e884f902855e0ce52d9120f",
+        "66ac558852bdbb84f94276160fe20732fdfa69d07be6cf0278c54c7d8920084e"
       ]
     },
     "arg-0026.weaken": {
