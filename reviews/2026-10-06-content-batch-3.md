@@ -1,0 +1,1368 @@
+# Peer review: answer keys for content batch 3 (arg-0029 to arg-0038)
+
+## 1. Role and ask
+
+You are the same senior reviewer who checked content batches 1 and 2 (arg-0009 to arg-0028). In batch 2 you marked nine of the ten exercises "fix". Every finding was accepted, the owner approved and published the batch, and the same wording fixes were applied to the published batch 1 exercises. This is the same answer-key check for ten new draft exercises (20 tasks: 6 flaw, 4 assumption, 4 strengthen, 4 weaken, 2 conclusion). Students will be graded against these keys by a chatbot, so a wrong key teaches the wrong lesson. Please be adversarial: try to break each key.
+
+The owner is an exam beginner and will approve the batch after your check, so your review is the expert check.
+
+## 2. What changed since batch 2
+
+The patterns you asked for at the end of your batch 2 review are now part of the content guidelines (section 5 below), and these drafts were written to them. Please check that they actually hold, not just that they are claimed:
+
+- **Literal negation.** Each assumption reference and full-credit anchor was negated word for word, every conjunct, with the premises kept, before its note was written. The note names the evidential link that disappears. "Too strong" near misses earn 1; premises and restated conclusions earn 0.
+- **Directional, material criterion 1.** Every strengthen task's first criterion reads "makes it materially more likely that … (a fact pointing the other way does not count)", and every weaken task's reads "gives a material reason to doubt that …". The 0-point strengthen anchors test this: three give a fact pointing the other way (arg-0029, arg-0034, arg-0037) and one a fact about a different question (arg-0032).
+- **Scoped disqualifiers.** A premise-only disqualifier names what it covers and applies only when the answer offers nothing else.
+- **A relevant fact, evidence and proof kept apart.** A strengthener need not prove the conclusion, a weakener need not refute it, and a necessary assumption must pass negation.
+- **Stated controls.** Where a key treats an alternative as excluded, the stimulus states it (arg-0029: all twelve long-lived restaurants were surveyed; arg-0030: every injury is recorded; arg-0031: which passage was set in Clearline, and the reading order, were balanced; arg-0034: the two groups of companies were similar in size, industry and average pay; arg-0038: the fare cut, not any other change, caused Corran's rise). arg-0037's baseline (about 40 dead birds below each side the previous autumn) is treated as a partial control only.
+- **Exact numbers and modest labels.** The arithmetic is in the difficulty notes (arg-0030's 80 percent threshold; arg-0037's counts and strike numbers). Both conclusion tasks are labelled 3, as you set arg-0024's similar structure, and arg-0031's flaw task is a 2 because the stimulus defines the term it turns on.
+- **New flaw patterns.** The six flaw tasks each test a pattern the published content does not yet cover: survivorship (arg-0029), a base rate (arg-0030), a shifting meaning of "significant" (arg-0031), absence of evidence (arg-0032), overlooked options (arg-0033), and reverse causation behind a stated control (arg-0034).
+
+Before this packet, a separate Claude check graded every anchor and negation. It found seven problems it rated must-fix and fourteen minor ones; all were fixed in the files below. The main ones: arg-0038's conclusion said only that crossings "would increase", so a full-credit anchor about employer-paid fares failed negation (the residents who still pay would see a cheaper fare), and the conclusion now claims "a large rise"; three flaw `accept` texts gave 0 to answers the rubric gives 1 for naming the inference; arg-0032's stimulus implied the maker's three trials were the only ones, which made a fourth study look like a premise conflict; arg-0031's stimulus did not balance which passage was set in Clearline; arg-0037's stimulus did not give the previous autumn's count, which left a rise on the west side open; and two full-credit flaw anchors did not name the argument's evidence and conclusion. Please do not assume that check was complete.
+
+## 3. What to check, for every task
+
+1. **Correct key.** Is the reference a correct, strong answer? For flaw tasks, is it the argument's main error (and is there only one)? For conclusion tasks, is it the main conclusion, and is the rival the note names really a rival?
+2. **Necessary-assumption test (assumption tasks).** Negate the reference and each full-credit anchor literally, keep every premise, and say whether the specific inference fails (not merely becomes weaker). Flag anything too strong, or anything that restates a premise or the conclusion.
+3. **Strengthen and weaken.** Is each reference and full-credit anchor consistent with every premise, new, and material in the right direction? Does `accept` wrongly exclude a correct kind of answer, or let a wrong one in? Does each 0-point anchor earn 0 for the reason its note gives?
+4. **Anchors and rubric agree.** Grade every anchor against the rubric and say if you would give a different score than stated.
+5. **Difficulty.** Is the label (1 easiest to 5) realistic compared with real exam arguments of the same type, and is the difficulty note right about what makes it hard?
+6. **Stimulus.** Any ambiguity, outside knowledge needed, or a second reasoning problem that would let a different answer be correct?
+
+## 4. Response format
+
+For each exercise, give a one-line verdict (keep / fix / drop). Then list every task with a problem as: task id, the problem, and the exact replacement text you propose. Say nothing about tasks you would keep unchanged. End with any pattern you see across the batch that the author should change in later batches.
+
+## 5. Rules the keys were written to (from CONTENT_GUIDELINES.md)
+
+### 3.1 Writing to a difficulty target
+
+Difficulty comes from precise logical discrimination, not from hiding the conclusion, adding clauses or an unforgiving rubric. Difficulty labels are author-predicted until students have attempted the task. For a task meant to be medium or hard, the author writes a short `difficulty_note` and meets the rules that apply:
+
+- **Structure map.** Write down the main conclusion, intermediate conclusions, premises, concessions and opposing views. A hard conclusion task has at least one plausible rival (usually an intermediate conclusion or an attributed opposing view) and the note says which way support runs. Moving the recommendation to the middle is not enough.
+- **Scope.** Mark the population, time period, measured quantity and claim strength in evidence and conclusion. A scope task turns on a specific mismatch, not "the groups might differ". Check units, populations, dates and logical objects in the key as carefully as in the stimulus: bags handed out are not the weight of waste, an opening date is not a construction date, and knowing of a delay is not knowing of wrongdoing.
+- **Quantifiers.** Name the boundary that matters (some, most, all, a proportion, a threshold) and check the reference against a counterexample to the tempting stronger answer.
+- **Conditionals.** Translate the relationship into its direction. Match the key to the conclusion's actual strength: failing to guarantee an outcome does not refute a claim that it is likely.
+- **Causes.** Rule out one plausible alternative in the stimulus and leave a consequential one open, so "correlation isn't causation" alone does not earn full credit. A partial control (a comparison group, a similar baseline) does not exclude an alternative; when the key relies on an exclusion, state the excluding fact in the stimulus.
+- **Competing claims.** Every distracting claim has a clear role (someone else's view, a concession, background, an intermediate conclusion). Ambiguous attribution is an editing problem, not difficulty.
+- **Two demands, no padding.** A hard task combines two interacting demands (for example an intermediate conclusion and a quantifier) and drops complications that serve neither. No outside knowledge.
+- **Near misses.** Write at least two plausible near-miss answers and say exactly why each fails (too strong, wrong population, helpful but not required, denies a premise). Use them as anchors or in notes.
+- **Strengthen and weaken.** For advanced tasks, constrain the kind of fact asked for (for example about the comparison group or the measurement) and accept every fact that satisfies the constraint. Keep a relevant fact, evidence and proof apart: availability is not attendance, an unchanged gap is not "no effect", a possible justification is not proof of innocence, and a business decision made in the same month may be the policy's own effect. A weakener need not refute the conclusion.
+- **Labels and arithmetic.** Check every calculation and threshold in the stimulus and key exactly. Keep difficulty labels modest: a signposted mismatch is a 2, and a prompt that names the missing comparison lowers the difficulty.
+
+### 3.2 The necessary-assumption check
+
+For every assumption task, negate the reference and each full-credit anchor, keep the premises, and confirm that the specific inference fails, not merely that the conclusion becomes less likely. Negate the literal text of the answer, every conjunct, not what it was meant to say, and name the evidential link that disappears; "another explanation becomes possible" is not enough. Don't require a perfect alternative when a better one would do. The assumption must not restate the conclusion or a premise, and must not be stronger than the argument needs. Not every flaw argument supports a clean assumption task; when it doesn't, leave the task out.
+
+### 5. References, acceptance notes, anchors and rubrics
+
+- **Reference:** what a strong student would write in a minute or two. For open-ended skills it is one example among many.
+- **Counts as correct (`accept`):** the logical properties every correct answer shares, not a list of paraphrases. Required for open-ended skills.
+- **Rubric:** 1–4 criteria, each worth exactly one point, each observable in the answer ("names the switch and the fall in scores"), never vague ("shows understanding"). A criterion may only require what the task prompt asks for. If full credit needs something, such as leaving out the reasons, the prompt says so.
+- **Alternatives:** where a rubric credits an alternative explanation, it must be offered as a possibility, not invented evidence asserted as fact.
+- **Disqualifiers:** only for misunderstandings severe enough that partial credit would mislead, e.g. stating the opposite conclusion. A disqualifier for restating a premise or the conclusion names what it covers and applies only when the answer offers nothing else: "Mentioning a stated claim while also giving a distinct assumption does not trigger this."
+- **Strengthen and weaken criteria:** criterion 1 is directional and material ("makes it materially more likely that…", "gives a material reason to doubt that…"), never "bears on whether…", which credits a fact pointing the wrong way. In `accept`, an unexplained fact that meets criterion 1 is "a qualifying fact" and earns 1.
+- **Anchors:** one sample answer for every possible score, including at least one full-credit answer unlike the reference for open-ended skills. Reference, `accept`, rubric and anchors must agree: grade each anchor against the rubric and check you get its stated score. A partial-credit anchor meets exactly one criterion (for a flaw task, it identifies the inference without saying why it fails); a bare flaw label earns 0.
+- **Likely errors:** the 2–4 tags a grader is most likely to need.
+
+## 6. The ten exercises
+
+### File: content/exercises/arg-0029.md
+
+````yaml
+---
+schema: 3
+id: arg-0029
+status: draft
+kind: argument
+difficulty: 2
+topics: [food, small business]
+source:
+  type: original
+  title: null
+  creator: null
+  year: null
+  locator: null
+  license_uri: null
+  attribution: null
+  rights_basis: null
+  modifications: null
+contributors: []
+ai_assistance:
+  used: true
+  notes: Stimulus, tasks, references, anchors and rubric drafted by Claude; awaiting human review and edits.
+approved_by: null
+approved_at: null
+approved_revision: null
+tasks:
+  - key: flaw
+    status: active
+    skill: flaw
+    difficulty: 2
+    difficulty_note: >-
+      Scope of the evidence: the magazine looked only at restaurants that lasted. Ten of twelve shows that
+      family recipes are common among long-lived restaurants, not that they help, unless they were less common
+      among restaurants that closed. If, say, ten in twelve of the restaurants that closed also cooked from
+      family recipes, the share among the survivors shows nothing about what helped them last. All twelve
+      long-lived restaurants were surveyed, so the number surveyed is not the problem.
+    prompt: Describe the main reasoning error in one or two sentences.
+    max: 2
+    reference: >-
+      The magazine looks only at restaurants that have lasted; without knowing how common family recipes were
+      among the restaurants that opened and later closed, the ten in twelve does not show that family recipes
+      helped any restaurant stay in business.
+    accept: >-
+      Any answer that identifies the move from "ten of the twelve restaurants open for more than twenty years
+      cook from family recipes" to "family recipes help a restaurant stay in business", and says why it does
+      not follow: the magazine looked only at restaurants that lasted, so unless family recipes were less
+      common among restaurants that closed, their frequency among the survivors shows nothing about what
+      helped them last. Saying that family recipes may simply be just as common among Dunmore's other
+      restaurants makes the same point. An answer whose only objection is another possible cause of these
+      restaurants' survival, such as good locations, without the missing comparison with restaurants that did
+      not last, does not identify the main error and earns at most 1. Objecting that twelve is a small sample
+      misses the point, since all twelve long-lasting restaurants were surveyed.
+    rubric:
+      - Ties the error to this argument, naming what the magazine found about the long-lasting restaurants (ten of twelve cook from family recipes) and the conclusion that family recipes help a restaurant stay in business.
+      - Says why the inference fails, namely that the magazine looked only at restaurants that lasted, so without knowing whether family recipes were less common among restaurants that closed (or among Dunmore's restaurants generally), their frequency among the survivors does not show that they helped.
+    anchors:
+      - points: 2
+        answer: >-
+          It only looks at the places that survived. If the restaurants that went under used family recipes
+          just as often, ten out of twelve tells you nothing about whether the recipes help a restaurant last.
+      - points: 1
+        answer: >-
+          The magazine goes from ten of the twelve long-lasting restaurants using family recipes to the claim
+          that family recipes help a restaurant last.
+        note: identifies the inference but does not say why it fails
+      - points: 0
+        answer: Twelve restaurants is too small a sample to prove anything.
+        note: >-
+          near miss: all twelve long-lasting restaurants were surveyed, so the problem is not the number
+          surveyed but the missing comparison with restaurants that closed
+    likely_errors: [unrepresentative-sample, missed-alternative, wrong-gap, understated]
+  - key: strengthen
+    status: active
+    skill: strengthen
+    difficulty: 2
+    difficulty_note: >-
+      The missing comparison is the main gap, so the strongest strengtheners show that family recipes were
+      less common among restaurants that did not last, or that restaurants using them closed less often. Facts
+      that show how family recipes kept these restaurants' customers coming back, or that rule out another
+      reason for their long life, also help without proving the conclusion. Repeating the ten in twelve is not
+      new.
+    prompt: >-
+      Give a new fact that, if true, would materially strengthen the argument, and explain how. Treat the
+      stated premises as true.
+    max: 2
+    reference: >-
+      Of the Dunmore restaurants that opened in the same years as these twelve and have since closed, only
+      about one in five cooked mainly from family recipes. Family recipes were then far more common among the
+      restaurants that lasted than among those that failed, which supports the idea that they helped.
+    accept: >-
+      Any new fact, consistent with the premises and not already stated in them, that makes it more likely
+      that cooking from family recipes helps a Dunmore restaurant stay in business, with an explanation of
+      how. Main kinds: the comparison the argument lacks (family recipes were less common among restaurants
+      that closed, or restaurants using them closed less often); a way family recipes kept these restaurants
+      going (their regular customers say they come back for the family dishes). A strengthener need not prove
+      the conclusion. A qualifying new fact whose bearing is not explained earns 1. A fact pointing the other
+      way, such as family-recipe restaurants often closing within a few years, earns 0.
+    rubric:
+      - Gives a new fact, consistent with the stated premises and not already stated in them, that makes it materially more likely that cooking from family recipes helps a Dunmore restaurant stay in business (a fact pointing the other way does not count).
+      - Explains how the fact strengthens the argument, namely why it makes family recipes more likely to have helped (for example, because they were less common among restaurants that closed, or because they keep customers coming back).
+    anchors:
+      - points: 2
+        answer: >-
+          Among Dunmore restaurants opened over the last thirty years, those cooking mainly from family
+          recipes were twice as likely as the others to still be open ten years later. That's the comparison
+          the magazine left out, and it points toward the recipes helping.
+        note: >-
+          a different strengthener from the reference (a survival rate for each kind of restaurant rather than
+          the share among those that closed)
+      - points: 1
+        answer: >-
+          Most of the Dunmore restaurants that closed in the last twenty years did not cook from family
+          recipes.
+        note: the right kind of fact, but the answer does not explain how it supports the argument
+      - points: 0
+        answer: Several new Dunmore restaurants that cooked from family recipes closed within a year.
+        note: >-
+          points the other way: family-recipe restaurants failing quickly gives a reason to doubt the
+          conclusion
+    likely_errors: [no-reasoning, irrelevant, missed-alternative, understated]
+---
+Twelve of the restaurants now open in the city of Dunmore have been in business for more than twenty
+years. A food magazine interviewed the owners of all twelve and found that ten of the restaurants cook
+mainly from recipes handed down in the owner's family. The magazine concludes that cooking from family
+recipes helps a Dunmore restaurant stay in business for a long time.
+````
+
+### File: content/exercises/arg-0030.md
+
+````yaml
+---
+schema: 3
+id: arg-0030
+status: draft
+kind: argument
+difficulty: 3
+topics: [sports, safety]
+source:
+  type: original
+  title: null
+  creator: null
+  year: null
+  locator: null
+  license_uri: null
+  attribution: null
+  rights_basis: null
+  modifications: null
+contributors: []
+ai_assistance:
+  used: true
+  notes: Stimulus, tasks, references, anchors and rubric drafted by Claude; awaiting human review and edits.
+approved_by: null
+approved_at: null
+approved_revision: null
+tasks:
+  - key: flaw
+    status: active
+    skill: flaw
+    difficulty: 2
+    difficulty_note: >-
+      Proportions: 48 of the 60 injuries (80 percent) happened on the beginner walls, but the conclusion is
+      about the chance that a single climb ends in injury. If b is the share of climbs made on the beginner
+      walls, a beginner climb is more likely to end in injury only if 48 divided by b is more than 12 divided
+      by (1 minus b), that is, only if b is under 80 percent. If four in five climbs or more were made on the
+      beginner walls, a climb there is no more likely to end in injury. Every injury is recorded, so answers
+      about unrecorded injuries miss the point.
+    prompt: Describe the main reasoning error in one or two sentences.
+    max: 2
+    reference: >-
+      The manager treats the share of injuries that happened on the beginner walls as if it showed how risky
+      each climb there is, without knowing how many climbs were made on each kind of wall; if four in five
+      climbs or more were on the beginner walls, a climb there would be no more likely to end in injury than
+      one on the harder walls.
+    accept: >-
+      Any answer that identifies the move from "48 of the 60 recorded injuries happened on the beginner walls"
+      to "a climb on a beginner wall is more likely to end in injury", and says why it does not follow: the
+      number of injuries on each kind of wall depends on how many climbs were made there, and if the beginner
+      walls carry a large enough share of the climbing (four in five climbs or more), they could have 48 of
+      the 60 injuries even if each climb there is no riskier. Exact numbers are not required. Answers saying
+      that beginners may be clumsier, or that easy routes make climbers careless, offer reasons the conclusion
+      might be true rather than an error in the reasoning, and earn at most 1, for naming the inference.
+      Answers about unrecorded injuries conflict with the statement that every injury is recorded and also
+      earn at most 1.
+    rubric:
+      - Ties the error to this argument, naming the evidence (48 of the 60 recorded injuries happened on the beginner walls) and the conclusion about the chance that a climb there ends in injury.
+      - Says why the inference fails, namely that the injuries on each kind of wall depend on how many climbs were made there, so if the beginner walls carried a large enough share of the climbs, they could have 48 of the 60 injuries even though each climb there is no riskier.
+    anchors:
+      - points: 2
+        answer: >-
+          More injuries on the beginner walls might just mean more climbing happens there. If, say, nine
+          climbs in ten are on those walls, 48 of 60 injuries actually means each beginner climb is safer.
+      - points: 1
+        answer: >-
+          The manager goes from most of the injuries happening on the beginner walls to a climb there being
+          more likely to end in injury.
+        note: identifies the inference but does not say why it fails
+      - points: 0
+        answer: Beginners are often clumsier than experienced climbers, so they get hurt more.
+        note: >-
+          near miss: a reason the conclusion might be true, not an error in the reasoning
+    likely_errors: [scope-shift, missed-alternative, wrong-gap, understated]
+  - key: assumption
+    status: active
+    skill: assumption
+    difficulty: 3
+    difficulty_note: >-
+      Quantifiers: the conclusion holds only if fewer than 80 percent of climbs were made on the beginner
+      walls (fewer than four beginner climbs for each climb on the harder walls). A necessary assumption may
+      set its limit at 80 percent or anywhere above it: "the beginner walls did not carry nearly all of the
+      climbs" is weaker than the exact limit but still needed. A limit below 80 percent, such as "most climbs
+      were on the harder walls", is stronger than needed. A claim that every injury is recorded repeats a
+      premise.
+    prompt: >-
+      State an assumption the argument needs: a claim that, if false, would make the argument fall apart. (A
+      necessary assumption; it need not make the argument airtight.)
+    max: 2
+    reference: Fewer than 80 percent of the climbs made at Crag Hall last year were on the beginner walls.
+    accept: >-
+      The inference under test is from "48 of the 60 injuries, all of which were recorded, happened on the
+      beginner walls" to "a climb on a beginner wall is more likely to end in injury than one on a harder
+      wall". Any unstated claim counts whose denial, with every premise kept, would defeat that inference. The
+      main kind limits the share of climbs made on the beginner walls: the argument needs the share to be
+      under 80 percent (fewer than four beginner climbs for every climb on the harder walls), so a claim that
+      the share is below 80 percent, or below any higher figure, or that the beginner walls did not carry
+      nearly all of the climbs, counts. Claims stronger than needed earn 1, such as that most climbs were on
+      the harder walls, or that the two kinds of wall were used about equally. Repeating a premise or
+      restating the conclusion earns 0.
+    disqualifiers:
+      - Offers only a stated premise (such as that 48 of the 60 injuries happened on the beginner walls) or a version of the conclusion (that a beginner climb is more likely to end in injury) as the assumption, with no distinct unstated claim. Mentioning a stated claim while also giving a distinct assumption does not trigger this.
+    rubric:
+      - States a claim the argument does not state that limits how much of the gym's climbing was done on the beginner walls (for example, that it was under 80 percent of all climbs), not a premise or a version of the conclusion.
+      - States it no more strongly than the argument needs, so that if it were false the beginner walls would carry at least four climbs for every climb on the harder walls, rather than a claim that most climbs were on the harder walls or that the two kinds of wall were used about equally.
+    anchors:
+      - points: 2
+        answer: The beginner walls didn't account for nearly all of the climbs made at the gym last year.
+        note: >-
+          weaker than the reference but still needed: if nearly all climbs were on the beginner walls, 48 of
+          60 injuries would mean each climb there was less likely to end in injury
+      - points: 1
+        answer: Most of the climbs made at Crag Hall last year were on the harder walls.
+        note: >-
+          near miss, too strong: the argument holds as long as fewer than 80 percent of climbs were on the
+          beginner walls, so those walls could still carry most of the climbing
+      - points: 0
+        answer: Of the 60 injuries recorded last year, 48 happened on the beginner walls.
+        note: a stated premise, not an assumption (disqualifier)
+    likely_errors: [overstated, restates-conclusion, wrong-gap, scope-shift]
+---
+The Crag Hall climbing gym records every injury that happens there, however minor. Of the 60 injuries it
+recorded last year, 48 happened on its beginner walls, where the routes are easiest, and 12 on its harder
+walls. The gym's manager concludes that a climb on one of the beginner walls is more likely to end in
+injury than a climb on one of the harder walls.
+````
+
+### File: content/exercises/arg-0031.md
+
+````yaml
+---
+schema: 3
+id: arg-0031
+status: draft
+kind: argument
+difficulty: 2
+topics: [psychology, design]
+source:
+  type: original
+  title: null
+  creator: null
+  year: null
+  locator: null
+  license_uri: null
+  attribution: null
+  rights_basis: null
+  modifications: null
+contributors: []
+ai_assistance:
+  used: true
+  notes: Stimulus, tasks, references, anchors and rubric drafted by Claude; awaiting human review and edits.
+approved_by: null
+approved_at: null
+approved_revision: null
+tasks:
+  - key: flaw
+    status: active
+    skill: flaw
+    difficulty: 2
+    difficulty_note: >-
+      Shifting meaning: "statistically significant" is defined in the stimulus as unlikely to have arisen by
+      chance, while "a significant difference" in the conclusion means one large enough to matter. With 2,000
+      readers, even a very small average speed-up can be statistically significant, so the evidence shows a
+      reliable difference, not a large one. The stimulus defines the term, which signposts the shift, so the
+      task is a 2. It also balances which passage was set in Clearline and the reading order, so answers about
+      an easier passage or the order miss the gap.
+    prompt: Describe the main reasoning error in one or two sentences.
+    max: 2
+    reference: >-
+      The blog slides from "statistically significant", which means only that the speed-up was unlikely to be
+      due to chance, to "a significant difference", meaning a large one; with 2,000 readers even a tiny
+      speed-up can be statistically significant, so the study does not show that Clearline makes much
+      difference.
+    accept: >-
+      Any answer that identifies the move from "the difference in reading speed was statistically significant"
+      to "switching would make a significant difference to how quickly people read", and says why it does not
+      follow: statistical significance, as the stimulus defines it, means only that the difference was
+      unlikely to be chance, not that it was large, so the speed-up could be too small to matter. Mentioning
+      the number of readers is not required. Answers about the reading order or an easier Clearline passage
+      conflict with the stimulus, which balances both, and earn at most 1, for naming the inference. An answer
+      whose only objection is that a short test may not carry over to everyday newspaper reading names a
+      weaker concern and earns at most 1.
+    rubric:
+      - Ties the error to this argument, naming the study's statistically significant difference and the conclusion that switching would make a significant difference to reading speed.
+      - Says why the inference fails, namely that statistically significant means only unlikely to be due to chance, not large, so the speed-up could be too small to matter.
+    anchors:
+      - points: 2
+        answer: >-
+          Statistically significant just means the gap probably isn't a fluke, not that it's big. With 2,000
+          people, a speed-up of a second or two could be significant in that sense and still be trivial, so
+          the study doesn't show that switching would make a real difference to reading speed.
+      - points: 1
+        answer: >-
+          The blog goes from the speed difference being statistically significant to Clearline making a
+          significant difference to reading speed.
+        note: identifies the inference but does not say why it fails
+      - points: 0
+        answer: Some readers may have read the Clearline passage second, after warming up.
+        note: >-
+          near miss: half the readers read their Clearline passage first, so the order was balanced and does
+          not explain the result
+    likely_errors: [misread-stimulus, scope-shift, wrong-gap, understated]
+  - key: weaken
+    status: active
+    skill: weaken
+    difficulty: 2
+    difficulty_note: >-
+      Measured size: the premises give a statistically significant difference but not its size, so a new fact
+      about how small the speed-up was, or about the speed-up fading once readers were used to the typeface,
+      weakens the conclusion that switching would make a significant difference. Facts about how well people
+      understood the passages concern comprehension, not speed, unless the answer ties them to speed.
+    prompt: >-
+      Give a new fact that, if true, would materially weaken the argument, and explain how. Treat the stated
+      premises as true.
+    max: 2
+    reference: >-
+      On average, readers were only about one percent faster in Clearline, saving under two seconds on
+      passages that took about three minutes to read. A difference that small is real but trivial, so
+      switching would not make a significant difference to how quickly people read.
+    accept: >-
+      Any new fact, consistent with every premise (2,000 readers, each passage set in Clearline for half of
+      them, a balanced reading order, and a statistically significant speed-up with Clearline), that gives a
+      real reason to doubt that switching to Clearline would make a significant difference to how quickly
+      people read newspapers, plus an explanation of how. Main kinds: the speed-up was very small; it faded
+      once readers were used to Clearline; it came almost entirely from a small group of readers while most
+      read no faster; it shrank or vanished when people read whole newspapers rather than short passages.
+      Facts about understanding, enjoyment or cost that the answer does not tie to reading speed do not count.
+      A qualifying fact whose effect is not explained earns 1. A fact that denies a premise, such as the
+      difference not being statistically significant, earns 0.
+    disqualifiers:
+      - Denies a stated premise, for example that the readers were faster on average with Clearline or that the difference was statistically significant.
+    rubric:
+      - Gives a new fact, consistent with the stated premises and not already stated in them, that gives a material reason to doubt that switching to Clearline would make a significant difference to how quickly people read.
+      - Explains how the fact weakens the argument, namely why, even granting a statistically significant speed-up, it makes a large effect on everyday reading speed less likely (for example, because the speed-up was tiny or faded once readers were used to the typeface).
+    anchors:
+      - points: 2
+        answer: >-
+          When the same readers were tested again after reading Clearline every day for a month, they were no
+          faster with it than with the standard typeface. The first result looks like a novelty effect, so
+          switching probably wouldn't change reading speed for long.
+        note: a different weakener from the reference (the speed-up fading rather than being small)
+      - points: 1
+        answer: >-
+          The average reader finished in Clearline less than two seconds sooner, on passages that took about
+          three minutes to read.
+        note: the right fact, but the answer does not explain how it undercuts the conclusion
+      - points: 0
+        answer: >-
+          Readers understood passages in Clearline slightly less well than passages in the other typeface.
+        note: >-
+          near miss: comprehension is not reading speed, and the answer does not tie it to speed
+    likely_errors: [irrelevant, no-reasoning, contradicts-premise, understated]
+---
+In a study, 2,000 adults each read two passages, one set in a standard newspaper typeface and the other
+in a new typeface called Clearline. Each passage was set in Clearline for half of the readers, and half
+of them read their Clearline passage first. On average they read faster in Clearline, and the researchers
+reported that the difference was statistically significant, meaning that it was unlikely to have arisen
+by chance. A design blog concludes that switching newspapers to Clearline would make a significant
+difference to how quickly people read them.
+````
+
+### File: content/exercises/arg-0032.md
+
+````yaml
+---
+schema: 3
+id: arg-0032
+status: draft
+kind: argument
+difficulty: 2
+topics: [health, medicine]
+source:
+  type: original
+  title: null
+  creator: null
+  year: null
+  locator: null
+  license_uri: null
+  attribution: null
+  rights_basis: null
+  modifications: null
+contributors: []
+ai_assistance:
+  used: true
+  notes: Stimulus, tasks, references, anchors and rubric drafted by Claude; awaiting human review and edits.
+approved_by: null
+approved_at: null
+approved_revision: null
+tasks:
+  - key: flaw
+    status: active
+    skill: flaw
+    difficulty: 2
+    difficulty_note: >-
+      Absence of evidence: the trials measured only sleep, so their silence about the liver is not evidence
+      that the liver was unharmed. The conclusion needs evidence from something that could have detected liver
+      harm. The number of participants is not the main problem, since a trial of any size that never looks at
+      the liver cannot show the liver is unharmed.
+    prompt: Describe the main reasoning error in one or two sentences.
+    max: 2
+    reference: >-
+      The maker treats the trials' silence about the liver as showing that Calmora does not harm it, but the
+      trials measured only sleep, so they could have missed liver harm; failing to find a harm no one looked
+      for does not show there is none.
+    accept: >-
+      Any answer that identifies the move from "none of the trials' reports mentions liver harm" to "Calmora
+      is safe for the liver", and says why it does not follow: the trials measured only sleep and so were not
+      looking for liver harm, and not finding a harm that no one looked for is not evidence that there is
+      none. Answers saying only that 900 participants is too few, or that the trials were too short, name a
+      weaker concern that would remain even if the trials had looked at the liver, and earn at most 1. Answers
+      that attack the maker's motives rather than its reasoning do not say why the inference fails and earn at
+      most 1, for naming the inference.
+    rubric:
+      - Ties the error to this argument, naming the trials' reports saying nothing about liver harm and the conclusion that Calmora is safe for the liver.
+      - Says why the inference fails, namely that the trials measured only sleep, so they were not looking for liver harm and could have missed it.
+    anchors:
+      - points: 2
+        answer: >-
+          The trials only tracked sleep, so they'd never have noticed liver damage unless someone happened to
+          bring it up. Their silence about the liver doesn't show Calmora is safe for it: not finding a
+          problem you weren't looking for doesn't show it isn't there.
+      - points: 1
+        answer: >-
+          The maker goes from the trials not mentioning any liver harm to Calmora being safe for the liver.
+        note: identifies the inference but does not say why it fails
+      - points: 0
+        answer: The maker profits from selling Calmora, so its claims can't be trusted.
+        note: >-
+          near miss: an attack on the source's motives, not an error in the argument's reasoning
+    likely_errors: [overstated, missed-alternative, attacks-source, understated]
+  - key: strengthen
+    status: active
+    skill: strengthen
+    difficulty: 2
+    difficulty_note: >-
+      The three trials cannot show anything about the liver, so a strengthener has to come from something that
+      could detect liver harm: a study that measured liver function, a reporting system that would have caught
+      liver problems, or facts about how the body handles the supplement. Facts about how well Calmora helps
+      sleep are not about the liver, and a fact saying the three trials did test the liver denies a premise.
+    prompt: >-
+      Give a new fact that, if true, would materially strengthen the argument, and explain how. Treat the
+      stated premises as true.
+    max: 2
+    reference: >-
+      A separate year-long study by university researchers gave Calmora to 500 people and tested their liver
+      function every three months, finding no more liver problems than in a similar group given a dummy pill.
+      That is direct evidence about the liver, which the sleep trials did not provide.
+    accept: >-
+      Any new fact, consistent with the premises and not already stated in them, that makes it more likely
+      that Calmora is safe for the liver, with an explanation of how. Main kinds: another study that measured
+      liver function in people taking Calmora and found no harm; a monitoring system that would have caught
+      liver problems among Calmora's users and found none; facts about how the body handles Calmora that make
+      liver harm unlikely (for example, it leaves the body without being processed by the liver). A fact
+      claiming that the maker's three trials tested the liver denies the premise that they measured only
+      sleep. A strengthener need not prove safety. A qualifying new fact whose bearing is not explained earns
+      1. A fact pointing the other way, such as reports of liver problems in Calmora users, earns 0.
+    rubric:
+      - Gives a new fact, consistent with the stated premises and not already stated in them, that makes it materially more likely that Calmora is safe for the liver (a fact pointing the other way does not count).
+      - Explains how the fact strengthens the argument, namely why it makes liver harm from Calmora less likely (for example, because a study that looked at the liver found none, or because liver harm would have been noticed).
+    anchors:
+      - points: 2
+        answer: >-
+          Doctors in the countries where Calmora is sold must report any suspected liver damage from
+          supplements, and in ten years of sales none has been reported for Calmora, though many have been for
+          other herbal products. So liver harm from it would probably have been noticed by now.
+        note: >-
+          a different strengthener from the reference (a reporting system that would have caught liver harm,
+          rather than a study that tested the liver)
+      - points: 1
+        answer: A study that took liver blood tests from 300 Calmora users over a year found no liver changes.
+        note: the right kind of fact, but the answer does not explain how it supports the argument
+      - points: 0
+        answer: In the trials, Calmora helped participants sleep about an hour longer.
+        note: >-
+          not about the liver: it bears on whether Calmora works, not on whether it is safe for the liver
+    likely_errors: [no-reasoning, irrelevant, contradicts-premise, understated]
+---
+Calmora is an herbal sleep aid sold without a prescription. Its maker has run three clinical trials of
+it, with 900 participants in all. The trials measured only how long the participants slept and how often
+they woke during the night, and none of the trials' reports mentions any harm to the liver. The maker
+concludes from these trials that the supplement is safe for the liver.
+````
+
+### File: content/exercises/arg-0033.md
+
+````yaml
+---
+schema: 3
+id: arg-0033
+status: draft
+kind: argument
+difficulty: 2
+topics: [transport, local government]
+source:
+  type: original
+  title: null
+  creator: null
+  year: null
+  locator: null
+  license_uri: null
+  attribution: null
+  rights_basis: null
+  modifications: null
+contributors: []
+ai_assistance:
+  used: true
+  notes: Stimulus, tasks, references, anchors and rubric drafted by Claude; awaiting human review and edits.
+approved_by: null
+approved_at: null
+approved_revision: null
+tasks:
+  - key: flaw
+    status: active
+    skill: flaw
+    difficulty: 2
+    difficulty_note: >-
+      Overlooked options: the engineer's premise says only that delays will worsen if nothing is done. The
+      councillor treats the two remedies the council studied as the only things that could be done, so ruling
+      them out seems to leave nothing. Cheaper measures (retiming the traffic lights, more buses, staggered
+      working hours) or outside money for one of the studied remedies would each count as doing something.
+      Answers disputing the cost or the engineer's forecast deny premises.
+    prompt: Describe the main reasoning error in one or two sentences.
+    max: 2
+    reference: >-
+      The councillor assumes that widening the street and building a bypass are the only ways to do something
+      about the traffic, so that ruling them out means nothing can be done; cheaper measures, such as retiming
+      the traffic lights or running more buses, could still keep the delays from growing.
+    accept: >-
+      Any answer that identifies the move from "the two remedies the council studied are unaffordable" to
+      "delays are bound to keep getting worse", and says why it does not follow: the engineer says only that
+      delays will worsen if nothing is done, and the councillor overlooks that something other than the two
+      studied remedies could be done (a cheaper measure, or money from outside the town for one of the studied
+      remedies). Naming a particular alternative is not required. Answers that dispute the cost of the
+      remedies or the engineer's forecast deny premises and do not say why the inference fails; they earn at
+      most 1, for naming the inference.
+    rubric:
+      - Ties the error to this argument, naming the two unaffordable remedies and the conclusion that delays are bound to keep getting worse.
+      - Says why the inference fails, namely that the councillor treats the two studied remedies as the only things that could be done, overlooking other measures that might stop the delays from growing.
+    anchors:
+      - points: 2
+        answer: >-
+          It assumes the only fixes are widening the street or building a bypass. Even if neither is
+          affordable, the town could try something cheaper, like retiming the lights or adding buses, so worse
+          delays aren't inevitable.
+      - points: 1
+        answer: >-
+          The councillor goes from the town being unable to afford the two remedies to the delays being bound
+          to keep getting worse.
+        note: identifies the inference but does not say why it fails
+      - points: 0
+        answer: The engineer's forecast could be wrong, and traffic might stop growing on its own.
+        note: >-
+          near miss: it disputes the engineer's forecast, a premise, instead of identifying the error in the
+          councillor's reasoning
+    likely_errors: [missed-alternative, contradicts-premise, wrong-gap, understated]
+  - key: weaken
+    status: active
+    skill: weaken
+    difficulty: 2
+    difficulty_note: >-
+      The conclusion that delays are bound to worsen needs nothing to be done. A weakener shows that something
+      could still be done: an affordable measure that would cut the delays or slow their growth, or money from
+      outside the town for one of the studied remedies. Saying a remedy is cheaper than the council was told
+      denies a premise.
+    prompt: >-
+      Give a new fact that, if true, would materially weaken the argument, and explain how. Treat the stated
+      premises as true.
+    max: 2
+    reference: >-
+      The engineer estimates that retiming the traffic lights along Bridge Street, which would cost the town
+      little, would cut rush-hour delays there by a fifth. Something affordable can still be done, which gives
+      reason to doubt that the delays are bound to keep getting worse.
+    accept: >-
+      Any new fact, consistent with every premise (a decade of growing traffic, the engineer's forecast that
+      delays will worsen unless something is done, and both studied remedies costing far more than the town
+      can afford), that gives a real reason to doubt that the delays are bound to keep getting worse, plus an
+      explanation of how. Main kinds: an affordable measure that would reduce the delays or slow their growth
+      (retimed lights, more buses, staggered working hours); money from outside the town that would pay for
+      widening the street or the bypass; something already planned that would take traffic off Bridge Street.
+      A qualifying fact whose effect is not explained earns 1. A fact that denies a premise, such as one of
+      the remedies costing little, earns 0.
+    disqualifiers:
+      - Denies a stated premise, for example that widening the street or building a bypass would cost far more than the town can afford.
+    rubric:
+      - Gives a new fact, consistent with the stated premises and not already stated in them, that gives a material reason to doubt that rush-hour delays on Bridge Street are bound to keep getting worse.
+      - Explains how the fact weakens the argument, namely why it means something could still be done about the delays (for example, an affordable measure that would reduce them, or outside money for one of the studied remedies).
+    anchors:
+      - points: 2
+        answer: >-
+          The regional government has offered to pay for a bypass for Marlow, apart from a share the town can
+          afford. The town may be able to build it after all, so the delays needn't keep getting worse.
+        note: >-
+          a different weakener from the reference (outside money for a studied remedy rather than a cheaper
+          measure)
+      - points: 1
+        answer: >-
+          Retiming the traffic lights on Bridge Street would cost little and would cut rush-hour delays there
+          by a fifth.
+        note: the right fact, but the answer does not explain how it undercuts the conclusion
+      - points: 0
+        answer: >-
+          Widening Bridge Street would cost much less than the council was told, little enough for the town to
+          afford.
+        note: denies the premise that each remedy would cost far more than the town can afford (disqualifier)
+    likely_errors: [contradicts-premise, no-reasoning, irrelevant, understated]
+---
+Rush-hour traffic on Bridge Street in the town of Marlow has grown every year for a decade, and the
+town's engineer reports that rush-hour delays there will keep getting worse unless something is done. The
+council has studied two remedies, widening the street and building a bypass, and each would cost far more
+than the town can afford. A councillor concludes that rush-hour delays on Bridge Street are bound to keep
+getting worse.
+````
+
+### File: content/exercises/arg-0034.md
+
+````yaml
+---
+schema: 3
+id: arg-0034
+status: draft
+kind: argument
+difficulty: 2
+topics: [workplace, surveys]
+source:
+  type: original
+  title: null
+  creator: null
+  year: null
+  locator: null
+  license_uri: null
+  attribution: null
+  rights_basis: null
+  modifications: null
+contributors: []
+ai_assistance:
+  used: true
+  notes: Stimulus, tasks, references, anchors and rubric drafted by Claude; awaiting human review and edits.
+approved_by: null
+approved_at: null
+approved_revision: null
+tasks:
+  - key: flaw
+    status: active
+    skill: flaw
+    difficulty: 2
+    difficulty_note: >-
+      Causes: the survey shows that flexible hours and higher satisfaction go together, not which came first.
+      The stimulus rules out size, industry and average pay, but leaves open that companies whose employees
+      were already satisfied, or that are better run, are the ones that choose to offer flexible hours. Saying
+      only that correlation is not causation names the flaw without saying what else could explain the link.
+      The survey covered 400 companies, so its size is not the problem.
+    prompt: Describe the main reasoning error in one or two sentences.
+    max: 2
+    reference: >-
+      The columnist infers from a one-time survey, which shows only that flexible hours and higher
+      satisfaction go together, that the hours cause the satisfaction; it may be the other way round, with
+      companies whose employees are already satisfied and trusted being the ones that choose to offer flexible
+      hours, or both may come from something else, such as better management.
+    accept: >-
+      Any answer that identifies the move from "employees at companies offering flexible hours rated their job
+      satisfaction higher" to "offering flexible hours makes employees more satisfied", and says why it does
+      not follow: the survey shows only that the two go together, so the satisfaction could have come first,
+      with companies whose employees were already satisfied being the ones that choose to offer flexible
+      hours, or both could come from something else about those companies, such as better management. The
+      answer must say what else could explain the link; saying only that correlation does not prove causation
+      earns at most 1. An answer whose only alternative is the companies' size, industry or average pay
+      conflicts with the stimulus, which says the two groups were similar in these, and earns at most 1, for
+      naming the inference.
+    rubric:
+      - Ties the error to this argument, naming the survey finding (employees at flexible-hours companies rated their satisfaction higher) and the conclusion that offering flexible hours makes employees more satisfied.
+      - Says why the inference fails, namely that the survey shows only that flexible hours and higher satisfaction go together, so the satisfaction may have come first (companies with satisfied staff choosing to offer flexible hours) or both may come from something else about those companies, such as better management.
+    anchors:
+      - points: 2
+        answer: >-
+          The survey only shows that staff at flexible-hours companies are happier, not that the hours made
+          them happier. Maybe it's the other way round: companies whose staff are already happy and trusted
+          are the ones that feel safe offering flexible hours.
+      - points: 1
+        answer: >-
+          The columnist goes from employees at flexible-hours companies being more satisfied to flexible hours
+          making employees more satisfied.
+        note: identifies the inference but does not say why it fails
+      - points: 0
+        answer: The flexible-hours companies might pay more, which would explain why their staff are happier.
+        note: >-
+          near miss: the stimulus says the two groups of companies had similar average pay, so this
+          alternative is ruled out
+    likely_errors: [correlation-causation, missed-alternative, contradicts-premise, understated]
+  - key: strengthen
+    status: active
+    skill: strengthen
+    difficulty: 2
+    difficulty_note: >-
+      The main gap is which came first, so the strongest strengtheners show that satisfaction rose after
+      flexible hours were introduced, or compare groups where chance rather than existing satisfaction decided
+      who got them. Ruling out another open explanation, such as better management, also helps. Restating that
+      the groups were similar in size, industry and pay is not new, and a fact that flexible hours tend to
+      follow existing satisfaction points the other way.
+    prompt: >-
+      Give a new fact that, if true, would materially strengthen the argument, and explain how. Treat the
+      stated premises as true.
+    max: 2
+    reference: >-
+      At the surveyed companies that switched to flexible hours in the past five years, their own earlier
+      staff surveys show satisfaction no higher than at fixed-hours companies before the switch, and it rose
+      after it. That suggests the flexible hours came first and raised satisfaction, rather than satisfied
+      staff leading companies to offer them.
+    accept: >-
+      Any new fact, consistent with the premises and not already stated in them, that makes it more likely
+      that offering flexible working hours makes employees more satisfied, with an explanation of how. Main
+      kinds: evidence that the satisfaction followed the flexible hours rather than preceding them (ratings
+      rose after companies switched, having been no higher before); a comparison in which chance, not existing
+      satisfaction, decided who got flexible hours; facts ruling out another explanation the stimulus leaves
+      open, such as better management at the flexible-hours companies; employees' own reports that their hours
+      are a main reason for their satisfaction. A strengthener need not prove the conclusion. A qualifying new
+      fact whose bearing is not explained earns 1. A fact pointing the other way, such as companies offering
+      flexible hours only after their staff were already satisfied, earns 0. Repeating that the groups were
+      similar in size, industry or pay is not new.
+    rubric:
+      - Gives a new fact, consistent with the stated premises and not already stated in them, that makes it materially more likely that offering flexible working hours makes employees more satisfied (a fact pointing the other way does not count).
+      - Explains how the fact strengthens the argument, namely why it makes flexible hours more likely to be the cause of the higher satisfaction (for example, because satisfaction rose after the hours were introduced, or because chance rather than existing satisfaction decided who got them).
+    anchors:
+      - points: 2
+        answer: >-
+          At several of the companies, flexible hours were first offered only to some teams, picked by drawing
+          lots, and a year later those teams rated their satisfaction higher than the teams that kept fixed
+          hours. Since chance decided which teams got them, the hours, not happier staff to begin with,
+          explain the difference.
+        note: >-
+          a different strengthener from the reference (a comparison decided by chance rather than a
+          before-and-after comparison)
+      - points: 1
+        answer: >-
+          At companies that switched to flexible hours, satisfaction ratings rose in the year after the
+          switch.
+        note: the right kind of fact, but the answer does not explain how it supports the argument
+      - points: 0
+        answer: >-
+          Most of the companies that offer flexible hours began doing so only after surveys showed their
+          employees were already highly satisfied.
+        note: >-
+          points the other way: the satisfaction came before the flexible hours, which supports the reverse
+          explanation
+    likely_errors: [no-reasoning, irrelevant, missed-alternative, understated]
+---
+A survey last year of employees at 400 companies found that, on average, employees at companies offering
+flexible working hours rated their job satisfaction higher than employees at companies with fixed hours.
+The two groups of companies were similar in size, industry and average pay. A business columnist
+concludes that offering flexible working hours makes employees more satisfied with their jobs.
+````
+
+### File: content/exercises/arg-0035.md
+
+````yaml
+---
+schema: 3
+id: arg-0035
+status: draft
+kind: argument
+difficulty: 3
+topics: [science, education]
+source:
+  type: original
+  title: null
+  creator: null
+  year: null
+  locator: null
+  license_uri: null
+  attribution: null
+  rights_basis: null
+  modifications: null
+contributors: []
+ai_assistance:
+  used: true
+  notes: Stimulus, tasks, references, anchors and rubric drafted by Claude; awaiting human review and edits.
+approved_by: null
+approved_at: null
+approved_revision: null
+tasks:
+  - key: conclusion
+    status: active
+    skill: conclusion
+    difficulty: 3
+    difficulty_note: >-
+      Structure map: opposing view (some residents: turn the observatory into a café, since the telescope is
+      outdated and few people visit), stated first; main conclusion (the town should keep the observatory open
+      as an observatory), stated second; concession (the telescope is no match for modern instruments);
+      premises (its main use has never been research; it hosts every school in the district each year; for
+      most children those evenings are the only chance to look through a telescope); intermediate conclusion
+      (closing it would take away something the schools could not easily replace), introduced by "so" in the
+      last sentence. Support runs from the intermediate conclusion back to the recommendation, which makes the
+      last sentence the tempting rival.
+    prompt: State the argument's main conclusion in one sentence.
+    max: 1
+    reference: The town of Ostrey should keep its old observatory open as an observatory.
+    accept: >-
+      Any wording that says Ostrey should keep the observatory open (or running) as an observatory. Extra
+      supporting reasons do not lose credit unless they make the identified conclusion ambiguous. Saying only
+      that the town should not turn the observatory into a café is weaker than the conclusion, since the
+      building could still close or be put to another use. Saying that closing the observatory would take away
+      something the district's schools could not easily replace is the intermediate claim offered as the
+      reason; saying that the telescope is no match for modern instruments is a concession; saying that the
+      observatory should become a café is the residents' view the author argues against; saying that the town
+      should upgrade the telescope or add more school visits goes beyond the author.
+    disqualifiers:
+      - States the opposite recommendation (that the observatory should be closed or turned into a café).
+    rubric:
+      - Identifies the main conclusion (that Ostrey should keep the old observatory open as an observatory), not the intermediate claim that closing it would take away something the district's schools could not easily replace, the concession about the telescope, the residents' view, or a call to upgrade or expand the observatory.
+    anchors:
+      - points: 1
+        answer: Ostrey should keep the observatory running as an observatory.
+      - points: 0
+        answer: >-
+          Closing the observatory would take away something the district's schools couldn't easily replace.
+        note: near miss, the intermediate conclusion offered as the reason for the recommendation
+    likely_errors: [premise-as-conclusion, counterpoint-as-conclusion, overstated]
+  - key: weaken
+    status: active
+    skill: weaken
+    difficulty: 2
+    difficulty_note: >-
+      The recommendation rests on the intermediate claim that closing the observatory would take away
+      something the schools could not easily replace. A weakener shows that the stargazing evenings would
+      carry on without the building staying an observatory (another provider, or a café plan that keeps them),
+      or that keeping it open carries a serious cost the argument does not weigh. Denying that the evenings
+      are most children's only chance to look through a telescope denies a premise.
+    prompt: >-
+      Give a new fact that, if true, would materially weaken the argument, and explain how. Treat the stated
+      premises as true.
+    max: 2
+    reference: >-
+      The county science center has offered to run the same stargazing evenings, with its own telescopes, for
+      every school in the district if the observatory closes. The schools could then keep the evenings, so
+      closing the observatory need not take away something they could not easily replace.
+    accept: >-
+      Any new fact, consistent with every premise (the telescope is outdated, the observatory's main use has
+      never been research, it hosts every school in the district each year, and for most of the district's
+      children those evenings are the only chance to look through a telescope), that gives a real reason to
+      doubt that the town should keep the observatory open as an observatory, plus an explanation of how. Main
+      kinds: the stargazing evenings would carry on without it (another provider would run them, or the café
+      plan would keep the telescope and the school visits); keeping the observatory open would carry a serious
+      cost the argument does not weigh, such as repairs the town cannot afford. A qualifying fact whose effect
+      is not explained earns 1. A fact that denies a premise, such as most children already having other
+      chances to look through a telescope, earns 0.
+    disqualifiers:
+      - Denies a stated premise, for example that for most of the district's children the stargazing evenings are the only chance to look through a telescope.
+    rubric:
+      - Gives a new fact, consistent with the stated premises and not already stated in them, that gives a material reason to doubt that the town should keep the observatory open as an observatory.
+      - Explains how the fact weakens the argument, namely why it means the schools would not lose their stargazing evenings if the observatory stopped being one, or why keeping it open carries a cost the argument does not weigh.
+    anchors:
+      - points: 2
+        answer: >-
+          The café plan would keep the dome and the telescope in place and set aside one evening a week for
+          school stargazing visits. So turning it into a café wouldn't take the evenings away from the
+          schools, which was the whole reason for keeping it as an observatory.
+        note: >-
+          a different weakener from the reference (the café plan keeping the evenings rather than another
+          provider running them)
+      - points: 1
+        answer: >-
+          The county science center has said it would run stargazing evenings for every school in the district
+          if the observatory closed.
+        note: the right fact, but the answer does not explain how it undercuts the conclusion
+      - points: 0
+        answer: Most of the district's children already get other chances to look through a telescope.
+        note: >-
+          denies the premise that for most of the district's children the stargazing evenings are the only
+          chance to look through a telescope (disqualifier)
+    likely_errors: [contradicts-premise, no-reasoning, irrelevant, understated]
+---
+Some residents of Ostrey want the town's old observatory turned into a café, arguing that its telescope
+is outdated and that few people visit. But the town should keep the observatory open as an observatory.
+Admittedly, its telescope is no match for modern instruments. Yet the observatory's main use has never
+been research: each year it hosts every school in the district for an evening of stargazing, and for most
+of the district's children those evenings are the only chance to look through a telescope. So closing it
+would take away something the district's schools could not easily replace.
+````
+
+### File: content/exercises/arg-0036.md
+
+````yaml
+---
+schema: 3
+id: arg-0036
+status: draft
+kind: argument
+difficulty: 3
+topics: [technology, workplace]
+source:
+  type: original
+  title: null
+  creator: null
+  year: null
+  locator: null
+  license_uri: null
+  attribution: null
+  rights_basis: null
+  modifications: null
+contributors: []
+ai_assistance:
+  used: true
+  notes: Stimulus, tasks, references, anchors and rubric drafted by Claude; awaiting human review and edits.
+approved_by: null
+approved_at: null
+approved_revision: null
+tasks:
+  - key: conclusion
+    status: active
+    skill: conclusion
+    difficulty: 3
+    difficulty_note: >-
+      Structure map: main conclusion (Brindle should make the four-day week permanent), stated first; opposing
+      view (some managers: end the trial, since customers wait longer for replies on Fridays); concession (the
+      complaint is fair); premises (as many projects finished as before; staff departures fell by half;
+      keeping experienced staff matters more than reply speed on one day a week); intermediate conclusion (the
+      trial's benefits outweigh its cost), the last sentence. Support runs from the intermediate conclusion
+      back to the opening recommendation, so the last sentence, which reads like a verdict, is the tempting
+      rival.
+    prompt: State the argument's main conclusion in one sentence.
+    max: 1
+    reference: Brindle Software should make its four-day working week permanent.
+    accept: >-
+      Any wording that says Brindle should make the four-day week permanent (or keep it for good). Extra
+      supporting reasons do not lose credit unless they make the identified conclusion ambiguous. Saying that
+      the trial's benefits outweigh its cost is the intermediate claim offered as the reason; saying that
+      customers wait longer for replies on Fridays is the managers' point, which the author concedes; saying
+      that the trial should end is the managers' view the author argues against; saying only that the trial
+      should be extended does not match the recommendation to make the four-day week permanent.
+    disqualifiers:
+      - States the opposite recommendation (that Brindle should end the trial or return to a five-day week).
+    rubric:
+      - Identifies the main conclusion (that Brindle Software should make its four-day working week permanent), not the intermediate claim that the trial's benefits outweigh its cost, the managers' complaint about Friday replies, the managers' view that the trial should end, or a call merely to extend the trial.
+    anchors:
+      - points: 1
+        answer: Brindle should keep the four-day week for good.
+      - points: 0
+        answer: The four-day week trial's benefits outweigh its cost.
+        note: near miss, the intermediate conclusion offered as the reason for the recommendation
+    likely_errors: [premise-as-conclusion, counterpoint-as-conclusion, overstated]
+  - key: assumption
+    status: active
+    skill: assumption
+    difficulty: 3
+    difficulty_note: >-
+      Two links: from the trial's results to the intermediate conclusion that its benefits outweigh its cost,
+      and from that to making the four-day week permanent. The benefits must be due to the four-day week at
+      least in part, must not vanish once it is no longer new, and must not be outweighed by a cost the trial
+      did not show. Requiring that the four-day week was the only reason fewer staff left, or that its
+      benefits will stay exactly as large, is stronger than needed. Saying that the benefits outweigh the cost
+      is the intermediate conclusion.
+    prompt: >-
+      State an assumption the argument needs: a claim that, if false, would make the argument fall apart. (A
+      necessary assumption; it need not make the argument airtight.)
+    max: 2
+    reference: >-
+      The fall in the number of staff who left during the trial was not entirely due to something other than
+      the four-day week.
+    accept: >-
+      The inference under test runs from "during the trial the company finished as many projects as before and
+      the number of staff who left fell by half; keeping experienced staff matters more than how quickly
+      customers get replies on one day a week" through "the trial's benefits outweigh its cost" to "Brindle
+      should make the four-day week permanent". Any unstated claim counts whose denial, with every premise
+      kept, would break either step. Main bridges: (a) the fall in departures was not entirely due to
+      something other than the four-day week, such as a pay rise or fewer jobs on offer elsewhere; (b) the
+      benefits would not all disappear once the four-day week was permanent and no longer new; (c) making it
+      permanent would not bring a cost the trial did not show, such as losing customers over time, large
+      enough to outweigh the benefits. Claims stronger than needed earn 1, such as that the four-day week was
+      the only reason fewer staff left, that its benefits will stay exactly as large, or that it has no costs
+      beyond slower Friday replies. A stated premise, the intermediate conclusion or the recommendation
+      offered as the assumption earns 0.
+    disqualifiers:
+      - Offers only a stated premise (such as that the number of staff who left fell by half during the trial), the intermediate conclusion (that the trial's benefits outweigh its cost) or the main conclusion (that Brindle should make the four-day week permanent) as the assumption, with no distinct unstated claim. Mentioning a stated claim while also giving a distinct assumption does not trigger this.
+    rubric:
+      - States a claim the argument does not state that bridges one of the argument's two steps (for example, that the fall in departures was not entirely due to something other than the four-day week, that its benefits would not all disappear once it was no longer new, or that no cost the trial did not show would outweigh them), not a premise or either stated conclusion.
+      - States it no more strongly than the argument needs, so that if it were false the trial's results would no longer support making the four-day week permanent (its benefits would not be due to it, would not last, or would be outweighed), rather than a claim that the four-day week was the only reason fewer staff left or that its benefits will stay exactly as large.
+    anchors:
+      - points: 2
+        answer: Once the four-day week stopped being new, its benefits wouldn't all disappear.
+        note: >-
+          a different bridge from the reference (whether the benefits last rather than what caused the fall in
+          departures); if it were false, a permanent four-day week would bring the slower Friday replies with
+          none of the benefits, and the trial would no longer support making it permanent
+      - points: 1
+        answer: The four-day week was the only reason fewer staff left during the trial.
+        note: >-
+          near miss, too strong: the argument needs the four-day week to be part of the reason, not the only
+          one; if a pay rise also helped, the trial could still support the recommendation
+      - points: 0
+        answer: During the trial, the number of staff who left fell by half.
+        note: a stated premise, not an assumption (disqualifier)
+    likely_errors: [overstated, restates-conclusion, wrong-gap, missed-alternative]
+---
+Brindle Software should make its four-day working week permanent. Some of its managers want to end the
+six-month trial, pointing out that customers sometimes wait longer for replies on Fridays. That complaint
+is fair, but it misses the larger picture. During the trial, the company finished as many projects as it
+had in the six months before, and the number of staff who left fell by half. Since keeping experienced
+staff matters more to the company's success than how quickly customers get replies on one day a week, the
+trial's benefits outweigh its cost.
+````
+
+### File: content/exercises/arg-0037.md
+
+````yaml
+---
+schema: 3
+id: arg-0037
+status: draft
+kind: argument
+difficulty: 3
+topics: [wildlife, architecture]
+source:
+  type: original
+  title: null
+  creator: null
+  year: null
+  locator: null
+  license_uri: null
+  attribution: null
+  rights_basis: null
+  modifications: null
+contributors: []
+ai_assistance:
+  used: true
+  notes: Stimulus, tasks, references, anchors and rubric drafted by Claude; awaiting human review and edits.
+approved_by: null
+approved_at: null
+approved_revision: null
+tasks:
+  - key: strengthen
+    status: active
+    skill: strengthen
+    difficulty: 2
+    difficulty_note: >-
+      The comparison with the previous autumn controls for fixed differences between the two sides, but a
+      change on the east side other than the film, or a difference in how reliably dead birds were found,
+      could still explain the gap. Strong strengtheners count strikes directly, show that nothing else changed
+      on the east side, or repeat the result by covering the other side. A fact suggesting that something else
+      lowered the east-side count points the other way.
+    prompt: >-
+      Give a new fact that, if true, would materially strengthen the argument, and explain how. Treat the
+      stated premises as true.
+    max: 2
+    reference: >-
+      Cameras recorded every bird that struck the library's windows that autumn: 11 struck the east windows
+      and 50 the west windows. So the difference lies in how many birds hit the windows, not just in how many
+      dead birds were found.
+    accept: >-
+      Any new fact, consistent with the premises and not already stated in them, that makes it more likely
+      that the dotted film greatly reduces the number of birds that fly into the windows, with an explanation
+      of how. Main kinds: a direct count of strikes showing far fewer on the filmed side; evidence that
+      nothing else changed on the east side (as many birds flew past each side, and no new trees, lights or
+      building work appeared there); evidence that dead birds were found as reliably below each side; the
+      result repeating when the film was put on other windows. A strengthener need not prove the conclusion. A
+      qualifying new fact whose bearing is not explained earns 1. A fact pointing the other way, such as
+      something new near the east side that could remove dead birds or keep birds away, earns 0.
+    rubric:
+      - Gives a new fact, consistent with the stated premises and not already stated in them, that makes it materially more likely that the dotted film greatly reduces the number of birds that fly into the windows (a fact pointing the other way does not count).
+      - Explains how the fact strengthens the argument, namely why it makes the film more likely to be the reason for the gap in dead birds, or the gap more likely to reflect fewer birds hitting the windows (for example, because strikes were counted directly, because nothing else changed on the east side, or because the result was repeated).
+    anchors:
+      - points: 2
+        answer: >-
+          When the college later covered the west windows too, the number of dead birds found below them the
+          next autumn fell from 41 to 8. The drop followed the film to the other side, so it's unlikely to be
+          down to something about the east side alone.
+        note: >-
+          a different strengthener from the reference (the result repeating on the other side rather than a
+          direct count of strikes)
+      - points: 1
+        answer: About the same number of birds flew past each side of the library that autumn.
+        note: the right kind of fact, but the answer does not explain how it supports the argument
+      - points: 0
+        answer: A family of foxes began living near the east side of the library last summer.
+        note: >-
+          points the other way: foxes could have taken dead birds from below the east windows, another
+          explanation for the low count there
+    likely_errors: [no-reasoning, irrelevant, missed-alternative, understated]
+  - key: assumption
+    status: active
+    skill: assumption
+    difficulty: 3
+    difficulty_note: >-
+      Two gaps, a cause and a measure. The comparison with the previous autumn controls for fixed differences
+      between the sides, but not for a change on the east side other than the film, such as far fewer birds
+      flying past it. And the evidence counts dead birds found, not birds that hit the windows, so the count
+      could fall if dead birds went missing more often below the east windows. A necessary assumption rules
+      out that one of these alone explains the gap; requiring that nothing at all besides the film changed on
+      the east side, or that every dead bird was found, is stronger than needed.
+    prompt: >-
+      State an assumption the argument needs: a claim that, if false, would make the argument fall apart. (A
+      necessary assumption; it need not make the argument airtight.)
+    max: 2
+    reference: >-
+      The gap between the dead birds found below the east and west windows is not entirely due to some change
+      on the east side other than the film, such as far fewer birds flying past that side that autumn.
+    accept: >-
+      The inference under test is from "9 dead birds were found below the filmed east windows and 41 below the
+      bare west windows, after about 40 below each side the previous autumn" to "the dotted film greatly
+      reduces the number of birds that fly into the windows". Any unstated claim counts whose denial, with
+      every premise kept, would defeat that inference. Main bridges: (a) the gap is not entirely due to some
+      change on the east side other than the film, such as far fewer birds flying past it or a new tree
+      shielding its windows; (b) dead birds did not go missing (taken by scavengers or cleared away) so much
+      more often below the east windows that this alone explains the gap; (c) the film did not merely leave
+      more of the birds that hit the east windows alive while just as many hit them. Claims stronger than
+      needed earn 1, such as that nothing at all besides the film changed on the east side, that every dead
+      bird was found, or that exactly as many birds flew past each side. Repeating a premise or restating the
+      conclusion earns 0.
+    disqualifiers:
+      - Offers only a stated premise (such as the counts of dead birds below each side) or a version of the conclusion (that the dotted film reduces the number of birds that fly into the windows) as the assumption, with no distinct unstated claim. Mentioning a stated claim while also giving a distinct assumption does not trigger this.
+    rubric:
+      - States a claim the argument does not state that rules out another explanation of the gap between the dead birds found below the east and west windows (for example, that it was not entirely due to some other change on the east side, or to dead birds going missing more often below the east windows), not a premise or a version of the conclusion.
+      - States it no more strongly than the argument needs, so that if it were false the gap would be explained by something other than the film reducing the number of birds hitting the windows, rather than a claim that nothing at all besides the film changed on the east side or that every dead bird was found.
+    anchors:
+      - points: 2
+        answer: >-
+          Scavengers or cleaners didn't take away dead birds so much more often on the east side that this
+          alone explains the gap.
+        note: >-
+          a different bridge from the reference (whether dead birds were found as reliably on each side rather
+          than another change on the east side); if it were false, the gap would reflect missing birds, not
+          fewer strikes
+      - points: 1
+        answer: Nothing besides the film changed on the east side of the library between the two autumns.
+        note: >-
+          near miss, too strong: a change that could not explain the gap, such as a new bench, would not hurt
+          the argument
+      - points: 0
+        answer: Staff found 9 dead birds below the east windows and 41 below the west windows.
+        note: a stated premise, not an assumption (disqualifier)
+    likely_errors: [overstated, missed-alternative, restates-conclusion, wrong-gap]
+---
+Birds often fly into the large windows of Penrose College's library. Last spring the college covered the
+windows on the library's east side with a film printed with small white dots and left the west-side
+windows bare. During the autumn migration that followed, staff found 9 dead birds below the east windows
+and 41 below the west windows. In the previous autumn they had found about 40 below each side. The
+college's grounds manager concludes that the dotted film greatly reduces the number of birds that fly
+into the windows.
+````
+
+### File: content/exercises/arg-0038.md
+
+````yaml
+---
+schema: 3
+id: arg-0038
+status: draft
+kind: argument
+difficulty: 3
+topics: [transport, islands]
+source:
+  type: original
+  title: null
+  creator: null
+  year: null
+  locator: null
+  license_uri: null
+  attribution: null
+  rights_basis: null
+  modifications: null
+contributors: []
+ai_assistance:
+  used: true
+  notes: Stimulus, tasks, references, anchors and rubric drafted by Claude; awaiting human review and edits.
+approved_by: null
+approved_at: null
+approved_revision: null
+tasks:
+  - key: assumption
+    status: active
+    skill: assumption
+    difficulty: 3
+    difficulty_note: >-
+      Analogy: the study settles that the fare cut caused Corran's rise, so the gap is whether Lissay is like
+      Corran in what made the cut work. A necessary assumption rules out a difference that would stop a
+      cheaper fare from bringing a large rise on Lissay: a ferry service that could not carry many more
+      crossings, or fares so often paid by someone else that halving the resident fare would barely change
+      what residents pay. Requiring that Lissay's residents are like Corran's in every way that matters, that
+      every resident pays the full fare, or that the ferry has empty seats on every crossing is stronger than
+      needed.
+    prompt: >-
+      State an assumption the argument needs: a claim that, if false, would make the argument fall apart. (A
+      necessary assumption; it need not make the argument airtight.)
+    max: 2
+    reference: Lissay's ferry service could carry many more crossings by its residents than it does now.
+    accept: >-
+      The inference under test is from "halving Corran's resident fare caused a 40 percent rise in residents'
+      crossings, and Lissay's resident fare is the same as Corran's was before the cut" to "halving Lissay's
+      resident fare would bring a large rise in the number of crossings its residents make". Any unstated
+      claim counts whose denial, with every premise kept, would defeat that inference. Main bridges: (a)
+      Lissay's ferry service could carry many more crossings by residents, on existing or added sailings; (b)
+      not so many of Lissay's residents have their fares paid by someone else, such as an employer, that
+      halving the resident fare would barely change what residents pay to cross. Claims stronger than needed
+      earn 1, such as that Lissay's residents are like Corran's in every way that matters, that every Lissay
+      resident pays the full fare themselves, or that the ferry has plenty of empty seats on every crossing.
+      Repeating a premise or restating the conclusion earns 0.
+    disqualifiers:
+      - Offers only a stated premise (such as that Lissay's resident fare is the same as Corran's was before the cut) or a version of the conclusion (that halving the fare would bring a large rise in residents' crossings) as the assumption, with no distinct unstated claim. Mentioning a stated claim while also giving a distinct assumption does not trigger this.
+    rubric:
+      - States a claim the argument does not state that rules out a difference between Lissay and Corran that would stop a cheaper fare from bringing a large rise in crossings on Lissay (for example, that Lissay's ferry service could carry many more crossings, or that not so many residents have their fares paid by someone else that a cut would barely change what they pay), not a premise or a version of the conclusion.
+      - States it no more strongly than the argument needs, so that if it were false a cheaper fare could not bring a large rise in crossings on Lissay, rather than a claim that Lissay's residents are like Corran's in every way, that every resident pays the full fare, or that the ferry has empty seats on every crossing.
+    anchors:
+      - points: 2
+        answer: >-
+          Not so many of Lissay's residents have their fares paid by employers that halving the fare would
+          barely change what they pay to cross.
+        note: >-
+          a different bridge from the reference (who pays the fare rather than the ferry service's capacity);
+          if it were false, the cut would barely change what residents pay, so Corran's result would give no
+          reason to expect a large rise
+      - points: 1
+        answer: Lissay's residents are like Corran's residents in every way that affects how often they cross.
+        note: >-
+          near miss, too strong: the islands could differ in many ways, such as income or the length of the
+          crossing, without stopping a cheaper fare from bringing a large rise on Lissay
+      - points: 0
+        answer: Halving the fare on Lissay would make its residents cross to the mainland much more often.
+        note: a version of the conclusion, not an assumption (disqualifier)
+    likely_errors: [overstated, restates-conclusion, wrong-gap, scope-shift]
+  - key: weaken
+    status: active
+    skill: weaken
+    difficulty: 2
+    difficulty_note: >-
+      The study rules out other causes of Corran's rise, so the gap is whether Lissay resembles Corran. A
+      weakener names a difference that would keep a cheaper fare from bringing a large rise on Lissay: ferries
+      already full, sailings too few to carry many more residents, or residents whose fares are mostly paid by
+      someone else. Disputing that the fare cut caused Corran's rise denies a premise.
+    prompt: >-
+      Give a new fact that, if true, would materially weaken the argument, and explain how. Treat the stated
+      premises as true.
+    max: 2
+    reference: >-
+      Lissay's ferry runs only twice a week and is fully booked by residents on nearly every crossing.
+      Residents could make few extra crossings even if the fare were halved, so a large rise like Corran's is
+      unlikely.
+    accept: >-
+      Any new fact, consistent with every premise (the fare cut, not any other change, caused a 40 percent
+      rise in Corran residents' crossings, and Lissay's resident fare is the same as Corran's was before the
+      cut), that gives a real reason to doubt that halving Lissay's resident fare would bring a large rise in
+      residents' crossings, plus an explanation of how. Main kinds: ferries already full or sailing too seldom
+      to carry many more residents; residents whose fares are mostly paid by employers or others, so that a
+      cut would barely change what most of them pay; little reason for Lissay's residents to cross more often,
+      such as the ferry landing far from any mainland town. A qualifying fact whose effect is not explained
+      earns 1. A fact that denies a premise, such as the rise on Corran having another cause, earns 0.
+    disqualifiers:
+      - Denies a stated premise, for example that the fare cut, not some other change, caused the rise in Corran residents' crossings.
+    rubric:
+      - Gives a new fact, consistent with the stated premises and not already stated in them, that gives a material reason to doubt that halving Lissay's resident fare would bring a large rise in the number of crossings its residents make.
+      - Explains how the fact weakens the argument, namely why it makes Lissay unlike Corran in a way that would keep a cheaper fare from bringing a large rise (for example, because the ferries are already full or because residents' fares are mostly paid by someone else).
+    anchors:
+      - points: 2
+        answer: >-
+          Most Lissay residents who cross travel on passes paid for by their mainland employers, so halving
+          the resident fare wouldn't change what most of them pay. Corran's cut worked by making trips cheaper
+          for residents, so a big jump like Corran's is unlikely on Lissay.
+        note: a different weakener from the reference (who pays the fare rather than how full the ferries are)
+      - points: 1
+        answer: Lissay's ferry is fully booked on nearly every crossing.
+        note: the right fact, but the answer does not explain how it undercuts the conclusion
+      - points: 0
+        answer: >-
+          The rise in crossings on Corran came from a new hospital opening on the mainland, not the fare cut.
+        note: denies the premise that the fare cut, not any other change, caused the rise (disqualifier)
+    likely_errors: [contradicts-premise, no-reasoning, scope-shift, understated]
+---
+Two years ago the island of Corran halved the ferry fare its residents pay to cross to the mainland, and
+over the following year residents' crossings rose by 40 percent. A study found that the fare cut, not any
+other change, caused the rise. The resident fare on Lissay, a nearby island, is the same as Corran's was
+before the cut. Lissay's council concludes that halving its residents' fare would also bring a large rise
+in the number of crossings they make.
+````
