@@ -123,3 +123,118 @@ All ten land together, with the owner's re-approval of the eight exercises in pl
 ## 6. Response format
 
 Numbered findings, each with severity (`blocker`, `major`, `minor`, `nit`), the part and file, the problem and a proposed fix. Then one line each for A1 to A4 and B1 to B10: agree, change (with wording), or reject (with the reason).
+
+## Reviewer response
+
+GPT-6 Pro, round 3, in the same chat as rounds 1 and 2, received 2026-10-06 at about 19:30 UTC. The text is verbatim; only its headings are one level lower here. SHA-256 of the reply as copied: `4a0c7f1283c8b7a4ef442c62c8494fc8ab67fdddaa974cc582e0441743c87eea`.
+
+Reviewed commit `9dbb99597c2a2ef9019e8f4c34cc6bfa345b0c6a`; the packet’s SHA-256 matches. I checked the eight affected exercises and the relevant implementation, tests and contracts. This is not a second exhaustive audit of all 40 tasks, and I did not independently run the repository’s test suites.
+
+### Numbered findings
+
+#### 1. **major — Part A: historical references can acquire incompatible current explanations**
+**Files:** `src/ui/pages/RequestPage.tsx`, `docs/EXERCISE_FORMAT.md` §3.1, `docs/ARCHITECTURE.md` §4.1.
+
+`formLineOf` matches only exercise ID and task key. Those identifiers deliberately survive wording corrections, so they do not establish that the current form line fits the frozen reference and acceptance notes displayed beside it. This is an instructional-consistency problem, not a grading-payload leak. For example, after B6, an old reference could still assert “far fewer unhappy customers,” beside a current form explaining that the given rates do not establish customer counts. 
+
+**Fix:** retain current-bundle lookup, but display the form only when the current task’s snapshot hash matches the row’s frozen snapshot hash, in addition to the accepted-state requirement. Otherwise omit it, optionally explaining that a newer explanation belongs to revised content.
+
+This requires neither another store nor a snapshot-format change. Adding or correcting **only** a form leaves the snapshot hash unchanged, so that updated form remains available for compatible historical attempts. Test both directions: form-only edit → display; grading-payload edit under the same key → suppress. 
+
+#### 2. **major — Part B, B4: “makes it likely” still sets too high a threshold**
+**File:** `content/exercises/arg-0025.md`, `weaken.rubric[1]`.
+
+The proposed replacement removes a proof requirement but introduces a probability threshold. A weakener can make the alternative materially more plausible without making it more likely than not. The existing acceptance text asks for a reason to doubt the conclusion, not establishment of a probable alternative. 
+
+**Fix:** use:
+
+> Explains how the fact weakens the argument, namely why it makes it more plausible that the failed inspections were spread across clearly more than one restaurant in ten.
+
+Accept the proposed addition of **“clearly”** to criterion 1. Keep the material-effect requirement there. Add the packet’s “not every restaurant failed all four inspections” answer as a regression case: establishing only a minimum of 101 restaurants does not, by itself, materially challenge “about one in ten.”
+
+#### 3. **minor — Part B, B1: “main cause” and “most of the decline” should not be interchangeable**
+**File:** `content/exercises/arg-0012.md`, `strengthen.rubric[1]`.
+
+I disagree with dismissing this difference as negligible. A contribution can be the largest without exceeding half: contributions of 40%, 35% and 25% illustrate the distinction. Criterion 1 and the conclusion use “most,” while criterion 2 substitutes “main cause.” A trainer teaching precise quantity and claim strength should preserve the original threshold. 
+
+**Fix:** retain B1’s proposed qualifications and change criterion 2 to:
+
+> Explains how the fact strengthens the argument, namely why it makes it more likely that the cameras caused most of the decline …
+
+For the acceptance note, an explicit boundary would be useful:
+
+> Repeating the stated citywide comparison or the exclusion of citywide changes as the main cause is not new. Further evidence limiting their contribution can qualify.
+
+This does not require a strengthener to prove that the cameras caused most of the decline.
+
+#### 4. **minor — Part A: the tests support the design, but the packet overstates their direct coverage**
+**Files:** `tests/unit/content.test.ts`, `tests/e2e/grading.spec.ts`.
+
+The unit test compares complete snapshots, including hashes, and checks that a marker is absent from the rendered prompt. That is strong evidence: the snapshot builder omits `form`, and the prompt renderer consumes snapshots. However, the test does not directly compare the before/after full prompts. 
+
+The browser test checks the Library, the completed session, the grading preview and the accepted result. Its `practice` helper finishes answering before returning, so the form-specific assertions do not actually inspect the answer page while the student is answering. It also does not exercise form visibility through needs-review, discard or undo. The current accepted-state guard looks correct; these are coverage gaps, not demonstrated early disclosure. 
+
+**Fix:** add direct full-prompt equality with fixed request inputs; a schema-3 → schema-4 comparison; rejection of a form-only edit using stale approval; and browser assertions while answering and across the excluded row states. Include finding 1’s historical-payload mismatch case. Keep the existing positive accepted-result test.
+
+#### 5. **minor — Parts A/B: put the task-key exception in the contract itself**
+**Files:** `docs/EXERCISE_FORMAT.md` §6, `docs/DECISIONS.md`, audit disposition.
+
+The format document’s score-changing-edit rule remains broader than the October 5 decision’s exception for corrections that restore already-established requirements. Leaving the qualification only in the decision log makes future classification unnecessarily ambiguous. 
+
+**Fix:** add an explicit qualification to §6:
+
+> A correction may retain its task key when it brings inconsistent reference, acceptance, rubric or anchor-note wording into line with the task requirements already established by the prompt, premises and acceptance criteria. It still requires re-approval and recording the changed snapshot revision. Changing the intended requirements or scoring standard requires a new task key.
+
+**B1–B4 qualify for retained keys here.** B1 restores the premise’s limited exclusion; B2 applies the existing “no stronger than needed” requirement; B3 removes a misleading explanation without changing its anchor’s score; B4 applies the existing material-weakening requirement. The additional wording in findings 2–3 also preserves those requirements. No automatic rewriting of historical grades is implied. 
+
+### A1–A4 dispositions
+
+**A1 — Change:** read from the current bundle only when the current grading-payload hash matches the frozen snapshot; otherwise omit the form. No additional store is necessary.
+
+**A2 — Agree:** accepted rows only, including confirmed self/manual grades; pending, needs-review, discarded and undone-to-pending rows must not show forms. Extend the tests accordingly.
+
+**A3 — Agree:** preserve schema 3 and its approvals; re-approve published schema-4 conversions after the grading check. The separately proposed key corrections still land before payload freezing.
+
+**A4 — Agree:** retain the one-line, 300-character limit and plain-text rendering. Describe “no markup” as “rendered as plain text, not interpreted as Markdown or HTML”; the schema does not reject every markup-looking string. 
+
+### B1–B10 dispositions
+
+**B1 — Change:** accept the limited-exclusion correction, and also replace criterion 2’s “main cause” with “caused most of the decline,” as in finding 3.
+
+**B2 — Agree:** the proposed wording requires a contribution from goat removal without excluding additional contributors; retain the task key. 
+
+**B3 — Agree:** the proposed note correctly identifies the anchor’s wrong target without claiming future attendance could never affect renewal; retain the zero-point anchor and task key. 
+
+**B4 — Change:** accept “clearly more” in criterion 1; use **“makes it more plausible”**, not “makes it likely,” in criterion 2; retain the task key.
+
+**B5 — Agree:** “grew large no more often than they stayed small” correctly includes the even split omitted by the original negation explanation. 
+
+**B6 — Agree:** replace the unsupported count claim with the 40%-versus-90% share comparison; the unknown volume prevents inferring “fewer.” 
+
+**B7 — Agree:** the proposed changes preserve the one-island evidence’s limited scope and treat goat removal as a possible contributing cause rather than the exclusive explanation. 
+
+**B8 — Agree:** the replacement preserves the supported “most” statement without converting the remaining eligible group into “few.” 
+
+**B9 — Agree:** the revised wording correctly distinguishes availability from attendance and removal of one obstacle from removal of every obstacle. 
+
+**B10 — Agree:** the revised wording treats the examples as evidence reducing replacement or alternative-cause explanations, not as eliminating them.
+
+## Triage
+
+Every point was accepted.
+
+| Point | Outcome |
+| --- | --- |
+| 1 (major), A1: an old reference can get a newer explanation beside it | Accepted. `formLineFor` (`src/domain/snapshot.ts`) returns a form line only while the task's current grading payload hashes to the attempt's snapshot, and `RequestPage` uses it for accepted rows. Recorded in `EXERCISE_FORMAT.md` §3.1, `ARCHITECTURE.md` §4.1 and the schema 4 entry in `DECISIONS.md`. A unit test covers both directions: a form-only edit still shows, and a key correction under the same key hides it for the old snapshot. |
+| 2 (major), B4: "makes it likely" sets too high a bar | Accepted. Criterion 2 now says "makes it more plausible that"; criterion 1 keeps "clearly". The "not every restaurant failed all four inspections" answer goes into Claude's test set for the grading check as a regression case. It is not added as an anchor, so the task's anchors stay as reviewed. |
+| 3 (minor), B1: "main cause" is not "most of the decline" | Accepted. Criterion 2 now says "makes it more likely that the cameras caused most of the decline", and the `accept` text uses Pro's boundary: repeating the stated comparison or the exclusion of citywide changes as the main cause is not new, and further evidence limiting their contribution can qualify. |
+| 4 (minor): test coverage overstated | Accepted. Added: full-prompt equality for a schema 3 file moved to schema 4 with a form line; a form-only edit to a published exercise fails only on approval and needs no new ledger revision; the hash guard in both directions. The browser test now checks the answer page while answering, then a needs-review row, grading by hand, the accepted row (a score entered by hand), undo back to waiting, and discard. |
+| 5 (minor): put the task-key exception in the contract | Accepted. `EXERCISE_FORMAT.md` §6 now has the qualification, citing the 2026-10-05 decision. |
+| A1 | Changed as in point 1. |
+| A2 | Agreed; covered by the tests in point 4. |
+| A3 | Agreed; no change. |
+| A4 | Agreed. `EXERCISE_FORMAT.md` §3.1 says a form line is rendered as plain text, not interpreted as Markdown or HTML. |
+| B1, B4 | Changed as in points 3 and 2. |
+| B2, B3, B5 to B10 | Agreed; unchanged. |
+
+The ten corrections, with Pro's wording for B1 and B4, land in this PR together with the owner's re-approval of the eight exercises and the new ledger revisions, before the grading check freezes payloads. Until then they wait as a patch, because a published exercise edited without re-approval fails the content build.

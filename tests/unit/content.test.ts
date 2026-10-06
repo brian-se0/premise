@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { stringify } from 'yaml';
 import { PROMPT_BUDGET, MAX_ANSWER_LENGTH, renderPrompt } from '../../src/domain/prompt.ts';
-import { buildSnapshot } from '../../src/domain/snapshot.ts';
+import { buildSnapshot, formLineFor } from '../../src/domain/snapshot.ts';
 import type { BuiltExercise, Exercise } from '../../src/domain/types.ts';
 import {
   bundleExercises,
@@ -387,8 +387,9 @@ describe('content validation', () => {
   });
 
   it('schema 4: a form line changes the content revision but never the snapshot or the grading prompt', async () => {
-    const plain = { ...baseDoc(), schema: 4 };
-    const withForm = structuredClone(plain);
+    // A schema 3 file moved to schema 4 with a form line: the same grading text, compared byte for byte.
+    const plain = baseDoc();
+    const withForm = { ...structuredClone(plain), schema: 4 };
     const form = 'FORM-LINE-MARKER: rule renew -> rose; the director infers rose -> renew.';
     task(withForm).form = form;
     const body = normalizeBody(BODY);
@@ -402,10 +403,50 @@ describe('content validation', () => {
     const [a, b] = [await built(plain), await built(withForm)];
     expect(b).toEqual(a);
     expect(JSON.stringify(b)).not.toContain('FORM-LINE-MARKER');
-    const rows = b.map((snapshot, i) => ({ rowId: `I0${i + 1}`, attemptId: `a${i}`, snapshot, answer: 'An answer.' }));
-    const prompt = renderPrompt('00000000-0000-4000-8000-000000000000', 'ZZZZZZ', rows);
-    expect(prompt).not.toContain('FORM-LINE-MARKER');
-    expect(prompt).not.toContain(form);
+    const prompt = (snapshots: typeof a) =>
+      renderPrompt(
+        '00000000-0000-4000-8000-000000000000',
+        'ZZZZZZ',
+        snapshots.map((snapshot, i) => ({ rowId: `I0${i + 1}`, attemptId: `a${i}`, snapshot, answer: 'An answer.' })),
+      );
+    expect(prompt(b)).toBe(prompt(a));
+    expect(prompt(b)).not.toContain('FORM-LINE-MARKER');
+  });
+
+  it('schema 4: adding a form line to a published exercise needs re-approval, and nothing else', async () => {
+    const published = await approve(baseDoc());
+    const ledger = await lock([published]);
+    const edited = { ...structuredClone(published), schema: 4 };
+    task(edited).form = 'Evidence: attendance is low. Claim: no one is harmed. Gap: low is not zero.';
+    const errors = await errorsFor([edited], { ledger });
+    expect(errors).toHaveLength(1);
+    expect(errors[0]).toMatch(/approved_revision does not match .* needs re-approval/);
+    // The grading payload is unchanged, so the ledger needs no new revision.
+    expect(await errorsFor([await approve(edited)], { ledger })).toEqual([]);
+  });
+
+  it('schema 4: a form line shows for a snapshot only while the task still grades the same way', async () => {
+    const doc = { ...baseDoc(), schema: 4 };
+    task(doc).form = 'Rule: low attendance. Claim: nobody harmed. Gap: low is not zero.';
+    const exercise = (d: Doc) => ({ ...d, stimulus: normalizeBody(BODY) }) as unknown as Exercise;
+    const e = exercise(doc);
+    const [flaw, assumption] = await Promise.all(e.tasks.map((t) => buildSnapshot(e, t)));
+
+    expect(await formLineFor([e], flaw!)).toBe(task(doc).form);
+    expect(await formLineFor([e], assumption!)).toBeNull();
+    expect(await formLineFor([], flaw!)).toBeNull();
+
+    // A form-only edit keeps the grading payload, so the corrected line shows for earlier attempts too.
+    const formOnly = structuredClone(doc);
+    task(formOnly).form = 'Rule: low attendance. Claim: nobody harmed. Gap: few is not none.';
+    expect(await formLineFor([exercise(formOnly)], flaw!)).toBe(task(formOnly).form);
+
+    // A key correction under the same task key changes the payload: the old snapshot shows no line.
+    const corrected = structuredClone(formOnly);
+    task(corrected).reference = 'Low attendance does not show that no one relies on Sunday hours.';
+    expect(await formLineFor([exercise(corrected)], flaw!)).toBeNull();
+    const current = await buildSnapshot(exercise(corrected), exercise(corrected).tasks[0]!);
+    expect(await formLineFor([exercise(corrected)], current)).toBe(task(corrected).form);
   });
 
   it('rule 13: word counts outside the range warn', async () => {

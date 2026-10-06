@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router';
 import { content } from '../../content.ts';
 import { formatLocalDate, localDateOf } from '../../domain/dates.ts';
@@ -37,6 +37,7 @@ import {
   type RowState,
 } from '../../storage/ops.ts';
 import { openMisses } from '../../domain/planner.ts';
+import { formLineFor } from '../../domain/snapshot.ts';
 import { ctx, db, loadPlannerState, newOpId, saveSetting, useLive, useSettings } from '../runtime.ts';
 import { NotFoundPage } from './NotFoundPage.tsx';
 
@@ -590,11 +591,20 @@ function taskLabel(s: SnapshotRecord): string {
   return content.taxonomy.skills[s.skill]?.label ?? s.skill;
 }
 
-/** The task's current form line (docs/METHOD.md §5). Display only: never part of a snapshot or prompt. */
-function formLineOf(s: SnapshotRecord): string | null {
-  const exercise = content.exercises.find((e) => e.id === s.exerciseId);
-  const key = s.taskId.slice(s.exerciseId.length + 1);
-  return exercise?.tasks.find((t) => t.key === key)?.form ?? null;
+/** The task's form line (docs/METHOD.md §5) for an accepted row. Display only: never part of a snapshot or prompt. */
+function useFormLine(s: SnapshotRecord, accepted: boolean): string | null {
+  const [found, setFound] = useState<{ hash: string; line: string | null } | null>(null);
+  const { exerciseId, taskId, hash } = s;
+  useEffect(() => {
+    let live = true;
+    void formLineFor(content.exercises, { exerciseId, taskId, hash }).then((line) => {
+      if (live) setFound({ hash, line });
+    });
+    return () => {
+      live = false;
+    };
+  }, [exerciseId, taskId, hash]);
+  return accepted && found?.hash === hash ? found.line : null;
 }
 
 function feedbackText(row: Row): string | null {
@@ -649,7 +659,7 @@ function RowView({
   const feedback = feedbackText(row);
   const tip = feedback ? tipOf(feedback) : null;
   const missed = state === 'accepted' && grading!.score! < grading!.max;
-  const form = state === 'accepted' ? formLineOf(snapshot) : null;
+  const form = useFormLine(snapshot, state === 'accepted');
 
   const act = (p: Promise<unknown>) => p.then(() => setMode('none')).catch((e: unknown) => onNotice(errorText(e)));
 

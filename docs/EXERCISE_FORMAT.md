@@ -80,7 +80,9 @@ Stimulus text. Arguments: 60–180 words. Passages: 350–550 words, 3–5 parag
 
 A form line is one author-written line giving the skeleton a task turns on, in the terms of `METHOD.md` §3. It is display only:
 
-- The app shows the task's current form line with the reference answer after the task's grade is accepted, never while the student is answering or before grading.
+- The app shows the task's current form line with the reference answer after the task's grade is accepted, never while the student is answering, before grading, or for a row that waits, needs review or was discarded.
+- It shows only while the task's current grading payload still hashes to the attempt's snapshot. After a key correction under the same task key, older attempts show no form line beside their older reference; a form-only edit leaves the hash unchanged, so the corrected line shows for them too.
+- It is rendered as plain text, not interpreted as Markdown or HTML.
 - It is not part of the snapshot payload (`ARCHITECTURE.md` §4.1), so it never enters a grading prompt, never changes a snapshot hash and is never a rubric criterion. Saved grading requests are unaffected by adding or editing one.
 - It is part of the content revision (§4 rule 7), so adding or editing one needs approval like any other edit, and a key check reviews form lines with the keys.
 - `form` is valid only under `schema: 4`. A schema 3 file is unchanged and needs no re-approval; moving a file to schema 4 to add form lines is an edit that does.
@@ -122,6 +124,7 @@ For open-ended skills, the reference is illustrative. `accept` describes the log
 
 - Wording fixes that do not change what a task tests: edit in place and re-approve (the content revision changes).
 - Any change to what a task tests, its max, rubric or anchors in a way that changes scores: add a new task key (e.g. `flaw-2`) and set the old task's `status: retired`. Old attempts keep their frozen snapshot, so history stays readable.
+- Except: a correction may keep its task key when it brings inconsistent reference, `accept`, rubric or anchor-note wording into line with the requirements the prompt, premises and `accept` text already establish, even if some answers that are not anchors then score differently (`DECISIONS.md`, 2026-10-05). It still needs re-approval, and its changed snapshot revision is recorded in the ledger. Changing the intended requirements or scoring standard needs a new task key. Past grades are not rewritten.
 - A task is **available** for study only when its exercise is `published` and the task is `active`.
 - Retired tasks, tasks of retired exercises, and tasks no longer present in the content are excluded from all new sessions and from due counts. Their cards and history are kept and shown in history. Cards are never transferred to a replacement task key; the replacement starts fresh.
 - Drafts are built only in development; production builds include `published` and `retired` exercises only.

@@ -76,7 +76,7 @@ A snapshot freezes everything needed to show, grade and count one task. Its payl
 - `credit` is the output of the shared credit formatter (`EXERCISE_FORMAT.md` §7), or null.
 - The hash is SHA-256 over the payload serialized as JSON with keys sorted, no insignificant whitespace, strings exactly as built (no Unicode normalization), arrays in authored order. It is written as lowercase hex.
 - Fields that are not part of the payload, such as `firstSeenAt`, are stored beside it and never hashed.
-- A task's form line (`EXERCISE_FORMAT.md` §3.1) is deliberately not in the payload: it is display-only content read from the current bundle, so it can never reach a grading prompt or change a hash.
+- A task's form line (`EXERCISE_FORMAT.md` §3.1) is deliberately not in the payload: it is display-only content read from the current bundle, so it can never reach a grading prompt or change a hash. It is shown for an attempt only while the task's current payload hash equals the attempt's snapshot hash.
 - Because `taskId` is in the payload, two tasks with identical grading text still get different hashes.
 - Import recomputes every snapshot hash and rejects the file if any differs.
 
