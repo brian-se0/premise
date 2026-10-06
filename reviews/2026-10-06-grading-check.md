@@ -1,6 +1,6 @@
 # Grading check: blind second scoring and review of PR #16
 
-Reviewer: an independent Claude Opus 5.5 session at maximum effort, started by the coordinator in its own thread on 2026-10-06 and briefed only by the packet below (`/mnt/project-files/grading-check/README.md` in the project's shared folder; one session id replaced). Phase 1 produced `pilot/second-scores.yaml`, committed verbatim at 7094d21. Phase 2 reviewed PR #16 at 6bb3c21 and 7094d21. The response is copied from `/mnt/project-files/reviews/2026-10-06-grading-check-review.md` as it stood at 21:05 UTC, with headings moved down two levels.
+Reviewer: an independent Claude Opus 5.5 session at maximum effort, started by the coordinator in its own thread on 2026-10-06 and briefed only by the packet below (`/mnt/project-files/grading-check/README.md` in the project's shared folder; one session id replaced). Phase 1 produced `pilot/second-scores.yaml`, committed verbatim at 7094d21. Phase 2 reviewed PR #16 at 6bb3c21 and 7094d21. The response is copied from `/mnt/project-files/reviews/2026-10-06-grading-check-review.md`, with headings moved down two levels: the review as it stood at 21:05 UTC, then the reviewer's addendum of 21:15 UTC, which checked the fixes.
 
 ## Packet
 
@@ -172,6 +172,25 @@ Final-label digest at 7094d21, for finding 4: `808927cf4b80c3b1cebafd72409596a5f
 Screening odds behind finding 2: the chance of at least 16 of 20 in one run is 0.24, 0.41, 0.63, 0.83 and 0.96 for a true exact agreement of 70%, 75%, 80%, 85% and 90%.
 
 
+### Addendum: check of the fixes at 9321593 (21:15 UTC)
+
+The answer thread fixed the findings in 9e168cc and recorded this review with its triage in 9321593. At 9321593, `npm run check` passes (436 tests), and in a scratch copy:
+
+- A held-out run with 3 of 5 replies prints "Not screened" with coverage 12/20; a complete one is screened, and an empty reply counts as a manual outcome.
+- A re-approved edit to arg-0020.weaken's key, a changed gold score and a late acceptable-score set are each refused by both `pilot:score` and `pilot:prompt`. Flipping a held-out exercise to development is refused by the mixing check.
+- `pilot:prompt` refuses to rebuild dev-a. Both held-out orders build, with four different tasks in every request. Keeping the development orders is the alternative finding 8 offered.
+- `registration.ts` holds the pre-registered digest, the final-label digest above and all 28 task hashes, the six held-out ones matching the table above.
+- The committed record matches this file as it stood at 21:05, apart from heading levels.
+
+Four small follow-ups, none blocking:
+
+1. **The PC run's `notes.csv` columns differ from the ones the report reads.** `grading-check/pc-run-brief.md` asks for run, request, chatbot, local time, model label, account, chat mode, copy method and notes, with no `label`, `client` or `search` column. With those columns the report prints "No notes.csv lines for this run" and does not flag a model switch (tested with a switch inside a run). Convert the file to the `pilot/README.md` header when committing it, with `label` such as `chatgpt-1`, or have `report.ts` accept the brief's columns.
+2. **A byte-order mark zeroes feedback matching.** A saved reply that starts with U+FEFF still parses clean scores but matches no feedback (0/20 in my test), because the parser rightly treats U+FEFF as text. The PC brief writes without one, but `pilot/README.md` only says UTF-8. Say "UTF-8 without a byte-order mark", and have `report.ts` strip a leading U+FEFF from the file with a remark, since a pasted reply never carries one.
+3. ~~**The registration's timing claim.** `pilot/registration.ts:1` and §9 say the values were registered before any chatbot reply was saved, but 9e168cc was committed at 21:04 UTC, and the PC run may have saved development replies before then. The values equal those committed at 7094d21 (20:38:48 UTC), before any reply reached the answer thread. Say that, and compare the first time in the PC run's `notes.csv` with it.~~ Withdrawn: project memory records that the PC session began pasting after the owner's go-ahead at 21:09 UTC, after 9e168cc, so the claim stands. The first time in the PC run's `notes.csv` will confirm it.
+4. **Saving phone replies.** Save each from the message's full body as the fetch tools return it, not from the notification text: previews stop at about 8 KB, and text relayed between sessions here arrives with `<` and `>` escaped.
+
+Optional: the report could print each chatbot's §9 verdict and flag a chatbot with held-out runs in only one order.
+
 ## Triage
 
 Fixes are in 9e168cc unless noted. The development prompts already on the owner's PC are unchanged.
@@ -192,3 +211,11 @@ Fixes are in 9e168cc unless noted. The development prompts already on the owner'
 14. **Accepted.** Search and tools off where the chatbot allows, a `search` column in `notes.csv`, and a report flag. The owner's go-ahead to the PC session asks for search and memory off.
 
 Nits: §9 no longer calls the set "hand-graded"; a reply to choose from and a missing reply count toward the manual-outcome target, and the table says so; `tests/unit/pilot-report.test.ts` runs the report end to end (row mapping, an incomplete run, label grouping, pooling, notes flags).
+
+Addendum follow-ups, in 1b25359 and the commit after it:
+
+1. **Accepted, by conversion.** Claude converts the PC session's notes to the `pilot/README.md` header, with a `label` such as `chatgpt-1`, when committing each run, so the report reads one format.
+2. **Accepted.** `report.ts` strips a leading byte-order mark with a remark, a test covers it, and `pilot/README.md` asks for UTF-8 without one.
+3. **Withdrawn by the reviewer.** `registration.ts` now also says its values are those at 7094d21; the first time in the PC run's notes will be checked against the owner's go-ahead at 21:09 UTC.
+4. **Accepted.** Phone replies are saved from the message's full body as the fetch tools return it, with relayed `&lt;` and `&gt;` restored.
+5. **Optional, done.** The report prints each chatbot's verdict under §9 "Choosing among chatbots": passes, does not pass, not screened (an incomplete run), or not decided (held-out runs in only one order).

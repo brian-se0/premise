@@ -162,6 +162,7 @@ describe('pilot report', () => {
     expect(text).toContain('**No notes.csv lines for this run:**');
     expect(text).toContain('| Replies: clean | 5/5 (100%) |');
     expect(text).toContain('| Feedback matched (rows) | 20/20 (100%) |');
+    expect(text).toContain('- request-01: the saved file began with a byte-order mark, which was ignored.');
     expect(text).toContain(
       '- claude: passes: every target met in all 2 held-out runs, in 2 orders. Reported apart: a Claude pass alone cannot select outcome 1.',
     );

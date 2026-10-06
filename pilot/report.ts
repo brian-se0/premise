@@ -135,7 +135,9 @@ export function buildReport(
           rows: fixture.rows.map((r) => ({ rowId: r.rowId, max: max(r), allowedTags: snapshots.get(r.taskId)!.allowedTags })),
         };
         // A byte-order mark is a file-encoding artifact, never part of a pasted reply.
-        const reply = readFileSync(path, 'utf8').replace(/^\uFEFF/, '');
+        const raw = readFileSync(path, 'utf8');
+        const reply = raw.replace(/^\uFEFF/, '');
+        if (reply !== raw) remarks.push(`${name}: the saved file began with a byte-order mark, which was ignored.`);
         const parsed = parseReply(reply, request);
         let outcome: ReplyOutcome;
         if (parsed.kind === 'parsed') outcome = parsed.block.outcome;
