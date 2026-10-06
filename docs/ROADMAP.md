@@ -1,6 +1,6 @@
 # Roadmap
 
-Status: draft v0.5 (2026-10-04, after the difficulty consultation). Milestones are ordered. Each ends with a peer review (`PEER_REVIEW.md`) before it is considered done.
+Status: draft v0.6 (2026-10-06, selective formal method). Milestones are ordered. Each ends with a peer review (`PEER_REVIEW.md`) before it is considered done.
 
 ## M0. Content validity, then grading feasibility
 No app UI or storage yet. Two parts, in order.
@@ -15,6 +15,7 @@ No app UI or storage yet. Two parts, in order.
 - The owner answers them, then deliberately writes the answer types in `GRADING_PROTOCOL.md` §9: at least 12 answers per skill, with acceptable-score sets for genuinely ambiguous ones.
 - The pure prompt builder (`src/domain/prompt.ts`) and snapshot hashing are written now, with unit tests, and run from a small script; there is no second builder. The owner pastes the prompts into two or three chatbots, on phone and PC, twice each with different row orders.
 - Prompt wording, rubrics and the candidate chatbot configuration are frozen on the development exercises before the holdout run. A prompt change bumps the prompt version.
+- The check runs on frozen grading payloads, which contain no form lines and use the current taxonomy (`METHOD.md` §5). Adding error tags afterwards needs a recheck on the revised payloads before tags route anything.
 - Every input, prompt, raw reply and hand-checked parse result is saved under `tests/fixtures/pilot/`. Grades, disagreements, feedback matches and every moment of friction go in `pilot/LOG.md`.
 - Before the holdout run: the expected parse and feedback results for the development replies are frozen as fixtures.
 - **Done when** the §9 metrics are reported with counts and denominators, and one outcome is recorded in `DECISIONS.md`:
@@ -44,6 +45,7 @@ Does the repair loop earn its time for students past the basics? Runs on the M2 
 - Three to five self-studying students who know the basics use the repair loop and final-weeks mode for a week, alongside their usual official practice. Record first-attempt results on fresh stimuli, time per session including grading, disputed grades, whether a targeted error recurs on a fresh argument, and whether they found the time worth it.
 - Where practical, compare with an equal-time block of their usual review.
 - Grading holdouts and learning-transfer holdouts are kept separate.
+- If built by then, the formal-drill trial (`METHOD.md` §5): form lines plus 12 to 18 optional drills versus form lines alone at equal time, measured by errors on delayed fresh arguments and total minutes, not drill accuracy.
 - **Done when** results are recorded in `pilot/` and a go, change or stop decision is logged in `DECISIONS.md`. A small pilot cannot prove score gains; it shows whether students get a usable correction at an acceptable cost.
 
 ## M4. Daily use
