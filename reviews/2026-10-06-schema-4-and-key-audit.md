@@ -237,4 +237,8 @@ Every point was accepted.
 | B1, B4 | Changed as in points 3 and 2. |
 | B2, B3, B5 to B10 | Agreed; unchanged. |
 
-The ten corrections, with Pro's wording for B1 and B4, land in this PR together with the owner's re-approval of the eight exercises and the new ledger revisions, before the grading check freezes payloads. Until then they wait as a patch, because a published exercise edited without re-approval fails the content build.
+The ten corrections, with Pro's wording for B1 and B4, land in this PR together with the owner's re-approval of the eight exercises and the new ledger revisions, before the grading check freezes payloads.
+
+## Owner decision
+
+2026-10-06, 19:40 UTC: the owner chose "Approve and merge" on the decision card "Re-approve the 8 corrected exercises and merge the Method PR?". The ten corrections, with Pro's wording for B1 and B4, are applied; the eight exercises carry their new `approved_revision`, and the ten changed snapshot revisions are recorded in `content/published-tasks.json`.
