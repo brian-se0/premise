@@ -1,25 +1,26 @@
 # Held-out exercises (arg-0020, arg-0024, arg-0027). Build and run only after the development runs have frozen the
 # prompt, rubrics and chatbot configuration (docs/GRADING_PROTOCOL.md §9).
-# Row order: a seeded shuffle (seed 404) of the answer ids. Answers: pilot/answers/.
+# Row order: a seeded shuffle (seed 404) of the answer ids, drawn again from the same generator until no request
+# holds two answers to one task (draw 239). Answers: pilot/answers/.
 run: holdout-b
 items:
-  - fla11
-  - str11
-  - asm12
-  - con12
-  - str12
-  - str14
-  - wea11
-  - con13
-  - asm11
   - str13
-  - fla14
   - asm14
   - con11
-  - fla13
-  - fla12
-  - wea14
-  - wea13
+  - fla11
+  - wea11
   - asm13
+  - con13
+  - fla14
+  - con12
+  - str11
+  - wea14
+  - fla13
+  - asm11
+  - fla12
+  - str12
   - wea12
   - con14
+  - wea13
+  - asm12
+  - str14

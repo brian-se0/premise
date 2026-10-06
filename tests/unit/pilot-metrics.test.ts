@@ -79,6 +79,13 @@ describe('pilot metrics', () => {
     expect(m.handRows).toEqual({ n: 2, d: 3 });
   });
 
+  it('counts replies to choose from and missing replies as manual outcomes', () => {
+    const m = computeMetrics([row(2, score(2))], ['clean', 'choose', 'missing', 'manual']);
+    expect(m.replies).toEqual({ clean: 1, recoverable: 0, manual: 1, choose: 1, missing: 1 });
+    expect(m.cleanParse).toEqual({ n: 1, d: 4 });
+    expect(m.manualOutcome).toEqual({ n: 3, d: 4 });
+  });
+
   it('reports an empty denominator as not evaluable, which never meets a target', () => {
     const m = computeMetrics([row(2, score(2))], ['clean']);
     expect(pct(m.falsePasses)).toBe('not evaluable');
@@ -163,6 +170,12 @@ describe('pilot answer files', () => {
     expect(load({ 'a.yaml': entry('x', 'arg-0013.conclusion', '  second: 2\n') })).toThrow(/second must be/);
     expect(load({ 'a.yaml': entry('x', 'arg-0009.flaw', '  second: 2\n  settled: 2\n') })).toThrow(/settlement reason/);
     expect(load({ 'a.yaml': entry('x', 'arg-0009.flaw', '  acceptable: [1]\n') })).toThrow(/two or more/);
+  });
+
+  it('requires a second score for every answer once any has one', () => {
+    expect(
+      load({ 'a.yaml': entry('x', 'arg-0009.flaw', '  second: 1\n') + entry('y', 'arg-0009.strengthen') }),
+    ).toThrow(/y: no second score/);
   });
 
   it('keeps the holdout split by whole exercise', () => {

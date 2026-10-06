@@ -8,6 +8,7 @@ import { loadExercises } from '../scripts/content.ts';
 import { buildSnapshot } from '../src/domain/snapshot.ts';
 import type { Snapshot } from '../src/domain/types.ts';
 import type { AnswerEntry } from './metrics.ts';
+import { REGISTRATION, type Registration } from './registration.ts';
 
 export const ANSWERS_DIR = join('pilot', 'answers');
 /** The owner's first answers to draft exercises: not part of the check (pilot/README.md). */
@@ -55,6 +56,11 @@ export function loadAnswers(snapshots: ReadonlyMap<string, Snapshot>, dir = ANSW
       answers.set(a.id, a);
     }
   }
+  // Once second scoring is recorded, every answer has a second score.
+  const unscored = [...answers.values()].filter((a) => a.second === undefined);
+  if (unscored.length > 0 && unscored.length < answers.size) {
+    throw new Error(`${unscored.map((a) => a.id).join(', ')}: no second score, though other answers have one`);
+  }
   // The split is by whole exercise (§9).
   const split = new Map<string, boolean>();
   for (const a of answers.values()) {
@@ -73,8 +79,47 @@ export function loadAnswers(snapshots: ReadonlyMap<string, Snapshot>, dir = ANSW
  * Later fields (second, settled, acceptable) do not change it.
  */
 export function goldDigest(answers: ReadonlyMap<string, AnswerEntry>): string {
-  const lines = [...answers.values()]
-    .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
-    .map((a) => JSON.stringify([a.id, a.task, a.answer, a.gold]));
+  return digest(answers, (a) => [a.id, a.task, a.answer, a.gold]);
+}
+
+/**
+ * SHA-256 over the final labels, recorded before the first chatbot reply is saved: one JSON line
+ * [id, task, answer, gold, second, settled, acceptable] per answer, sorted by id, with null for an
+ * absent field and the acceptable set sorted.
+ */
+export function labelDigest(answers: ReadonlyMap<string, AnswerEntry>): string {
+  return digest(answers, (a) => [
+    a.id,
+    a.task,
+    a.answer,
+    a.gold,
+    a.second ?? null,
+    a.settled ?? null,
+    a.acceptable === undefined ? null : [...a.acceptable].sort((x, y) => x - y),
+  ]);
+}
+
+function digest(answers: ReadonlyMap<string, AnswerEntry>, line: (a: AnswerEntry) => unknown[]): string {
+  const lines = [...answers.values()].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)).map((a) => JSON.stringify(line(a)));
   return createHash('sha256').update(lines.join('\n') + '\n').digest('hex');
+}
+
+/**
+ * Refuses an answer set or key that no longer matches what was registered before the first reply
+ * (pilot/registration.ts): a changed gold score, final label or task key.
+ */
+export function checkRegistration(
+  answers: ReadonlyMap<string, AnswerEntry>,
+  snapshots: ReadonlyMap<string, Snapshot>,
+  registered: Registration = REGISTRATION,
+): void {
+  const problems: string[] = [];
+  if (goldDigest(answers) !== registered.gold) problems.push("Claude's scores or the answers differ from the pre-registered digest");
+  if (labelDigest(answers) !== registered.labels) problems.push('the final labels differ from the registered digest');
+  for (const task of new Set([...answers.values()].map((a) => a.task))) {
+    if (snapshots.get(task)?.hash !== registered.tasks[task]) problems.push(`the key of ${task} differs from the one its answers were scored under`);
+  }
+  if (problems.length) {
+    throw new Error(`The grading check's registered inputs changed (pilot/registration.ts): ${problems.join('; ')}.`);
+  }
 }

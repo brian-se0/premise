@@ -43,8 +43,11 @@ export interface GradedRow {
   feedbackMatched: boolean;
 }
 
-/** Parse outcome of one reply: §6 outcomes, plus a reply with several different blocks to choose from. */
-export type ReplyOutcome = 'clean' | 'recoverable' | 'manual' | 'choose';
+/**
+ * Outcome of one request: the §6 parse outcomes, a reply with several different blocks to choose from,
+ * or no saved reply at all.
+ */
+export type ReplyOutcome = 'clean' | 'recoverable' | 'manual' | 'choose' | 'missing';
 
 export interface Ratio {
   n: number;
@@ -64,6 +67,7 @@ export interface Metrics {
   passFail: Ratio;
   replies: Record<ReplyOutcome, number>;
   cleanParse: Ratio;
+  /** Requests the student had to settle by hand (manual, choose or missing), over requests. */
   manualOutcome: Ratio;
   feedbackMatch: Ratio;
   /** Rows the student resolves by hand (no numeric score) over requests. */
@@ -78,7 +82,13 @@ export function computeMetrics(rows: readonly GradedRow[], replies: readonly Rep
   const full = exact.filter((r) => goldOf(r) === r.max);
   const sets = numeric.filter((r) => r.gold.kind === 'set');
   const count = (o: ReplyOutcome) => replies.filter((x) => x === o).length;
-  const outcomes = { clean: count('clean'), recoverable: count('recoverable'), manual: count('manual'), choose: count('choose') };
+  const outcomes = {
+    clean: count('clean'),
+    recoverable: count('recoverable'),
+    manual: count('manual'),
+    choose: count('choose'),
+    missing: count('missing'),
+  };
   return {
     rows: rows.length,
     coverage: { n: numeric.length, d: rows.length },
@@ -94,7 +104,7 @@ export function computeMetrics(rows: readonly GradedRow[], replies: readonly Rep
     passFail: { n: exact.filter((r) => (r.result.score === r.max) === (goldOf(r) === r.max)).length, d: exact.length },
     replies: outcomes,
     cleanParse: { n: outcomes.clean, d: replies.length },
-    manualOutcome: { n: outcomes.manual, d: replies.length },
+    manualOutcome: { n: outcomes.manual + outcomes.choose + outcomes.missing, d: replies.length },
     feedbackMatch: { n: rows.filter((r) => r.feedbackMatched).length, d: rows.length },
     handRows: { n: rows.length - numeric.length, d: replies.length },
   };
@@ -167,7 +177,7 @@ export function screen(m: Metrics): TargetCheck[] {
       : { target: 'At most one false pass', value: ratio(m.falsePasses), met: m.falsePasses.n <= 1 },
     atLeast('Pass/fail agreement ≥ 90%', m.passFail, 0.9),
     atLeast('Clean parse ≥ 90%', m.cleanParse, 0.9),
-    atMost('Manual outcome ≤ 2%', m.manualOutcome, 0.02),
+    atMost('Manual outcome ≤ 2% (counting replies to choose from and missing replies)', m.manualOutcome, 0.02),
     atLeast('Feedback match ≥ 90%', m.feedbackMatch, 0.9),
   ];
 }

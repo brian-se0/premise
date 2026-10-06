@@ -12,11 +12,12 @@
 //       task: arg-0001.flaw
 //       answer: The author assumes ...
 
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { basename, join } from 'node:path';
 import { parse } from 'yaml';
 import { planRequests, type GradingItem } from '../src/domain/prompt.ts';
-import { loadAnswers, loadSnapshots } from './load.ts';
+import { checkRegistration, loadAnswers, loadSnapshots } from './load.ts';
+import type { AnswerEntry } from './metrics.ts';
 
 type RunItem = string | { id: string; task: string; answer: string };
 
@@ -33,8 +34,17 @@ if (!runPath) {
 }
 const runFile = parse(readFileSync(runPath, 'utf8')) as RunFile;
 
+const outDir = join('tests', 'fixtures', 'pilot', runFile.run || basename(runPath, '.yaml'));
+// A rebuild gets new request ids and fences, so replies saved for the old prompts would no longer match.
+if (existsSync(outDir) && readdirSync(outDir).some((f) => /^request-\d{2}\./.test(f))) {
+  console.error(`${outDir} already holds a built run. Delete the folder first to rebuild it; saved replies would no longer match.`);
+  process.exit(1);
+}
+
 const snapshots = await loadSnapshots();
-const answers = runFile.items.some((i) => typeof i === 'string') ? loadAnswers(snapshots) : new Map();
+const usesAnswerSet = runFile.items.some((i) => typeof i === 'string');
+const answers = usesAnswerSet ? loadAnswers(snapshots) : new Map<string, AnswerEntry>();
+if (usesAnswerSet) checkRegistration(answers, snapshots);
 
 const items: GradingItem[] = runFile.items.map((i) => {
   const item = typeof i === 'string' ? answers.get(i) : i;
@@ -50,7 +60,18 @@ const requests = planRequests(items, {
   random: Math.random,
 });
 
-const outDir = join('tests', 'fixtures', 'pilot', runFile.run || basename(runPath, '.yaml'));
+// Held-out requests mirror real use: one answer per task in a request, and no development answers (§9).
+const held = items.filter((i) => answers.get(i.attemptId)?.holdout === true).length;
+if (held > 0 && held < items.length) throw new Error('A run must not mix development and held-out answers');
+if (held > 0) {
+  requests.forEach((req, n) => {
+    const tasks = req.rows.map((r) => r.snapshot.taskId);
+    if (new Set(tasks).size < tasks.length) {
+      throw new Error(`Request ${n + 1} would hold two held-out answers to one task (${tasks.join(', ')}); reorder the run file`);
+    }
+  });
+}
+
 mkdirSync(outDir, { recursive: true });
 requests.forEach((req, n) => {
   const name = `request-${String(n + 1).padStart(2, '0')}`;
