@@ -2,7 +2,7 @@
 
 ## 1. Role and ask
 
-You are the same senior reviewer who checked content batches 1 and 2 (arg-0009 to arg-0028). In batch 2 you marked nine of the ten exercises "fix". Every finding was accepted, the owner approved and published the batch, and the same wording fixes were applied to the published batch 1 exercises. This is the same answer-key check for ten new draft exercises (20 tasks: 6 flaw, 4 assumption, 4 strengthen, 4 weaken, 2 conclusion). Students will be graded against these keys by a chatbot, so a wrong key teaches the wrong lesson. Please be adversarial: try to break each key.
+You are the same senior reviewer who checked content batches 1 and 2 (arg-0009 to arg-0028). In batch 2 you marked nine of the ten exercises "fix". Every finding was accepted, the owner approved and published the batch, and the same wording fixes were applied to the published batch 1 exercises. Earlier today you also reviewed the selective formal method (docs/METHOD.md) and exercise schema 4, which adds a display-only form line to each task. This is the same answer-key check for ten new draft exercises (20 tasks: 6 flaw, 4 assumption, 4 strengthen, 4 weaken, 2 conclusion), now with a form line on every task, so the owner approves keys and form lines once. Students will be graded against these keys by a chatbot, so a wrong key teaches the wrong lesson. Please be adversarial: try to break each key.
 
 The owner is an exam beginner and will approve the batch after your check, so your review is the expert check.
 
@@ -16,9 +16,13 @@ The patterns you asked for at the end of your batch 2 review are now part of the
 - **A relevant fact, evidence and proof kept apart.** A strengthener need not prove the conclusion, a weakener need not refute it, and a necessary assumption must pass negation.
 - **Stated controls.** Where a key treats an alternative as excluded, the stimulus states it (arg-0029: all twelve long-lived restaurants were surveyed; arg-0030: every injury is recorded; arg-0031: which passage was set in Clearline, and the reading order, were balanced; arg-0034: the two groups of companies were similar in size, industry and average pay; arg-0038: the fare cut, not any other change, caused Corran's rise). arg-0037's baseline (about 40 dead birds below each side the previous autumn) is treated as a partial control only.
 - **Exact numbers and modest labels.** The arithmetic is in the difficulty notes (arg-0030's 80 percent threshold; arg-0037's counts and strike numbers). Both conclusion tasks are labelled 3, as you set arg-0024's similar structure, and arg-0031's flaw task is a 2 because the stimulus defines the term it turns on.
+- **Form lines (new).** Every task has a `form` line (schema 4): one author-written line giving the skeleton the task turns on, in the Method's terms. The app shows it beside the reference only after the student's grade is accepted; it never enters a grading payload and is never a criterion. They were drafted by the thread that wrote the Method and edited by the author of the keys.
+- **Your schema 4 round applied here.** Weaken criteria ask for an explanation that makes the alternative "more plausible", not "likely"; strengthen criteria keep the conclusion's own strength ("caused much of the gap", not "the cause"); notes say a comparison "reduces" a rival rather than controlling for it.
 - **New flaw patterns.** The six flaw tasks each test a pattern the published content does not yet cover: survivorship (arg-0029), a base rate (arg-0030), a shifting meaning of "significant" (arg-0031), absence of evidence (arg-0032), overlooked options (arg-0033), and reverse causation behind a stated control (arg-0034).
 
 Before this packet, a separate Claude check graded every anchor and negation. It found seven problems it rated must-fix and fourteen minor ones; all were fixed in the files below. The main ones: arg-0038's conclusion said only that crossings "would increase", so a full-credit anchor about employer-paid fares failed negation (the residents who still pay would see a cheaper fare), and the conclusion now claims "a large rise"; three flaw `accept` texts gave 0 to answers the rubric gives 1 for naming the inference; arg-0032's stimulus implied the maker's three trials were the only ones, which made a fourth study look like a premise conflict; arg-0031's stimulus did not balance which passage was set in Clearline; arg-0037's stimulus did not give the previous autumn's count, which left a rise on the west side open; and two full-credit flaw anchors did not name the argument's evidence and conclusion. Please do not assume that check was complete.
+
+After the form lines were added, a second Claude check read every form line against its key and the Method. It found three must-fix problems (arg-0034's flaw line named only the reversed rival while the key also credits a third factor; arg-0034's strengthen line said "rule out" where the key says the fact reduces the rival; arg-0029's flaw line misused "selection" for a missing comparison) and nine minor ones, all fixed. Please check the form lines yourself as well.
 
 ## 3. What to check, for every task
 
@@ -28,12 +32,13 @@ Before this packet, a separate Claude check graded every anchor and negation. It
 4. **Anchors and rubric agree.** Grade every anchor against the rubric and say if you would give a different score than stated.
 5. **Difficulty.** Is the label (1 easiest to 5) realistic compared with real exam arguments of the same type, and is the difficulty note right about what makes it hard?
 6. **Stimulus.** Any ambiguity, outside knowledge needed, or a second reasoning problem that would let a different answer be correct?
+7. **Form line.** Does it state the skeleton correctly and agree with the key, in the Method's terms (an arrow only for a conditional, a rival reduced rather than closed unless the stimulus closes it, exact quantities)? Would it mislead a student who reads it after grading, for example by naming a different gap or implying a stronger answer was required?
 
 ## 4. Response format
 
 For each exercise, give a one-line verdict (keep / fix / drop). Then list every task with a problem as: task id, the problem, and the exact replacement text you propose. Say nothing about tasks you would keep unchanged. End with any pattern you see across the batch that the author should change in later batches.
 
-## 5. Rules the keys were written to (from CONTENT_GUIDELINES.md)
+## 5. Rules the keys were written to (from CONTENT_GUIDELINES.md and METHOD.md)
 
 ### 3.1 Writing to a difficulty target
 
@@ -65,13 +70,79 @@ For every assumption task, negate the reference and each full-credit anchor, kee
 - **Anchors:** one sample answer for every possible score, including at least one full-credit answer unlike the reference for open-ended skills. Reference, `accept`, rubric and anchors must agree: grade each anchor against the rubric and check you get its stated score. A partial-credit anchor meets exactly one criterion (for a flaw task, it identifies the inference without saying why it fails); a bare flaw label earns 0.
 - **Likely errors:** the 2–4 tags a grader is most likely to need.
 
+### METHOD.md §3. Three kits
+
+Switch a kit on by meaning, with words only as cues: "must" can state an obligation, and "because" usually introduces evidence.
+
+#### 3.1 Logic: when the answer depends on form
+
+Cues: if, only if, unless, whenever, all, every, no, none, most, some, and, or.
+
+- **Translate by sentence pattern**, not by word list.
+  - "If A, then B" and "A only if B" both mean A → B: A guarantees B, and B is required for A.
+  - "Only A are B" means B → A.
+  - "A unless B" means "if not B, then A". It does not say that B rules A out.
+  - "No A is B" means A → not B.
+  - "Or" means at least one, possibly both, unless the sentence says otherwise.
+- **Valid moves:** the contrapositive (A → B gives not B → not A) and chaining (A → B and B → C give A → C).
+- **Traps:** reversing (A → B does not give B → A) and negating both sides (A → B does not give not A → not B).
+- **De Morgan** where it pays: "not (A and B)" is "not A, or not B"; "not (A or B)" is "not A and not B". Use it to contrapose a rule with a compound condition and to negate a compound answer.
+- **Negation pairs** for the assumption test, with the group and time held fixed. These are opposites, not equivalences, and the negation is the plain opposite, not the extreme.
+
+  | Statement | Its negation |
+  | --- | --- |
+  | All A are B | At least one A is not B |
+  | Some A are B (at least one, possibly all) | No A is B |
+  | Most A are B (more than half) | Half or fewer of A are B |
+  | Always | Not always |
+  | A and B | Not A, or not B |
+  | A or B | Neither A nor B |
+  | If A, then B | A without B (for a rule: at least one case of A without B) |
+
+  "Not necessary" does not mean "necessarily not". An "and" assumption is necessary exactly when each half is. An "or" assumption is necessary whenever either half is, and can be necessary when neither half is on its own (a plan may need at least one working power source without needing any particular one).
+- **Quantifiers, in exact shapes:**
+  - All A are B, and all B are C: all A are C.
+  - All A are B, and some A are C: some B are C.
+  - All A are B, and some B are C: nothing follows about A and C.
+  - Most A are B, and most A are C (the same group A): some B are C.
+  - Some A are B, and some A are C: no overlap of B and C is guaranteed.
+  - "All" alone does not say that any A exists.
+- **Keep what the sentence commits to.** "Could", "should" and "past winners" do not become "does", "will" and "all future winners". A counterexample defeats a guarantee, not a claim that something is likely.
+
+#### 3.2 Quantity: when numbers or shares carry the argument
+
+Cues: percent, share, rate, average, per, each, total, any number. Ask: out of what (denominator), counting what (unit), over what period? Try an easy counterexample before exact arithmetic, unless a threshold decides the question.
+
+- **Count = rate × base.** A share can fall while the count rises. If 15% of appointments were missed before and 9% now, missed appointments rose when bookings grew by more than two-thirds (15/9 = 5/3).
+- **Unit of analysis, with bounds.** 1,000 restaurants inspected 4 times each, with 1 inspection in 10 failing, gives 400 failed inspections: at 100 to 400 restaurants (10% to 40%), not necessarily one in ten.
+- **Part and whole.** Parts that each pass a test alone may fail it together.
+- **Proxy and target.** What was measured (bags handed out, camera sightings) may not be what is claimed (weight of waste, number of animals).
+- **Averages.** An average hides the spread; an average across groups depends on each group's size. A rise from 10% to 12% is 2 percentage points, or 20%.
+
+#### 3.3 Evidence: causes, samples and measurement
+
+Cues: caused, led to, made, raised, responsible for, since then, a survey or sample. When two things go together, list the rivals to "X caused Y":
+
+1. **Reversed:** Y caused X.
+2. **Something else:** a third factor drives both, or decides who ends up with X (selection).
+3. **Chance or a bounce-back:** a group picked at an unusual high or low tends to drift back toward normal.
+4. **Measurement:** what was counted is not what the Claim is about.
+
+Check which rivals the passage **rules out or reduces** (a comparison group, the earlier trend, matched conditions) and which stay open. A comparison group reduces other explanations; it does not eliminate them. To strengthen, rule out or reduce an open rival or show how the cause works. To weaken, make an open rival plausible, keeping every premise true. A rival can be true alongside a real cause, so a weakener need not prove the cause did nothing. "X causes Y" does not make X sufficient, necessary or the only cause, so a causal claim never becomes an arrow for the logic kit.
+
+### METHOD.md §5. For authors (form lines and key checks)
+
+- **Form lines.** Each task may carry one author-written line giving the skeleton the task turns on, in the kits' terms, for example "Rule: renew → attendance rose. The director infers rose → renew: the arrow is reversed." A form line is shown with the reference only after the task's grade is accepted, never enters a grading payload, and is never a criterion. It is the `form` field of exercise schema 4 (`EXERCISE_FORMAT.md` §3.1). A key check reviews the form lines along with the keys.
+- **Support test (author notes only).** A new fact F strengthens a claim C, given the evidence E, when F is more expected if C is true than if it is false: P(F | C, E) > P(F | not C, E). Equality means F is neutral about C, not irrelevant to everything. The test gives a direction, not a size; rubrics still ask for a material effect (`CONTENT_GUIDELINES.md` §5).
+- **Key checks.** Besides `CONTENT_GUIDELINES.md` §3.1–§3.2, check each key against §3: modality, time and scope kept; a counterexample used only against a guarantee; negations literal, with "and" and "or" handled as above; quantifier inferences in their exact shapes; arithmetic with its denominator, unit and period; rivals described as ruled out or reduced; no causal claim treated as a conditional.
+
 ## 6. The ten exercises
 
 ### File: content/exercises/arg-0029.md
 
 ````yaml
 ---
-schema: 3
+schema: 4
 id: arg-0029
 status: draft
 kind: argument
@@ -140,6 +211,10 @@ tasks:
           near miss: all twelve long-lasting restaurants were surveyed, so the problem is not the number
           surveyed but the missing comparison with restaurants that closed
     likely_errors: [unrepresentative-sample, missed-alternative, wrong-gap, understated]
+    form: >-
+      Evidence: 10 of 12 long-lived restaurants cook mainly from family recipes. Claim: family recipes help a
+      restaurant last. Missing comparison: only survivors were counted; the share among restaurants that
+      closed is unknown.
   - key: strengthen
     status: active
     skill: strengthen
@@ -189,6 +264,9 @@ tasks:
           points the other way: family-recipe restaurants failing quickly gives a reason to doubt the
           conclusion
     likely_errors: [no-reasoning, irrelevant, missed-alternative, understated]
+    form: >-
+      Missing comparison: family recipes among the restaurants that closed. A fact showing they were much
+      rarer there reduces the survivors-only rival.
 ---
 Twelve of the restaurants now open in the city of Dunmore have been in business for more than twenty
 years. A food magazine interviewed the owners of all twelve and found that ten of the restaurants cook
@@ -200,7 +278,7 @@ recipes helps a Dunmore restaurant stay in business for a long time.
 
 ````yaml
 ---
-schema: 3
+schema: 4
 id: arg-0030
 status: draft
 kind: argument
@@ -270,6 +348,9 @@ tasks:
         note: >-
           near miss: a reason the conclusion might be true, not an error in the reasoning
     likely_errors: [scope-shift, missed-alternative, wrong-gap, understated]
+    form: >-
+      Evidence: 48 of 60 injuries were on beginner walls (a share of injuries). Claim: a beginner climb is
+      riskier (injuries per climb). Missing denominator: how many climbs were made on each kind of wall.
   - key: assumption
     status: active
     skill: assumption
@@ -316,6 +397,9 @@ tasks:
         answer: Of the 60 injuries recorded last year, 48 happened on the beginner walls.
         note: a stated premise, not an assumption (disqualifier)
     likely_errors: [overstated, restates-conclusion, wrong-gap, scope-shift]
+    form: >-
+      Risk per climb = injuries ÷ climbs. With 48 of 60 injuries (80%) on beginner walls, a beginner climb is
+      riskier only if under 80% of climbs were made there.
 ---
 The Crag Hall climbing gym records every injury that happens there, however minor. Of the 60 injuries it
 recorded last year, 48 happened on its beginner walls, where the routes are easiest, and 12 on its harder
@@ -327,7 +411,7 @@ injury than a climb on one of the harder walls.
 
 ````yaml
 ---
-schema: 3
+schema: 4
 id: arg-0031
 status: draft
 kind: argument
@@ -398,6 +482,9 @@ tasks:
           near miss: half the readers read their Clearline passage first, so the order was balanced and does
           not explain the result
     likely_errors: [misread-stimulus, scope-shift, wrong-gap, understated]
+    form: >-
+      Evidence: the speed-up is statistically significant (unlikely to be chance). Claim: a significant
+      (large) difference. Shift: "significant" changes meaning, and the size of the speed-up is never given.
   - key: weaken
     status: active
     skill: weaken
@@ -448,6 +535,9 @@ tasks:
         note: >-
           near miss: comprehension is not reading speed, and the answer does not tie it to speed
     likely_errors: [irrelevant, no-reasoning, contradicts-premise, understated]
+    form: >-
+      Size, not chance: a fact showing the speed-up is tiny, or fades once readers are used to Clearline,
+      leaves it statistically significant but gives material reason to doubt "a significant difference".
 ---
 In a study, 2,000 adults each read two passages, one set in a standard newspaper typeface and the other
 in a new typeface called Clearline. Each passage was set in Clearline for half of the readers, and half
@@ -461,7 +551,7 @@ difference to how quickly people read them.
 
 ````yaml
 ---
-schema: 3
+schema: 4
 id: arg-0032
 status: draft
 kind: argument
@@ -526,6 +616,9 @@ tasks:
         note: >-
           near miss: an attack on the source's motives, not an error in the argument's reasoning
     likely_errors: [overstated, missed-alternative, attacks-source, understated]
+    form: >-
+      Evidence: no liver harm reported by trials that measured only sleep. Claim: safe for the liver.
+      Measurement: not finding a harm no one looked for does not show there is none.
   - key: strengthen
     status: active
     skill: strengthen
@@ -572,6 +665,9 @@ tasks:
         note: >-
           not about the liver: it bears on whether Calmora works, not on whether it is safe for the liver
     likely_errors: [no-reasoning, irrelevant, contradicts-premise, understated]
+    form: >-
+      Reduce the measurement gap: a study that actually tested liver function and found no more liver problems
+      than with a dummy pill.
 ---
 Calmora is an herbal sleep aid sold without a prescription. Its maker has run three clinical trials of
 it, with 900 participants in all. The trials measured only how long the participants slept and how often
@@ -583,7 +679,7 @@ concludes from these trials that the supplement is safe for the liver.
 
 ````yaml
 ---
-schema: 3
+schema: 4
 id: arg-0033
 status: draft
 kind: argument
@@ -651,6 +747,9 @@ tasks:
           near miss: it disputes the engineer's forecast, a premise, instead of identifying the error in the
           councillor's reasoning
     likely_errors: [missed-alternative, contradicts-premise, wrong-gap, understated]
+    form: >-
+      Rule: nothing done → delays worsen. Evidence: widening and a bypass are unaffordable. Claim: delays are
+      bound to worsen. Gap: it assumes those two remedies are the only things that could be done.
   - key: weaken
     status: active
     skill: weaken
@@ -701,6 +800,9 @@ tasks:
           afford.
         note: denies the premise that each remedy would cost far more than the town can afford (disqualifier)
     likely_errors: [contradicts-premise, no-reasoning, irrelevant, understated]
+    form: >-
+      Rule: nothing done → worse. An affordable measure that would cut delays means something can be done, so
+      the rule no longer supports "bound to get worse".
 ---
 Rush-hour traffic on Bridge Street in the town of Marlow has grown every year for a decade, and the
 town's engineer reports that rush-hour delays there will keep getting worse unless something is done. The
@@ -713,7 +815,7 @@ getting worse.
 
 ````yaml
 ---
-schema: 3
+schema: 4
 id: arg-0034
 status: draft
 kind: argument
@@ -743,10 +845,11 @@ tasks:
     difficulty: 2
     difficulty_note: >-
       Causes: the survey shows that flexible hours and higher satisfaction go together, not which came first.
-      The stimulus rules out size, industry and average pay, but leaves open that companies whose employees
-      were already satisfied, or that are better run, are the ones that choose to offer flexible hours. Saying
-      only that correlation is not causation names the flaw without saying what else could explain the link.
-      The survey covered 400 companies, so its size is not the problem.
+      The stimulus says the two groups were similar in size, industry and average pay, which reduces those
+      rivals, but leaves open that companies whose employees were already satisfied, or that are better run,
+      are the ones that choose to offer flexible hours. Saying only that correlation is not causation names
+      the flaw without saying what else could explain the link. The survey covered 400 companies, so its size
+      is not the problem.
     prompt: Describe the main reasoning error in one or two sentences.
     max: 2
     reference: >-
@@ -782,8 +885,12 @@ tasks:
         answer: The flexible-hours companies might pay more, which would explain why their staff are happier.
         note: >-
           near miss: the stimulus says the two groups of companies had similar average pay, so this
-          alternative is ruled out
+          alternative conflicts with a premise
     likely_errors: [correlation-causation, missed-alternative, contradicts-premise, understated]
+    form: >-
+      Evidence: in one survey, flexible hours and higher satisfaction go together (groups similar in size,
+      industry and pay). Claim: the hours raise satisfaction. Open rivals: reversed (satisfied workplaces
+      choose flexible hours) or a third factor such as better management.
   - key: strengthen
     status: active
     skill: strengthen
@@ -816,7 +923,7 @@ tasks:
       similar in size, industry or pay is not new.
     rubric:
       - Gives a new fact, consistent with the stated premises and not already stated in them, that makes it materially more likely that offering flexible working hours makes employees more satisfied (a fact pointing the other way does not count).
-      - Explains how the fact strengthens the argument, namely why it makes flexible hours more likely to be the cause of the higher satisfaction (for example, because satisfaction rose after the hours were introduced, or because chance rather than existing satisfaction decided who got them).
+      - Explains how the fact strengthens the argument, namely why it makes it more likely that offering flexible hours raised satisfaction (for example, because satisfaction rose after the hours were introduced, or because chance rather than existing satisfaction decided who got them).
     anchors:
       - points: 2
         answer: >-
@@ -840,6 +947,9 @@ tasks:
           points the other way: the satisfaction came before the flexible hours, which supports the reverse
           explanation
     likely_errors: [no-reasoning, irrelevant, missed-alternative, understated]
+    form: >-
+      Reduce the reversed rival: at the surveyed companies that switched, satisfaction was no higher before
+      the switch and rose after it, which suggests the hours came first.
 ---
 A survey last year of employees at 400 companies found that, on average, employees at companies offering
 flexible working hours rated their job satisfaction higher than employees at companies with fixed hours.
@@ -851,7 +961,7 @@ concludes that offering flexible working hours makes employees more satisfied wi
 
 ````yaml
 ---
-schema: 3
+schema: 4
 id: arg-0035
 status: draft
 kind: argument
@@ -912,16 +1022,20 @@ tasks:
           Closing the observatory would take away something the district's schools couldn't easily replace.
         note: near miss, the intermediate conclusion offered as the reason for the recommendation
     likely_errors: [premise-as-conclusion, counterpoint-as-conclusion, overstated]
+    form: >-
+      Claim: Ostrey should keep the observatory open as an observatory. "Closing it would take away something
+      the schools could not easily replace" is an intermediate conclusion; the outdated telescope is a
+      concession; the café plan is the opposing view.
   - key: weaken
     status: active
     skill: weaken
     difficulty: 2
     difficulty_note: >-
       The recommendation rests on the intermediate claim that closing the observatory would take away
-      something the schools could not easily replace. A weakener shows that the stargazing evenings would
-      carry on without the building staying an observatory (another provider, or a café plan that keeps them),
-      or that keeping it open carries a serious cost the argument does not weigh. Denying that the evenings
-      are most children's only chance to look through a telescope denies a premise.
+      something the schools could not easily replace. A weakener makes it more plausible that the stargazing
+      evenings would carry on without the building staying an observatory (another provider, or a café plan
+      that keeps them), or shows a serious cost of keeping it open that the argument does not weigh. Denying
+      that the evenings are most children's only chance to look through a telescope denies a premise.
     prompt: >-
       Give a new fact that, if true, would materially weaken the argument, and explain how. Treat the stated
       premises as true.
@@ -944,7 +1058,7 @@ tasks:
       - Denies a stated premise, for example that for most of the district's children the stargazing evenings are the only chance to look through a telescope.
     rubric:
       - Gives a new fact, consistent with the stated premises and not already stated in them, that gives a material reason to doubt that the town should keep the observatory open as an observatory.
-      - Explains how the fact weakens the argument, namely why it means the schools would not lose their stargazing evenings if the observatory stopped being one, or why keeping it open carries a cost the argument does not weigh.
+      - Explains how the fact weakens the argument, namely why it makes it more plausible that the schools would keep their stargazing evenings if the observatory stopped being one, or why keeping it open carries a cost the argument does not weigh.
     anchors:
       - points: 2
         answer: >-
@@ -965,6 +1079,9 @@ tasks:
           denies the premise that for most of the district's children the stargazing evenings are the only
           chance to look through a telescope (disqualifier)
     likely_errors: [contradicts-premise, no-reasoning, irrelevant, understated]
+    form: >-
+      Connection: closing removes something the schools could not easily replace. A fact that someone else
+      would run the same evenings undercuts that link.
 ---
 Some residents of Ostrey want the town's old observatory turned into a café, arguing that its telescope
 is outdated and that few people visit. But the town should keep the observatory open as an observatory.
@@ -978,7 +1095,7 @@ would take away something the district's schools could not easily replace.
 
 ````yaml
 ---
-schema: 3
+schema: 4
 id: arg-0036
 status: draft
 kind: argument
@@ -1035,6 +1152,10 @@ tasks:
         answer: The four-day week trial's benefits outweigh its cost.
         note: near miss, the intermediate conclusion offered as the reason for the recommendation
     likely_errors: [premise-as-conclusion, counterpoint-as-conclusion, overstated]
+    form: >-
+      Claim: Brindle should make the four-day week permanent. "Benefits outweigh cost" is an intermediate
+      conclusion; the managers' call to end the trial is the opposing view, and their Friday complaint is
+      conceded.
   - key: assumption
     status: active
     skill: assumption
@@ -1087,6 +1208,10 @@ tasks:
         answer: During the trial, the number of staff who left fell by half.
         note: a stated premise, not an assumption (disqualifier)
     likely_errors: [overstated, restates-conclusion, wrong-gap, missed-alternative]
+    form: >-
+      Two steps: trial results, then "benefits outweigh cost", then "make it permanent". One needed bridge:
+      the halving of departures was not entirely due to something other than the four-day week; negate it and
+      the trial shows no retention benefit from it.
 ---
 Brindle Software should make its four-day working week permanent. Some of its managers want to end the
 six-month trial, pointing out that customers sometimes wait longer for replies on Fridays. That complaint
@@ -1100,7 +1225,7 @@ trial's benefits outweigh its cost.
 
 ````yaml
 ---
-schema: 3
+schema: 4
 id: arg-0037
 status: draft
 kind: argument
@@ -1129,11 +1254,11 @@ tasks:
     skill: strengthen
     difficulty: 2
     difficulty_note: >-
-      The comparison with the previous autumn controls for fixed differences between the two sides, but a
-      change on the east side other than the film, or a difference in how reliably dead birds were found,
-      could still explain the gap. Strong strengtheners count strikes directly, show that nothing else changed
-      on the east side, or repeat the result by covering the other side. A fact suggesting that something else
-      lowered the east-side count points the other way.
+      The comparison with the previous autumn reduces the rival of fixed differences between the two sides,
+      but a change on the east side other than the film, or a difference in how reliably dead birds were
+      found, could still explain the gap. Strong strengtheners count strikes directly, show that nothing else
+      changed on the east side, or repeat the result by covering the other side. A fact suggesting that
+      something else lowered the east-side count points the other way.
     prompt: >-
       Give a new fact that, if true, would materially strengthen the argument, and explain how. Treat the
       stated premises as true.
@@ -1153,7 +1278,7 @@ tasks:
       something new near the east side that could remove dead birds or keep birds away, earns 0.
     rubric:
       - Gives a new fact, consistent with the stated premises and not already stated in them, that makes it materially more likely that the dotted film greatly reduces the number of birds that fly into the windows (a fact pointing the other way does not count).
-      - Explains how the fact strengthens the argument, namely why it makes the film more likely to be the reason for the gap in dead birds, or the gap more likely to reflect fewer birds hitting the windows (for example, because strikes were counted directly, because nothing else changed on the east side, or because the result was repeated).
+      - Explains how the fact strengthens the argument, namely why it makes it more likely that the film caused much of the gap in dead birds, or that the gap reflects fewer birds hitting the windows (for example, because strikes were counted directly, because nothing else changed on the east side, or because the result was repeated).
     anchors:
       - points: 2
         answer: >-
@@ -1172,17 +1297,20 @@ tasks:
           points the other way: foxes could have taken dead birds from below the east windows, another
           explanation for the low count there
     likely_errors: [no-reasoning, irrelevant, missed-alternative, understated]
+    form: >-
+      Proxy: dead birds found below the windows. Target: birds striking the windows. A direct count of strikes
+      showing a similar east-west gap (11 against 50) reduces the measurement rival.
   - key: assumption
     status: active
     skill: assumption
     difficulty: 3
     difficulty_note: >-
-      Two gaps, a cause and a measure. The comparison with the previous autumn controls for fixed differences
-      between the sides, but not for a change on the east side other than the film, such as far fewer birds
-      flying past it. And the evidence counts dead birds found, not birds that hit the windows, so the count
-      could fall if dead birds went missing more often below the east windows. A necessary assumption rules
-      out that one of these alone explains the gap; requiring that nothing at all besides the film changed on
-      the east side, or that every dead bird was found, is stronger than needed.
+      Two gaps, a cause and a measure. The comparison with the previous autumn reduces the rival of fixed
+      differences between the sides, but does nothing about a change on the east side other than the film,
+      such as far fewer birds flying past it. And the evidence counts dead birds found, not birds that hit the
+      windows, so the count could fall if dead birds went missing more often below the east windows. A
+      necessary assumption rules out that one of these alone explains the gap; requiring that nothing at all
+      besides the film changed on the east side, or that every dead bird was found, is stronger than needed.
     prompt: >-
       State an assumption the argument needs: a claim that, if false, would make the argument fall apart. (A
       necessary assumption; it need not make the argument airtight.)
@@ -1225,6 +1353,10 @@ tasks:
         answer: Staff found 9 dead birds below the east windows and 41 below the west windows.
         note: a stated premise, not an assumption (disqualifier)
     likely_errors: [overstated, missed-alternative, restates-conclusion, wrong-gap]
+    form: >-
+      Comparison: east (film) 9, west (bare) 41, after about 40 each the autumn before. Two gaps: another
+      east-side change, and dead birds found, not strikes. One needed bridge: the gap is not entirely due to
+      another east-side change; negate it and the film explains none of it.
 ---
 Birds often fly into the large windows of Penrose College's library. Last spring the college covered the
 windows on the library's east side with a film printed with small white dots and left the west-side
@@ -1238,7 +1370,7 @@ into the windows.
 
 ````yaml
 ---
-schema: 3
+schema: 4
 id: arg-0038
 status: draft
 kind: argument
@@ -1313,13 +1445,17 @@ tasks:
         answer: Halving the fare on Lissay would make its residents cross to the mainland much more often.
         note: a version of the conclusion, not an assumption (disqualifier)
     likely_errors: [overstated, restates-conclusion, wrong-gap, scope-shift]
+    form: >-
+      Analogy: Corran's fare cut caused a 40% rise in residents' crossings; Lissay's resident fare equals
+      Corran's old one. One needed bridge: Lissay's ferry service could carry many more crossings; if not, a
+      cut cannot bring a large rise.
   - key: weaken
     status: active
     skill: weaken
     difficulty: 2
     difficulty_note: >-
       The study rules out other causes of Corran's rise, so the gap is whether Lissay resembles Corran. A
-      weakener names a difference that would keep a cheaper fare from bringing a large rise on Lissay: ferries
+      weakener names a difference that could keep a cheaper fare from bringing a large rise on Lissay: ferries
       already full, sailings too few to carry many more residents, or residents whose fares are mostly paid by
       someone else. Disputing that the fare cut caused Corran's rise denies a premise.
     prompt: >-
@@ -1343,7 +1479,7 @@ tasks:
       - Denies a stated premise, for example that the fare cut, not some other change, caused the rise in Corran residents' crossings.
     rubric:
       - Gives a new fact, consistent with the stated premises and not already stated in them, that gives a material reason to doubt that halving Lissay's resident fare would bring a large rise in the number of crossings its residents make.
-      - Explains how the fact weakens the argument, namely why it makes Lissay unlike Corran in a way that would keep a cheaper fare from bringing a large rise (for example, because the ferries are already full or because residents' fares are mostly paid by someone else).
+      - Explains how the fact weakens the argument, namely why it makes Lissay unlike Corran in a way that could keep a cheaper fare from bringing a large rise (for example, because the ferries are already full or because residents' fares are mostly paid by someone else).
     anchors:
       - points: 2
         answer: >-
@@ -1359,6 +1495,10 @@ tasks:
           The rise in crossings on Corran came from a new hospital opening on the mainland, not the fare cut.
         note: denies the premise that the fare cut, not any other change, caused the rise (disqualifier)
     likely_errors: [contradicts-premise, no-reasoning, scope-shift, understated]
+    form: >-
+      Analogy: the study settles Corran's cause, so the gap is whether Lissay is like Corran. A difference
+      that could keep a cheaper fare from bringing a large rise, such as ferries already full on nearly every
+      sailing, weakens it.
 ---
 Two years ago the island of Corran halved the ferry fare its residents pay to cross to the mainland, and
 over the following year residents' crossings rose by 40 percent. A study found that the fare cut, not any
