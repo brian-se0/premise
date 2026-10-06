@@ -1,6 +1,6 @@
 # Exercise Format
 
-Status: draft v0.5 (2026-10-04, after the difficulty consultation). Schema version: `3`. This is a contract: the build script, the prompt builder and contributors all depend on it. Changing it requires a `DECISIONS.md` entry and a peer review.
+Status: draft v0.6 (2026-10-06, form lines). Schema versions: `3` and `4`; schema 4 is schema 3 plus optional form lines (§3.1). This is a contract: the build script, the prompt builder and contributors all depend on it. Changing it requires a `DECISIONS.md` entry and a peer review.
 
 ## 1. Files
 
@@ -20,7 +20,7 @@ The stimulus **text** used in snapshots and grading prompts is the body trimmed,
 
 ```yaml
 ---
-schema: 3
+schema: 4                    # 3 or 4; form lines need 4 (§3.1)
 id: arg-0001
 status: draft                # draft | published | retired
 kind: argument               # argument | passage
@@ -70,13 +70,24 @@ tasks:
         answer: Reading scores fell in nearby districts after the switch.
         note: a premise, not the conclusion
     likely_errors: [premise-as-conclusion, counterpoint-as-conclusion, overstated]
+    form: >-                 # optional, schema 4 only: one line, at most 300 characters (§3.1)
+      Claim: Harlow should not adopt the four-day week. The reading scores are evidence; the teacher point is a concession.
 ---
 Stimulus text. Arguments: 60–180 words. Passages: 350–550 words, 3–5 paragraphs.
 ```
 
+### 3.1 Form lines (schema 4)
+
+A form line is one author-written line giving the skeleton a task turns on, in the terms of `METHOD.md` §3. It is display only:
+
+- The app shows the task's current form line with the reference answer after the task's grade is accepted, never while the student is answering or before grading.
+- It is not part of the snapshot payload (`ARCHITECTURE.md` §4.1), so it never enters a grading prompt, never changes a snapshot hash and is never a rubric criterion. Saved grading requests are unaffected by adding or editing one.
+- It is part of the content revision (§4 rule 7), so adding or editing one needs approval like any other edit, and a key check reviews form lines with the keys.
+- `form` is valid only under `schema: 4`. A schema 3 file is unchanged and needs no re-approval; moving a file to schema 4 to add form lines is an edit that does.
+
 ## 4. Validation rules (enforced by `npm run content`)
 
-1. Front matter matches the schema; unknown keys are errors.
+1. Front matter matches the schema; unknown keys are errors. A `form` line needs `schema: 4`, is a single line and is at most 300 characters.
 2. `id` matches the filename and is unique; task keys are unique within the file.
 3. Every `skill` and `likely_errors` tag exists in `content/taxonomy.yaml`.
 4. `max` equals the number of rubric criteria.
@@ -89,7 +100,7 @@ Stimulus text. Arguments: 60–180 words. Passages: 350–550 words, 3–5 parag
 11. The grading prompt for any single task, with a 2,000-character answer, fits the prompt budget in `GRADING_PROTOCOL.md` §2.
 12. A task key that was ever published is never reused for different content, and a retired task cannot become active again. The build enforces the mechanical part against `content/published-tasks.json` (`DECISIONS.md`, Published-task ledger): same skill and max under a key, every published revision and every retirement recorded, no return from retired, and nothing retired that was never published. Whether reworded content still tests the same thing is checked at approval.
 13. Word counts are within the ranges above (warning, not error).
-14. Body and all task text contain no blocked strings: `LSAT`, `LSAC`, `PrepTest`, `Law School Admission` (case-insensitive). This is a screen, not proof of clean provenance.
+14. Body and all task text, form lines included, contain no blocked strings: `LSAT`, `LSAC`, `PrepTest`, `Law School Admission` (case-insensitive). This is a screen, not proof of clean provenance.
 
 ## 5. Skills (v1)
 

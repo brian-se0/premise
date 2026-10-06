@@ -366,6 +366,48 @@ describe('content validation', () => {
     expect(bundleExercises(all, false)).toHaveLength(3);
   });
 
+  it('schema 4: form lines are single lines of at most 300 characters, and need schema 4', async () => {
+    const ok = baseDoc();
+    ok.schema = 4;
+    task(ok).form = 'Evidence: attendance is low. Claim: no one is harmed. Gap: low is not zero.';
+    expect(await errorsFor([ok])).toEqual([]);
+    expect(await errorsFor([{ ...baseDoc(), schema: 4 }])).toEqual([]);
+
+    const old = baseDoc();
+    task(old).form = 'Evidence: attendance is low.';
+    expect((await errorsFor([old])).join()).toMatch(/tasks\.0\.form: form lines need schema 4/);
+
+    const multi = structuredClone(ok);
+    task(multi).form = 'Evidence: attendance is low.\nClaim: no one is harmed.';
+    expect((await errorsFor([multi])).join()).toMatch(/tasks\.0\.form: a single line/);
+    const long = structuredClone(ok);
+    task(long).form = 'x'.repeat(301);
+    expect((await errorsFor([long])).join()).toMatch(/tasks\.0\.form/);
+    expect((await errorsFor([{ ...baseDoc(), schema: 5 }])).join()).toMatch(/schema/);
+  });
+
+  it('schema 4: a form line changes the content revision but never the snapshot or the grading prompt', async () => {
+    const plain = { ...baseDoc(), schema: 4 };
+    const withForm = structuredClone(plain);
+    const form = 'FORM-LINE-MARKER: rule renew -> rose; the director infers rose -> renew.';
+    task(withForm).form = form;
+    const body = normalizeBody(BODY);
+    // Approval covers form lines, so a key check reviews them with the keys.
+    expect(await contentRevision(withForm, body)).not.toBe(await contentRevision(plain, body));
+
+    const built = async (d: Doc) => {
+      const e = { ...d, stimulus: body } as unknown as BuiltExercise;
+      return Promise.all(e.tasks.map((t) => buildSnapshot(e, t)));
+    };
+    const [a, b] = [await built(plain), await built(withForm)];
+    expect(b).toEqual(a);
+    expect(JSON.stringify(b)).not.toContain('FORM-LINE-MARKER');
+    const rows = b.map((snapshot, i) => ({ rowId: `I0${i + 1}`, attemptId: `a${i}`, snapshot, answer: 'An answer.' }));
+    const prompt = renderPrompt('00000000-0000-4000-8000-000000000000', 'ZZZZZZ', rows);
+    expect(prompt).not.toContain('FORM-LINE-MARKER');
+    expect(prompt).not.toContain(form);
+  });
+
   it('rule 13: word counts outside the range warn', async () => {
     const short = await validateContent({ ...files([]), exercises: [file(baseDoc(), 'Too short.')] });
     expect(short.errors).toEqual([]);
@@ -388,6 +430,7 @@ describe('content validation', () => {
       'Law School Admission',
     ],
     ['acceptance notes', (d: Doc) => void (task(d, 1).accept = 'Like an LSAT key.'), BODY, 'LSAT'],
+    ['a form line', (d: Doc) => void ((d.schema = 4), (task(d).form = 'As in an LSAT flaw.')), BODY, 'LSAT'],
   ])('rule 14: blocked strings are rejected in %s', async (_, edit, body, blocked) => {
     const d = baseDoc();
     edit(d);

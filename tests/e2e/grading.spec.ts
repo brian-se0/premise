@@ -133,6 +133,24 @@ test('answer, autosave, resume after reload, grade by paste, results', async ({ 
   await expect(page.getByText(/0 waiting · closed/)).toBeVisible();
 });
 
+test('a form line shows only with the reference after grading, never in the prompt', async ({ page }) => {
+  const form = /money problems behind the switch/;
+  await page.goto('#/library/arg-0001');
+  await expect(page.getByText(form)).toHaveCount(0);
+  await practice(page, 'arg-0001', ['Harlow should keep its five-day week.', 'Correlation is not causation.']);
+  await expect(page.getByText(form)).toHaveCount(0);
+  await toRequest(page);
+  const prompt = await promptText(page);
+  expect(prompt).not.toMatch(form);
+  await paste(page, reply(prompt, { I01: '1', I02: '1' }));
+  await expect(page.getByText(form)).toHaveCount(0);
+  await confirmButton(page).click();
+  await expect(page.getByText(/0 waiting · closed/)).toBeVisible();
+  await card(page, 'I02').getByText('Reference answer').click();
+  await expect(card(page, 'I02').getByText(form)).toBeVisible();
+  await expect(card(page, 'I01').getByText('Form:')).toHaveCount(0);
+});
+
 test('double confirm and confirm from two tabs schedule once', async ({ page, context }) => {
   await practice(page, 'arg-0001', ['Harlow should keep its five-day week.', 'Correlation is not causation.']);
   const url = await toRequest(page);

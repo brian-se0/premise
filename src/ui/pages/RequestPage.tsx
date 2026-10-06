@@ -590,6 +590,13 @@ function taskLabel(s: SnapshotRecord): string {
   return content.taxonomy.skills[s.skill]?.label ?? s.skill;
 }
 
+/** The task's current form line (docs/METHOD.md §5). Display only: never part of a snapshot or prompt. */
+function formLineOf(s: SnapshotRecord): string | null {
+  const exercise = content.exercises.find((e) => e.id === s.exerciseId);
+  const key = s.taskId.slice(s.exerciseId.length + 1);
+  return exercise?.tasks.find((t) => t.key === key)?.form ?? null;
+}
+
 function feedbackText(row: Row): string | null {
   const range = row.grading?.feedbackRange;
   if (!range || !row.reply) return null;
@@ -642,6 +649,7 @@ function RowView({
   const feedback = feedbackText(row);
   const tip = feedback ? tipOf(feedback) : null;
   const missed = state === 'accepted' && grading!.score! < grading!.max;
+  const form = state === 'accepted' ? formLineOf(snapshot) : null;
 
   const act = (p: Promise<unknown>) => p.then(() => setMode('none')).catch((e: unknown) => onNotice(errorText(e)));
 
@@ -703,6 +711,11 @@ function RowView({
           <details className="reference">
             <summary>Reference answer</summary>
             <p>{snapshot.reference}</p>
+            {form && (
+              <p className="meta">
+                <strong>Form:</strong> {form}
+              </p>
+            )}
             {snapshot.accept && <p className="meta">Counts as correct: {snapshot.accept}</p>}
           </details>
           <div className="row">
