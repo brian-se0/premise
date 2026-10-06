@@ -5,6 +5,7 @@ A feasibility screen: can a chatbot grade written answers well enough for the ow
 ## Layout
 
 - `answers/` — the answer set, one YAML file per skill: answer id, task id, answer text, gold score (or acceptable-score set for ambiguous answers), the blind second score and any settlement, answer type, and whether it belongs to a held-out exercise. Claude writes it (`GRADING_PROTOCOL.md` §9). `walkthrough.yaml` holds the owner's first answers to draft exercises, which are not part of the check.
+- `second-scores.yaml` — the blind second scorer's file, verbatim (SHA-256 `530bcf01…ff2933a`).
 - `runs/` — one YAML file per row order: which answers, in what order (see `build-prompt.ts` for the format). `dev-a` and `dev-b` order the development answers; `holdout-a` and `holdout-b` order the held-out ones (arg-0020, arg-0024, arg-0027) and are built only after the development runs have frozen the configuration. The same prompts go to every chatbot under test.
 - `LOG.md` — every run, grade disagreement, feedback match and moment of friction.
 - `../tests/fixtures/pilot/<run>/` — generated requests (`request-NN.json`, `request-NN.prompt.txt`), the pasted replies (`request-NN.reply.<chatbot>-<n>.txt`, for example `request-03.reply.gemini-1.txt`) and, once checked by hand, the expected parse results. The app must reproduce these. Each `<chatbot>-<n>` label in a folder is one grading run.
