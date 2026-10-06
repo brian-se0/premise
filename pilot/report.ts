@@ -46,6 +46,8 @@ interface Run {
   chatbot: string;
   rows: GradedRow[];
   requests: RunRequest[];
+  /** Held-out screening: targets not met, or null for an incomplete run that is not screened. */
+  unmet?: string[] | null;
 }
 
 const REPLY = /^(request-\d{2})\.reply\.(.+)\.txt$/;
@@ -132,7 +134,8 @@ export function buildReport(
           promptVersion: fixture.promptVersion,
           rows: fixture.rows.map((r) => ({ rowId: r.rowId, max: max(r), allowedTags: snapshots.get(r.taskId)!.allowedTags })),
         };
-        const reply = readFileSync(path, 'utf8');
+        // A byte-order mark is a file-encoding artifact, never part of a pasted reply.
+        const reply = readFileSync(path, 'utf8').replace(/^\uFEFF/, '');
         const parsed = parseReply(reply, request);
         let outcome: ReplyOutcome;
         if (parsed.kind === 'parsed') outcome = parsed.block.outcome;
@@ -167,10 +170,13 @@ export function buildReport(
       out.push(...skillLines(run, answers, snapshots), '');
       if (held.rows > 0) {
         if (missing > 0) {
+          run.unmet = null;
           out.push(`**Not screened:** the run is incomplete, so the §9 screening targets are not applied.`, '');
         } else {
+          const checks = screen(held);
+          run.unmet = checks.filter((t) => !t.met).map((t) => t.target);
           out.push('Screening targets on the held-out exercises (§9):', '');
-          for (const t of screen(held)) out.push(`- ${t.met ? 'Met' : 'Not met'}: ${t.target} (${t.value ?? 'not evaluable'})`);
+          for (const t of checks) out.push(`- ${t.met ? 'Met' : 'Not met'}: ${t.target} (${t.value ?? 'not evaluable'})`);
           out.push('');
         }
       }
@@ -214,6 +220,9 @@ export function buildReport(
       ),
       '',
     );
+    out.push('Verdicts (§9 "Choosing among chatbots"):', '');
+    for (const chatbot of order) out.push(`- ${chatbot}: ${verdict(heldByChatbot.get(chatbot)!)}`);
+    out.push('');
   }
 
   const pairs: string[] = [];
@@ -238,6 +247,19 @@ export function buildReport(
       'independent answers. Upper bounds are one-sided 95% (exact binomial) and assume independent rows.',
   );
   return out.join('\n');
+}
+
+/** A chatbot passes only if every held-out run, in at least two orders, meets every target. */
+function verdict(runs: Run[]): string {
+  const apart = runs[0]!.chatbot === SAME_AS_GOLD ? ' Reported apart: a Claude pass alone cannot select outcome 1.' : '';
+  const name = (r: Run) => `${r.folder} ${r.label}`;
+  const incomplete = runs.filter((r) => r.unmet === null);
+  if (incomplete.length) return `not screened: ${incomplete.map(name).join(', ')} incomplete.${apart}`;
+  const failed = runs.filter((r) => r.unmet!.length > 0);
+  if (failed.length) return `does not pass: ${failed.map((r) => `${name(r)} missed ${r.unmet!.join('; ')}`).join('. ')}.${apart}`;
+  const orders = new Set(runs.map((r) => r.folder)).size;
+  if (orders < 2) return `not decided: every target met, but held-out runs in only one order.${apart}`;
+  return `passes: every target met in all ${runs.length} held-out runs, in ${orders} orders.${apart}`;
 }
 
 function metricsOf(run: Run, holdout: boolean, isHoldout: (id: string) => boolean): Metrics {

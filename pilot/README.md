@@ -18,7 +18,7 @@ These rules hold for every run, on PC or phone (`docs/GRADING_PROTOCOL.md` §9):
 
 - Use the chatbot's free version and the model its free plan uses by default; on a paid account, pick that model and note "paid account".
 - Paste each request into a new temporary or private chat. Where the chatbot has no such mode, turn memory and chat history off for the chat if it allows that. Turn web search and tools off where the chatbot allows. Paste the whole prompt unchanged.
-- Save the first reply whole with the reply's own copy control, as `request-NN.reply.<chatbot>-<n>.txt` (UTF-8). Never regenerate, edit or follow up. Save an error, refusal or cut-off reply as it is, or an empty file if nothing can be copied. A re-paste is a new run with a new `<n>`.
+- Save the first reply whole with the reply's own copy control, as `request-NN.reply.<chatbot>-<n>.txt` (UTF-8 without a byte-order mark). Never regenerate, edit or follow up. Save an error, refusal or cut-off reply as it is, or an empty file if nothing can be copied. A re-paste is a new run with a new `<n>`.
 - If a free limit stops a chatbot, note when and what it said, carry on with the others, and come back when the limit resets.
 - Add a line per reply to the run folder's `notes.csv`, with this header: `request,label,time,model,client,account,mode,search,copied,notes`. For example: `03,gemini-1,21:14,Gemini Flash,web PC,free,temporary,no,copy button,`. `search` is `yes` when the reply searched the web. The report flags a run whose `model` changed and a reply that searched.
 - On a phone, use the app's own copy control and paste the reply into a message in the project thread; Claude saves it unchanged.

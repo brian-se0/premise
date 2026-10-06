@@ -1,7 +1,9 @@
-// The grading check's fixed inputs (docs/GRADING_PROTOCOL.md §9), recorded before any chatbot reply was
-// saved. `npm run pilot:score` and `npm run pilot:prompt` refuse to run when the answer set or a key
-// no longer matches. Changing a value here changes the check's gold or keys after the fact and needs
-// a docs/DECISIONS.md entry; held-out results influenced by such a change are regression material.
+// The grading check's fixed inputs (docs/GRADING_PROTOCOL.md §9): the answer set and keys as they stood at
+// 7094d21 (pushed 20:38 UTC on 2026-10-06), before any chatbot reply existed; the first development paste
+// followed the owner's go-ahead at 21:10 UTC. `npm run pilot:score` and `npm run pilot:prompt` refuse to run
+// when the answer set or a key no longer matches. Changing a value here changes the check's gold or keys after
+// the fact and needs a docs/DECISIONS.md entry; held-out results influenced by such a change are regression
+// material.
 
 export interface Registration {
   /** goldDigest (pilot/load.ts): Claude's scores, fixed before the blind second scorer started. */

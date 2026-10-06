@@ -106,6 +106,7 @@ describe('pilot report', () => {
     expect(text).not.toMatch(/^- Met:/m);
     expect(text).toContain('| Resolution coverage | 12/20 (60%) |');
     expect(text).toContain('| Replies: recoverable / manual / choose / missing | 0 / 0 / 0 / 2 |');
+    expect(text).toMatch(/- gemini: not screened: .*held-incomplete gemini-1 incomplete\./);
   });
 
   it('screens a complete run, pools a chatbot’s runs and compares them', () => {
@@ -143,15 +144,26 @@ describe('pilot report', () => {
     expect(text).toContain('| Rows | 40 |');
     expect(text).toMatch(/- grok: .*held-complete grok-1 and .*held-complete grok-2: same score 19\/20 \(95%\)/);
     expect(text).toMatch(/Held-out by skill \(information\): assumption exact 4\/4, resolved 4\/4; conclusion/);
+    expect(text).toContain('- grok: not decided: every target met, but held-out runs in only one order.');
   });
 
-  it('flags a run with no notes and reports Claude apart', () => {
-    const { folder, requests } = buildRun('held-claude', heldIds());
-    requests.forEach((req, i) =>
-      writeFileSync(join(folder, `request-0${i + 1}.reply.claude-1.txt`), reply(req, goldOf)),
+  it('flags a run with no notes, reads a reply saved with a byte-order mark, and reports Claude apart', () => {
+    const orderB = (parse(readFileSync('pilot/runs/holdout-b.yaml', 'utf8')) as { items: string[] }).items;
+    const folders = [buildRun('held-claude-a', heldIds()), buildRun('held-claude-b', orderB)].map(
+      ({ folder, requests }) => {
+        requests.forEach((req, i) =>
+          writeFileSync(join(folder, `request-0${i + 1}.reply.claude-1.txt`), '\uFEFF' + reply(req, goldOf)),
+        );
+        return folder;
+      },
     );
-    const text = buildReport([folder], answers, snapshots);
+    const text = buildReport(folders, answers, snapshots);
     expect(text).toContain('claude-1 (reported apart: the gold scores also come from Claude)');
     expect(text).toContain('**No notes.csv lines for this run:**');
+    expect(text).toContain('| Replies: clean | 5/5 (100%) |');
+    expect(text).toContain('| Feedback matched (rows) | 20/20 (100%) |');
+    expect(text).toContain(
+      '- claude: passes: every target met in all 2 held-out runs, in 2 orders. Reported apart: a Claude pass alone cannot select outcome 1.',
+    );
   });
 });
