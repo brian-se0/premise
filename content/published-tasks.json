@@ -347,6 +347,166 @@
       "revisions": [
         "2d88e386587d83e88a80d98c0b440d313024ef3bcb0adff521f4678ccd7f62ec"
       ]
+    },
+    "arg-0029.flaw": {
+      "skill": "flaw",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "9486463beea74bc6ee1ed1b891c46c5a0dca290ee12742c3b923df1726d1402c"
+      ]
+    },
+    "arg-0029.strengthen": {
+      "skill": "strengthen",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "b99b23bc5811df04bfe9025cf475ae53a26d29c9544f4400e2435d8528f4f252"
+      ]
+    },
+    "arg-0030.flaw": {
+      "skill": "flaw",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "a5c3d5568bac9189d562ff190c1807a8b5623dc6c0b0c946cb8cc826f1b7b065"
+      ]
+    },
+    "arg-0030.assumption": {
+      "skill": "assumption",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "920f125b4c0b374dfebd5486b4fcd5c1b345cea4697eb0e8a0d59e15892e77f6"
+      ]
+    },
+    "arg-0031.flaw": {
+      "skill": "flaw",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "1dce690063099928998642c1ce0633a4d03b94b43d32234ab17a91919f96b37e"
+      ]
+    },
+    "arg-0031.weaken": {
+      "skill": "weaken",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "ee1ad0bfcd740e04fb2b6985bff8c57475f37277b9f5ddd59d4f054cfeccc900"
+      ]
+    },
+    "arg-0032.flaw": {
+      "skill": "flaw",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "90f4e7b0d65616391fa9550b623f387663d7a174265c2bf79b275232c481a6f0"
+      ]
+    },
+    "arg-0032.strengthen": {
+      "skill": "strengthen",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "ab14813aa0fe2562d2521c6fd9d89f67a00d01d212c5afd5ba1a0fffac589975"
+      ]
+    },
+    "arg-0033.flaw": {
+      "skill": "flaw",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "83d8c82f0dd91cafc14e0f9b072a734559f8eeb5f62c66d8c2e61d8958dbddcf"
+      ]
+    },
+    "arg-0033.weaken": {
+      "skill": "weaken",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "60504f2edeecb2aa492da619721e236e922853b0f253ffb04924ad3ad54e00ea"
+      ]
+    },
+    "arg-0034.flaw": {
+      "skill": "flaw",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "41818d1083ebe8b03c55d97f8642f4896e426b8b842d76c335380ba6154d07e9"
+      ]
+    },
+    "arg-0034.strengthen": {
+      "skill": "strengthen",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "410a819831ed7a9b42e5009615443fbf5ddbe08993a87ddeed83265127f39865"
+      ]
+    },
+    "arg-0035.conclusion": {
+      "skill": "conclusion",
+      "max": 1,
+      "status": "active",
+      "revisions": [
+        "fd22b654b7aafb480df6a18a982d670ddfb12986a13c68a80382c861853c516c"
+      ]
+    },
+    "arg-0035.weaken": {
+      "skill": "weaken",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "a261c812e8b2ab847e4e4edcb82f45eda96a215c8b3973f648cf4dd43eb271c6"
+      ]
+    },
+    "arg-0036.conclusion": {
+      "skill": "conclusion",
+      "max": 1,
+      "status": "active",
+      "revisions": [
+        "3c135aaf93a7bfab17a988623f302313c3570dcf789df2bed56b9a5ecb12b14a"
+      ]
+    },
+    "arg-0036.assumption": {
+      "skill": "assumption",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "24e2d5fc148929a0393a1792ac9740a31a8dbb6c930d8db4e80e1b9c3eb553e7"
+      ]
+    },
+    "arg-0037.strengthen": {
+      "skill": "strengthen",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "9ba250656be7e79857f41feafd0ae642021cb92c969359c3bea52133cc37cfa0"
+      ]
+    },
+    "arg-0037.assumption": {
+      "skill": "assumption",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "6ebfcbbdf397d60256bbe642ec03cae410221652a900e337973a3033abc9ae25"
+      ]
+    },
+    "arg-0038.assumption": {
+      "skill": "assumption",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "21ddc70f2fd37da73bd8503ec6025779c28073b1088718e92725d8f23646e007"
+      ]
+    },
+    "arg-0038.weaken": {
+      "skill": "weaken",
+      "max": 2,
+      "status": "active",
+      "revisions": [
+        "06f623592adf1beed01a06c42a3426a7c254b24a55cb0d2954d470a72f23acdb"
+      ]
     }
   }
 }
