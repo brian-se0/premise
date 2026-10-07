@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=e3911a81-a4c9-4963-88ab-32d40cce0d5e
+I01: 0/2
+- Criterion 1: not met. The markings-as-guide claim concerns the distortion claim the task says to take as given, not an unstated bridge from that granted distortion to the recommendation to start elsewhere.
+- Criterion 2: not met. Because the claim is aimed at the wrong step, it is not a properly scoped necessary assumption for the recommendation.
+- Tip: Hold the granted claim fixed and ask what extra claim is still needed for the recommendation to follow.
+I02: 1/2
+- Criterion 1: met. Ruling out a few repeatedly photographed lynx accounting for most of the 2020 photos is an unstated link between the photo drop and population size.
+- Criterion 2: not met. It rules out 2020 repeats without comparing them to 2025, so a smaller repeat effect, or the same pattern in both years, could still leave a substantial population drop.
+- Tip: Size the alternative against both years so that, if false, the drop no longer shows a substantial fall.
+I03: 1/2
+- Criterion 1: met. A multi-year pre-camera decline on those streets is a new pre-installation fact that can undercut the cameras as the main cause.
+- Criterion 2: not met. The answer never says why that trend would make much of the 40 percent drop expected even without the cameras.
+- Tip: After the new fact, spell out how it would produce most of the observed decline on its own.
+I04: 2/2
+- Criterion 1: met. A list of 340 restaurants with at least one violation is consistent with 400 failed inspections and spreads failures well beyond one restaurant in ten.
+- Criterion 2: met. It explains that the writer treated the inspection failure rate as if it were the restaurant rate, so the conclusion does not follow.
+- Tip: Keep tying the new count back to the gap between inspections and distinct restaurants.
+END FEEDBACK
+
+BEGIN SCORES v2 request=e3911a81-a4c9-4963-88ab-32d40cce0d5e
+I01 | 0/2 | wrong-gap, misread-stimulus
+I02 | 1/2 | overstated
+I03 | 1/2 | incomplete
+I04 | 2/2 | -
+END SCORES

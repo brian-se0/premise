@@ -1,0 +1,16 @@
+BEGIN FEEDBACK request=6667e0ad-d733-4433-b855-30341b20fb03
+I01: 1/2
+- Criterion 1 (new fact that makes a rise more likely): Met. The fact that Pell's Saturday sales were also flat for years before the move is not stated in the premises. It is consistent with them and is one of the listed strengtheners, since it makes Pell a closer match to Ardley.
+- Criterion 2 (explains how it strengthens the argument): Not met. The answer says Pell "was where Ardley is now" and that this makes the jump more likely. That is only a restatement of the similarity. It does not say why the similarity matters, for example that the move's effect would then carry over because Ardley is in the same position Pell was in.
+- Tip: After stating your fact, add a "because" sentence that connects it to why Ardley's sales would rise too, not just that the two towns look alike.
+
+I02: 1/2
+- Criterion 1 (distinct unstated claim linking the extra rise to cover crops): Met. The answer gives an unstated claim about other factors (seed, fertilizer, irrigation, weather) being the same across the two groups, which is a real bridge between the yield gap and the cover crops. It is not a premise or a restatement of the conclusion.
+- Criterion 2 (no stronger than needed): Not met. The answer requires that the two groups had "everything else in common" and that cover crops were "the only difference." That is too strong. The argument only needs that no other difference by itself accounts for the whole extra rise, and small differences that do not explain the gap would not sink it.
+- Tip: Phrase a necessary assumption as "no other difference alone explains the gap," rather than "nothing else differed."
+END FEEDBACK
+
+BEGIN SCORES v2 request=6667e0ad-d733-4433-b855-30341b20fb03
+I01 | 1/2 | incomplete
+I02 | 1/2 | overstated
+END SCORES

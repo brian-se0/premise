@@ -1,0 +1,26 @@
+BEGIN FEEDBACK request=7ef74f63-fd47-42f0-8029-42f128e64925
+I01: 2/2
+
+* Criterion 1: met; the answer gives a new fact that components slow down substantially when running together, consistent with each being under half a second alone.
+* Criterion 2: met; it explains that the combined slowdown makes the screen take about 1.2 seconds, exceeding the half-second limit.
+* Tip: When weakening an argument, connect the new fact explicitly to why the whole system can fail even though each part passes separately.
+  I02: 1/2
+* Criterion 1: met; the answer correctly identifies the shift from one in ten inspections to one in ten restaurants.
+* Criterion 2: not met; it says the share of restaurants could be lower than one in ten, but 400 failed inspections across 1,000 restaurants require at least 100 restaurants and could involve up to 400, so the relevant concern is that the share could be higher.
+* Tip: Check the direction of the numerical implication before explaining why a percentage inference fails.
+  I03: 1/2
+* Criterion 1: met; the fact that nearby towns without a fee kept handing out about the same number of bags is new and supports the fee as the cause of Brannock's decline.
+* Criterion 2: not met; the answer gives the comparison but does not explain why it makes the fee more likely to have caused the reduction in Brannock.
+* Tip: After giving a comparison, state the causal implication explicitly—for example, that the stable numbers elsewhere make a general trend less likely.
+  I04: 1/2
+* Criterion 1: met; the localized crash reduction near the cameras is a new fact that supports the cameras as the cause.
+* Criterion 2: not met; saying it “helps the council's case” does not explain that crashes staying stable outside camera range links the decline specifically to the cameras.
+* Tip: Explain the causal connection by stating why the location-specific pattern makes another explanation less likely.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=7ef74f63-fd47-42f0-8029-42f128e64925
+I01 | 2/2 | -
+I02 | 1/2 | scope-shift
+I03 | 1/2 | no-reasoning
+I04 | 1/2 | no-reasoning
+END SCORES

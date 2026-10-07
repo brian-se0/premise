@@ -1,0 +1,23 @@
+BEGIN FEEDBACK request=64c66b35-06ea-44f3-a78e-bcd7e7ed658b
+I01: 0/2
+- Criterion 1 (states an unstated claim linking the three-island recovery to the four): Not met. The answer only says that removing the goats would let saltbush grow back on the four islands, which is the argument's conclusion. It offers no distinct unstated claim, so the disqualifier applies.
+- Criterion 2 (stated no more strongly than needed): Not met. A restated conclusion is not an assumption, so there is nothing to judge for strength.
+- Tip: Ask what else would have to be true for the goats' removal to work on the four islands (for example, no other obstacle, or seeds or plants to regrow from), and state that instead of the conclusion.
+I02: 1/1
+- Criterion (identifies the main conclusion): Met. The answer says first-time listeners should start with a recording other than the Ardent Quartet's. It correctly treats the flawless playing, the fast slow movements and the distorted picture as support, and it correctly identifies the pop-band point as the critics' argument, which the author rejects.
+- Tip: Keep checking which claim the rest of the passage is there to support, as you did here.
+I03: 0/1
+- Criterion (identifies the main conclusion): Not met. The answer names the intermediate claim, that the study's finding can't be trusted because the bicycle makers paid for it, as the main conclusion. It also reverses the relationship, calling the recommendation that the council should not count the study a reason for that claim. In fact the distrust of the finding is the reason for the recommendation.
+- Tip: Test each candidate by asking which claim answers "so what should the council do?" The recommendation is the conclusion, and the untrustworthy finding is its support.
+I04: 2/2
+- Criterion 1 (ties the error to this argument): Met. The answer names the director's crediting of the later hours for the 30 percent rise in teen borrowing at the five branches.
+- Criterion 2 (names an unruled-out alternative cause): Met. The answer points out that the branches were chosen because teens there had asked most for later hours, so teen interest there may already have been rising, and borrowing could have climbed anyway. This is an open alternative that the stimulus does not rule out.
+- Tip: Keep pairing the flawed inference with a specific, plausible alternative cause, as you did here.
+END FEEDBACK
+
+BEGIN SCORES v2 request=64c66b35-06ea-44f3-a78e-bcd7e7ed658b
+I01 | 0/2 | restates-conclusion
+I02 | 1/1 | -
+I03 | 0/1 | premise-as-conclusion
+I04 | 2/2 | -
+END SCORES

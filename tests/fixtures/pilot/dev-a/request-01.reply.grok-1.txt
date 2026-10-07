@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=72e77090-69d3-452b-9a19-047a210ece12
+I01: 0/2
+- Criterion by criterion: not met — the answer only restates the conclusion (saltbush will grow back once goats are removed from the four islands), which the argument already states, so it is not an unstated linking assumption. Not met — because it is the conclusion itself, it is not a distinct necessary claim whose denial would break the inference while the premises stay.
+- Tip: State a claim the argument leaves unsaid, such as that nothing else on the four islands would block recovery, not the prediction the author already draws.
+I02: 2/2
+- Criterion by criterion: met — it gives an unstated link: goat removal must explain at least part of the recovery on the three islands, otherwise that recovery would not support the same move on the other four. Met — the claim is only as strong as needed; if some other change unique to those three islands fully explained the recovery, the argument would fail without requiring the islands to match in every condition.
+- Tip: Keep naming the gap between the observed recovery and the causal role of goat removal, as you did here.
+I03: 0/1
+- Criterion by criterion: not met — the author leaves the lane decision open and only concludes that the council should not count the paid study; saying the council should vote against the lanes goes past that conclusion.
+- Tip: Separate the recommendation actually made (do not count this study) from concessions and from a stronger policy the author does not assert.
+I04: 1/2
+- Criterion by criterion: not met — the answer never names the move from the rise after later hours to the director’s claim that the longer hours caused it. Met — a reading challenge or heavier assignments near only those five branches is an open alternative the stimulus does not rule out.
+- Tip: Name both the causal conclusion and the alternative cause so the flaw is tied to this argument, not only to a possible other story.
+END FEEDBACK
+
+BEGIN SCORES v2 request=72e77090-69d3-452b-9a19-047a210ece12
+I01 | 0/2 | restates-conclusion
+I02 | 2/2 | -
+I03 | 0/1 | overstated
+I04 | 1/2 | incomplete
+END SCORES

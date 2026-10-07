@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=8c7374a7-e26d-43f4-a74f-1c5b7dc83039
+I01: 0/2
+- Criterion by criterion: not met — the needed assumption is that no other change accounts for all of the extra rise; the answer states the opposite, that some other change does account for it. Not met — that inverted claim, if true, destroys the conclusion rather than being a claim whose falsity would make the argument fall apart, so strength is not the issue.
+- Tip: State the claim the argument needs to be true (other changes do not fully explain the gap), not the rival explanation that would sink it.
+I02: 2/2
+- Criterion by criterion: met — the answer ties the error to treating Kessel Ridge’s necessary dry-season water (and fertile soil) as support for calling the ruins probably a large settlement. Met — it explains that necessary is not the same as likely, and that the passage never shows sites with those conditions tended to grow large rather than stay small.
+- Tip: Keep pairing the necessary condition with the missing frequency claim whenever a conclusion says “probably.”
+I03: 1/2
+- Criterion by criterion: met — the fire marshal’s written approval of holding repairs until an already ordered system arrived is a new fact, consistent with the premises, that casts doubt on whether the delay was wrongdoing. Not met — the answer never says how that fact undercuts the editor’s use of the code’s conditions.
+- Tip: After the new fact, add one sentence on which rule condition it puts in doubt and why that weakens the call to publish.
+I04: 2/2
+- Criterion by criterion: met — the answer gives an unstated claim that the rise is not due to unhappy customers dropping off before the survey, which links the higher average to greater satisfaction with the help. Met — denying that claim would leave the whole rise explained by who answered, so it is not stronger than the argument needs.
+- Tip: Phrase the assumption as “the rise is not entirely due to…” so the rival explanation is clearly the one that would wipe out the conclusion.
+END FEEDBACK
+
+BEGIN SCORES v2 request=8c7374a7-e26d-43f4-a74f-1c5b7dc83039
+I01 | 0/2 | wrong-gap
+I02 | 2/2 | -
+I03 | 1/2 | incomplete
+I04 | 2/2 | -
+END SCORES

@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=4f33402e-ab9f-48ee-be5c-3c89b5eb4aa2
+I01: 1/2
+- Criterion 1 (ties the error to this argument): Met. The answer names the confusion between the share of inspections (1 in 10) and the share of restaurants, and notes the four inspections per restaurant.
+- Criterion 2 (says why the inference fails, with the share of restaurants possibly far higher): Not met. It says only that the two numbers "don't have to be the same". It never says the failed inspections could be spread across many more restaurants, so the share of restaurants could be higher than one in ten (up to four in ten). This matches the 1/2 anchor.
+- Tip: Spell out the direction of the gap, for example "400 failed inspections could involve up to 400 different restaurants, which is 40 percent."
+I02: 1/2
+- Criterion 1 (new fact that makes a great reduction more likely): Met. Neighboring towns without a fee still hand out about the same number of bags, which makes a cause other than the fee less likely. It is a new fact and consistent with the premises.
+- Criterion 2 (explains how it strengthens the argument): Not met. The answer states the fact but never says why it makes it more likely that the fee caused a large fall in the plastic households throw away.
+- Tip: After stating your fact, add a "because..." sentence linking it to the conclusion, for example "this suggests the drop is due to the fee, not a general trend."
+I03: 1/2
+- Criterion 1 (new fact giving material reason to doubt the memo reveals wrongdoing): Met. A written approval from the fire marshal of a plan to delay repairs until a replacement system arrived gives a plausible justification for the delay, so it may not be wrongdoing. This is consistent with the premises.
+- Criterion 2 (explains how it weakens the use of the rule): Not met. The answer gives no explanation of how the fact bears on the rule's condition that the memo reveals wrongdoing, so this earns the one point for an unexplained qualifying fact.
+- Tip: Close with a sentence naming which condition of the rule may fail and why, for example "so the delay may not count as wrongdoing, and the rule may not apply."
+I04: 0/2
+- Criterion 1 (new fact that makes recovery on the four islands more likely): Not met. The fact says saltbush returned only fifteen years after removal, in the same year a replanting program began. That points toward replanting as an alternative cause, so it makes the goats' removal a less likely explanation and weakens the argument.
+- Criterion 2 (explains how the fact strengthens the argument): Not met. The explanation claims the fact ties the recovery to the goats' removal, but the fact does the opposite. The reasoning does not follow from the fact given.
+- Tip: Check that your fact points in the right direction by asking whether it makes the conclusion more or less likely before explaining it.
+END FEEDBACK
+
+BEGIN SCORES v2 request=4f33402e-ab9f-48ee-be5c-3c89b5eb4aa2
+I01 | 1/2 | incomplete
+I02 | 1/2 | incomplete
+I03 | 1/2 | incomplete
+I04 | 0/2 | wrong-gap
+END SCORES

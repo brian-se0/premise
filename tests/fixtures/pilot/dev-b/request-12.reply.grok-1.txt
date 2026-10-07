@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=ca3e0e4d-11c0-4fc7-a566-148ee7281052
+I01: 1/1
+- Criterion by criterion: met — the answer states that a first-time listener should not begin with the Ardent Quartet recording and should choose a different one, which is the author's recommendation rather than the distorted-impression claim or the critics' dismissal.
+- Tip: Keep naming the recommended action itself, not the reason offered for it.
+I02: 1/1
+- Criterion by criterion: met — the answer says the council should leave the bicycle makers' study out of the case for the lanes whatever the vote is, which is the main conclusion rather than the claim that the finding cannot be trusted.
+- Tip: Preserve the author's open decision about building the lanes and limit the conclusion to not counting the study.
+I03: 1/2
+- Criterion by criterion: met — the answer ties the error to this argument by naming the dry-season water requirement that Kessel Ridge met and the conclusion that the ruins were probably a large settlement. Not met — saying sites could have stayed small so the requirement does not mean the settlement was big only shows the conditions fail to guarantee largeness, not that nothing shows sites meeting them were usually large.
+- Tip: When the conclusion is “probably,” say what is missing about how often those conditions produced a large settlement, not only that they do not force that result.
+I04: 1/1
+- Criterion by criterion: met — the answer identifies the main point as not starting with the Ardent recording, which is the author's recommendation rather than the intermediate distorted-sense claim.
+- Tip: Make the audience explicit (first-time listeners) so the recommendation cannot be read as a general dismissal of the recording.
+END FEEDBACK
+
+BEGIN SCORES v2 request=ca3e0e4d-11c0-4fc7-a566-148ee7281052
+I01 | 1/1 | -
+I02 | 1/1 | -
+I03 | 1/2 | incomplete
+I04 | 1/1 | -
+END SCORES

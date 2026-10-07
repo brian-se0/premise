@@ -1,0 +1,32 @@
+BEGIN FEEDBACK request=4f33402e-ab9f-48ee-be5c-3c89b5eb4aa2
+I01: 1/2
+
+* Criterion 1: Met. The answer correctly names the 1 in 10 inspections versus 1 in 10 restaurants distinction.
+* Criterion 2: Not met. The student states that the two numbers don't have to be the same, but does not explain that the proportion of affected restaurants could be higher (up to four in ten) due to multiple inspections per restaurant.
+* Tip: When explaining why a proportion inference fails, specify how the numbers can shift (e.g., that failure rates across multiple inspections could spread across up to 40% of restaurants).
+
+I02: 1/2
+
+* Criterion 1: Met. The student provides a relevant new fact about neighboring towns without a fee maintaining their bag usage levels.
+* Criterion 2: Not met. The response fails to provide an explanation of how this control group observation strengthens the causal link to the town's reduced household plastic waste weight.
+* Tip: Always include an explicit explanation connecting your new fact to the conclusion, showing how it supports the argument.
+
+I03: 1/2
+
+* Criterion 1: Met. The student provides a plausible new fact showing official approval for delaying repairs, which calls into question whether the delay constituted wrongdoing.
+* Criterion 2: Not met. The response presents the fact but does not explicitly explain how it affects the application of the paper's code of practice rule.
+* Tip: Explicitly state how the new premise weakens the editor's conclusion regarding the specific rule or condition in question.
+
+I04: 0/2
+
+* Criterion 1: Not met. The fact provided introduces an alternative explanation (replanting program) that actually weakens the original argument instead of strengthening it.
+* Criterion 2: Not met. The explanation incorrectly asserts that a replanting program strengthens the causal link to goat removal.
+* Tip: Make sure your additional fact rules out alternative causes or supports the main mechanism, rather than introducing a separate cause like a replanting program.
+END FEEDBACK
+
+BEGIN SCORES v2 request=4f33402e-ab9f-48ee-be5c-3c89b5eb4aa2
+I01 | 1/2 | understated
+I02 | 1/2 | incomplete
+I03 | 1/2 | incomplete
+I04 | 0/2 | wrong-gap
+END SCORES

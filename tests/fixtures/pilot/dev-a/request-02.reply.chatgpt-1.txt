@@ -1,0 +1,32 @@
+BEGIN FEEDBACK request=9609701c-36e2-4c8f-8afd-a5dc664c0fdf
+I01: 2/2
+
+* Criterion 1 met: The answer gives a new fact that checkout bags made up a large share of household plastic waste by weight.
+* Criterion 2 met: It explains that an 80% reduction in bags would therefore remove a large amount of plastic waste by weight. 
+* Tip: When strengthening an argument about weight, connect the proposed fact directly to the quantity being measured.
+
+I02: 2/2
+
+* Criterion 1 met: The answer states an unstated link: a shift of lynx into areas without cameras could explain the photographic decline without a population decline.
+* Criterion 2 met: It limits the assumption appropriately by saying the range shift would have to be large enough to account for the drop from 120 to 58, rather than requiring no change in lynx behavior at all. 
+* Tip: State necessary assumptions in terms of whether an alternative explanation could be large enough to account for the observed evidence.
+
+I03: 2/2
+
+* Criterion 1 met: The answer gives new evidence that saltbush seeds and seedlings are present on the four goat islands.
+* Criterion 2 met: It explains that grazing prevents the existing seedlings from surviving, so removing the goats would remove the factor currently blocking regrowth. 
+* Tip: Prefer strengtheners that directly show the proposed intervention would remove the obstacle preventing the predicted outcome.
+
+I04: 2/2
+
+* Criterion 1 met: The answer ties the error directly to the rise in teenage borrowing after the hours were extended and the director's causal conclusion.
+* Criterion 2 met: It identifies an unruled-out alternative cause: teenage interest or library use in those branches may already have been increasing because of how the branches were selected. 
+* Tip: For causal arguments, identify a plausible alternative cause that could produce the observed change independently of the proposed cause.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=9609701c-36e2-4c8f-8afd-a5dc664c0fdf
+I01 | 2/2 | -
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 2/2 | -
+END SCORES

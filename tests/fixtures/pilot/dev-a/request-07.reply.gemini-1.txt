@@ -1,0 +1,32 @@
+BEGIN FEEDBACK request=954c1c55-7f84-4260-ad41-02b4aa63072c
+I01: 1/2
+
+* Rubric item 1 met: The student provided a new fact consistent with the premises (state auditor's report online) showing another way the public could learn about the wrongdoing.
+* Rubric item 2 not met: The response incorrectly concludes that "the Ledger shouldn't publish it," inferring that failing to meet the rule's specific condition means publishing is strictly forbidden.
+* Tip: Avoid concluding that an action is forbidden simply because a specific rule allowing or recommending it does not apply.
+
+I02: 0/2
+
+* Rubric item 1 not met: The student only listed a bare label ("Necessary vs. sufficient condition error") without tying it to the specific elements of the argument.
+* Rubric item 2 not met: The student did not explain why the inference fails in the context of the museum's attendance rise and grant renewal.
+* Tip: Always apply abstract logical concepts directly to the details and premises of the given scenario.
+
+I03: 0/2
+
+* Rubric item 1 not met: The fact provided introduces an alternative explanation (a replanting program) that actually weakens the connection between removing goats and the saltbush recovery.
+* Rubric item 2 not met: The explanation incorrectly asserts that a replanting program ties the recovery to goat removal rather than explaining a genuine strengthening mechanism.
+* Tip: Make sure your new fact eliminates alternative explanations or demonstrates shared mechanisms rather than introducing confounding variables.
+
+I04: 2/2
+
+* Rubric item 1 met: The student correctly identified an unstated assumption regarding selection bias in who answered the survey.
+* Rubric item 2 met: The student stated the assumption appropriately without overstating it, explicitly noting that the argument survives as long as at least part of the rise reflects actual satisfaction.
+* Tip: Keep precisely targeting the minimum necessary condition needed for an argument to remain valid.
+END FEEDBACK
+
+BEGIN SCORES v2 request=954c1c55-7f84-4260-ad41-02b4aa63072c
+I01 | 1/2 | understated
+I02 | 0/2 | no-reasoning, incomplete
+I03 | 0/2 | wrong-gap
+I04 | 2/2 | -
+END SCORES

@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=f6f30331-2fe2-4993-99ef-725a8574db64
+I01: 0/2
+- Criterion by criterion: not met — the answer never ties the error to the fall from 15 to 9 percent and the conclusion that fewer appointments are missed. Not met — it talks about patients who never get booked, which does not explain why a lower share of a larger booking total need not be a smaller number of misses.
+- Tip: Stay on the inference from a lower no-show share to fewer missed appointments, and say why more bookings can offset that drop.
+I02: 2/2
+- Criterion by criterion: met — the unstated claim is that lynx did not move off the camera trails enough to produce the drop from 120 to 58 photos by itself. Met — the “by so much” qualifier is only as strong as needed: if that shift alone explained the drop, the photo counts would no longer show a substantial fall in the number of lynx.
+- Tip: Keep the size condition explicit, as you did, so the assumption is necessary rather than “habits never changed at all.”
+I03: 2/2
+- Criterion by criterion: met — the distinct unstated claim is that the rise is not due to unhappy customers leaving before the end-of-chat survey, which links the higher average to satisfaction with the help rather than to who answered. Met — denying that claim would remove the support for the script conclusion, without requiring that nothing else differed or that exactly the same customers answered.
+- Tip: Lead with the survey-selection claim and drop the restatement that people were happier, which is the conclusion itself.
+I04: 0/2
+- Criterion by criterion: not met — a rise from about 400 to 600 bookings is consistent with the premises but too small to cast doubt on fewer misses; 9 percent of 600 is still below 15 percent of 400. Not met — the explanation says the clinic is missing more appointments, but the figures given show 54 versus 60, so the number fell and the conclusion is not weakened.
+- Tip: Check the threshold before you weaken a rate-to-count claim: bookings must grow by at least about two-thirds before 9 percent of the new total is at least 15 percent of the old one.
+END FEEDBACK
+
+BEGIN SCORES v2 request=f6f30331-2fe2-4993-99ef-725a8574db64
+I01 | 0/2 | wrong-gap, irrelevant
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 0/2 | understated, incomplete
+END SCORES

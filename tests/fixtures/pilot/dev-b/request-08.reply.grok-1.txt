@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=d4348993-ca70-4dee-9b04-b5ccdf025dcd
+I01: 1/2
+- Criterion 1 met: the answer supplies an unstated availability claim that links the granted distortion to choosing a different recording rather than restating a premise or the recommendation.
+- Criterion 2 not met: requiring a recording that follows Beethoven’s tempos exactly is stronger than the argument needs; a less distorting recording would be enough.
+- Tip: State only what must be true for the recommendation to follow, not a stronger condition such as exact adherence to the markings.
+I02: 2/2
+- Criterion 1 met: flat Saturday sales in Pell before the move is a new fact, consistent with the premises, that makes a similar rise in Ardley more likely.
+- Criterion 2 met: the answer explains that Pell then resembled Ardley now, so the same kind of jump is more plausible.
+- Tip: Keep pairing a new likeness fact with a short “so the transfer is more likely” clause, as you did here.
+I03: 2/2
+- Criterion 1 met: the answer states an unstated causal bridge—that goat removal accounts for at least part of the recovery on the three islands—linking that recovery to the four islands.
+- Criterion 2 not overstated: denying it (recovery wholly due to something that happened only on those three) would make the argument fall apart without requiring the islands to match in soil or rain.
+- Tip: Keep the assumption at “at least part of the cause,” and show the counterexample that would sever the link, as you did.
+I04: 1/2
+- Criterion 1 met: a multi-year pre-installation decline on the eight streets is a new, premise-consistent fact that gives a real reason to doubt the cameras caused most of the drop.
+- Criterion 2 not met: the answer never says why that prior trend makes much of the 40 percent fall likely even without the cameras.
+- Tip: After the pre-camera fact, add one sentence on the alternative path (the decline was already under way, so it could have continued without the cameras).
+END FEEDBACK
+
+BEGIN SCORES v2 request=d4348993-ca70-4dee-9b04-b5ccdf025dcd
+I01 | 1/2 | overstated
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 1/2 | no-reasoning
+END SCORES

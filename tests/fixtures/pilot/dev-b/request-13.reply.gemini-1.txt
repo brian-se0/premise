@@ -1,0 +1,18 @@
+BEGIN FEEDBACK request=91f61859-2550-4260-958e-bdfc13c4cfc9
+I01: 2/2
+
+* Criterion 1: Met. The student provides a new fact (340 restaurants had violations, or 34%) consistent with the premises that points to failures being spread across clearly more than 1 in 10 restaurants.
+* Criterion 2: Met. The student explains how this weakens the argument by showing that 34% is way more than 1 in 10, explaining that the writer confused the inspection failure rate with the restaurant failure rate.
+* Tip: Excellent job directly calculating the spread to highlight the flaw in the writer's reasoning.
+
+I02: 1/2
+
+* Criterion 1: Met. The student identifies an unstated claim regarding external factors (seed, fertilizer, weather, etc.) rather than repeating a premise or conclusion.
+* Criterion 2: Not met. The student states the claim too strongly ("had everything else in common", "cover crops were the only difference"), requiring that no other differences existed at all rather than stating that no other difference fully accounts for the yield gap.
+* Tip: State necessary assumptions moderately so they don't rule out minor, irrelevant differences that wouldn't defeat the argument.
+END FEEDBACK
+
+BEGIN SCORES v2 request=91f61859-2550-4260-958e-bdfc13c4cfc9
+I01 | 2/2 | -
+I02 | 1/2 | overstated
+END SCORES

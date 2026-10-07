@@ -1,0 +1,29 @@
+BEGIN FEEDBACK request=ca3e0e4d-11c0-4fc7-a566-148ee7281052
+I01: 1/1
+
+* Criterion: met — identifies the main conclusion that first-time listeners should choose a different recording rather than the Ardent Quartet's.
+* Tip: Distinguish the author's recommendation from the reasons given to support it.
+
+I02: 1/1
+
+* Criterion: met — correctly states that the council should leave the bicycle makers' study out of the case for the lanes.
+* Tip: When identifying a conclusion, focus on what the author recommends the decision-maker do.
+
+I03: 2/2
+
+* Criterion 1: met — connects the large-settlement water requirement, Kessel Ridge's year-round water, and the conclusion that the settlement was probably large.
+* Criterion 2: met — explains that having water and fertile soil does not establish that a large settlement was likely, since sites with those conditions could remain small.
+* Tip: When criticizing a likelihood claim, explain what evidence is missing about how often the stated conditions actually lead to the conclusion.
+
+I04: 1/1
+
+* Criterion: met — correctly identifies that the Ardent recording is not the one a first-time listener should start with.
+* Tip: State the recommendation directly when asked for the main conclusion.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=ca3e0e4d-11c0-4fc7-a566-148ee7281052
+I01 | 1/1 | -
+I02 | 1/1 | -
+I03 | 2/2 | -
+I04 | 1/1 | -
+END SCORES

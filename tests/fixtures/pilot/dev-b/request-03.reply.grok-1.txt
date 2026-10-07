@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=4f33402e-ab9f-48ee-be5c-3c89b5eb4aa2
+I01: 1/2
+- Criterion 1 met: the answer names the one-in-ten inspection rate and the conclusion about one restaurant in ten, and ties the error to equating those two shares.
+- Criterion 2 not met: it notes the four inspections but only says the shares need not match, without saying the failed inspections could be spread across more restaurants than one in ten (up to four in ten).
+- Tip: State the direction of the mismatch: four inspections each means the failures can cover far more restaurants than the inspection rate suggests.
+I02: 1/2
+- Criterion 1 met: nearby towns without a fee still handing out about the same number of bags is a new fact that makes the fee a more likely cause of the drop.
+- Criterion 2 not met: the answer never says how that comparison makes a large, fee-driven fall in household plastic waste more likely.
+- Tip: After the new fact, add one sentence on the gap it closes, here that the bag drop is less likely to be a regional trend unrelated to the fee.
+I03: 1/2
+- Criterion 1 met: written fire-marshal approval of a delayed-repair plan is a new fact, consistent with the premises, that makes it less clear the delay was wrongdoing the public had no other way to learn about.
+- Criterion 2 not met: the answer does not explain why that approval means a condition of the code may not be met.
+- Tip: Say which condition of the rule the fact undercuts, here that an approved plan makes the delay less clearly wrongdoing.
+I04: 0/2
+- Criterion 1 not met: recovery starting only fifteen years later, in the same year as a replanting program, points away from goat removal as the cause, so it does not make recovery on the other four more likely.
+- Criterion 2 not met: the explanation claims the fact ties recovery to goat removal, which is the opposite of what the timing and the replanting program suggest.
+- Tip: Check that a proposed strengthener actually supports the causal claim; a fact that offers a rival cause weakens rather than strengthens.
+END FEEDBACK
+
+BEGIN SCORES v2 request=4f33402e-ab9f-48ee-be5c-3c89b5eb4aa2
+I01 | 1/2 | incomplete
+I02 | 1/2 | incomplete
+I03 | 1/2 | incomplete
+I04 | 0/2 | irrelevant
+END SCORES
