@@ -38,3 +38,7 @@ All eight runs: web on the owner's PC, pasted and copied by Claude after the own
 - Signed in, plan not shown (the menu offers "Upgrade plan"); private chat in Auto mode (set from Expert at dev-a 01). No web search switch.
 - dev-a 21:21 to 21:59 UTC, dev-b 22:02 to 22:28 UTC, 2026-10-06.
 - Every reply clean, every feedback row matched. One disagreement with gold (dev-a, one point high).
+
+## 2026-10-07 · configuration frozen for the held-out runs
+
+Unchanged from the development runs: prompt v4, parser v4, the keys and labels registered in `pilot/registration.ts`, and each chatbot's setup as in its entry above (ChatGPT free in a temporary chat; Claude on the owner's paid account in an incognito chat with Sonnet 5.5 at Medium effort; Gemini Flash 3.6 free in a normal chat; Grok in a private chat in Auto mode), pasted and copied the same way. The expected parse and feedback results for the 104 development replies are in each run's `expected.json`. An independent reading of every score block and feedback heading agreed with them on all 104; the four replies without a single score block (dev-a 08 ChatGPT, empty; dev-a 11 and dev-b 02 Gemini, refusals; dev-a 08 Claude, a corrected second block) were read in full.

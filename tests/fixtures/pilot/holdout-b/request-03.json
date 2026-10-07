@@ -1,0 +1,36 @@
+{
+  "id": "faa2557b-b994-42db-b496-42d6a6eabacb",
+  "fence": "5HZBH8",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "con12",
+      "taskId": "arg-0024.conclusion",
+      "snapshotHash": "28724fcca95f57247818dd0ccba2b39264faabf11b3e2e1ac09516b27af9f98f",
+      "answer": "The author is arguing that the Varden Historical Society should actively support the apartment plan for the silo, since the conversion keeps the walls and loading machinery."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "str11",
+      "taskId": "arg-0027.strengthen",
+      "snapshotHash": "198269e7d33a4153198a796b6acc7a50fc4f111d2a4178ba99c7ab9d10cb0fe1",
+      "answer": "The letter is addressed to \"Judge Amos Ferris\", and the county court's records show Ferris was first appointed a judge in 1803. Someone writing in 1788 would not have called him a judge, so the letter itself points to a date of 1803 or later, which backs the curator independently of the watermark."
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "wea14",
+      "taskId": "arg-0020.weaken",
+      "snapshotHash": "429a6fce8fbec4bed3b3686bbbe2a563881a42cf481795460c34643ebe4b188e",
+      "answer": "In the speaking check-in during their first week on the app, the users who later kept 100-day streaks were rated two levels higher, on average, than the users who never practiced more than seven days in a row."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "fla13",
+      "taskId": "arg-0020.flaw",
+      "snapshotHash": "14527d8e350cc40c01833387421f6f32ba61f7f9b784b82da1cc70eaacc525d1",
+      "answer": "The flaw is that Lingora is the one making the claim. It's an ad for their own app, so obviously they want their streak feature to look good, and you can't trust what a company says about its own product."
+    }
+  ],
+  "selfGradeOnly": false
+}
