@@ -2,21 +2,19 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { beforeAll, describe, expect, it } from 'vitest';
 import { loadSnapshots } from '../../pilot/load.ts';
-import { renderPromptForVersion, type PromptVersion } from '../../src/domain/prompt.ts';
+import type { PromptVersion } from '../../src/domain/prompt.ts';
 import { PARSER_VERSION, parseReply } from '../../src/domain/scoreParser.ts';
 import type { Snapshot } from '../../src/domain/types.ts';
 
-// The pilot's saved prompts and replies (docs/GRADING_PROTOCOL.md §10): the app's prompt builder must
-// reproduce every prompt byte for byte, and its parser the hand-checked results in expected.json.
+// The pilot's saved replies (docs/GRADING_PROTOCOL.md §10): the parser must reproduce the hand-checked results in
+// each run's expected.json. tests/unit/prompt.test.ts checks the saved prompts.
 const root = join('tests', 'fixtures', 'pilot');
-const runs = readdirSync(root).filter((f) => existsSync(join(root, f, 'request-01.json')));
+const runs = readdirSync(root).filter((f) => existsSync(join(root, f, 'expected.json')));
 
 interface RequestFixture {
   id: string;
-  fence: string;
   promptVersion: PromptVersion;
-  rows: { rowId: string; attemptId: string; taskId: string; snapshotHash: string; answer: string }[];
-  selfGradeOnly: boolean;
+  rows: { rowId: string; taskId: string }[];
 }
 
 let snapshots: Map<string, Snapshot>;
@@ -33,23 +31,7 @@ const requestsOf = (run: string) =>
     }));
 
 describe.each(runs)('pilot run %s', (run) => {
-  it('rebuilds every saved prompt byte for byte from its frozen inputs', () => {
-    for (const { name, fixture } of requestsOf(run)) {
-      const rows = fixture.rows.map((r) => {
-        const snapshot = snapshots.get(r.taskId)!;
-        expect(snapshot.hash, `${name} ${r.rowId}`).toBe(r.snapshotHash);
-        return { rowId: r.rowId, attemptId: r.attemptId, snapshot, answer: r.answer };
-      });
-      const path = join(root, run, `${name}.prompt.txt`);
-      expect(existsSync(path), name).toBe(!fixture.selfGradeOnly);
-      if (fixture.selfGradeOnly) continue;
-      expect(renderPromptForVersion(fixture.promptVersion, fixture.id, fixture.fence, rows), name).toBe(
-        readFileSync(path, 'utf8'),
-      );
-    }
-  });
-
-  it.runIf(existsSync(join(root, run, 'expected.json')))('parses every saved reply as expected', () => {
+  it('parses every saved reply as expected', () => {
     const expected = JSON.parse(readFileSync(join(root, run, 'expected.json'), 'utf8')) as {
       parserVersion: number;
       replies: Record<string, unknown>;
