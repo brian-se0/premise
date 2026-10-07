@@ -1812,3 +1812,7 @@ After all of these, `npm run content` accepts all 38 exercises, `npm run check` 
 ### Carried forward
 
 The review's six patterns for later batches go into the content lessons for the next batch and, with them, into `CONTENT_GUIDELINES.md` in a separate change. Two of them also apply to published exercises, which need the owner's re-approval to change and so are left for that change: five published strengthen tasks say nothing about a premise-denying fact (arg-0009, arg-0015, arg-0018, arg-0019 and arg-0027; pattern 4), and seven published flaw tasks have a 0-point note that gives only the wrong-gap reason (arg-0011, arg-0014, arg-0016, arg-0017, arg-0018, arg-0021 and arg-0025; pattern 6, which needs a change only where `accept` caps a wrong-gap answer at 1).
+
+## Approval
+
+The owner (brian-se0) approved all ten exercises on a decision card in the project thread at 04:32 UTC on 2026-10-07. Before the approval fields were set, each exercise's `ai_assistance.notes` was updated to say how it was drafted and checked; nothing else changed after the card. All twenty tasks are now in `content/published-tasks.json`.
