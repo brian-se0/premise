@@ -51,3 +51,5 @@ All eight runs used the frozen configuration above, with the same clients, accou
 - Claude (claude-1, reported apart): every reply clean. In holdout-b 05 the I04 feedback heading (2/2) contradicts its score (0/2), so that row's feedback is unmatched. Disagreements: 4 rows in holdout-a (2 false passes), 2 in holdout-b.
 - Gemini (gemini-1): ten more chats in the owner's Gemini history. In holdout-a 04 the I04 feedback heading (1/2) contradicts its score (0/2). In holdout-b 03 the tag `ad-hominem` is not allowed for I04 and was dropped, so the reply is recoverable. holdout-a matched gold on all 20 rows; holdout-b gave wea11, con12 and asm11 full credit for gold 0 (3 false passes).
 - Grok (grok-1): every reply clean, every feedback row matched, and all 20 rows equal to the gold in both runs.
+
+The owner was given the held-out rows where ChatGPT or Gemini disagreed with the gold, with their feedback (§9), and on 2026-10-08 chose outcome 1 with Grok (`docs/DECISIONS.md`).

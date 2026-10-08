@@ -2,6 +2,18 @@
 
 Newest first. Each entry: date, decision, why, and what it rules out. Reopening a decision needs a new entry, not an edit.
 
+## 2026-10-08 — Grading check outcome: proceed with Grok as the checked chatbot
+
+The M0b grading check (`GRADING_PROTOCOL.md` §9) ends in outcome 1, proceed with chatbot, naming Grok: the free web version on a PC, in a private chat in Auto mode, with prompt v4, parser v4 and the app's default batch of 4. Each chatbot graded the held-out exercises (arg-0020, arg-0024, arg-0027) in two row orders of five requests. Claude pasted the prompts on the owner's PC after the owner's typed go-ahead.
+- **Grok passed.** It matched the gold on 20/20 rows in each run, with no false passes. Every reply was clean and all feedback matched.
+- **ChatGPT** (free, gpt-5-6, temporary chat) **did not pass.**
+  - holdout-a: one reply carried a mistyped request id and could not be read. That left resolution coverage at 16/20, clean parses at 4/5 and feedback matched at 16/20; read by hand, its scores there equal the gold.
+  - holdout-b: 3 false passes, with pass/fail agreement at 17/20.
+- **Gemini** (Flash 3.6, normal chat) **did not pass.** holdout-a met every target. holdout-b had 3 false passes (pass/fail 17/20) and one recoverable reply (clean parses 4/5).
+- **Claude** (Sonnet 5.5 at Medium in an incognito chat on the owner's paid account, assumed to be the free default) **did not pass.** It is measured against its own reading of the keys. holdout-a had 2 false passes (pass/fail 17/20); holdout-b met every target.
+
+Before choosing, the owner was given each held-out row where ChatGPT or Gemini disagreed with the gold, with that chatbot's feedback, and chose this outcome on 2026-10-08. The Grade screen keeps linking all four chatbots and marks Grok as checked. Results come from `npm run pilot:score`, the runs are in `pilot/LOG.md`, and the replies are in `tests/fixtures/pilot/`. **Why:** Grok was the only chatbot other than Claude to meet every screening target in both orders. **Rules out:** describing ChatGPT, Gemini or Claude as checked; reading the pass as more than a screen, since agreement is with Claude's reading of the keys on synthetic answers, 20 rows a run; and treating a changed Grok model or mode, prompt version or batch size as checked without a new check on fresh held-out exercises.
+
 ## 2026-10-06 — Grading targets free frontier chatbots first, local models second
 
 Students should be able to grade with the free version of any frontier chatbot: OpenAI's ChatGPT, Anthropic's Claude, Google's Gemini and xAI's Grok. The Grade screen links all four, and the grading check tests their free versions. Local models running on the student's own computer are the second target, tested after the four. Closed models outside the frontier are not a target for now. Nothing about the prompt is tuned to one chatbot. **Why:** the owner wants grading to cost students nothing and to work with the chatbots they are most likely to have. **Rules out:** a paid chatbot as a requirement, and designing the prompt around a non-frontier closed model.
