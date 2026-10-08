@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=cf7ad594-5b10-4640-aeab-89addf1f2881
+I01: 0/2
+- Criterion 1 (new fact that makes a date of 1801 or later more likely): Not met. The fact says a mill across the border used a running hare in the 1770s and Tarrant merchants bought from it. That makes it more likely the letter's paper came from an earlier source, so it points the wrong way and undercuts the curator's conclusion.
+- Criterion 2 (explains how the fact strengthens the argument): Not met. The explanation says the hare mark was "well-known", which does not connect to dating the letter to 1801 or later.
+- Tip: Before offering a strengthener, check that it makes the later date more likely, for example by tying the paper to Holt or ruling out other sources of hare-marked paper.
+I02: 1/2
+- Criterion 1 (unstated claim that lets Holt's records date this sheet): Met. The answer gives a distinct, unstated claim about other papermakers using a hare mark before 1801, which is not a premise or the conclusion.
+- Criterion 2 (no stronger than needed): Not met. It says that none of the papermakers who sold paper in Tarrant used a hare mark before 1801. That covers every supplier, including ones that did not make this sheet, so it is stronger than the argument needs. The argument only needs that this sheet was not made earlier by another hare-marking maker.
+- Tip: Narrow your assumption to the specific sheet, for example that this letter's paper was not made before 1801 by another papermaker using a hare mark.
+I03: 1/1
+- Criterion (identifies main conclusion): Met. "The society should not object to the apartment conversion" matches the author's recommendation without overstating it into a call to support the plan.
+- Tip: Keep separating the recommendation from the reasons and concessions, as you did here.
+I04: 1/2
+- Criterion 1 (ties the error to this argument): Met. The answer names the streak holders' higher test scores and the ad's conclusion that keeping a streak made people better speakers.
+- Criterion 2 (names an open alternative explanation): Not met. The alternative offered is that the streak people had used the app longer. The stimulus says all users had been learning on the app for about a year, so this is ruled out.
+- Tip: Check each alternative against the stimulus's matched conditions (same time on the app, same hours, no outside classes), and instead consider things like prior skill or better speakers finding streaks easier to keep.
+
+END FEEDBACK
+
+BEGIN SCORES v2 request=cf7ad594-5b10-4640-aeab-89addf1f2881
+I01 | 0/2 | missed-alternative
+I02 | 1/2 | overstated
+I03 | 1/1 | -
+I04 | 1/2 | contradicts-premise
+END SCORES

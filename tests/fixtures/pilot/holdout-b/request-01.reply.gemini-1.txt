@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=cf7ad594-5b10-4640-aeab-89addf1f2881
+I01: 0/2
+
+* Criterion 1: Not met. The proposed fact contradicts the premise that Holt was the only paper mill in the region and actually weakens the curator's conclusion instead of strengthening it.
+* Criterion 2: Not met. The explanation incorrectly claims that an earlier watermark weakens rather than supports the argument's timeline.
+* Tip: Make sure your proposed fact supports the conclusion and does not contradict any stated premises in the prompt.
+I02: 1/2
+* Criterion 1: Met. The answer correctly identifies an unstated assumption regarding other paper suppliers selling in Tarrant.
+* Criterion 2: Not met. The claim is overly broad ("none of the paper makers who sold paper in Tarrant back then"), making it stronger than necessary.
+* Tip: Focus your assumption tightly on the specific sheet of paper rather than making broad claims about all suppliers or papermakers.
+I03: 1/1
+* Criterion 1: Met. Correctly identifies the main conclusion that the society should not object to or oppose the apartment conversion.
+* Tip: Keep capturing the core conclusion directly and concisely just as you did here.
+I04: 1/2
+* Criterion 1: Met. Correctly ties the inference from higher test scores to the conclusion about streaks causing better speech.
+* Criterion 2: Not met. The proposed alternative explanation relies on users having been on the app longer, which directly contradicts the stimulus stating both groups had been learning Spanish on the app for about a year.
+* Tip: Always check your alternative explanations against the given premises to ensure they don't contradict matched variables.
+END FEEDBACK
+
+BEGIN SCORES v2 request=cf7ad594-5b10-4640-aeab-89addf1f2881
+I01 | 0/2 | irrelevant
+I02 | 1/2 | overstated
+I03 | 1/1 | -
+I04 | 1/2 | contradicts-premise
+END SCORES

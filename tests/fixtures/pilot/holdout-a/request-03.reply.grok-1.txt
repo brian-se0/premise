@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=5eb00edc-eda9-4ebc-9894-4c2110360cb7
+I01: 0/2
+- Criterion 1 (new fact about starting Spanish that weakens the streak claim, consistent with the premises): not met. Taking Spanish class at school all year denies the premise that no one in either group was taking Spanish classes or lessons outside the app.
+- Criterion 2 (explains how the fact weakens the streak inference): not met. The explanation depends on that ruled-out outside instruction, so it does not count.
+- Tip: Keep every stated premise fixed and add only a starting-level difference, such as the future streak holders already speaking better when they signed up.
+I02: 0/2
+- Criterion 1 (ties the error to the higher speaking scores and the claim that streaks make learners better speakers): not met. The answer attacks who is advertising, not the move from scores to the streak conclusion.
+- Criterion 2 (names an open alternative the argument does not rule out): not met. Company self-interest is not an alternative explanation of the score gap left open by the premises.
+- Tip: Name the inference from streak holders’ higher scores to “streaks make better speakers,” then give a possibility the premises do not close, such as better speakers finding streaks easier to keep.
+I03: 0/2
+- Criterion 1 (unstated bridge, not a premise or stated conclusion): not met. The answer restates the intermediate claim that the conversion keeps what is historically important and the recommendation not to fight the plan.
+- Criterion 2 (no stronger than needed): not met. No distinct necessary assumption is stated.
+- Tip: State something the author never says whose denial would break the argument, such as that nothing the conversion removes is essential to the silo’s historical importance under the charter.
+I04: 0/1
+- Criterion 1 (main conclusion is that the society should not oppose the conversion): not met. “Actively support” goes beyond the author’s recommendation not to oppose the plan.
+- Tip: Match the author’s recommendation exactly: the society should not oppose the apartment plan, not that it should campaign for it.
+END FEEDBACK
+
+BEGIN SCORES v2 request=5eb00edc-eda9-4ebc-9894-4c2110360cb7
+I01 | 0/2 | contradicts-premise
+I02 | 0/2 | irrelevant
+I03 | 0/2 | restates-conclusion
+I04 | 0/1 | overstated
+END SCORES

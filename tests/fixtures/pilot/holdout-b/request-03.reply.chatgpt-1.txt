@@ -1,0 +1,28 @@
+BEGIN FEEDBACK request=faa2557b-b994-42db-b496-42d6a6eabacb
+I01: 0/1
+
+* Criterion by criterion: not met — the answer says the society should actively support the plan, which goes beyond the conclusion that it merely should not oppose it.
+* Tip: Distinguish “should not oppose” from the stronger claim that the society should actively support or promote the plan.
+
+I02: 2/2
+
+* Criterion by criterion: met — the answer gives a new fact about how the letter addresses Ferris that points to a date of 1803 or later; met — it explains that this provides independent evidence that the letter was written after 1800, strengthening the curator's conclusion.
+* Tip: For a strengthener, give a new fact and explicitly connect it to why the conclusion becomes more likely.
+
+I03: 1/2
+
+* Criterion by criterion: met — the answer gives a new fact about the groups' speaking ability when they began using the app; not met — it does not explain how the initial difference weakens the claim that the streaks caused the later score gap.
+* Tip: After stating an initial-group difference, explain that the later gap may reflect the groups' different starting abilities rather than the streaks.
+
+I04: 0/2
+
+* Criterion by criterion: not met — the answer does not identify the inference from higher streak-holder scores to the claim that streaks caused better speaking; not met — it gives no relevant alternative explanation for the score difference, instead questioning the company's credibility.
+* Tip: Identify the causal inference and then name a plausible alternative cause, such as streak holders already being better speakers at the start.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=faa2557b-b994-42db-b496-42d6a6eabacb
+I01 | 0/1 | overstated
+I02 | 2/2 | -
+I03 | 1/2 | incomplete
+I04 | 0/2 | irrelevant
+END SCORES

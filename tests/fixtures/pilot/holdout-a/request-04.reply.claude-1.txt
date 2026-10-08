@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=47fdd841-9687-4f34-bb5e-f2eec34ba29b
+I01: 1/2
+- Criterion 1 (new fact about starting Spanish ability that materially weakens the argument): Met. The fact that future streak holders were rated two levels higher in their first week is about starting ability and is consistent with every premise. It gives a real reason to doubt that the streaks explain the later gap.
+- Criterion 2 (explains how the fact weakens the argument): Not met. The answer states the fact and stops. It never says that the gap may have existed before any streak, or that the later gap may simply reflect where the groups started.
+- Tip: After stating your fact, add one sentence saying what it makes more plausible, for example "so the later gap may just reflect the head start."
+I02: 1/1
+- Criterion 1 (identifies the main conclusion): Met. "The society should not object to the apartment conversion" matches the reference conclusion that the society should not oppose the plan. It is not the intermediate claim, the concession, the members' view, or an overstated call to support the plan.
+- Tip: Keep separating the final recommendation from the claims offered as reasons for it, as you did here.
+I03: 1/2
+- Criterion 1 (states an unstated claim that lets Holt's records date the sheet): Met. The claim that no paper maker supplying Tarrant used a running hare before 1801 is a distinct unstated assumption, not a premise or the conclusion.
+- Criterion 2 (no stronger than needed): Not met. It covers every supplier to Tarrant, including ones that did not make this sheet. The argument only needs that this particular sheet was not made before 1801 by another hare-marking maker, or that it came from Holt.
+- Tip: Narrow your assumption to the sheet itself, such as "this sheet was made by Holt," so that its denial exactly breaks the dating inference.
+I04: 2/2
+- Criterion 1 (new fact consistent with the premises that makes an 1801-or-later date more likely): Met. Ink first sold in the 1770s but still common into the 1820s is new information. It does not contradict the premises, and it points toward a later date. It is weak evidence, since a letter from 1788 could have used the same ink, but it still does not push the other way.
+- Criterion 2 (explains how it strengthens the argument): Met. The answer says the ink was still in use after 1801 and so gives separate evidence of a later date that backs up the curator.
+- Tip: To make the fact stronger, choose one that actually excludes 1788, such as an ink first made after 1800.
+END FEEDBACK
+
+BEGIN SCORES v2 request=47fdd841-9687-4f34-bb5e-f2eec34ba29b
+I01 | 1/2 | no-reasoning
+I02 | 1/1 | -
+I03 | 1/2 | overstated
+I04 | 2/2 | -
+END SCORES

@@ -1,0 +1,31 @@
+BEGIN FEEDBACK request=1c6a6666-fc46-4492-b72e-82fdd20cb106
+I01: 0/2
+
+* Criterion 1 (new fact that strengthens): Not met. The student provided a fact that actually weakens the argument by giving an alternative source for hare watermarks prior to 1801.
+* Criterion 2 (explains how): Not met. The explanation incorrectly claims that this weakens/refutes the curator's conclusion rather than strengthening it.
+* Tip: Make sure the new fact you introduce supports and strengthens the argument's conclusion rather than weakening or undermining it.
+
+I02: 1/1
+
+* Criterion 1 (identifies main conclusion): Met. Correctly identifies the main conclusion that the historical society should not oppose converting the silo into apartments.
+* Tip: Keep up the clear and precise identification of the author's primary recommendation.
+
+I03: 0/2
+
+* Criterion 1 (new fact about initial Spanish ability that weakens): Not met. The student stated that the streak holders were complete beginners while the non-streak group had studied Spanish before, which would predict that the non-streak group should score higher (the opposite of the actual result), failing to weaken the argument.
+* Criterion 2 (explains how it weakens): Not met. The explanation fails to logically weaken the argument because a higher score by beginners would actually suggest the streaks were *more* effective, not less.
+* Tip: When suggesting initial differences between groups to weaken a causal claim, ensure the starting advantage aligns with and accounts for the higher final test scores.
+
+I04: 0/2
+
+* Criterion 1 (ties error to argument): Not met. The student inverted the argument's logic, incorrectly stating the ad concluded the opposite of what it actually claimed.
+* Criterion 2 (names unruled-out explanation): Not met. The response defends the advertisement's original premise instead of identifying a flaw or unruled-out alternative explanation.
+* Tip: Read the ad's claim carefully so you criticize the flawed inference rather than defending it or getting the direction of cause and effect backwards.
+END FEEDBACK
+
+BEGIN SCORES v2 request=1c6a6666-fc46-4492-b72e-82fdd20cb106
+I01 | 0/2 | irrelevant
+I02 | 1/1 | -
+I03 | 0/2 | missed-alternative
+I04 | 0/2 | misread-stimulus
+END SCORES

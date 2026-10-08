@@ -1,0 +1,22 @@
+BEGIN FEEDBACK request=cbb2a198-4002-4b54-8f2c-6acbcec7119e
+I01: 1/2
+
+* Criterion by criterion: Criterion 1 is met because the answer ties the reasoning error to the ad concluding that streaks made people better speakers based on higher test scores. Criterion 2 is not met because the alternative explanation offered (using the app longer) contradicts the stimulus premise that both groups spent about the same total number of hours practicing and had been using the app for about a year.
+* Tip: Make sure the alternative explanation you propose does not conflict with facts explicitly stated in the stimulus.
+I02: 2/2
+* Criterion by criterion: Criterion 1 is met because it states an unstated claim that bridges the letter's paper to Holt's records. Criterion 2 is met because it states the assumption at the precise level of necessity needed by the argument.
+* Tip: Keep identifying necessary assumptions concisely as you did here by focusing on the minimal required bridge between premises and conclusion.
+I03: 2/2
+* Criterion by criterion: Criterion 1 is met because providing court records of Judge Ferris's appointment in 1803 is a plausible new fact not stated in the stimulus. Criterion 2 is met because the explanation clearly shows how this fact independently date-stamps the letter to 1803 or later.
+* Tip: Outstanding job providing both a strong external fact and a clear explanation of how it independently supports the conclusion.
+I04: 2/2
+* Criterion by criterion: Criterion 1 is met because it identifies the unstated assumption concerning the interior features that will be removed during conversion. Criterion 2 is met because it states the assumption no more strongly than needed, specifically noting the distinction between essential value and non-essential detail.
+* Tip: Excellent work explaining why the assumption is necessary without overstating its scope.
+END FEEDBACK
+
+BEGIN SCORES v2 request=cbb2a198-4002-4b54-8f2c-6acbcec7119e
+I01 | 1/2 | contradicts-premise
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 2/2 | -
+END SCORES

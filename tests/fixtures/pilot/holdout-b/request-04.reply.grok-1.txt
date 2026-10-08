@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=053afdfe-4a4a-4494-8fdf-75eecf2b09af
+I01: 0/2
+- Criterion 1: not met. The claim that conversion still keeps whatever makes the silo historically important is the argument's intermediate conclusion, and the walls and machinery point is a stated premise, not a distinct unstated bridge.
+- Criterion 2: not met. Because no distinct assumption is offered, the answer also fails to state a claim no stronger than the argument needs.
+- Tip: State a claim the passage never says, such as that nothing the conversion removes is essential under the charter, rather than restating its conclusion.
+I02: 2/2
+- Criterion 1: met. The answer ties the error to reading the streak holders' higher speaking scores as proof that the streak made them better speakers.
+- Criterion 2: met. It names an open alternative the stimulus does not rule out: a Spanish-speaking partner could both prompt daily app use and supply real conversation practice.
+- Tip: Keep naming a concrete alternative the premises leave open whenever you reject a causal claim from a group comparison.
+I03: 1/2
+- Criterion 1: met. Restricting Tarrant's pre-1801 paper to the Holt mill is a new fact that would make a hare watermark before 1801 much harder to explain.
+- Criterion 2: not met. The answer never says why that fact makes a date of 1801 or later more likely.
+- Tip: After giving the new fact, add one sentence on how it blocks an earlier source of the watermark or otherwise supports the later date.
+I04: 0/2
+- Criterion 1: not met. The fact that streak holders took Spanish class at school denies the premise that no one in either group had classes or lessons outside the app, so it is not an allowed weakener.
+- Criterion 2: not met. The explanation rests on that ruled-out extra instruction rather than on a permitted fact about speaking ability at sign-up.
+- Tip: Weaken this argument with a fact about how well each group already spoke when they started, without contradicting the matched hours or the ban on outside lessons.
+END FEEDBACK
+
+BEGIN SCORES v2 request=053afdfe-4a4a-4494-8fdf-75eecf2b09af
+I01 | 0/2 | restates-conclusion
+I02 | 2/2 | -
+I03 | 1/2 | incomplete
+I04 | 0/2 | contradicts-premise
+END SCORES

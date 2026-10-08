@@ -1,0 +1,43 @@
+BEGIN FEEDBACK request=f1693ee8-4fd2-4863-854b-9dcd47277c93
+I01: 2/2
+
+* Criterion by criterion:
+* Gives a new fact about starting Spanish level: Met.
+* Explains how it weakens the argument (reverse causation / initial difference): Met.
+
+
+* Tip: Keep up the clear explanation of how the initial difference impacts the causal claim.
+
+I02: 1/2
+
+* Criterion by criterion:
+* Gives a new fact consistent with premises: Met.
+* Explains how the fact strengthens the argument: Not met. The response states a fact but does not explain how it strengthens the curator's conclusion.
+
+
+* Tip: Always explicitly explain how your new fact supports or connects to the conclusion.
+
+I03: 0/1
+
+* Criterion by criterion:
+* Identifies the main conclusion: Not met. The student stated the opposing position that the author argues against, rather than the author's main conclusion.
+
+
+* Tip: Make sure to identify the author's own final recommendation rather than the counter-argument.
+
+I04: 2/2
+
+* Criterion by criterion:
+* Ties the error to this argument: Met.
+* Names a valid alternative explanation not ruled out by stimulus: Met.
+
+
+* Tip: Great job identifying a valid third variable that explains both the streaks and the higher scores.
+END FEEDBACK
+
+BEGIN SCORES v2 request=f1693ee8-4fd2-4863-854b-9dcd47277c93
+I01 | 2/2 | -
+I02 | 1/2 | no-reasoning
+I03 | 0/1 | counterpoint-as-conclusion
+I04 | 2/2 | -
+END SCORES

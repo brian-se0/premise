@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=44f8afbe-2d89-4791-ada7-8f22740b47fa
+I01: 2/2
+- Criterion 1: Met. The fact concerns how well the groups spoke Spanish at sign-up (future streak holders were beginners, the others had studied before). It is consistent with the premises and gives a real reason to doubt the streaks explain the gap.
+- Criterion 2: Met. The answer explains that the groups started in different places, so the comparison is unfair and the streaks can't be credited for the scores. The explanation could have been sharper, since the streak holders started behind and so the gap might actually understate the streaks' effect, but it does address why the comparison fails as evidence. Note that this fact cuts against the reference direction (streak holders started weaker), which the argument-weakening task doesn't clearly support. Because it still shows the groups differed at the start, I give credit for the rubric as written, though it is a weak weakener.
+- Tip: State the direction of the starting gap and say how it would produce the later score gap, so the weakening is clear.
+I02: 2/2
+- Criterion 1: Met. "The letter is written on Holt paper" is an unstated claim that lets Holt's records date the sheet. It is not a premise or the conclusion.
+- Criterion 2: Met. It is the reference bridge and no stronger than needed. If it were false, Holt's 1801 start date would not apply to this sheet.
+- Tip: Keep assumptions as narrow as this one, tied to the specific sheet rather than to all paper or all makers.
+I03: 1/1
+- Criterion 1: Met. The answer states that the society should not stand in the way of converting the silo into apartments, which is the main conclusion. It correctly treats the members' view as a counterpoint.
+- Tip: Keep leading with the author's recommendation, as you did here.
+I04: 1/2
+- Criterion 1: Met. The answer ties the error to this argument, naming the streak holders' higher speaking-test scores and the conclusion that the streak caused them.
+- Criterion 2: Not met. The answer names the alternative (users who already spoke better kept the streaks), but it asserts the ad "assumes" this and then says the streak "made them score higher," which reverses the argument's actual claim. It muddles which direction the ad takes and does not present the alternative as an open possibility the ad fails to rule out.
+- Tip: Say clearly that the ad claims streak causes skill, then offer your alternative as a possibility, such as "maybe better speakers found streaks easier to keep."
+END FEEDBACK
+
+BEGIN SCORES v2 request=44f8afbe-2d89-4791-ada7-8f22740b47fa
+I01 | 2/2 | -
+I02 | 2/2 | -
+I03 | 1/1 | -
+I04 | 1/2 | incomplete
+END SCORES

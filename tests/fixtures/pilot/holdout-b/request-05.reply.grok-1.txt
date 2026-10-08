@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=88a31d2f-e845-4b05-8c13-2d1336e0bbe1
+I01: 0/1
+- Criterion by criterion: not met. The answer states the opposite recommendation (the society should oppose the conversion and keep the silo exactly as it is), which is the members' view the author argues against, not the author's main conclusion.
+- Tip: Locate the claim the rest of the passage is offered to support, and do not treat the view being rejected as the conclusion.
+I02: 2/2
+- Criterion by criterion: met. Placement level at sign-up is a fact about how well the two groups spoke Spanish when they began, and it is consistent with the premises. Met. The explanation shows why the later gap may reflect a starting advantage that also made long streaks easier, rather than an effect of the streaks.
+- Tip: Keep tying the new fact to the start of use, and say explicitly whether the gap was already there or the better speakers selected into the streak.
+I03: 2/2
+- Criterion by criterion: met. The claim that the gutted interior is not essential to the silo's historical importance is unstated and bridges the step from preserved walls and machinery to preserved importance. Met. It is no stronger than needed: importance need not hinge on those parts, while still allowing them to add detail.
+- Tip: State the bridge at the strength the inference actually needs, such as "not essential," rather than "shows nothing at all."
+I04: 0/2
+- Criterion by criterion: not met. Ink sold from the 1770s and still common into the 1820s fits both the date on the letter and a later date, so it does not make 1801 or later more likely. Not met. Saying that continued use after 1801 is separate evidence of a later date does not explain a real strengthening, because the same ink was already available in 1788.
+- Tip: A strengthener must rule out the earlier date or tie the letter to a source that only exists from 1801 on, not merely remain compatible with both dates.
+END FEEDBACK
+
+BEGIN SCORES v2 request=88a31d2f-e845-4b05-8c13-2d1336e0bbe1
+I01 | 0/1 | counterpoint-as-conclusion, misread-stimulus
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 0/2 | irrelevant
+END SCORES

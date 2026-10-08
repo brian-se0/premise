@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=1c6a6666-fc46-4492-b72e-82fdd20cb106
+I01: 0/2
+- Criterion 1 (new fact making a date of 1801 or later more likely): not met. A border mill already using a running hare in the 1770s, with Tarrant merchants buying that paper, makes an 1788 date more plausible, so it weakens the curator rather than strengthening the conclusion.
+- Criterion 2 (explains how the fact strengthens): not met. The explanation claims the fact backs the curator’s reading, but the fact undercuts the link between the watermark and a post-1801 Holt sheet.
+- Tip: A strengthener must close off an earlier source of the mark or add independent evidence of a later date, not open another pre-1788 source.
+I02: 1/1
+- Criterion 1 (main conclusion, not an intermediate claim): met. “Ought not to stand in the way of converting it into apartments” is the author’s recommendation, not the claim that the conversion preserves historical features or the members’ view that the silo must stay unchanged.
+- Tip: Keep the one-sentence conclusion on the author’s recommendation and leave concessions and supporting reasons out of it.
+I03: 0/2
+- Criterion 1 (start-of-use speaking fact that weakens the streak claim): not met. If future streak holders began as complete beginners and the other group had already studied Spanish, yet the streak holders scored higher later, that makes the streaks a more plausible cause, not a less plausible one.
+- Criterion 2 (explains why the gap may reflect the start, not the streaks): not met. Saying the groups “didn’t start from the same place” does not show why the later gap fails to support the streaks when the start difference runs against the streak holders.
+- Tip: To weaken this ad, the new fact must put the streak holders ahead at sign-up (or show a start gap as large as the later one), then say the later scores may only repeat that head start.
+I04: 0/2
+- Criterion 1 (ties the error to higher scores and the claim that streaks make better speakers): not met. The answer reverses the ad: the ad concludes that streaks produced the higher scores, and it does not assume that better speakers were the ones who kept streaks.
+- Criterion 2 (names an open alternative the argument does not rule out): not met. Reverse causation is asserted as what the ad assumes, then rejected in favor of the ad’s own causal claim, so the answer never says why the inference fails.
+- Tip: State the ad’s inference (higher scores, therefore streaks cause better speaking) and name a possibility it leaves open, such as better speakers finding long streaks easier to keep.
+END FEEDBACK
+
+BEGIN SCORES v2 request=1c6a6666-fc46-4492-b72e-82fdd20cb106
+I01 | 0/2 | misread-stimulus
+I02 | 1/1 | -
+I03 | 0/2 | misread-stimulus
+I04 | 0/2 | misread-stimulus
+END SCORES
