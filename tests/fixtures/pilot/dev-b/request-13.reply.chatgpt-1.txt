@@ -1,0 +1,16 @@
+BEGIN FEEDBACK request=91f61859-2550-4260-958e-bdfc13c4cfc9
+I01: 2/2
+
+* Criterion 1: met — the 340 restaurants with at least one violation is a new fact consistent with the premises and shows the failures were spread across 34% of restaurants.
+* Criterion 2: met — it explicitly explains that the writer confused the inspection rate with the restaurant rate, showing why the conclusion is weakened.
+* Tip: Distinguish the rate of failed inspections from the proportion of distinct restaurants with at least one failure.
+  I02: 1/2
+* Criterion 1: met — the answer gives an unstated bridge: the comparison can be attributed to cover crops only if other relevant differences are controlled.
+* Criterion 2: not met — requiring the groups to have “everything else in common” and the cover crops to be “the only difference” is stronger than necessary; only factors that could account for the entire extra rise need to be ruled out.
+* Tip: State the assumption narrowly by ruling out other factors that could fully explain the adopters’ extra yield increase, rather than requiring all other conditions to be identical.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=91f61859-2550-4260-958e-bdfc13c4cfc9
+I01 | 2/2 | -
+I02 | 1/2 | overstated
+END SCORES

@@ -1,0 +1,202 @@
+# Grading-check answer set: assumption (docs/GRADING_PROTOCOL.md §9). Written by Claude in a student's voice on
+# 2026-10-06; `gold` is Claude's score, fixed before the second scorer started (digest of [id, task, answer, gold]
+# over all five files, as `npm run pilot:score` prints it: ae78dd71f7ef4b8824d9919aba1fcc4b2e0f1de6a5f551b5db0db87744aeb59f).
+# `second` is the blind score of an independent Claude Opus 5.5 session at maximum effort (pilot/second-scores.yaml).
+# `acceptable` marks an answer where a scorer recorded another score as defensible under the key; `settlement` says why.
+# `type` is the §9 answer type; `why` is Claude's reasoning for `gold`. Held-out answers: arg-0020, arg-0024, arg-0027.
+- id: asm01
+  task: arg-0010.assumption
+  holdout: false
+  type: ambiguous
+  answer: >-
+    i think it assumes the ratings went up because people were actually happier with the help they got, and
+    not because the unhappy customers quit the chat before the end so they never got the survey
+  gold: 1
+  second: 1
+  acceptable: [ 1, 2 ]
+  settlement: >-
+    Both scorers gave 1 and both name 2 as defensible: the key does not say how to read an unhedged "because
+    X, not because Y", which can exclude any partial effect (too strong) or name the main explanation (bridge
+    (a)).
+  why: >-
+    Criterion 1 is met (an unstated claim linking the rise to satisfaction via who answered). Read literally,
+    "not because" denies any contribution from unhappy customers leaving, which the accept text says is
+    stronger than needed (a partial effect would not undo the argument), so 1; read charitably as "not just
+    because", it is bridge (a) and earns 2. Under either uniform reading of "because" one conjunct is too
+    strong, so 1 is the better score.
+- id: asm02
+  task: arg-0010.assumption
+  holdout: false
+  type: extra-explanation
+  answer: >-
+    The head of support has to assume the jump from 3.6 to 4.3 isn't wholly a matter of who ended up answering
+    the survey. The survey only reaches people who stay until the agent closes the chat, so if the script made
+    frustrated customers give up and leave early, the ones left would rate higher even if nobody got better
+    help. The argument survives as long as at least some of the rise is people actually being more satisfied.
+    (Six months on each side seems like a fair window, so I don't think the time period is the problem.)
+  gold: 2
+  second: 2
+  why: >-
+    Bridge (a) from the accept text, stated as "not wholly" a change in who answered, so its denial leaves the
+    rise with no support and it is no stronger than needed; both criteria met. The aside about the six-month
+    window neither adds nor costs credit.
+- id: asm03
+  task: arg-0013.assumption
+  holdout: false
+  type: partial
+  answer: >-
+    The author assumes that newcomers can get hold of a recording where the slow movements are played at
+    exactly the tempos Beethoven marked.
+  gold: 1
+  second: 1
+  why: >-
+    It links the distortion to the recommendation by positing a better recording (criterion 1), but requiring
+    one that follows the markings exactly is stronger than needed; the accept text says this earns 1.
+- id: asm04
+  task: arg-0013.assumption
+  holdout: false
+  type: confidently-wrong
+  answer: >-
+    The argument rests on the assumption that Beethoven's tempo markings are the right way to play these
+    quartets. If the markings weren't a trustworthy guide, taking the slow movements faster wouldn't be a
+    distortion at all, and the case against starting with the Ardent recording would disappear.
+  gold: 0
+  second: 0
+  why: >-
+    The accept text says claims about whether Beethoven's markings are a fair guide concern the claim the
+    prompt grants, not the step being tested, and do not answer the task; it does not link the granted
+    distortion to the recommendation, so neither criterion is met.
+- id: asm05
+  task: arg-0015.assumption
+  holdout: false
+  type: disqualifier
+  answer: >-
+    basically it assumes that if they get rid of the goats on the other four islands the saltbush will grow
+    back there too
+  gold: 0
+  second: 0
+  why: >-
+    This is a version of the conclusion (removing the goats would let saltbush recover on the four islands)
+    with no distinct unstated claim, so the disqualifier applies.
+- id: asm06
+  task: arg-0015.assumption
+  holdout: false
+  type: valid-unlike-reference
+  answer: >-
+    the biologists are assuming that taking the goats off is at least part of why the saltbush came back on
+    those 3 islands. like if it was really all down to something else that only happened there, say rabbits or
+    some other saltbush eater dying out on just those 3, then the recovery wouldnt tell you anything about
+    what removing goats would do on the other 4
+  gold: 2
+  second: 2
+  why: >-
+    Bridge (c) in the accept text: the removal accounts for at least part of the recovery on the three. If
+    false, that recovery owes nothing to the goats' removal, which criterion 2 names as a way the argument
+    falls apart, and "at least part" keeps it no stronger than needed; both criteria met.
+- id: asm07
+  task: arg-0019.assumption
+  holdout: false
+  type: partial
+  answer: >-
+    The hidden assumption is that the two groups of farms had everything else in common over the last five
+    years: same seed, same fertilizer, same irrigation, same weather, so that the cover crops were the only
+    difference. That is the only way the 12 percent versus 3 percent comparison can be pinned on the cover
+    crops.
+  gold: 1
+  second: 1
+  why: >-
+    It states an unstated claim linking the extra rise to the cover crops (criterion 1), but requiring that
+    nothing else at all differed is sufficient rather than necessary; the accept text says requiring no other
+    change, or nothing affecting only one group, earns 1.
+- id: asm08
+  task: arg-0019.assumption
+  holdout: false
+  type: keyword-contradiction
+  answer: >-
+    The adviser is assuming that some other change on the cover-crop farms, like switching to a
+    higher-yielding seed, accounts for all of their extra rise in yields. That is what lets him say the cover
+    crops raised yields.
+  gold: 0
+  second: 0
+  why: >-
+    It uses the key's terms (another change, higher-yielding seed, all of the extra rise) but asserts the
+    negation of the needed assumption, which would leave the extra rise fully explained by something other
+    than the cover crops; it does not link the rise to the cover crops, so neither criterion is met.
+- id: asm09
+  task: arg-0023.assumption
+  holdout: false
+  type: valid-unlike-reference
+  answer: >-
+    It assumes the lynx didn't shift their ranges into parts of Corrin Forest that have no cameras by so much
+    that this alone could cut the photos from 120 to 58. If they had, the drop would reflect where the lynx
+    go, not how many there are.
+  gold: 2
+  second: 2
+  why: >-
+    A listed bridge different from the reference (movement to parts of the forest without cameras), and it
+    addresses the size of the shift and the change between the years, as the accept text requires; if false,
+    the drop would no longer show a substantial fall, so both criteria are met.
+- id: asm10
+  task: arg-0023.assumption
+  holdout: false
+  type: partial
+  answer: >-
+    The assumption is that the 120 photos in 2020 weren't mostly of one or two lynx that kept walking past the
+    same camera again and again.
+  gold: 1
+  second: 1
+  why: >-
+    It targets photographs per animal (criterion 1) but rules out repeat photographs in 2020 without regard to
+    2025, which the accept text and criterion 2 say is stronger than needed and earns 1.
+- id: asm11
+  task: arg-0024.assumption
+  holdout: true
+  type: disqualifier
+  answer: >-
+    the assumption is that turning the silo into apartments still keeps whatever makes it historically
+    important, since the walls and the loading machinery stay. so the society shouldnt fight it
+  gold: 0
+  second: 0
+  why: >-
+    It offers the intermediate conclusion (the conversion preserves what makes the silo historically
+    important), a stated premise (walls and machinery kept) and the main conclusion, with no distinct unstated
+    claim, so the disqualifier applies.
+- id: asm12
+  task: arg-0024.assumption
+  holdout: true
+  type: reference-like
+  answer: >-
+    Keeping the walls and the loading machinery only saves the silo's historical value if the inside isn't
+    doing any essential work in showing how people lived and worked there. So the argument assumes the
+    interior parts that get gutted aren't essential to its importance. They might add some detail, but the
+    silo's importance doesn't hinge on them.
+  gold: 2
+  second: 2
+  why: >-
+    The reference's bridge (a) in the student's own structure: if false, the conversion would remove something
+    essential to the silo's historical importance, and allowing that the interior adds some detail keeps it no
+    stronger than needed; both criteria met.
+- id: asm13
+  task: arg-0027.assumption
+  holdout: true
+  type: concise-correct
+  answer: >-
+    The letter is written on Holt paper.
+  gold: 2
+  second: 2
+  why: >-
+    Bridge (a), the rubric's own example: if the sheet was not Holt's, Holt's 1801 start date no longer sets a
+    lower bound for it, and it concerns only this sheet, so both criteria are met.
+- id: asm14
+  task: arg-0027.assumption
+  holdout: true
+  type: partial
+  answer: >-
+    i think the curator is assuming none of the paper makers who sold paper in Tarrant back then were using a
+    running hare watermark before 1801
+  gold: 1
+  second: 1
+  why: >-
+    It would let Holt's records date the sheet (criterion 1), but it is a claim about every supplier to
+    Tarrant, including ones that did not make this sheet; the accept text says that is stronger than needed
+    and earns 1.

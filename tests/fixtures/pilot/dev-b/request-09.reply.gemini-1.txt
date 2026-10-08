@@ -1,0 +1,43 @@
+BEGIN FEEDBACK request=3b4a07b6-62de-47b9-b4a7-3e9148a0fa51
+I01: 2/2
+
+* Criterion by criterion:
+* Criterion 1 (New fact pointing in the right direction): Met. The student provides a plausible new fact about teenagers with jobs/sports who could not visit before 6 p.m.
+* Criterion 2 (Explains how it strengthens): Met. The student explicitly explains that the new hours were what allowed these teenagers to borrow at all, connecting the added hours directly to the increase in borrowing.
+
+
+* Tip: Keep providing specific operational ties like this—connecting the new capability directly to the outcome is a great way to strengthen causal arguments.
+
+I02: 0/2
+
+* Criterion by criterion:
+* Criterion 1 (Unstated claim linking distortion to recommendation): Not met. The student addresses whether the Ardent recording's fast tempos count as a distortion (a premise/granted claim issue), rather than bridging the granted distortion to the recommendation to choose a different recording.
+* Criterion 2 (No stronger than needed): Not met. Because the answer targets the wrong gap, it does not state a valid necessary assumption linking distortion to the final recommendation.
+
+
+* Tip: When asked for an assumption between a granted claim (e.g., that something is distorted) and a recommendation, focus on why that distortion matters or whether a less distorted alternative exists, rather than questioning whether the distortion occurred.
+
+I03: 1/1
+
+* Criterion by criterion:
+* Criterion 1 (Identifies main conclusion): Met. The student correctly identifies the main conclusion that the study shouldn't be counted/trusted as evidence for the bike lanes.
+
+
+* Tip: Excellent job concisely capturing the main executive point of the argument rather than getting caught up in the background evidence.
+
+I04: 1/2
+
+* Criterion by criterion:
+* Criterion 1 (Unstated claim linking photos to lynx population): Met. The student identifies a valid potential gap involving repeat photographs of a few individuals.
+* Criterion 2 (No stronger than needed): Not met. The response overstates the assumption by requiring that the 2020 photos weren't "mostly of one or two lynx," rather than framing it in terms of whether repeat photos were sufficient to account for the entire drop in counts between years without a population decline.
+
+
+* Tip: Remember that necessary assumptions only need to rule out an effect large enough to account for the overall difference, rather than ruling out the possibility entirely or requiring strict limits.
+END FEEDBACK
+
+BEGIN SCORES v2 request=3b4a07b6-62de-47b9-b4a7-3e9148a0fa51
+I01 | 2/2 | -
+I02 | 0/2 | wrong-gap
+I03 | 1/1 | -
+I04 | 1/2 | overstated
+END SCORES

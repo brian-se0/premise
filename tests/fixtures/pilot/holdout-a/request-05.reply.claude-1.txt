@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=f1693ee8-4fd2-4863-854b-9dcd47277c93
+I01: 2/2
+- Criterion 1 (new fact about starting Spanish level, consistent with premises, material reason to doubt): Met. The fact that sign-up placement predicted who later kept 100-day streaks, with most of the short-streak group starting as beginners, concerns how well users spoke at the start. It contradicts no premise.
+- Criterion 2 (explains how it weakens the argument): Met. The student explains that users who already know some Spanish find daily practice easier and more fun, so the causation may run backwards, and that they would also score higher on a speaking test anyway.
+- Tip: Keep pairing the new fact with a sentence on why it makes the gap plausibly pre-existing, as you did here.
+I02: 1/2
+- Criterion 1 (new fact, consistent with premises, makes 1801 or later more likely): Met. The fact that no hare-marked paper came from outside the region before 1801 closes off other sources of paper and ties the letter to Holt.
+- Criterion 2 (explains how it strengthens the argument): Not met. The student gives only the fact, with no explanation of why it makes a date of 1801 or later more likely.
+- Tip: After stating the fact, add a sentence like "so the hare paper must be Holt's, which didn't exist before 1801."
+I03: 0/1
+- Criterion 1 (identifies the main conclusion that the society should not oppose the conversion): Not met. The student states the opposite recommendation, that the society should oppose the conversion, and takes the members' view, which the author argues against, as the conclusion. This triggers the disqualifier.
+- Tip: Look for the author's own recommendation, and don't treat a view introduced with "Some argue" as the author's position.
+I04: 2/2
+- Criterion 1 (ties the error to this argument): Met. The student names the streak holders' higher speaking scores and the conclusion that keeping a streak made them better.
+- Criterion 2 (names an open alternative the stimulus doesn't rule out): Met. A Spanish-speaking roommate or girlfriend could cause both the daily app use and the better speaking, which is a possible common cause the argument doesn't exclude and the stimulus doesn't forbid.
+- Tip: Offering a concrete third factor, as you did, is an effective way to show why correlation doesn't establish the streak's effect.
+END FEEDBACK
+
+BEGIN SCORES v2 request=f1693ee8-4fd2-4863-854b-9dcd47277c93
+I01 | 2/2 | -
+I02 | 1/2 | no-reasoning
+I03 | 0/1 | counterpoint-as-conclusion
+I04 | 2/2 | -
+END SCORES

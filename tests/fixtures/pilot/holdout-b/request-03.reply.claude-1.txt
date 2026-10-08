@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=faa2557b-b994-42db-b496-42d6a6eabacb
+I01: 0/1
+- Criterion 1 (identifies the main conclusion): Not met. The answer says the society should actively support the plan, but the author only says it should not oppose it. The counts-as-correct notes name a call to support the plan as going beyond the author, so this misstates the conclusion.
+- Tip: Match the strength of the author's wording exactly; "should not oppose" is weaker than "should support."
+I02: 2/2
+- Criterion 1 (new fact, consistent with premises, makes 1801 or later more likely): Met. The letter is addressed to a judge who was first appointed in 1803, which is new and separate from the watermark evidence. It points to a date after 1801.
+- Criterion 2 (explains how it strengthens): Met. The answer says a 1788 writer would not have called him a judge, so the letter itself indicates 1803 or later and supports the curator independently of the watermark.
+- Tip: Keep pairing the new fact with a clear link to the conclusion, as you did here.
+I03: 1/2
+- Criterion 1 (new fact about starting Spanish ability that gives a material reason to doubt the streaks explain the gap): Met. At sign-up the future streak holders were rated two levels higher, which is the right kind of fact and is consistent with the premises.
+- Criterion 2 (explains how it weakens the argument): Not met. The answer states the fact but never says that the later gap may simply reflect where the groups started rather than what the streaks did.
+- Tip: After stating your fact, add a sentence saying what it makes more plausible than the conclusion, such as "so the gap may have existed before any streak."
+I04: 0/2
+- Criterion 1 (ties the error to the streak holders' higher scores and the conclusion that streaks make better speakers): Not met. The answer criticizes the source (a company advertising its own product) and never discusses the score gap or the inference from it to the causal claim.
+- Criterion 2 (names an open alternative explanation for the higher scores): Not met. No possible explanation is offered, such as the streak holders having spoken better from the start.
+- Tip: Look at the logic from evidence to conclusion and ask what else could explain the evidence, rather than who is making the claim.
+END FEEDBACK
+
+BEGIN SCORES v2 request=faa2557b-b994-42db-b496-42d6a6eabacb
+I01 | 0/1 | overstated
+I02 | 2/2 | -
+I03 | 1/2 | incomplete
+I04 | 0/2 | irrelevant
+END SCORES

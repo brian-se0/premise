@@ -1,0 +1,44 @@
+BEGIN FEEDBACK request=8c7374a7-e26d-43f4-a74f-1c5b7dc83039
+I01: 0/2
+
+* Criterion by criterion:
+* [1 pt] Not met: The student claims the adviser assumes a competing cause *does* account for the extra rise, which contradicts the logic of the argument.
+* [1 pt] Not met: The student incorrectly states the alternative explanation as something the argument assumes rather than denies.
+
+
+* Tip: Remember that an assumption must be a claim the argument *needs* to be true (e.g., that another factor did *not* cause the rise), rather than stating that the alternative factor caused it.
+
+I02: 2/2
+
+* Criterion by criterion:
+* [1 pt] Met: Correctly ties the requirement (water and soil) to the conclusion that the settlement was probably large.
+* [1 pt] Met: Accurately explains that necessary conditions do not establish likelihood without evidence that such sites usually grew large.
+
+
+* Tip: Keep up the precise analysis of necessary versus sufficient conditions when evaluating probabilistic claims.
+
+I03: 1/2
+
+* Criterion by criterion:
+* [1 pt] Met: Provides a relevant, premise-consistent new fact that provides a legitimate reason to doubt wrongdoing.
+* [1 pt] Not met: Does not explicitly explain how this fact undermines the editor's conclusion under the specific rule (i.e., that if the delay was authorized, it may not constitute "wrongdoing").
+
+
+* Tip: Always explicitly state the final link explaining *how* your new fact invalidates or weakens the specific rule or conclusion.
+
+I04: 2/2
+
+* Criterion by criterion:
+* [1 pt] Met: Identifies an unstated claim bridging the higher ratings to actual satisfaction rather than selection bias.
+* [1 pt] Met: Framed appropriately to show that if this alternative selection bias were true, the argument's inference would fail.
+
+
+* Tip: Excellent job identifying selection bias as a key gap in sample-based reasoning.
+END FEEDBACK
+
+BEGIN SCORES v2 request=8c7374a7-e26d-43f4-a74f-1c5b7dc83039
+I01 | 0/2 | wrong-gap
+I02 | 2/2 | -
+I03 | 1/2 | incomplete
+I04 | 2/2 | -
+END SCORES

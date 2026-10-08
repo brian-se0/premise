@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=47fdd841-9687-4f34-bb5e-f2eec34ba29b
+I01: 1/2
+- Criterion by criterion: met — the first-week check-in gap is a new, premise-consistent fact about starting speaking level that could explain the later score gap without the streaks. Not met — the answer never says why that starting gap undercuts the claim that the streaks produced the later advantage.
+- Tip: After stating the starting-level fact, add one sentence on how the later gap may already have been there, so the streaks need not explain it.
+I02: 1/1
+- Criterion by criterion: met — the sentence states the author’s recommendation that the society should not oppose the conversion, not the intermediate preservation claim or the members’ view.
+- Tip: Keep the main conclusion as the recommendation the author is defending, not the reason offered for it.
+I03: 1/2
+- Criterion by criterion: met — ruling out a pre-1801 hare mark among sellers to Tarrant is an unstated claim whose denial would stop Holt’s records from dating this sheet. Not met — the claim is stronger than needed, since it covers every supplier to Tarrant, not only the maker of this sheet.
+- Tip: Limit the assumption to this sheet (it came from Holt, or it was not made before 1801 by another maker using a hare mark).
+I04: 0/2
+- Criterion by criterion: not met — ink first sold in the 1770s and still used into the 1820s fits both 1788 and a post-1801 date, so it does not make a later date more likely. Not met — “still used after 1801” only fails to rule a later date out; it is not separate evidence that the letter was written then.
+- Tip: A strengthener must raise the chance of 1801 or later, such as ink first made after 1800 or a watermark detail that matches only Holt paper from 1801 on.
+END FEEDBACK
+
+BEGIN SCORES v2 request=47fdd841-9687-4f34-bb5e-f2eec34ba29b
+I01 | 1/2 | no-reasoning
+I02 | 1/1 | -
+I03 | 1/2 | overstated
+I04 | 0/2 | irrelevant
+END SCORES

@@ -1,0 +1,23 @@
+BEGIN FEEDBACK request=0fffd33d-b12d-40f1-a7c9-53f0d9920777
+I01: 0/2
+- Criterion 1 (new fact that gives material reason to doubt): not met. Growth from 400 to 600 is only one-half, below the two-thirds needed, and the student's own numbers show 54 missed appointments against 60 before. That means the number fell, which supports the director.
+- Criterion 2 (explains how it weakens the argument): not met. The conclusion that "the clinic is actually missing more" contradicts the figures just computed (54 is less than 60).
+- Tip: After computing both numbers, compare them before claiming a result, and pick growth large enough (at least two-thirds) that 9 percent of the new total reaches 15 percent of the old.
+I02: 1/1
+- Criterion 1 (identifies main conclusion): met. The answer says the council should give the bike industry's study no weight on the pro-lanes side whatever it decides, which matches the reference.
+- Tip: Keep stating the recommendation itself rather than the reason given for it, as you did here.
+I03: 1/1
+- Criterion 1 (identifies main conclusion): met. Saying the Ardent recording isn't a good one to start on matches the recommendation that newcomers should begin with a different recording. It is brief but correct and is not the intermediate "distorted sense" claim.
+- Tip: Mention "newcomers to the late quartets" explicitly to make the conclusion fully precise.
+I04: 2/2
+- Criterion 1 (new fact, consistent with premises, material doubt): met. Tripled bookings are consistent with "far more" and exceed the two-thirds growth threshold.
+- Criterion 2 (explains how it weakens): met. 9% of triple is 27% of the old total, which is more than 15%, so more appointments are missed despite the lower share.
+- Tip: This is a clear fact-plus-arithmetic structure, so reuse it.
+END FEEDBACK
+
+BEGIN SCORES v2 request=0fffd33d-b12d-40f1-a7c9-53f0d9920777
+I01 | 0/2 | -
+I02 | 1/1 | -
+I03 | 1/1 | -
+I04 | 2/2 | -
+END SCORES

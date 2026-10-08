@@ -1,0 +1,31 @@
+BEGIN FEEDBACK request=5eb00edc-eda9-4ebc-9894-4c2110360cb7
+I01: 0/2
+
+* Criterion 1 (new fact about starting Spanish level): Not met. The student introduced an explanation involving high school Spanish classes, which contradicts the premise that no users were taking outside classes.
+* Criterion 2 (explanation of weakening): Not met. Since the proposed fact violates the premise, it does not properly explain a valid weakener based on initial language ability.
+* Tip: Make sure your new fact does not contradict any stated premises in the stimulus, such as the rule that no users were taking outside classes.
+
+I02: 0/2
+
+* Criterion 1 (ties error to argument): Not met. The response focuses on ad hominem bias rather than identifying the core conditional/causal inference made from the test scores to the conclusion.
+* Criterion 2 (names unruled-out alternative): Not met. The student points to source bias instead of offering a plausible alternative explanation for why streak holders scored higher.
+* Tip: Focus on the logical gap between the evidence and the conclusion rather than questioning the motivation of the person making the argument.
+
+I03: 0/2
+
+* Criterion 1 (identifies unstated bridge): Not met. The student's answer restates the intermediate conclusion provided in the text rather than providing an unstated assumption.
+* Criterion 2 (appropriately scoped assumption): Not met. The answer fails to identify a necessary unstated premise required for the argument to hold.
+* Tip: An assumption must be an unstated premise; avoid simply repeating claims or conclusions already stated in the text.
+
+I04: 0/1
+
+* Criterion 1 (identifies main conclusion): Not met. The student overstates the conclusion by claiming the society should "actively support" the plan, whereas the argument only claims they "should not oppose" it.
+* Tip: Be careful not to exaggerate the main claim—saying an organization "should not oppose" something is not the same as saying they "should actively support" it.
+END FEEDBACK
+
+BEGIN SCORES v2 request=5eb00edc-eda9-4ebc-9894-4c2110360cb7
+I01 | 0/2 | contradicts-premise
+I02 | 0/2 | irrelevant
+I03 | 0/2 | restates-conclusion
+I04 | 0/1 | overstated
+END SCORES

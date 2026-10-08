@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=72e77090-69d3-452b-9a19-047a210ece12
+I01: 0/2
+- Criterion 1 (states an unstated claim linking recovery on the three islands to recovery on the four): Not met. The answer says that if the goats are removed from the other four islands, saltbush will grow back there too. That is the argument's conclusion, not a distinct assumption.
+- Criterion 2 (no stronger than needed): Not met. A restated conclusion does not count as a claim of the right strength. The disqualifier applies because no separate unstated claim is given.
+- Tip: Ask what must be true about the four islands (such as nothing else blocking regrowth, or seeds or plants being available) for the three-island result to carry over, rather than repeating where the argument ends up.
+I02: 2/2
+- Criterion 1 (states an unstated claim linking the two groups): Met. The answer says the goat removal accounts for at least part of the recovery on the three islands. That is a distinct unstated claim, and it is one of the recognized bridges.
+- Criterion 2 (no stronger than needed): Met. The claim requires only that the goats' removal be part of the cause, not that the islands match in soil or rain. The answer also shows that if it were false, the recovery on the three islands would say nothing about removal on the other four.
+- Tip: Keep doing this: state the weakest claim that still breaks the argument if denied, and show what happens when it is denied.
+I03: 0/1
+- Criterion 1 (identifies the main conclusion): Not met. The answer says the council should vote against the bike lanes, which goes beyond the author. The author explicitly leaves the decision open and says the lanes may be worth building for other reasons. The actual conclusion is that the council should not count the study in the lanes' favor.
+- Tip: Separate what the author says about the evidence from what the author says about the decision, and check the concession sentence ("may well be worth building") to see which one the author actually commits to.
+I04: 1/2
+- Criterion 1 (ties the error to this argument): Not met. The answer offers an alternative explanation but never names the inference being criticized, namely that the rise after the hours changed shows the hours caused it, so the error itself is left undescribed.
+- Criterion 2 (names an open alternative cause): Met. Schools near those branches starting a reading challenge or assigning more books is a possible other cause of the rise that the stimulus does not rule out.
+- Tip: Begin by stating the faulty step (the director concludes the longer hours caused the rise just because borrowing rose after the change), then add your alternative cause as the reason it fails.
+END FEEDBACK
+
+BEGIN SCORES v2 request=72e77090-69d3-452b-9a19-047a210ece12
+I01 | 0/2 | restates-conclusion
+I02 | 2/2 | -
+I03 | 0/1 | overstated
+I04 | 1/2 | incomplete
+END SCORES

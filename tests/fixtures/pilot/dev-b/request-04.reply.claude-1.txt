@@ -1,0 +1,26 @@
+BEGIN FEEDBACK request=165fe0d2-7e16-44fc-97e8-49be419cd5dc
+I01: 2/2
+- Criterion 1 (new fact): Met. The waste-audit finding that checkout bags were the largest single item by weight of household plastic rubbish is new, consistent with the premises, and makes a large drop in weight more likely.
+- Criterion 2 (explanation): Met. The student explains that if bags were that big a share by weight, 80 percent fewer of them should remove a big slice of the weight, and they link this to the gap between counting bags and weighing plastic.
+- Tip: Keep stating how the fact bridges the specific gap in the argument, as you did here by moving from bag count to plastic weight.
+I02: 2/2
+- Criterion 1 (new fact): Met. Live seed in the soil and seedlings emerging each spring on the four goat islands is new, consistent with the premises, and is evidence from the four islands themselves that saltbush can regrow there.
+- Criterion 2 (explanation): Met. The student explains that grazing is what holds the shrub back, so removing the goats would end the barrier and let regrowth happen.
+- Tip: Evidence from the target islands themselves is a strong kind of strengthener, so look for facts about the group the conclusion is about.
+I03: 2/2
+- Criterion 1 (new fact): Met. The fact that the eight streets had 66 injury crashes in the twelve months before installation, against about 40 a year over the prior five years, is a pre-installation fact consistent with every premise, and it gives a material reason to doubt the cameras caused most of the decline.
+- Criterion 2 (explanation): Met. The student explains that an unusually high year tends not to repeat, so crashes would likely have fallen back toward normal even without cameras, accounting for a good chunk of the 40 percent drop.
+- Tip: Putting numbers on the fact, as you did, makes it easy to see how large the unexplained part of the drop could be.
+I04: 2/2
+- Criterion 1 (unstated bridging claim): Met. The student assumes the rise from 3.6 to 4.3 is not wholly due to a change in who answered the survey, which is an unstated claim linking the higher rating to real satisfaction and matches a main bridge.
+- Criterion 2 (not too strong): Met. The student says the argument survives as long as at least some of the rise reflects real satisfaction, so the claim is no stronger than needed, and the failure scenario of frustrated customers leaving early illustrates why its denial would undo the argument.
+- Tip: Stating the assumption in a "not entirely due to" form keeps it necessary without demanding that nothing else changed.
+
+END FEEDBACK
+
+BEGIN SCORES v2 request=165fe0d2-7e16-44fc-97e8-49be419cd5dc
+I01 | 2/2 | -
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 2/2 | -
+END SCORES

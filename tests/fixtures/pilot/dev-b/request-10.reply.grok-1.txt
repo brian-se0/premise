@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=d1d72bb3-a7b7-4ba9-989a-ccbccf3c5c11
+I01: 2/2
+- Criterion by criterion: met — the answer names the move from the no-show share falling from 15% to 9% to the claim that fewer appointments are missed. Met — it explains that bookings rose a lot, so a smaller share of a much larger total can be as large or larger.
+- Tip: Keep pairing the rate drop with the larger base, as you did, whenever a percentage is treated as a count.
+I02: 0/2
+- Criterion by criterion: not met — “not every restaurant that failed did so all four times” only rules out the most extreme concentration and can still leave about one restaurant in ten with a violation, so it does not point to failures spread across clearly more than one in ten. Not met — the answer never explains how the fact would raise the number of restaurants involved above about one in ten.
+- Tip: State a fact that forces the 400 failed inspections onto far more than 100 restaurants, then say why that undercuts “about one in ten.”
+I03: 2/2
+- Criterion by criterion: met — the answer ties the error to treating the required attendance rise as a guarantee that the grant will be renewed. Met — it says the policy makes the rise necessary but not sufficient, so the council can still refuse for other reasons.
+- Tip: When a rule is “only if,” check whether the writer has flipped a necessary condition into a sufficient one.
+I04: 0/2
+- Criterion by criterion: not met — the claim offered is the opposite of what the argument needs: the adviser must assume that another change does not fully explain the extra rise, not that it does. Not met — as stated, the claim would undercut the conclusion rather than being a necessary bridge no stronger than the argument requires.
+- Tip: Phrase the assumption as the unstated claim that, if false, would let something other than cover crops fully explain the extra 12% rise.
+END FEEDBACK
+
+BEGIN SCORES v2 request=d1d72bb3-a7b7-4ba9-989a-ccbccf3c5c11
+I01 | 2/2 | -
+I02 | 0/2 | incomplete, understated
+I03 | 2/2 | -
+I04 | 0/2 | wrong-gap
+END SCORES

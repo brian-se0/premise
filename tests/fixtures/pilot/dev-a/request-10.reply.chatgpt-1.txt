@@ -1,0 +1,28 @@
+BEGIN FEEDBACK request=a2f892e7-8a19-41cf-88cc-3c686c3e5d3d
+I01: 2/2
+
+* Criterion 1: met — the answer gives a new, premise-consistent fact that no other safety changes occurred on the eight streets.
+* Criterion 2: met — this rules out another plausible cause of the crash decline, making it more likely the cameras caused most of it.
+* Tip: When strengthening a causal argument, identify a plausible alternative cause and give a fact that rules it out.
+
+I02: 0/1
+
+* Criterion 1: not met — the answer states the opposite recommendation: it says newcomers should start with the Ardent recording, whereas the author's conclusion is that they should start with a different recording.
+* Tip: Distinguish the author's final recommendation from concessions and reasons offered along the way.
+  I03: 0/2
+* Criterion 1: not met — saying that not every restaurant that failed did so all four times does not establish that the failures were spread across more than one restaurant in ten; the statement could still be consistent with failures concentrated in relatively few restaurants.
+* Criterion 2: not met — no explanation is given of how the fact would weaken the writer's conclusion.
+* Tip: To weaken a percentage inference from repeated inspections, show that failed inspections were distributed across many different restaurants and explain why that raises the proportion of restaurants affected.
+
+I04: 0/1
+
+* Criterion 1: not met — the answer identifies the intermediate claim that the study's finding cannot be trusted, rather than the main conclusion that the council should not count the study in favor of the lanes.
+* Tip: Look for the author's recommendation or action claim; reasons such as "the finding can't be trusted" usually support that conclusion rather than constitute it.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=a2f892e7-8a19-41cf-88cc-3c686c3e5d3d
+I01 | 2/2 | -
+I02 | 0/1 | misread-stimulus
+I03 | 0/2 | incomplete
+I04 | 0/1 | premise-as-conclusion
+END SCORES

@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=a2f892e7-8a19-41cf-88cc-3c686c3e5d3d
+I01: 1/2
+
+* [1 pt] Met: Gives a new fact (no other safety changes were made on those eight streets) consistent with premises that rules out an alternative explanation.
+* [0 pt] Not met: Does not explain how this fact strengthens the argument.
+* Tip: Always explicitly state how your new fact supports the main argument or rules out an alternative explanation.
+I02: 0/1
+* [0 pt] Not met: Misidentifies the conclusion, incorrectly claiming the author recommends starting with the Ardent recording (which directly contradicts the stimulus).
+* Tip: Make sure to read the author's final recommendation carefully so you don't state the exact opposite of their position.
+I03: 1/2
+* [1 pt] Met: Gives a new fact consistent with premises suggesting failures were spread across multiple restaurants.
+* [0 pt] Not met: Does not explain how this fact weakens the food writer's conclusion by showing that the proportion of failing restaurants could be higher than one in ten.
+* Tip: Be sure to walk through the math or logic showing how your new fact directly undermines the conclusion.
+I04: 0/1
+* [0 pt] Not met: Mistook the intermediate reason/claim for the main conclusion, explicitly selecting the premise/sub-conclusion instead of the author's primary actionable recommendation.
+* Tip: Ask yourself what the author is ultimately trying to convince the reader to do or accept, rather than focusing on the reason offered behind it.
+END FEEDBACK
+
+BEGIN SCORES v2 request=a2f892e7-8a19-41cf-88cc-3c686c3e5d3d
+I01 | 1/2 | no-reasoning
+I02 | 0/1 | misread-stimulus
+I03 | 1/2 | no-reasoning
+I04 | 0/1 | premise-as-conclusion
+END SCORES

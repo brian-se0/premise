@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=d1d72bb3-a7b7-4ba9-989a-ccbccf3c5c11
+I01: 2/2
+- Criterion 1 (ties error to the argument): Met. The student names the drop in the share missed (15% to 9%) and the director's jump to "fewer missed appointments."
+- Criterion 2 (why the inference fails): Met. The student notes that bookings rose sharply, so a smaller share of a much larger total can be equal or larger in number.
+- Tip: Adding a quick numeric example (e.g., 9% of double the bookings exceeds 15% of the original) would make an already sound answer even more convincing.
+I02: 0/2
+- Criterion 1 (new fact pointing to failures spread over clearly more than one in ten restaurants): Not met. "Not every restaurant that failed did so all four times" is too weak and vague. It does not say that few restaurants failed more than once, so it doesn't establish that failures were spread widely. It is also nearly trivial given the premises.
+- Criterion 2 (explains how it weakens the argument): Not met. There is no explanation of how the fact would push the number of distinct failing restaurants well above 100 (e.g., 400 failures spread over close to 400 restaurants).
+- Tip: State a concrete fact (such as "very few restaurants failed more than one inspection") and then do the arithmetic showing that 400 failures would then cover far more than 100 restaurants.
+I03: 2/2
+- Criterion 1 (ties error to the argument): Met. The student identifies the director treating the required rise in attendance as a guarantee of renewal.
+- Criterion 2 (why the inference fails): Met. The student explains that the rise is necessary but not sufficient, that the council could refuse on other grounds (budget cuts, a poor review), and that the director reads the conditional backwards. The side note about the size of the rise is accurate and consistent with the policy.
+- Tip: Keep applying the necessary-versus-sufficient distinction to the specific terms of the argument, as you did here.
+I04: 0/2
+- Criterion 1 (states a claim linking the extra rise to the cover crops): Not met. The student states the opposite of a needed assumption: that some other change accounts for all of the extra rise. That claim would undermine the argument rather than support it, so it is not an assumption the argument needs.
+- Criterion 2 (not stronger than needed): Not met. Since the claim is the reverse of what the argument requires, there is no valid assumption to judge for strength.
+- Tip: Phrase the assumption as the denial of an alternative explanation (e.g., "no other change on the adopting farms by itself accounts for their extra rise"), and check that if your claim were false the argument would collapse.
+END FEEDBACK
+
+BEGIN SCORES v2 request=d1d72bb3-a7b7-4ba9-989a-ccbccf3c5c11
+I01 | 2/2 | -
+I02 | 0/2 | understated
+I03 | 2/2 | -
+I04 | 0/2 | wrong-gap
+END SCORES

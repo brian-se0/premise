@@ -1,0 +1,36 @@
+{
+  "id": "9609701c-36e2-4c8f-8afd-a5dc664c0fdf",
+  "fence": "SCHV3V",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "str09",
+      "taskId": "arg-0026.strengthen",
+      "snapshotHash": "66ac558852bdbb84f94276160fe20732fdfa69d07be6cf0278c54c7d8920084e",
+      "answer": "Brannock's shops used to hand out unusually thick bags, and the town's last waste audit before the fee found that checkout bags made up more of the weight of household plastic rubbish than any other single item. If 80 percent fewer of them are going home, a big slice of that weight should be gone. The officer's argument really jumps from a count of bags to a weight of plastic, so a fact about weight is what it was missing. (Kind of surprising that 25 cents was enough to change people's habits that much.)"
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "asm09",
+      "taskId": "arg-0023.assumption",
+      "snapshotHash": "11ee666fa05b933dabb57e11cf05585c4b249a47905d62d898693769076d2a35",
+      "answer": "It assumes the lynx didn't shift their ranges into parts of Corrin Forest that have no cameras by so much that this alone could cut the photos from 120 to 58. If they had, the drop would reflect where the lynx go, not how many there are."
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "str05",
+      "taskId": "arg-0015.strengthen",
+      "snapshotHash": "bd4b45d1c7b55e2d69d5f8d83f40b25d9ffc78a5cae38ee80bc717eb717e7496",
+      "answer": "Surveys on the four goat islands find plenty of live saltbush seed in the soil, and seedlings come up every spring, but the goats eat nearly all of them within a few weeks. So the shrub can still regrow there; what holds it back is the grazing, which is exactly what removing the goats would end."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "fla02",
+      "taskId": "arg-0009.flaw",
+      "snapshotHash": "99089536385814080f5e0a6d9f3d251766ffcfd5c2a104120dfb80bd6cd649a5",
+      "answer": "The director credits the later closing time for the 30 percent jump in teen borrowing at the five branches, but those branches weren't chosen at random: they were the ones where teens had asked most often for later hours. Teens there may already have been getting more into the library, so borrowing could have climbed even if the hours had stayed the same."
+    }
+  ],
+  "selfGradeOnly": false
+}

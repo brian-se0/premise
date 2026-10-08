@@ -1,0 +1,27 @@
+BEGIN FEEDBACK request=1c6a6666-fc46-4492-b72e-82fdd20cb106
+I01: 0/2
+- New fact that makes a date of 1801 or later more likely: Not met. The student says another mill used a running hare in the 1770s, which points the other way. It gives an alternative source of hare-marked paper from before 1788, so it weakens the argument rather than strengthening it.
+- Explains how the fact strengthens the argument: Not met. The explanation says the hare was a well-known mark, which does nothing to support a date of 1801 or later.
+- Tip: Before submitting, check that your fact pushes toward the conclusion (for a strengthener, it should close off other sources of hare paper or tie the paper to Holt), not away from it.
+
+I02: 1/1
+- Identifies the main conclusion: Met. The student states that the society ought not to stand in the way of converting the silo, which matches "should not oppose." The members' view is mentioned only as a contrast and is not offered as the conclusion.
+- Tip: Keep stating the recommendation itself, as you did here, rather than the reason given for it.
+
+I03: 2/2
+- New fact about starting Spanish ability, consistent with the premises: Met. The streak holders were mostly complete beginners at sign-up, while many in the other group had studied Spanish before. This concerns starting ability and does not deny any premise. It gives a material reason to doubt that the streaks explain the gap.
+- Explains how it weakens the argument: Met. The student says the groups did not start from the same place, so the comparison is unfair and the streaks cannot be credited for the higher scores. Note that this fact would cut against the argument's conclusion in a different way than the reference: it makes the streak holders' advantage look larger, not smaller. Still, the starting groups differed, so the comparison is shaky, and the explanation links this to the doubt about the streaks. This is acceptable under the criteria.
+- Tip: When you give a weakener, say explicitly what the initial difference would lead us to expect about the later gap, since that makes the explanation tighter.
+
+I04: 1/2
+- Ties the error to this argument: Met. The student names the higher speaking-test scores and the conclusion that keeping the streak made the users score higher.
+- Names a possible explanation the argument leaves open: Not met. The student reverses the roles: they describe the ad as assuming that better speakers kept the streaks, and say the ad claims the streak caused the scores. In fact the ad claims the streak caused the scores, and the open alternative is that prior ability led to streaks. The student's wording is garbled and presents the alternative as what the ad assumes, so it never offers it as an unexcluded possibility.
+- Tip: State the alternative as a possibility the ad fails to rule out (for example, "better starting speakers may find long streaks easier to keep"), and make clear the ad itself claims the opposite direction.
+END FEEDBACK
+
+BEGIN SCORES v2 request=1c6a6666-fc46-4492-b72e-82fdd20cb106
+I01 | 0/2 | missed-alternative
+I02 | 1/1 | -
+I03 | 2/2 | -
+I04 | 1/2 | misread-stimulus
+END SCORES

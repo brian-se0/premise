@@ -1,0 +1,36 @@
+{
+  "id": "8c7374a7-e26d-43f4-a74f-1c5b7dc83039",
+  "fence": "RE6ZTG",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "asm08",
+      "taskId": "arg-0019.assumption",
+      "snapshotHash": "cc89fe651806fcfd5f93965c013ac369a577eb54aafc55c16c28b1d793c9728d",
+      "answer": "The adviser is assuming that some other change on the cover-crop farms, like switching to a higher-yielding seed, accounts for all of their extra rise in yields. That is what lets him say the cover crops raised yields."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "fla03",
+      "taskId": "arg-0011.flaw",
+      "snapshotHash": "c27186b0b32050ef2ed66267e92491b495fdb3cebbd513f3d46eaeaf75653662",
+      "answer": "Water through the dry season was necessary for a big settlement, but the argument uses Kessel Ridge's spring (and its rich soil) as if that made a big settlement likely. Necessary isn't the same as likely: for \"probably large\" to follow we'd need to know that sites with that kind of water and soil tended to grow big rather than stay small, and nothing in the passage tells us that."
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "wea10",
+      "taskId": "arg-0028.weaken",
+      "snapshotHash": "2d88e386587d83e88a80d98c0b440d313024ef3bcb0adff521f4678ccd7f62ec",
+      "answer": "The county fire marshal inspected the alarms back in the fall and approved, in writing, the district's plan to hold off on repairs until the replacement system it had already ordered arrived."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "asm01",
+      "taskId": "arg-0010.assumption",
+      "snapshotHash": "855af9b8f30409549fc0f33b47076693014f6b62bf061fe789ddaee89bcc12b2",
+      "answer": "i think it assumes the ratings went up because people were actually happier with the help they got, and not because the unhappy customers quit the chat before the end so they never got the survey"
+    }
+  ],
+  "selfGradeOnly": false
+}

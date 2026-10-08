@@ -1,0 +1,192 @@
+# Grading-check answer set: conclusion (docs/GRADING_PROTOCOL.md §9). Written by Claude in a student's voice on
+# 2026-10-06; `gold` is Claude's score, fixed before the second scorer started (digest of [id, task, answer, gold]
+# over all five files, as `npm run pilot:score` prints it: ae78dd71f7ef4b8824d9919aba1fcc4b2e0f1de6a5f551b5db0db87744aeb59f).
+# `second` is the blind score of an independent Claude Opus 5.5 session at maximum effort (pilot/second-scores.yaml).
+# `acceptable` marks an answer where a scorer recorded another score as defensible under the key; `settlement` says why.
+# `type` is the §9 answer type; `why` is Claude's reasoning for `gold`. Held-out answers: arg-0020, arg-0024, arg-0027.
+- id: con01
+  task: arg-0013.conclusion
+  holdout: false
+  type: partial
+  answer: >-
+    i think the main point is basically that the ardent recording isnt a good one to start out on
+  gold: 1
+  second: 1
+  why: >-
+    Blurs the recommendation into an evaluation and leaves out "newcomers to the late quartets" and the
+    alternative recording, but "start out on" keeps the first-time scope, so it says newcomers should not
+    start with the Ardent recording, which the accept text credits; it does not call the recording bad in
+    general.
+- id: con02
+  task: arg-0013.conclusion
+  holdout: false
+  type: extra-explanation
+  answer: >-
+    If you're new to Beethoven's late quartets, you should start with some recording other than the Ardent
+    Quartet's. That's the conclusion, and the rest backs it up: the playing is flawless, but the slow
+    movements are taken much faster than marked, and since those movements carry the emotional weight, a
+    first-timer would get a distorted picture. The pop band thing is the critics' argument, which the author
+    actually throws out.
+  gold: 1
+  second: 1
+  why: >-
+    The first sentence, labelled as the conclusion, states the recommendation to newcomers; the rest correctly
+    maps the support and the rejected critics' view. The accept text says extra supporting reasons do not lose
+    credit unless they make the identified conclusion ambiguous, and here they do not.
+- id: con03
+  task: arg-0013.conclusion
+  holdout: false
+  type: confidently-wrong
+  answer: >-
+    The conclusion is that the Ardent Quartet's new recording of the late quartets is a poor one, because the
+    players rush nearly every slow movement and those movements are the emotional heart of the music.
+  gold: 0
+  second: 0
+  why: >-
+    Offers a verdict that the recording is poor overall, which the accept text calls the critics' broader view
+    ("saying that the recording is bad ... is the critics' broader view, not the author's conclusion"); it
+    drops the recommendation to newcomers, so the criterion is not met.
+- id: con04
+  task: arg-0013.conclusion
+  holdout: false
+  type: reference-like
+  answer: >-
+    The author's main conclusion is that the Ardent Quartet's version isn't the recording a first-time
+    listener to Beethoven's late quartets should begin with; they should pick a different one.
+  gold: 1
+  second: 1
+  why: >-
+    Names the recommendation itself (a first-time listener should begin with a recording other than the Ardent
+    Quartet's), with its newcomer scope, so the single rubric criterion is met.
+- id: con05
+  task: arg-0013.conclusion
+  holdout: false
+  type: disqualifier
+  answer: >-
+    the author is saying people new to the late quartets should start with the ardent recording since the
+    playing is technically flawless, and the critics who brought up the cellists pop band past are being
+    unfair
+  gold: 0
+  second: 0
+  why: >-
+    States the opposite recommendation (newcomers should start with the Ardent recording), which is the task's
+    disqualifier, so the item scores 0.
+- id: con06
+  task: arg-0017.conclusion
+  holdout: false
+  type: keyword-contradiction
+  answer: >-
+    The main conclusion is that the study's finding about shop sales can't be trusted, since the Association
+    of Bicycle Makers paid for it. The statement that the council should not count the study in favor of the
+    lanes is one of the reasons the author gives for that.
+  gold: 0
+  second: 0
+  why: >-
+    Quotes the right sentence but reverses the support: it names the intermediate claim (the finding cannot be
+    trusted) as the main conclusion and calls the council recommendation a reason for it. The rubric excludes
+    the intermediate claim, so the criterion is not met.
+- id: con07
+  task: arg-0017.conclusion
+  holdout: false
+  type: reference-like
+  answer: >-
+    However its vote on the Harbor Street lanes turns out, the Dunmore council should leave the bicycle
+    makers' study out of the case for them.
+  gold: 1
+  second: 1
+  why: >-
+    Says the council should not count the study as support for the lanes, keeping the author's neutrality on
+    the lanes themselves; this is the main conclusion, so the criterion is met.
+- id: con08
+  task: arg-0017.conclusion
+  holdout: false
+  type: ambiguous
+  answer: >-
+    that the study shouldnt be trusted as evidence for the bike lanes
+  gold: 1
+  second: 1
+  acceptable: [ 0, 1 ]
+  settlement: >-
+    Both scorers gave 1 and both name 0 as defensible: the answer blends the intermediate claim's "trusted"
+    with the main conclusion's "as evidence for the bike lanes" and names no council action, and the key does
+    not place such blends.
+  why: >-
+    Read as a recommendation about how the study may be used in the lanes decision ("should not be relied on
+    as evidence for the lanes"), it matches "should not count the study (or give it weight) as support for the
+    bike lanes" and scores 1. Read as a restatement of the intermediate claim that the finding cannot be
+    trusted, with no council action, it scores 0. The "should" and "as evidence for the bike lanes" make the
+    first reading more likely.
+- id: con09
+  task: arg-0017.conclusion
+  holdout: false
+  type: valid-unlike-reference
+  answer: >-
+    basically whatever happens with the lanes, the study the bike industry paid for shouldnt get any weight on
+    the yes side when the council decides
+  gold: 1
+  second: 1
+  why: >-
+    Says the council should give the study no weight in favor of the lanes while leaving the decision open;
+    the accept text credits "should not count the study (or give it weight) as support for the bike lanes", so
+    the criterion is met.
+- id: con10
+  task: arg-0017.conclusion
+  holdout: false
+  type: confidently-wrong
+  answer: >-
+    The author's conclusion is that the Dunmore council should vote against the protected bike lanes on Harbor
+    Street, since the only evidence for them came from a study the bicycle makers paid for.
+  gold: 0
+  second: 0
+  why: >-
+    Gives a recommendation against building the lanes, which the accept text says goes beyond the author, who
+    leaves that decision open and concedes the lanes may be worth building for safety; the rubric excludes it.
+- id: con11
+  task: arg-0024.conclusion
+  holdout: true
+  type: concise-correct
+  answer: >-
+    The society should not object to the apartment conversion.
+  gold: 1
+  second: 1
+  why: >-
+    Short but complete: the historical society should not object to the plan to convert the silo into
+    apartments, which the accept text credits, so the criterion is met.
+- id: con12
+  task: arg-0024.conclusion
+  holdout: true
+  type: confidently-wrong
+  answer: >-
+    The author is arguing that the Varden Historical Society should actively support the apartment plan for
+    the silo, since the conversion keeps the walls and loading machinery.
+  gold: 0
+  second: 0
+  why: >-
+    Overstates the conclusion: the author says only that the society should not oppose the plan, and the
+    accept text says that calling for the society to support the conversion goes beyond the author; the rubric
+    excludes "a call for the society to support the plan".
+- id: con13
+  task: arg-0024.conclusion
+  holdout: true
+  type: valid-unlike-reference
+  answer: >-
+    Even though some members want the silo left exactly as it is, the writer's position is that the society
+    ought not to stand in the way of converting it into apartments.
+  gold: 1
+  second: 1
+  why: >-
+    The main clause states the author's recommendation (the society should not stand in the way of, that is
+    not oppose, the apartment conversion); the members' view appears only as the position argued against, so
+    the criterion is met.
+- id: con14
+  task: arg-0024.conclusion
+  holdout: true
+  type: disqualifier
+  answer: >-
+    the conclusion is the society should oppose turning the silo into apartments bc its the last wooden silo
+    in the county and has to stay exactly how it is
+  gold: 0
+  second: 0
+  why: >-
+    States the opposite recommendation (the society should oppose the conversion and keep the silo exactly as
+    it stands), which is the task's disqualifier, so the item scores 0.

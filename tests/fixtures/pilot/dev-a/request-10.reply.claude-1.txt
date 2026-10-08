@@ -1,0 +1,26 @@
+BEGIN FEEDBACK request=a2f892e7-8a19-41cf-88cc-3c686c3e5d3d
+I01: 1/2
+- Criterion 1 (new fact that strengthens): Met. The claim that no other safety changes were made on those streets is new, consistent with the premises, and rules out a rival explanation the stimulus leaves open.
+- Criterion 2 (explains how it strengthens): Not met. The answer states the fact but never says why it makes the cameras more likely to be the cause of the decline (for example, that it removes other possible causes).
+- Tip: After stating your fact, add a "so" sentence that links it to the conclusion, such as "so the drop is less likely to come from anything other than the cameras."
+
+I02: 0/1
+- Criterion (identifies main conclusion): Not met. The student states the opposite recommendation, that newcomers should start with the Ardent recording, and treats the flawless playing and the criticism of the critics as the support. This also mistakes the author's concession for the main point. The disqualifier applies.
+- Tip: Look for the "Still, I would not..." turn and the closing recommendation, since the author's own advice comes after the concession.
+
+I03: 1/2
+- Criterion 1 (new fact pointing to failures spread over more than one in ten restaurants): Met, though only barely. Saying that not every failing restaurant failed all four times is consistent with the premises and points toward spread, but it is weak and vague, since it does not say that few failed more than once.
+- Criterion 2 (explains how it weakens the argument): Not met. There is no explanation of how this makes it more plausible that the 400 failed inspections were spread over many restaurants, far more than 100.
+- Tip: Spell out the arithmetic of the effect, for example "if few restaurants failed more than once, the 400 failures involve nearly 400 different restaurants, not 100."
+
+I04: 0/1
+- Criterion (identifies main conclusion): Not met. The student names the intermediate claim, that the study's finding can't be trusted, as the main conclusion, and says the real conclusion is one of its reasons, which reverses the structure. The author's main conclusion is that the council should not count the study in favor of the lanes.
+- Tip: Ask which claim the others are meant to support; the untrustworthiness of the study supports the recommendation about what the council should do.
+END FEEDBACK
+
+BEGIN SCORES v2 request=a2f892e7-8a19-41cf-88cc-3c686c3e5d3d
+I01 | 1/2 | incomplete
+I02 | 0/1 | counterpoint-as-conclusion
+I03 | 1/2 | understated
+I04 | 0/1 | premise-as-conclusion
+END SCORES

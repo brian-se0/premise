@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=44f8afbe-2d89-4791-ada7-8f22740b47fa
+I01: 2/2
+
+* Criterion 1: met — It gives a relevant new starting-point fact: future streak holders were mostly beginners while the other group had prior Spanish study.
+* Criterion 2: met — It explains that the groups began from different levels, so the later score gap cannot fairly be credited to the streaks.
+* Tip: When proposing a confounder, explicitly connect the initial difference to why the later outcome may not have been caused by the factor being tested.
+  I02: 2/2
+* Criterion 1: met — “The letter is written on Holt paper” is an unstated bridge that allows Holt's records to apply to this sheet.
+* Criterion 2: met — The assumption is appropriately narrow and, if false, Holt's 1801 start date would no longer establish a lower bound for the letter's paper.
+* Tip: For necessary-assumption questions, identify the unstated link that connects a specific premise to the conclusion.
+  I03: 1/1
+* Criterion 1: met — It correctly identifies the main conclusion that the society should not oppose the conversion into apartments, rather than the intermediate historical-preservation claim.
+* Tip: Distinguish the author's recommendation from the reasons offered to support that recommendation.
+  I04: 2/2
+* Criterion 1: met — It explicitly connects the causal claim to the users who kept 100-day streaks and their higher speaking-test scores.
+* Criterion 2: met — It identifies the relevant alternative that the streak holders may already have spoken better, which could explain both their streaks and their higher scores.
+* Tip: State alternative explanations as possibilities rather than asserting one causal direction as definitely true.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=44f8afbe-2d89-4791-ada7-8f22740b47fa
+I01 | 2/2 | -
+I02 | 2/2 | -
+I03 | 1/1 | -
+I04 | 2/2 | -
+END SCORES

@@ -1,0 +1,22 @@
+BEGIN FEEDBACK request=89fb1714-0df9-48c7-b806-a91034e4b299
+I01: 0/1
+
+* Criterion by criterion: not met — the answer identifies that the recording rushes slow movements, but treats the recording as poor rather than stating the main conclusion that newcomers should start with a different recording.
+* Tip: Distinguish the author's recommendation from the reasons given to support it.
+  I02: 1/2
+* Criterion by criterion: met — the answer correctly distinguishes the one-in-ten share of inspections from the one-in-ten share of restaurants; not met — it does not explain that the failed inspections could be spread across more than one-tenth of the restaurants, potentially up to four-tenths.
+* Tip: When identifying a percentage error, explain how the underlying events could be distributed differently across the relevant population.
+  I03: 1/1
+* Criterion by criterion: met — the answer correctly says the council should leave the bicycle makers' study out of the case for the lanes, which is the main conclusion.
+* Tip: When asked for the main conclusion, state the author's recommendation rather than the supporting reason.
+  I04: 2/2
+* Criterion by criterion: met — the answer gives a new fact, that Ardley has about twice Pell's population, which supplies a larger potential customer base; met — it explains that this larger pool could make increased Thursday-evening sales more likely.
+* Tip: Connect a new fact explicitly to why the predicted outcome would be more likely.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=89fb1714-0df9-48c7-b806-a91034e4b299
+I01 | 0/1 | premise-as-conclusion
+I02 | 1/2 | incomplete
+I03 | 1/1 | -
+I04 | 2/2 | -
+END SCORES

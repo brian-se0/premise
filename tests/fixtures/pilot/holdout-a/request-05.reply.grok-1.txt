@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=f1693ee8-4fd2-4863-854b-9dcd47277c93
+I01: 2/2
+- Criterion by criterion: met — the sign-up placement fact is about how well the two groups spoke Spanish when they began, and it is consistent with the premises. Met — the explanation shows that better starting Spanish could both make a long streak easier and account for the later speaking gap, so the streak need not be the cause.
+- Tip: Keep pairing a start-of-use speaking difference with the reverse-causation story you already used.
+I02: 1/2
+- Criterion by criterion: met — limiting pre-1801 paper to the Holt mill is a new fact that makes hare-marked paper more likely to date from 1801 or later. Not met — the answer states the fact but never says why that would force the letter’s date forward.
+- Tip: After the new fact, add one sentence on how it blocks an earlier source of the hare watermark.
+I03: 0/1
+- Criterion by criterion: not met — the sentence states the members’ view that the society should oppose the conversion, which is the position the argument rejects, not the main conclusion.
+- Tip: Take the recommendation the author is defending, not the opposing view the author answers.
+I04: 2/2
+- Criterion by criterion: met — the answer names the move from higher streak-holder speaking scores to the claim that the streak made them better speakers. Met — a Spanish-speaking partner is an open alternative that could produce both the streak and the better speaking, and the stimulus does not rule it out.
+- Tip: Keep naming a specific open alternative, as you did, rather than only labeling the inference.
+END FEEDBACK
+
+BEGIN SCORES v2 request=f1693ee8-4fd2-4863-854b-9dcd47277c93
+I01 | 2/2 | -
+I02 | 1/2 | no-reasoning
+I03 | 0/1 | counterpoint-as-conclusion
+I04 | 2/2 | -
+END SCORES

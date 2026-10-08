@@ -1,0 +1,36 @@
+{
+  "id": "e3911a81-a4c9-4963-88ab-32d40cce0d5e",
+  "fence": "4E2ZR3",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "asm04",
+      "taskId": "arg-0013.assumption",
+      "snapshotHash": "94f0bdbc60efe40cd0565f1d244063da348358c55b6dcf537bbe27e2a78bb55c",
+      "answer": "The argument rests on the assumption that Beethoven's tempo markings are the right way to play these quartets. If the markings weren't a trustworthy guide, taking the slow movements faster wouldn't be a distortion at all, and the case against starting with the Ardent recording would disappear."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "asm10",
+      "taskId": "arg-0023.assumption",
+      "snapshotHash": "11ee666fa05b933dabb57e11cf05585c4b249a47905d62d898693769076d2a35",
+      "answer": "The assumption is that the 120 photos in 2020 weren't mostly of one or two lynx that kept walking past the same camera again and again."
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "wea02",
+      "taskId": "arg-0012.weaken",
+      "snapshotHash": "00e7718a795953cc21294b2bd6918f370ea9905d2473b15f03b794468a613b08",
+      "answer": "crashes on those 8 streets were already going down every year for like 5 years before the cameras got put in"
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "wea08",
+      "taskId": "arg-0025.weaken",
+      "snapshotHash": "4f7c64ed97b81d5634f5a0941a1e3c054bbfd1839bc5847caff4ae9ca60424e9",
+      "answer": "the health dept's list of restaurants that had at least one serious violation last year has 340 names on it. thats 34% of the 1000 restaurants, way more than 1 in 10. the writer basically took the inspection rate and treated it like it was the restaurant rate"
+    }
+  ],
+  "selfGradeOnly": false
+}

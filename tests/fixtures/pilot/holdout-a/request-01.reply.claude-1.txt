@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=cbb2a198-4002-4b54-8f2c-6acbcec7119e
+I01: 1/2
+- Criterion 1 (ties the error to this argument): Met. The answer names the streak holders' higher test scores and the ad's conclusion that keeping a streak made people better speakers.
+- Criterion 2 (names an open alternative): Not met. The alternative offered is that streak people had used the app longer, but the stimulus says all users had been learning for about a year and spent about the same total hours, so this is ruled out.
+- Tip: Before offering an alternative explanation, check the stimulus to make sure it doesn't already match or rule out that factor; try something like prior Spanish skill, or better speakers finding streaks easier.
+I02: 1/2
+- Criterion 1 (unstated claim that lets Holt's records date the sheet): Met. "The letter is written on Holt paper" is not stated in the argument, and it is a main bridge.
+- Criterion 2 (no stronger than needed): Not met. The statement is imprecise: it says the letter is "written on" Holt paper, which is a claim about the sheet's origin, but it gives no explanation, and it does not clearly separate the needed claim (this sheet came from Holt) from stronger ones. Because the wording is the bare reference-level claim, a case could be made for full credit, but as written it does not show it is limited to this one sheet or rule out other readings, so I'm not awarding the second point.
+- Tip: State the assumption precisely and say what would go wrong if it were false, for example that another maker using a hare mark, or an earlier origin, would break the dating.
+I03: 2/2
+- Criterion 1 (new, consistent fact that makes 1801 or later more likely): Met. The letter addressing Ferris as "Judge" and records showing he was first appointed in 1803 is a new fact, consistent with the premises, and points to a later date.
+- Criterion 2 (explains how it strengthens): Met. The answer explains that someone writing in 1788 would not have used that title, so the letter points to 1803 or later independently of the watermark.
+- Tip: This is the right pattern: a concrete new fact plus a clear explanation of how it bears on the date.
+I04: 2/2
+- Criterion 1 (unstated claim that bridges a step): Met. The answer states that the interior parts to be removed aren't essential to the silo's historical importance, which is a main bridge and not a premise or a conclusion.
+- Criterion 2 (no stronger than needed): Met. It claims only that the interior isn't essential, and explicitly allows that it may add some detail, so it is not stronger than needed.
+- Tip: Keep doing this: tie the assumption to the specific gap and phrase it so that a minor lost detail would not defeat the argument.
+END FEEDBACK
+
+BEGIN SCORES v2 request=cbb2a198-4002-4b54-8f2c-6acbcec7119e
+I01 | 1/2 | contradicts-premise
+I02 | 1/2 | incomplete
+I03 | 2/2 | -
+I04 | 2/2 | -
+END SCORES

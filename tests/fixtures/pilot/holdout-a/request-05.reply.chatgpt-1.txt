@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=f1693ee8-4fd2-4863-854b-9dcd47277c93
+I01: 2/2
+
+* Criterion 1: met — The answer gives a fact about starting proficiency: users who began at intermediate or higher levels were much more likely to become streak holders, while many of the comparison group began as beginners.
+* Criterion 2: met — It explains that pre-existing Spanish ability could both make maintaining a streak easier and account for higher speaking scores, so the causal direction could be reversed.
+* Tip: When challenging a causal claim, look for a pre-existing difference that could explain both the supposed cause and the outcome.
+  I02: 1/2
+* Criterion 1: met — The answer gives a new fact that the town did not receive paper from outside the region before 1801 and obtained its paper from Holt.
+* Criterion 2: not met — The answer does not explicitly explain that this ties the letter's paper to Holt and therefore to paper made with the hare mark only from 1801 onward.
+* Tip: After giving a supporting fact, explicitly state the chain from that fact to the conclusion you are strengthening.
+  I03: 0/1
+* Criterion 1: not met — The answer states the opposite of the author's main conclusion: it says the society should oppose the conversion and keep the silo unchanged.
+* Tip: Distinguish the author's conclusion from a view the author is arguing against, especially when the passage explicitly says the society should not oppose the plan.
+  I04: 2/2
+* Criterion 1: met — The answer directly identifies the ad's inference from higher scores among streak holders to the claim that streaks caused the improvement.
+* Criterion 2: met — It gives an unruled-out alternative explanation: a Spanish-speaking partner could encourage app use while also providing additional conversation practice, producing higher scores independently of the streak.
+* Tip: For causal arguments, name a plausible third factor that could produce both the observed behavior and the outcome.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=f1693ee8-4fd2-4863-854b-9dcd47277c93
+I01 | 2/2 | -
+I02 | 1/2 | no-reasoning
+I03 | 0/1 | misread-stimulus,counterpoint-as-conclusion
+I04 | 2/2 | -
+END SCORES

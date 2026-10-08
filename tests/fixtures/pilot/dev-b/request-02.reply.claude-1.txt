@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=f6f30331-2fe2-4993-99ef-725a8574db64
+I01: 0/2
+- Criterion 1 (ties the error to the fall in share and the conclusion about fewer missed appointments): Not met. The answer is about patients who never get booked, not about moving from a lower share to fewer missed appointments.
+- Criterion 2 (says why the inference fails given far more bookings): Not met. It never mentions that a smaller share of a much larger total need not be a smaller number.
+- Tip: Start from the argument's own step (share fell, so count fell) and ask whether the numbers behind the share changed.
+I02: 2/2
+- Criterion 1 (distinct unstated claim linking photos to lynx numbers): Met. The assumption is that lynx did not shift to camera-free parts of the forest.
+- Criterion 2 (not stronger than needed): Met. It requires only that any shift not be large enough to account for the drop from 120 to 58 by itself, not that habits stayed identical.
+- Tip: Keep up the habit of putting a size limit on the assumption ("by so much that this alone...").
+I03: 2/2
+- Criterion 1 (distinct unstated claim): Met. The first half restates the conclusion, but the answer also adds a distinct claim: the rise is not due to unhappy customers quitting before the survey. That matches the "who answered" bridge.
+- Criterion 2 (not too strong): Met. It rules out only one selection mechanism, and its denial would leave the rise unsupportive of the conclusion.
+- Tip: Skip the restated conclusion and state only the bridge, ideally with "not entirely" to show it needs only partial protection.
+I04: 0/2
+- Criterion 1 (new fact that materially weakens): Not met. Growth of about half (400 to 600) is below the two-thirds needed to weaken the argument. It actually supports the director.
+- Criterion 2 (correct explanation): Not met. The arithmetic gives 54 missed appointments now against 60 before, so fewer are missed. The answer wrongly says more are missed.
+- Tip: Check your own calculation before concluding. Bookings must grow by at least two-thirds for 9 percent of the new total to reach 15 percent of the old.
+END FEEDBACK
+
+BEGIN SCORES v2 request=f6f30331-2fe2-4993-99ef-725a8574db64
+I01 | 0/2 | wrong-gap
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 0/2 | understated
+END SCORES

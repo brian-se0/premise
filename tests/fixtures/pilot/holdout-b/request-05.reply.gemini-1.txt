@@ -1,0 +1,31 @@
+BEGIN FEEDBACK request=88a31d2f-e845-4b05-8c13-2d1336e0bbe1
+I01: 0/1
+
+* Criterion 1: Not met. The response incorrectly identifies the members' opposing view as the conclusion rather than stating that the society should not oppose the plan.
+* Tip: Make sure to identify the main conclusion of the author's argument rather than the opposing position that the author argues against.
+
+I02: 2/2
+
+* Criterion 1: Met. Provides a valid new fact that users starting at higher levels were significantly more likely to keep long streaks.
+* Criterion 2: Met. Explains clearly how this weakens the argument by showing reverse causation or prior ability driving both the streak and test performance.
+* Tip: Keep up the clear explanation of how alternative explanations weaken causal claims.
+
+I03: 2/2
+
+* Criterion 1: Met. States an unstated assumption regarding whether the interior is essential to showing how people lived and worked.
+* Criterion 2: Met. Formulates the assumption at the precise necessary strength required for the argument to hold.
+* Tip: Excellent job identifying the exact minimal assumption required to bridge the gap in the argument.
+
+I04: 0/2
+
+* Criterion 1: Not met. The fact that ink used between the 1770s and 1820s was used on the letter does not make a date of 1801 or later more likely, as it is equally consistent with the original 1788 date.
+* Criterion 2: Not met. The explanation fails to show how an ink available in the 1770s provides separate evidence of a post-1801 date.
+* Tip: To strengthen a timeline claim with physical evidence, ensure the new evidence excludes or makes less likely the earlier date (e.g., ink first invented after 1800).
+END FEEDBACK
+
+BEGIN SCORES v2 request=88a31d2f-e845-4b05-8c13-2d1336e0bbe1
+I01 | 0/1 | counterpoint-as-conclusion
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 0/2 | no-reasoning, irrelevant
+END SCORES

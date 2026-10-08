@@ -1,0 +1,36 @@
+{
+  "id": "30fc6ab2-6f09-411c-aa60-6287c5346d20",
+  "fence": "TQ59KB",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "fla09",
+      "taskId": "arg-0025.flaw",
+      "snapshotHash": "360bdc48b2eda1e8e624434e61911d327ff82e4d3c7334bbf5b006d3512394c2",
+      "answer": "The writer jumps from one inspection in ten finding a violation to one restaurant in ten having one. But each restaurant was inspected four times, so the same bad restaurant could account for several of the failed inspections, which means the real share of restaurants with a violation could be lower than one in ten."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "con09",
+      "taskId": "arg-0017.conclusion",
+      "snapshotHash": "d329e18d41fb8f8fe4e4a00941e9230388300b6eddbeb14f5275fa1bba5250e7",
+      "answer": "basically whatever happens with the lanes, the study the bike industry paid for shouldnt get any weight on the yes side when the council decides"
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "con03",
+      "taskId": "arg-0013.conclusion",
+      "snapshotHash": "837020b094efbf9c46f24efe2af1c0481bea3118fbebf395c43c7f33dfd33593",
+      "answer": "The conclusion is that the Ardent Quartet's new recording of the late quartets is a poor one, because the players rush nearly every slow movement and those movements are the emotional heart of the music."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "wea05",
+      "taskId": "arg-0016.weaken",
+      "snapshotHash": "33dd30bd51484d7593275ab76ec88de51a6af414a43adc2f0682a90c6f576d89",
+      "answer": "When all forty components update at once they fight over the phone's processor and memory, and Corvane's own profiling shows each one runs about four times slower than it does alone. The map took about 0.3 seconds by itself in the standard tests, so with everything running it would need around 1.2 seconds, and the screen isn't done until the map is. That's more than twice the limit even though every piece passed separately. This is the classic gap between unit tests and integration tests, which is why a lot of app teams also time the whole screen end to end before a release."
+    }
+  ],
+  "selfGradeOnly": false
+}

@@ -1,0 +1,27 @@
+BEGIN FEEDBACK request=e3911a81-a4c9-4963-88ab-32d40cce0d5e
+I01: 0/2
+
+* Criterion 1: not met; the answer concerns whether the recording is genuinely distorted, but the task grants that distortion and asks for the bridge from distortion to recommending another recording.
+* Criterion 2: not met; because the proposed claim addresses the granted premise rather than the needed recommendation link, it does not supply the required assumption.
+* Tip: Accept the distortion as given and identify why that distortion matters for choosing a first recording or why a better alternative is available.
+  I02: 2/2
+* Criterion 1: met; it identifies an unstated link between the photo count and the number of lynx by addressing repeated photographs of the same animals.
+* Criterion 2: met; it does not require identical lynx behavior or rule out all repeat photography, only the concentration needed to undermine the population inference.
+* Tip: When using a repeat-photography alternative, make clear that it could explain enough of the year-to-year drop to undermine the population conclusion.
+  I03: 1/2
+* Criterion 1: met; the claim that crashes had already been declining for five years before installation is a qualifying pre-installation fact that weakens the camera explanation.
+* Criterion 2: not met; the answer does not explain that the prior downward trend suggests much or all of the 40% decline could have occurred without the cameras.
+* Tip: After stating a weakening fact, explicitly connect it to why the observed post-installation decline might have happened anyway.
+  I04: 2/2
+* Criterion 1: met; 340 restaurants with at least one violation directly shows the failed inspections were spread across far more than 100 restaurants.
+* Criterion 2: met; the answer explains that the writer incorrectly treated the 10% inspection failure rate as if it were the percentage of restaurants with violations.
+* Tip: Distinguish the percentage of failed inspections from the percentage of distinct restaurants with at least one failure.
+
+END FEEDBACK
+
+BEGIN SCORES v2 request=e3911a81-a4c9-4963-88ab-32d40cce0d5e
+I01 | 0/2 | wrong-gap
+I02 | 2/2 | -
+I03 | 1/2 | incomplete
+I04 | 2/2 | -
+END SCORES

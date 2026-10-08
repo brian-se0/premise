@@ -1,0 +1,17 @@
+BEGIN FEEDBACK request=91f61859-2550-4260-958e-bdfc13c4cfc9
+I01: 1/2
+- Criterion 1 (new fact pointing to failures spread across clearly more than one restaurant in ten): Met. The fact that 340 restaurants had at least one serious violation is new, consistent with the premises (1,000 restaurants, four inspections each, 400 failed inspections, since 340 restaurants with 400 failures is possible), and it directly shows the failures were spread over far more than one in ten.
+- Criterion 2 (explains how the fact weakens the argument): Not met. The answer says the writer confused the inspection rate with the restaurant rate, which is a correct diagnosis. But it does not explain why failures would be spread over many restaurants, for example because few restaurants failed more than once, so the 400 failures fell on hundreds of different restaurants. It also simply asserts the conclusion's opposite rather than showing a mechanism for it.
+- Tip: After giving your new fact, add a sentence showing the link from the 400 failed inspections to the number of distinct restaurants, such as how few repeat failures would spread them out.
+
+I02: 1/2
+- Criterion 1 (states an unstated claim linking the adopters' extra rise to the cover crops): Met. The answer claims that nothing else differed between the groups (seed, fertilizer, irrigation, weather). This is not a premise or the conclusion, and it bridges the gap between the yield gap and cover crops as the cause.
+- Criterion 2 (not stronger than needed): Not met. It requires the two groups to share everything else in common, with cover crops the only difference. That is too strong, since minor differences that do not account for the extra rise would leave the argument intact.
+- Tip: Phrase the assumption as "no other difference between the groups by itself accounts for the extra rise" rather than "no other difference at all."
+
+END FEEDBACK
+
+BEGIN SCORES v2 request=91f61859-2550-4260-958e-bdfc13c4cfc9
+I01 | 1/2 | incomplete
+I02 | 1/2 | overstated
+END SCORES

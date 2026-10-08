@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=df19cff8-1f96-42e6-b7ff-7f7c4666abc9
+I01: 2/2
+- Criterion 1 (new fact): Met. The fact that most extra checkouts came from teens with jobs or sports who couldn't get to the library before 6 is new, consistent with the premises, and ties the rise to the added hours.
+- Criterion 2 (explanation): Met. The student explains that the new hours are what allowed these teens to borrow at all, which makes the hours the likelier cause.
+- Tip: Keep pairing the new fact with a "so" clause that links it back to the conclusion, as you did here.
+I02: 0/1
+- Criterion 1 (main conclusion): Not met. "The study shouldn't be trusted as evidence" restates the intermediate claim that the study's finding cannot be trusted, which is the reason offered. The main conclusion is the recommendation that the council should not count the study in favor of the lanes. Saying the study "shouldn't be trusted" is close, but it describes the study's reliability rather than what the council should do with it, matching the near-miss anchor.
+- Tip: Ask which claim the rest of the passage is there to support. Here the "paid for by bicycle makers" reasoning supports the recommendation to the council, so that recommendation is the conclusion.
+I03: 2/2
+- Criterion 1 (new fact): Met, with a caveat. The steady borrowing at the seven other branches is stated in the stimulus, so it is not strictly new. The student does add that those branches kept closing at 6 and stayed flat over the same year, which is mostly a restatement. I am still crediting it because the student's framing of the other branches as a control group goes beyond the bare premise, though this is borderline.
+- Criterion 2 (explanation): Met. The control-group reasoning explains that the difference is attributable to the extra hours rather than something else.
+- Tip: Offer a fact the stimulus does not already give, such as flat borrowing at those five branches in prior years, so the "new fact" criterion is clearly met.
+I04: 2/2
+- Criterion 1 (tie to this argument): Met. The student names the drop in share missed from 15% to 9% and the conclusion that fewer appointments are missed.
+- Criterion 2 (why it fails): Met. The student says bookings rose a lot, so a smaller share of a much bigger total can be as large or larger.
+- Tip: A quick numeric example would make the point even more concrete.
+END FEEDBACK
+
+BEGIN SCORES v2 request=df19cff8-1f96-42e6-b7ff-7f7c4666abc9
+I01 | 2/2 | -
+I02 | 0/1 | premise-as-conclusion
+I03 | 2/2 | -
+I04 | 2/2 | -
+END SCORES

@@ -1,0 +1,36 @@
+{
+  "id": "47fdd841-9687-4f34-bb5e-f2eec34ba29b",
+  "fence": "T1MV3B",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "wea14",
+      "taskId": "arg-0020.weaken",
+      "snapshotHash": "429a6fce8fbec4bed3b3686bbbe2a563881a42cf481795460c34643ebe4b188e",
+      "answer": "In the speaking check-in during their first week on the app, the users who later kept 100-day streaks were rated two levels higher, on average, than the users who never practiced more than seven days in a row."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "con11",
+      "taskId": "arg-0024.conclusion",
+      "snapshotHash": "28724fcca95f57247818dd0ccba2b39264faabf11b3e2e1ac09516b27af9f98f",
+      "answer": "The society should not object to the apartment conversion."
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "asm14",
+      "taskId": "arg-0027.assumption",
+      "snapshotHash": "6dc447a7d8bac114e064e5211de1d483274ce1c47ea3554c77e50abb441ec1c7",
+      "answer": "i think the curator is assuming none of the paper makers who sold paper in Tarrant back then were using a running hare watermark before 1801"
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "str14",
+      "taskId": "arg-0027.strengthen",
+      "snapshotHash": "198269e7d33a4153198a796b6acc7a50fc4f111d2a4178ba99c7ab9d10cb0fe1",
+      "answer": "The ink used on the letter was a type first sold in the 1770s and still common into the 1820s. Since that ink was still being used after 1801, it gives separate evidence of a later date and backs up the curator."
+    }
+  ],
+  "selfGradeOnly": false
+}

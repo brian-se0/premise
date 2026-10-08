@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=3b4a07b6-62de-47b9-b4a7-3e9148a0fa51
+I01: 2/2
+- Criterion by criterion: met — the new fact (extra checkouts came from teens who could not reach the library before 6 because of jobs or sports) is not already in the stimulus and ties the rise to the added hours. met — the explanation says those hours were what first made borrowing possible for them, so the hours themselves are the likelier cause.
+- Tip: Keep pairing a new causal fact with one sentence that says which rival explanation it closes.
+I02: 0/2
+- Criterion by criterion: not met — the claim that Beethoven’s markings are the right guide concerns whether the recording is distorting at all, which the task already grants, not the step from distortion to recommending a different recording. not met — because that claim is about the granted distortion rather than an unstated bridge to the recommendation, strength is not the issue; the gap tested is missed.
+- Tip: Once a claim is granted, look only for what must still be true for that claim to support the recommendation.
+I03: 0/1
+- Criterion by criterion: not met — “the study shouldn’t be trusted as evidence” restates the intermediate reason, not the main conclusion that the council should not count the study whatever it decides about the lanes.
+- Tip: Separate the author’s recommendation to the decision-maker from the reason offered for that recommendation.
+I04: 1/2
+- Criterion by criterion: met — ruling out a few repeatedly photographed lynx as the source of most 2020 photos is an unstated link between the photo drop and the population claim. not met — it rules out 2020 repeats without comparing them to 2025 or saying they were large enough to explain the drop from 120 to 58, which is stronger than the argument needs.
+- Tip: Phrase the assumption so that its denial would fully explain the size of the drop without a substantial population fall, including the comparison between years.
+END FEEDBACK
+
+BEGIN SCORES v2 request=3b4a07b6-62de-47b9-b4a7-3e9148a0fa51
+I01 | 2/2 | -
+I02 | 0/2 | wrong-gap, misread-stimulus
+I03 | 0/1 | premise-as-conclusion
+I04 | 1/2 | overstated
+END SCORES

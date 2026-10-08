@@ -1,0 +1,22 @@
+BEGIN FEEDBACK request=ca3e0e4d-11c0-4fc7-a566-148ee7281052
+I01: 1/1
+- Criterion 1 (identifies the main conclusion): Met. The answer says first-time listeners should not begin with the Ardent recording and should pick a different one, which is the author's recommendation. It does not fall back on the intermediate "distorted sense" claim or the critics' view.
+- Tip: Keep checking that your stated conclusion is the final recommendation, not the reason given for it.
+I02: 1/1
+- Criterion 1 (identifies the main conclusion): Met. The answer says the council should leave the bicycle makers' study out of the case for the lanes, whatever the vote's outcome. That matches the author's actual conclusion. It does not say the lanes should not be built, and it does not stop at "the study can't be trusted."
+- Tip: Keep separating "don't count this evidence" from "don't build the lanes," as you did here.
+I03: 2/2
+- Criterion 1 (ties the error to this argument): Met. The answer names the requirement (big settlements needed a reliable dry-season water source), notes that Kessel Ridge had one, and states the conclusion that the ruins were probably a big settlement.
+- Criterion 2 (says why the inference fails): Met. The answer points out that many places with springs and good soil could have stayed small villages. That addresses whether such sites were likely to grow large. It goes beyond saying only that the water requirement does not guarantee a large settlement.
+- Tip: Keep tying "necessary but not sufficient" to how likely the conclusion is, as you did here.
+I04: 0/1
+- Criterion 1 (identifies the main conclusion): Not met. "The Ardent recording isn't a good one to start out on" does say it is not a good starting point. But it never says newcomers should begin with a different recording, and it gives the recording's quality rather than the recommendation as the point. It is also close to the critics' broader view that the recording is bad. The answer is too vague to count as the author's conclusion.
+- Tip: Say who the recommendation is for and what they should do instead, for example "first-time listeners should start with a different recording."
+END FEEDBACK
+
+BEGIN SCORES v2 request=ca3e0e4d-11c0-4fc7-a566-148ee7281052
+I01 | 1/1 | -
+I02 | 1/1 | -
+I03 | 2/2 | -
+I04 | 0/1 | incomplete
+END SCORES

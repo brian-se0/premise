@@ -1,0 +1,31 @@
+BEGIN FEEDBACK request=47fdd841-9687-4f34-bb5e-f2eec34ba29b
+I01: 1/2
+
+* Criterion 1: Met. The student provides a fact showing that streak holders were already speaking better when they started.
+* Criterion 2: Not met. The student merely states the fact without explaining how it undercuts the conclusion or weakens the argument.
+* Tip: Always explicitly explain how the new fact creates doubt in the conclusion rather than just stating the fact itself.
+
+I02: 1/1
+
+* Criterion 1: Met. Correctly identifies the main conclusion that the society should not oppose/object to the plan.
+* Tip: Great job succinctly identifying the main recommendation of the argument.
+
+I03: 1/2
+
+* Criterion 1: Met. States an unstated assumption about paper suppliers in Tarrant.
+* Criterion 2: Not met. The claim is overstated because it applies to *all* paper makers who sold paper in Tarrant, rather than just the maker of this specific sheet of paper.
+* Tip: Make sure your stated assumption isn't overly broad or stronger than what the argument strictly requires.
+
+I04: 1/2
+
+* Criterion 1: Not met. Ink sold from the 1770s to the 1820s was already available in 1788, so it does not make a post-1801 date materially more likely.
+* Criterion 2: Not met. The explanation incorrectly claims that availability continuing after 1801 constitutes separate evidence of a later date.
+* Tip: Ensure your new fact actually provides evidence favoring a post-1801 date rather than being fully consistent with the earlier date (1788).
+END FEEDBACK
+
+BEGIN SCORES v2 request=47fdd841-9687-4f34-bb5e-f2eec34ba29b
+I01 | 1/2 | no-reasoning
+I02 | 1/1 | -
+I03 | 1/2 | overstated
+I04 | 0/2 | irrelevant, no-reasoning
+END SCORES

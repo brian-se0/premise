@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=64c66b35-06ea-44f3-a78e-bcd7e7ed658b
+I01: 0/2
+
+* Criterion 1: not met; the answer restates the conclusion that removing the goats will let saltbush recover, rather than giving an unstated bridge.
+* Criterion 2: not met; it does not provide a distinct, appropriately limited necessary assumption.
+* Tip: Give a reason the observed recovery supports the prediction, such as there being saltbush plants or seeds available to regrow after the goats are removed.
+  I02: 1/1
+* Criterion 1: met; it correctly identifies the recommendation that first-time listeners should start with a recording other than the Ardent Quartet's, while accurately distinguishing the supporting claims.
+* Tip: State the author's recommendation directly, then use the supporting reasons only if needed.
+  I03: 0/1
+* Criterion 1: not met; it identifies the intermediate claim that the study cannot be trusted, rather than the main conclusion that the council should not count the study in favor of the lanes.
+* Tip: Distinguish the author's recommendation from the reason given for that recommendation.
+  I04: 2/2
+* Criterion 1: met; it correctly connects the rise in teenage borrowing after the later closing time to the director's causal conclusion.
+* Criterion 2: met; it identifies a possible preexisting difference—greater interest in library use among teens at those branches—that could explain the rise without the longer hours causing it.
+* Tip: When challenging a causal claim, name a plausible alternative cause that the evidence does not rule out.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=64c66b35-06ea-44f3-a78e-bcd7e7ed658b
+I01 | 0/2 | restates-conclusion
+I02 | 1/1 | -
+I03 | 0/1 | premise-as-conclusion
+I04 | 2/2 | -
+END SCORES

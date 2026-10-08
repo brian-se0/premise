@@ -1,0 +1,53 @@
+BEGIN FEEDBACK request=99f69b08-6e6f-4707-b0f0-f51397a7dbf3
+I01: 2/2
+
+* Criterion by criterion:
+* [1 pt] Met. Ties the error to the argument by referencing necessary water/soil vs. claiming a big settlement is likely.
+* [1 pt] Met. Correctly explains that nothing in the passage shows that sites with those conditions tended to grow big rather than stay small.
+
+
+* Tip: Keep highlighting the difference between a necessary condition and one that makes an outcome probable.
+
+I02: 0/1
+
+* Criterion by criterion:
+* [1 pt] Not met. The student states the opposite recommendation (claiming the author says newcomers *should* start with the Ardent recording).
+
+
+* Tip: Pay close attention to the author's actual recommendation versus what the author is arguing against.
+
+I03: 0/2
+
+* Criterion by criterion:
+* [1 pt] Not met. Simply having a larger population does not guarantee a higher percentage increase or makeBEGIN FEEDBACK request=99f69b08-6e6f-4707-b0f0-f51397a7dbf3
+I01: 2/2
+
+
+* Criterion 1: Met. The response clearly identifies the premise about necessary conditions (water and soil) and the conclusion that the settlement was probably large.
+* Criterion 2: Met. The response explains that necessary conditions do not establish probability without knowing whether such sites tended to grow big rather than stay small.
+* Tip: Keep maintaining this clear distinction between necessary conditions and probabilistic conclusions in future exercises.
+
+I02: 0/1
+
+* Criterion 1: Not met. The student misread the stimulus, claiming the author recommends starting with the Ardent recording, when the author actually concluded the opposite.
+* Tip: Pay close attention to the author's final recommendation versus the views of external critics or concessions made in the text.
+
+I03: 0/2
+
+* Criterion 1: Not met. Stating that Ardley has twice as many people does not make it more likely that the market's sales would rise, as population size alone does not address whether Ardley residents share the specific commuting habits that drove success in Pell.
+* Criterion 2: Not met. The explanation relies on a flawed inference that a larger population automatically leads to a higher percentage increase in sales.
+* Tip: When strengthening an analogical argument, focus on facts that show the new location shares the specific mechanism or customer behavior that caused success in the original location.
+
+I04: 2/2
+
+* Criterion 1: Met. Gives a specific new fact (bookings tripled) consistent with the premise that bookings increased significantly.
+* Criterion 2: Met. Correctly calculates that 9% of triple the bookings equals 27% of the original volume, demonstrating that the total count of missed appointments increased despite the percentage drop.
+* Tip: Great job executing the percentage-versus-total-count mathematical calculation to show how a lower rate can yield a higher absolute number.
+END FEEDBACK
+
+BEGIN SCORES v2 request=99f69b08-6e6f-4707-b0f0-f51397a7dbf3
+I01 | 2/2 | -
+I02 | 0/1 | misread-stimulus
+I03 | 0/2 | no-reasoning
+I04 | 2/2 | -
+END SCORES

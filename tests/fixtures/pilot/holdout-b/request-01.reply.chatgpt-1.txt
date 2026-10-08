@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=cf7ad594-5b10-4640-aeab-89addf1f2881
+I01: 0/2
+
+* Criterion 1: not met; the proposed fact would weaken the curator's argument by showing that hare-marked paper could have come from another mill before 1801.
+* Criterion 2: not met; the explanation incorrectly says this supports the curator when it actually creates an alternative earlier source.
+* Tip: Make sure the new fact rules out an earlier source or supplies independent evidence that the letter dates from 1801 or later.
+  I02: 1/2
+* Criterion 1: met; the answer identifies an unstated claim about other papermakers' use of the hare watermark that would affect whether Holt's records can date the sheet.
+* Criterion 2: not met; the claim is stronger than necessary because it covers all paper makers selling in Tarrant, rather than only ruling out an earlier non-Holt source for this sheet.
+* Tip: State the narrowest necessary assumption, such as that this particular sheet was not made before 1801 by another papermaker using a hare mark.
+  I03: 1/1
+* Criterion 1: met; the answer correctly identifies the society's recommendation not to object to the apartment conversion.
+* Tip: When asked for the main conclusion, state the author's recommendation rather than the reason offered for it.
+  I04: 1/2
+* Criterion 1: met; the answer correctly connects the higher scores of streak holders to the ad's claim that the streak caused better speaking ability.
+* Criterion 2: not met; the proposed alternative—that streak holders had been using the app longer—is ruled out because both groups had been learning for about a year.
+* Tip: Use an alternative explanation not excluded by the stimulus, such as streak holders already having better Spanish when they started.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=cf7ad594-5b10-4640-aeab-89addf1f2881
+I01 | 0/2 | misread-stimulus
+I02 | 1/2 | overstated
+I03 | 1/1 | -
+I04 | 1/2 | contradicts-premise
+END SCORES

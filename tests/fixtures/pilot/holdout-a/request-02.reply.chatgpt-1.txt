@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=1c6a6666-fc46-4492-b72e-82fdd20cb106
+I01: 0/2
+
+* Criterion 1: not met. The new fact says another mill used the hare mark before 1801, which makes the watermark less useful for supporting a later date rather than more likely.
+* Criterion 2: not met. The explanation supports the opposite of the curator's conclusion.
+* Tip: Choose a new fact that makes the letter's 1801-or-later date more likely, such as evidence tying its watermark specifically to Holt paper.
+  I02: 1/1
+* Criterion 1: met. The answer correctly identifies the society's main conclusion: it should not stand in the way of converting the silo into apartments.
+* Tip: When asked for the main conclusion, state the author's recommendation rather than the reason given for it.
+  I03: 0/2
+* Criterion 1: not met. The fact given about the groups' starting abilities would actually strengthen the streak explanation, because the future streak holders started as beginners while the comparison group had more prior study.
+* Criterion 2: not met. The explanation incorrectly says the unequal starting points make the streaks unable to explain the higher scores, when the stated starting difference points in the opposite direction.
+* Tip: To weaken a causal comparison, show that the group with better later scores already had an advantage in speaking ability when the study began.
+  I04: 1/2
+* Criterion 1: not met. The answer does not clearly state that the ad infers that keeping the streak caused the higher speaking-test scores.
+* Criterion 2: met. It identifies the relevant alternative explanation that people who already spoke better may have been more likely to keep 100-day streaks.
+* Tip: Explicitly connect the higher scores to the ad's causal conclusion, then give the alternative explanation that better speakers may have been more likely to maintain streaks.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=1c6a6666-fc46-4492-b72e-82fdd20cb106
+I01 | 0/2 | missed-alternative
+I02 | 1/1 | -
+I03 | 0/2 | misread-stimulus
+I04 | 1/2 | misread-stimulus
+END SCORES

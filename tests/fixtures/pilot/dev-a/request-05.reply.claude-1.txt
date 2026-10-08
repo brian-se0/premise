@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=bb129f9d-fc94-4168-b1bc-076018e12ba0
+I01: 2/2
+- Criterion 1 (ties error to the argument): Met. The answer names the dry-season water requirement, notes Kessel Ridge had it, and states the conclusion that the ruins were probably a big settlement.
+- Criterion 2 (why the inference fails): Met. It says many places with springs and good soil could have stayed small villages, which shows the conditions don't make a large settlement likely. It goes beyond saying the conditions fail to guarantee one.
+- Tip: Keep pointing to the missing information about how often sites with these conditions actually grew large.
+I02: 1/1
+- Criterion 1 (identifies the main conclusion): Met. It states that newcomers should start with a recording other than the Ardent Quartet's. It treats the slow-movement and distortion points as support and correctly identifies the pop-band point as the critics' rejected argument.
+- Tip: Keep checking for the recommendation the author is actually arguing for, as you did here.
+I03: 2/2
+- Criterion 1 (ties error to the argument): Met. It names the inference from the attendance rise, which the policy requires, to the director's assurance that the grant will be renewed.
+- Criterion 2 (why the inference fails): Met. It explains that a rise is needed but doesn't guarantee renewal, and that the council could refuse on other grounds such as budget cuts. The "renewed → attendance rose" versus "attendance rose → renewed" point applies necessary-not-sufficient to this case. The side note about the size of the rise is accurate and does no harm.
+- Tip: Applying the conditional to the specific case, as you did, is what earns the point.
+I04: 0/2
+- Criterion 1 (ties error to the argument): Not met. The answer never mentions the drop in the share of missed appointments (15 to 9 percent) or the conclusion that fewer appointments are being missed.
+- Criterion 2 (why the inference fails): Not met. It raises patients who can't get booked at all, which doesn't bear on whether the number of missed appointments fell. It never mentions that far more appointments are now booked, so a smaller share can still be a larger number.
+- Tip: When an argument moves from a rate or share to a count, check whether the total changed, and work a quick example with numbers.
+END FEEDBACK
+
+BEGIN SCORES v2 request=bb129f9d-fc94-4168-b1bc-076018e12ba0
+I01 | 2/2 | -
+I02 | 1/1 | -
+I03 | 2/2 | -
+I04 | 0/2 | irrelevant
+END SCORES

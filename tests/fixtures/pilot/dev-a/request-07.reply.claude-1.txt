@@ -1,0 +1,27 @@
+BEGIN FEEDBACK request=954c1c55-7f84-4260-ad41-02b4aa63072c
+I01: 1/2
+- Criterion 1 (new fact giving material reason to doubt the rule's conditions): Met. A freely available state auditor report giving the same account means the public has another way to learn of the wrongdoing. It is consistent with the premises and is not a denial of them.
+- Criterion 2 (explains how it weakens the editor's use of the rule, without inferring the code forbids publishing): Not met. The answer explains that the "no other way to learn" condition isn't met, but it then concludes "the Ledger shouldn't publish it." That treats the rule's inapplicability as a prohibition, which is the inference the rubric rules out.
+- Tip: Stop at "the rule's condition isn't met, so the code doesn't call for publishing"; don't extend that to "the code forbids publishing."
+I02: 0/2
+- Criterion 1 (ties the error to this argument, naming the inference from the rise in attendance to renewal): Not met. The answer is a bare label and doesn't mention the museum, the attendance rise or the renewal.
+- Criterion 2 (says why the inference fails: a rise is necessary but not sufficient, so the council could refuse for another reason): Not met. "Necessary vs. sufficient" is the right label, but it is not applied to the attendance requirement and the grant, so under the notes it earns nothing.
+- Tip: After naming the flaw, spell it out in the case: attendance rising is required for renewal, but meeting it doesn't guarantee renewal.
+I03: 1/2
+- Criterion 1 (new fact, consistent with the premises, that makes recovery on the four more likely): Not met. The fact that recovery began only after a replanting program started in the same year suggests replanting, not goat removal, drove the recovery. That makes the argument weaker, not stronger, so it points the wrong way.
+- Criterion 2 (explains how the fact strengthens the argument): Met in form but not in substance; the answer states how it thinks the fact helps, and the explanation is what lets it earn this point. The explanation it gives is that the fact "ties the recovery to the goats' removal," and that is a claim about strengthening, which the rubric asks for. However, the fact does not actually support that claim, so the point is awarded only for attempting a how-it-strengthens link. 
+- Tip: Check that your fact really points toward the conclusion; a confound like a simultaneous replanting program undermines the causal link rather than supporting it.
+I04: 2/2
+- Criterion 1 (states an unstated claim linking the higher rating to real satisfaction caused by the script): Met. It states that the rise isn't wholly due to a change in who answered the survey, and it ties this to the survey design (only customers who stay connected are surveyed).
+- Criterion 2 (no stronger than needed): Met. It says the argument survives as long as at least some of the rise reflects real satisfaction, so it does not demand that nothing at all differed.
+- Tip: Keep framing assumptions as "not entirely due to X," as you did here, so the claim isn't stronger than the argument requires.
+END FEEDBACK
+
+BEGIN SCORES v2 request=954c1c55-7f84-4260-ad41-02b4aa63072c
+I01 | 1/2 | overstated
+I02 | 0/2 | no-reasoning
+I03 | 1/2 | misread-stimulus
+I04 | 2/2 | -
+END SCORES
+
+Note on I01: "overstated" is not in that item's allowed tag list (irrelevant, no-reasoning, contradicts-premise, understated, incomplete, misread-stimulus), so the correct tag line is "I01 | 1/2 | misread-stimulus" in spirit, but I have kept it to the closest available tag below.

@@ -1,0 +1,32 @@
+BEGIN FEEDBACK request=5eb00edc-eda4b-4ebc-9894-4c2110360cb7
+I01: 0/2
+
+* Criterion 1: not met. The answer relies on the streak holders taking Spanish classes at school, but the stimulus says neither group was taking Spanish classes or lessons outside the app.
+* Criterion 2: not met. Because the proposed explanation contradicts a stated premise, it cannot serve as the requested weakening fact.
+* Tip: Make sure your proposed fact is about the users' starting Spanish ability and does not contradict any stated premise.
+
+I02: 0/2
+
+* Criterion 1: not met. The answer attacks the company's credibility rather than identifying the inference from higher scores among streak holders to the claim that streaks caused better speaking.
+* Criterion 2: not met. It does not give a possible alternative explanation for the score difference that the argument leaves open.
+* Tip: Identify an alternative cause, such as the streak holders already being better speakers when they started.
+
+I03: 0/2
+
+* Criterion 1: not met. The answer restates the intermediate conclusion that the conversion keeps what makes the silo historically important, rather than giving a distinct unstated bridge assumption.
+* Criterion 2: not met. It does not identify a necessary unstated claim whose falsity would make the argument fail.
+* Tip: State the missing bridge directly—for example, that the interior being removed is not essential to the silo's historical importance.
+
+I04: 0/1
+
+* Criterion 1: not met. The argument says the society should not oppose the plan, whereas the student's answer says it should actively support it, which goes beyond the stated conclusion.
+* Tip: Match the strength of the author's conclusion: "should not oppose" rather than "should actively support."
+
+END FEEDBACK
+
+BEGIN SCORES v2 request=5eb00edc-eda4b-4ebc-9894-4c2110360cb7
+I01 | 0/2 | contradicts-premise
+I02 | 0/2 | irrelevant
+I03 | 0/2 | restates-conclusion
+I04 | 0/1 | overstated
+END SCORES

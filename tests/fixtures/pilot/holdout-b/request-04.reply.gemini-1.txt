@@ -1,0 +1,32 @@
+BEGIN FEEDBACK request=053afdfe-4a4a-4494-8fdf-75eecf2b09af
+I01: 2/2
+
+* Criterion 1: met. The student states an unstated claim bridging the argument (that converting the building preserves what makes it historically important).
+* Criterion 2: met. The claim is appropriately framed and not overly strong.
+* Tip: Make sure to clearly distinguish between necessary assumptions and stated premises or intermediate conclusions when writing out your response.
+
+I02: 2/2
+
+* Criterion 1: met. The answer clearly ties the error to the argument's premise (speaking test scores) and conclusion (streaks make learners better speakers).
+* Criterion 2: met. The student provides a plausible alternative explanation (having a Spanish-speaking roommate or partner) that accounts for both the streak and higher scores.
+* Tip: Keep up the great work of explicitly describing both the correlation and a specific third variable that could explain the link.
+
+I03: 1/2
+
+* Criterion 1: met. Gives a new fact (Tarrant received no paper outside the region/all paper came from Holt before 1801) that is consistent with the premises.
+* Criterion 2: not met. The response fails to explain *how* this fact strengthens the argument by connecting it back to the watermarked letter and its date.
+* Tip: Always include a sentence explicitly explaining how your new fact leads to the argument's conclusion.
+
+I04: 0/2
+
+* Criterion 1: not met. The student claims the users were taking Spanish classes at school, which directly contradicts the stimulus premise stating that none of the users in either group were taking Spanish classes outside the app.
+* Criterion 2: not met. Because the answer contradicts a stated premise, it fails to provide a valid weakening explanation under the given constraints.
+* Tip: Always double-check the stimulus to ensure your new fact does not contradict any explicitly stated premises.
+END FEEDBACK
+
+BEGIN SCORES v2 request=053afdfe-4a4a-4494-8fdf-75eecf2b09af
+I01 | 2/2 | -
+I02 | 2/2 | -
+I03 | 1/2 | incomplete
+I04 | 0/2 | contradicts-premise
+END SCORES

@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=e3911a81-a4c9-4963-88ab-32d40cce0d5e
+I01: 0/2
+- Criterion 1 (states an unstated claim linking the granted distortion to the recommendation): Not met. The student's assumption, that Beethoven's tempo markings are the right way to play the quartets, concerns whether the distortion claim is true. The task grants that claim, so it does not bridge from distortion to "begin with a different recording."
+- Criterion 2 (no stronger than needed): Not met. Because the claim does not address the tested step, there is nothing to judge for strength, and if it were false the granted premise would still stand.
+- Tip: Take the granted claim as fixed and ask what else must be true for it to lead to the recommendation, such as a less distorting recording existing or a distorted first impression being a real drawback.
+I02: 2/2
+- Criterion 1 (unstated claim linking the drop in photographs to the number of lynx): Met. The student says the 2020 photographs were not mostly of one or two lynx repeatedly passing the same camera. This is an unstated claim that connects photographs to animals, and it is not a premise or a restatement of the conclusion.
+- Criterion 2 (no stronger than needed): Met. Denying it, so that a few animals dominated the 2020 count, would let the drop in photographs be explained without a population fall. The wording "mostly of one or two lynx" is a reasonably calibrated threshold and does not demand that every lynx be photographed equally. It is framed around the 2020 count and could have mentioned the 2025 comparison more explicitly, but it still captures the key idea.
+- Tip: When ruling out an alternative explanation, say how it affects the comparison between the two years, as you nearly did here.
+I03: 1/2
+- Criterion 1 (new pre-installation fact consistent with the premises that gives a material reason for doubt): Met. Crashes on the eight streets were already falling every year for about five years before the cameras. This is about the years before installation, is consistent with the premises, and points to a pre-existing trend.
+- Criterion 2 (explains how it weakens the argument): Not met. The student does not say that a continuing trend could have produced much of the 40 percent drop without cameras, and does not say how large the earlier declines were.
+- Tip: After stating the fact, add a sentence on its effect, such as "if that trend simply continued, much of the 40 percent fall would have happened anyway."
+I04: 0/2
+- Criterion 1 (new fact consistent with the premises, not already stated, that points to failures being spread over clearly more than one restaurant in ten): Not met. The student reports that the department's list has 340 names. This is a fact of the right kind, but it essentially restates the conclusion's negation. It is also arithmetically problematic: with 400 failed inspections, 340 restaurants is possible, but the student presents the figure as a given rather than as a fact that arises from the premises.
+- Criterion 2 (explains how the fact weakens the argument): Not met. The student only notes that the writer confused the inspection rate with the restaurant rate. They give no reason why failures would be spread widely, such as few repeat failures.
+- Tip: Offer a fact that explains why failures would be scattered, such as violators usually passing later inspections, and then show how it makes the restaurant-level rate much higher than one in ten.
+END FEEDBACK
+
+BEGIN SCORES v2 request=e3911a81-a4c9-4963-88ab-32d40cce0d5e
+I01 | 0/2 | wrong-gap
+I02 | 2/2 | -
+I03 | 1/2 | incomplete
+I04 | 0/2 | no-reasoning
+END SCORES

@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=faa2557b-b994-42db-b496-42d6a6eabacb
+I01: 1/1
+
+* Criterion 1 (met): Correctly identifies the main conclusion that the society should not oppose the plan.
+* Tip: Make sure not to overstate the author's recommendation—saying the society should "not oppose" a plan is not the same as saying it should "actively support" it.
+I02: 2/2
+* Criterion 1 (met): Provides a plausible new fact about Judge Ferris that implies a date of 1803 or later.
+* Criterion 2 (met): Clearly explains how this fact independently supports the conclusion.
+* Tip: Keep up the clear explanation of how the new evidence connects to the conclusion.
+I03: 1/2
+* Criterion 1 (met): Gives an appropriate initial-ability fact comparing the two groups at sign-up.
+* Criterion 2 (not met): Does not explain how this initial difference undercuts the claim that the streaks caused the higher scores.
+* Tip: Always include an explicit explanation showing how the new fact weakens the author's reasoning.
+I04: 0/2
+* Criterion 1 (not met): Focuses on an ad hominem/bias objection rather than addressing the argument's inference from scores to causation.
+* Criterion 2 (not met): Fails to point out an unaddressed alternative explanation for the higher test scores.
+* Tip: Evaluate the logical structure of the argument itself rather than dismissing the claim based on the speaker's motives.
+END FEEDBACK
+
+BEGIN SCORES v2 request=faa2557b-b994-42db-b496-42d6a6eabacb
+I01 | 1/1 | overstated
+I02 | 2/2 | -
+I03 | 1/2 | no-reasoning
+I04 | 0/2 | ad-hominem, irrelevant
+END SCORES

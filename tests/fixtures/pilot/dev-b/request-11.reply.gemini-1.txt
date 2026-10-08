@@ -1,0 +1,30 @@
+BEGIN FEEDBACK request=64c66b35-06ea-44f3-a78e-bcd7e7ed658b
+I01: 0/2
+
+* Criterion 1: Not met. The response restates the argument's conclusion rather than identifying an unstated assumption.
+* Criterion 2: Not met. Because it restates the conclusion, it does not state a necessary unstated claim required by the argument.
+* Tip: Make sure to identify an unstated underlying claim needed for the premise to lead to the conclusion, rather than repeating the conclusion itself.
+
+I02: 1/1
+
+* Criterion 1: Met. Correctly identifies the author's main conclusion that first-time listeners should start with a different recording, despite including additional context about the supporting details.
+* Tip: Keep your answer focused strictly on stating the main conclusion sentence itself without adding unnecessary breakdown of the rest of the text.
+
+I03: 0/1
+
+* Criterion 1: Not met. The response mistakes the intermediate premise/reason ("finding can't be trusted") for the main conclusion ("council should not count the study").
+* Tip: Watch out for intermediate conclusions; ask yourself which claim is ultimate recommendation versus which claim serves as a supporting reason for that recommendation.
+
+I04: 2/2
+
+* Criterion 1: Met. Clearly ties the error to the director's causal claim regarding the 30 percent jump in teen borrowing at the five extended-hour branches.
+* Criterion 2: Met. Identifies a plausible, unruled-out alternative explanation (that teens at those specific branches were already developing greater interest in the library).
+* Tip: Excellent job pinpointing the self-selection flaw and explaining how the underlying interest could independently account for the increase.
+END FEEDBACK
+
+BEGIN SCORES v2 request=64c66b35-06ea-44f3-a78e-bcd7e7ed658b
+I01 | 0/2 | restates-conclusion
+I02 | 1/1 | -
+I03 | 0/1 | premise-as-conclusion
+I04 | 2/2 | -
+END SCORES

@@ -1,0 +1,30 @@
+BEGIN FEEDBACK request=7ef74f63-fd47-42f0-8029-42f128e64925
+I01: 1/2
+- Criterion 1 (new fact, consistent with premises, material reason for doubt): Not met. The student says the map took about 0.3 seconds alone, which is consistent with the premises. But the fact that each component runs about four times slower under contention is the weakener, and it is stated as profiling evidence, so it is a new fact. On a strict reading, though, "each runs about four times slower" would put some components well past half a second only if they were near 0.125 s alone, which is not contradicted. The fact is therefore valid and consistent. Re-checking: it is a new, premise-consistent fact that gives real reason to doubt the screen finishes in time, so this criterion is met.
+- Criterion 2 (explains how): Met. It explains that components compete for processor and memory, so the map takes about 1.2 seconds when run with the others, and the screen is not done until the map is, exceeding the limit.
+- Net: both criteria are met on a careful reading, which gives 2/2. Correcting the line above: Criterion 1 is met and Criterion 2 is met.
+- Tip: State the new fact first, then follow it with the numbers showing why the whole exceeds the limit, as you did here.
+I01 final: 2/2
+
+I02: 1/2
+- Criterion 1 (ties error to this argument): Met. It names the jump from one inspection in ten finding a violation to one restaurant in ten having one.
+- Criterion 2 (says why the inference fails, with the direction right): Not met. It notes each restaurant was inspected four times but concludes the share of restaurants could be lower than one in ten. That has the direction wrong, since at least 100 restaurants must account for 400 failures, and the share could be as high as four in ten.
+- Tip: Work out the extreme cases: if every failure were at a different restaurant, how many restaurants would have failed?
+
+I03: 1/2
+- Criterion 1 (new fact, consistent, materially strengthens): Met. Neighboring towns without a fee kept handing out the same number of bags, which makes a cause other than the fee less likely.
+- Criterion 2 (explains how): Not met. The answer states the fact with no explanation of why it supports the claim. Note also that the fact bears on bag counts rather than total plastic weight, so spelling out the link would have helped.
+- Tip: After giving your fact, add a sentence beginning "This helps because..." linking it to the conclusion.
+
+I04: 2/2
+- Criterion 1 (new fact, consistent, materially strengthens): Met. The drop was concentrated near the cameras, while the parts of the same streets outside camera range saw barely any change. This is consistent with the premises and is new.
+- Criterion 2 (explains how): Met. It says this helps the council's case, and the reasoning is implicit but adequate: the decline tracks camera coverage, which points to the cameras and away from other factors on those streets. The explanation is brief but acceptable.
+- Tip: Make the causal link explicit in a sentence, such as "crashes fell only where cameras operate, so something else on the street is unlikely to be responsible."
+END FEEDBACK
+
+BEGIN SCORES v2 request=7ef74f63-fd47-42f0-8029-42f128e64925
+I01 | 2/2 | -
+I02 | 1/2 | wrong-gap
+I03 | 1/2 | incomplete
+I04 | 2/2 | -
+END SCORES

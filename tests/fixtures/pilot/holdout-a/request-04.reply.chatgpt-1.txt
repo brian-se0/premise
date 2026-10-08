@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=47fdd841-9687-4f34-bb5e-f2eec34ba29b
+I01: 1/2
+
+* Criterion 1: met — the answer gives a new fact that the future streak holders already spoke better during their first week, which materially weakens the causal claim.
+* Criterion 2: not met — it does not explain that the later score gap may reflect this pre-existing difference rather than the effect of the streaks.
+* Tip: After giving a pre-existing difference, explicitly say that the later gap may have been present before the streaks began.
+  I02: 1/1
+* Criterion 1: met — the answer correctly states that the society should not object to the apartment conversion, which is the main conclusion.
+* Tip: For conclusion questions, identify the author's main recommendation rather than a reason offered in support of it.
+  I03: 1/2
+* Criterion 1: met — the answer identifies an unstated claim about other paper makers' use of the running-hare watermark, which is relevant to the dating inference.
+* Criterion 2: not met — the claim is too broad because it covers all paper makers selling in Tarrant, rather than only ruling out an earlier alternative source for this particular sheet.
+* Tip: State the narrowest assumption needed, such as that this particular sheet was not made before 1801 by another maker using the same watermark.
+  I04: 0/2
+* Criterion 1: not met — the fact that the ink type existed in the 1770s and remained common into the 1820s does not make a post-1800 date more likely, because it was available both before and after 1801.
+* Criterion 2: not met — the explanation incorrectly treats continued availability of the ink as evidence of a later date.
+* Tip: Choose new evidence that distinguishes 1801-or-later from dates before 1801, rather than evidence compatible with both periods.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=47fdd841-9687-4f34-bb5e-f2eec34ba29b
+I01 | 1/2 | incomplete
+I02 | 1/1 | -
+I03 | 1/2 | overstated
+I04 | 0/2 | irrelevant
+END SCORES

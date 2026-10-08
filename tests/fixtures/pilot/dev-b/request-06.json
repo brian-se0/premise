@@ -1,0 +1,36 @@
+{
+  "id": "99f69b08-6e6f-4707-b0f0-f51397a7dbf3",
+  "fence": "65DYPZ",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "fla03",
+      "taskId": "arg-0011.flaw",
+      "snapshotHash": "c27186b0b32050ef2ed66267e92491b495fdb3cebbd513f3d46eaeaf75653662",
+      "answer": "Water through the dry season was necessary for a big settlement, but the argument uses Kessel Ridge's spring (and its rich soil) as if that made a big settlement likely. Necessary isn't the same as likely: for \"probably large\" to follow we'd need to know that sites with that kind of water and soil tended to grow big rather than stay small, and nothing in the passage tells us that."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "con05",
+      "taskId": "arg-0013.conclusion",
+      "snapshotHash": "837020b094efbf9c46f24efe2af1c0481bea3118fbebf395c43c7f33dfd33593",
+      "answer": "the author is saying people new to the late quartets should start with the ardent recording since the playing is technically flawless, and the critics who brought up the cellists pop band past are being unfair"
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "str07",
+      "taskId": "arg-0022.strengthen",
+      "snapshotHash": "0bec2ed71823e6bf39b0b7c7ef93d08fe167894fd93d1b9419acf59aae3d237e",
+      "answer": "ardley has about twice as many people as pell. so if pell's market went up by a third, ardley's should go up even more since theres way more potential customers to come on thursday nights"
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "wea04",
+      "taskId": "arg-0014.weaken",
+      "snapshotHash": "77f5b9f14cbed520161efbebe6390832360aa78008339acceb1274aa1eaa3636",
+      "answer": "Monthly bookings tripled. 9% of triple is 27% of the old monthly total, more than the 15% missed before, so more appointments are missed now."
+    }
+  ],
+  "selfGradeOnly": false
+}

@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=954c1c55-7f84-4260-ad41-02b4aa63072c
+I01: 1/2
+- Criterion 1 met: the free auditor report already sets out the officials' knowledge, the six-month delay, and the open school, so the public has another way to learn of the same wrongdoing.
+- Criterion 2 not met: you correctly say the "no other way" condition may fail, but then infer that the code therefore forbids publishing; the rule only requires publication when its conditions hold and does not bar it otherwise.
+- Tip: Stop once you have shown a rule condition may not be met; do not treat a one-way "publish whenever" rule as a ban on publishing.
+I02: 0/2
+- Criterion 1 not met: the bare label never names this argument's move from the museum's attendance rise to the claim that the grant will be renewed.
+- Criterion 2 not met: it does not say why a necessary attendance rise still leaves the council free to refuse for another reason.
+- Tip: Apply the necessary-versus-sufficient point to the stated policy and the director's conclusion in one or two sentences, not as an unapplied label.
+I03: 0/2
+- Criterion 1 not met: a fifteen-year lag that coincides with a replanting program points away from goat removal as the cause, so it does not make recovery on the four islands after removal more likely.
+- Criterion 2 not met: the explanation says the fact ties recovery to the goats' removal, but the timing and the replanting program do the opposite.
+- Tip: Check that the new fact supports the claimed causal link rather than supplying a rival cause, and explain that direction explicitly.
+I04: 2/2
+- Criterion 1 met: the unstated claim is that the rise from 3.6 to 4.3 is not wholly due to who stayed to answer the survey, which is what links the higher average to greater satisfaction from the script.
+- Criterion 2 not overstated: you require only that the rise not be entirely a selection effect and allow the argument to stand if some of it is real satisfaction.
+- Tip: Keep necessary assumptions at "not entirely X" when a partial alternative cause would not wipe out the conclusion.
+END FEEDBACK
+
+BEGIN SCORES v2 request=954c1c55-7f84-4260-ad41-02b4aa63072c
+I01 | 1/2 | misread-stimulus
+I02 | 0/2 | incomplete, no-reasoning
+I03 | 0/2 | irrelevant
+I04 | 2/2 | -
+END SCORES

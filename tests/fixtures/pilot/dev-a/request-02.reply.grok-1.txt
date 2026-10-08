@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=9609701c-36e2-4c8f-8afd-a5dc664c0fdf
+I01: 2/2
+- Criterion 1 met: the waste-audit fact is new and not already in the premises, and a large weight share of unusually thick checkout bags makes a big drop in household plastic weight more likely.
+- Criterion 2 met: the answer explains that an 80 percent fall in bags going home would remove a large slice of that weight, closing the count-to-weight gap.
+- Tip: Keep tying the new fact to the quantity the conclusion claims, as you did with weight rather than bag count alone.
+I02: 2/2
+- Criterion 1 met: the unstated claim links the photo drop to lynx numbers by ruling out a large enough shift off the camera trails.
+- Criterion 2 met: it is limited to a shift big enough to explain the fall from 120 to 58 by itself, so denying it would break the inference without requiring that ranges never changed.
+- Tip: Keep the “enough to explain the whole drop” qualifier so the assumption stays necessary rather than stronger than the argument needs.
+I03: 2/2
+- Criterion 1 met: live seed and spring seedlings on the four goat islands, eaten within weeks, is a new fact that makes recovery after removal more likely.
+- Criterion 2 met: the answer explains that the shrub can still establish there and that grazing is what holds it back, so ending that grazing would allow recovery.
+- Tip: Prefer evidence from the islands the conclusion is about, as you did, rather than only restating the contrast already given.
+I04: 2/2
+- Criterion 1 met: the answer names the 30 percent rise at the five later-hour branches and the director’s claim that the longer hours caused it.
+- Criterion 2 met: it gives an open alternative—those branches were chosen because teens already wanted later hours, so interest there may already have been rising—and that cause is not ruled out by the stimulus.
+- Tip: When you flag a causal jump, name a concrete alternative the premises leave open, as you did with pre-existing interest at the selected branches.
+END FEEDBACK
+
+BEGIN SCORES v2 request=9609701c-36e2-4c8f-8afd-a5dc664c0fdf
+I01 | 2/2 | -
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 2/2 | -
+END SCORES

@@ -1,0 +1,32 @@
+BEGIN FEEDBACK request=7ef74f63-fd47-42f0-8029-42f128e64925
+I01: 2/2
+
+* Criterion 1: Met. The student provides a plausible new fact about resource competition slowing down components when run simultaneously.
+* Criterion 2: Met. The response clearly explains how this performance hit causes the total screen update time to exceed the 0.5-second limit.
+* Tip: Keep up the clear explanation of how your introduced evidence directly impacts the overall timeline.
+
+I02: 1/2
+
+* Criterion 1: Met. The response correctly identifies the shift from the share of failed inspections to the share of restaurants with a violation.
+* Criterion 2: Not met. The student incorrectly claims the true share of restaurants could be lower than one in ten, rather than higher (up to four in ten).
+* Tip: Double-check the directional effect of repeated sampling when calculating potential proportions across a group.
+
+I03: 1/2
+
+* Criterion 1: Met. The student provides a valid control-group fact comparing Brannock to neighboring towns without fees.
+* Criterion 2: Not met. The student states that this helps the case but fails to provide an explicit explanation of how or why it strengthens the causal link.
+* Tip: Always include an explicit sentence explaining how your new fact supports or links back to the main conclusion.
+
+I04: 2/2
+
+* Criterion 1: Met. The student provides a new fact showing the crash reduction was localized directly within the range of the cameras.
+* Criterion 2: Met. The student explains that the contrast between camera zones and non-camera zones on the same streets supports the cameras as the primary cause.
+* Tip: Excellent job using spatial correlation to effectively strengthen a causal claim.
+END FEEDBACK
+
+BEGIN SCORES v2 request=7ef74f63-fd47-42f0-8029-42f128e64925
+I01 | 2/2 | -
+I02 | 1/2 | wrong-gap
+I03 | 1/2 | no-reasoning
+I04 | 2/2 | -
+END SCORES

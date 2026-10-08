@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=89fb1714-0df9-48c7-b806-a91034e4b299
+I01: 0/1
+- Criterion by criterion: not met. The answer treats the recording as a poor one because slow movements are rushed, which is a supporting reason (and stronger than the author claims), not the main conclusion that newcomers should start with a different recording.
+- Tip: Separate the final recommendation from the reasons offered for it, and state only that recommendation as the conclusion.
+I02: 1/2
+- Criterion by criterion: met. The answer names the move from one inspection in ten finding a violation to one restaurant in ten having been found with one. Not met. It notes that four inspections each mean the shares need not match, but does not say the failed inspections could have been spread across far more restaurants than one in ten.
+- Tip: After naming the mismatched shares, spell out the direction of the gap, such as how many restaurants the failed inspections could cover.
+I03: 1/1
+- Criterion by criterion: met. The answer states that, whatever the council decides, it should leave the bicycle makers' study out of the case for the lanes.
+- Tip: Keep identifying the action the author recommends rather than the reason given for that action.
+I04: 0/2
+- Criterion by criterion: not met. A larger population is not a new fact that makes a Thursday-evening sales rise in Ardley materially more likely, since the given cause was commuters stopping on the way home, not town size. Not met. The explanation does not show why that fact would make Ardley's sales rise after the same move.
+- Tip: Offer a new fact that matches the mechanism already shown to work, and say how that fact raises the chance of the same result here.
+END FEEDBACK
+
+BEGIN SCORES v2 request=89fb1714-0df9-48c7-b806-a91034e4b299
+I01 | 0/1 | premise-as-conclusion, overstated
+I02 | 1/2 | understated
+I03 | 1/1 | -
+I04 | 0/2 | irrelevant
+END SCORES

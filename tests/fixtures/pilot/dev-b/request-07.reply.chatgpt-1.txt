@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=30fc6ab2-6f09-411c-aa60-6287c5346d20
+I01: 1/2
+
+* Criterion 1: met — identifies the shift from one in ten inspections finding a violation to one in ten restaurants being found with one.
+* Criterion 2: not met — it says the share of restaurants could be lower than one in ten, but the failed inspections require at least one in ten restaurants; the share could instead be higher, up to four in ten.
+* Tip: When multiple inspections are done per restaurant, ask whether the same failures could be spread across different restaurants, which can make the restaurant share higher than the inspection share.
+  I02: 1/1
+* Criterion 1: met — correctly states that the council should not give the study weight in favor of the bike lanes.
+* Tip: Distinguish the author's main recommendation from the reasons offered to support it.
+  I03: 0/1
+* Criterion 1: not met — identifies the recording as a poor one rather than the narrower conclusion that newcomers should start with a different recording; the author explicitly says the playing is technically flawless and does not dismiss the recording outright.
+* Tip: Look for the author's specific recommendation, especially after concessions such as "still" or "however," rather than adopting a broader criticism.
+  I04: 2/2
+* Criterion 1: met — gives a new fact consistent with the premises: the components slow down substantially when running together.
+* Criterion 2: met — explains that the map alone taking about 1.2 seconds under the combined load makes the whole screen exceed the half-second limit despite each component passing its individual test.
+* Tip: For a weakening fact, show how components can interact in the real combined test even though each passes when tested alone.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=30fc6ab2-6f09-411c-aa60-6287c5346d20
+I01 | 1/2 | understated
+I02 | 1/1 | -
+I03 | 0/1 | overstated
+I04 | 2/2 | -
+END SCORES

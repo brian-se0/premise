@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=3b4a07b6-62de-47b9-b4a7-3e9148a0fa51
+I01: 2/2
+- Criterion 1 (new fact that strengthens): Met. The fact that most extra borrowing came from teens with jobs or sports who couldn't reach the library before 6 p.m. is new, consistent with the premises, and ties the rise to the added hours.
+- Criterion 2 (explains how): Met. The student says the new hours are what let these teens borrow at all, which makes the hours the likelier cause.
+- Tip: Keep pairing the new fact with a "so this makes X more likely the cause" explanation, as you did here.
+I02: 0/2
+- Criterion 1 (unstated claim linking the granted distortion to the recommendation): Not met. The student questions whether Beethoven's markings are a trustworthy guide, which concerns the distortion claim the prompt tells you to take as given, not the step from distortion to recommending a different recording.
+- Criterion 2 (not stronger than needed): Not met. The claim doesn't bridge the tested step at all, so there is nothing to credit here; the notes explicitly say claims about the markings' fairness don't answer the task.
+- Tip: When told to grant a claim, look for what is missing between that claim and the conclusion, such as "a less distorting recording is available" or "a distorted first impression is a real drawback."
+I03: 1/1
+- Criterion 1 (main conclusion): Met. Saying the study shouldn't be trusted as evidence for the bike lanes captures that the council should not count it in the lanes' favor. It is phrased close to the intermediate claim, but it explicitly frames the study as evidence for the lanes, which matches the recommendation.
+- Tip: Phrase the conclusion as a recommendation about what to do with the study (e.g., "the council should not count it") to make clear it is the final point, not the reason.
+I04: 2/2
+- Criterion 1 (unstated claim linking photos to lynx numbers): Met. The student assumes the 2020 photos were not mostly repeat photos of one or two lynx passing the same camera, which is a distinct unstated claim linking photos to population.
+- Criterion 2 (not too strong): Met. It targets only the repeat-photo explanation for the 2020 count and doesn't require that habits stayed identical. The claim is slightly loose about the comparison with 2025, but it is acceptable as a necessary assumption.
+- Tip: To make this airtight, add that such repeat photos didn't inflate 2020 relative to 2025 enough to explain the drop.
+
+END FEEDBACK
+
+BEGIN SCORES v2 request=3b4a07b6-62de-47b9-b4a7-3e9148a0fa51
+I01 | 2/2 | -
+I02 | 0/2 | wrong-gap
+I03 | 1/1 | -
+I04 | 2/2 | -
+END SCORES

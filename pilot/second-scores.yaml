@@ -1,0 +1,441 @@
+# Premise grading check: blind second scores (GRADING_PROTOCOL.md §9, "Second grader").
+# Scorer: an independent Claude Opus 5.5 session at maximum effort, started by the coordinator for this check, 2026-10-06.
+# Input: /mnt/project-files/grading-check/answers-blind.yaml (SHA-256 598764e1...0445039, checked before scoring).
+# Keys: content/exercises/ on main at 72888ad. Each answer was scored as protocol §3 instructs a chatbot, using only
+# what a grading prompt carries (stimulus, prompt, max, reference, accept, disqualifiers, anchors, rubric). Difficulty
+# notes and form lines were read for context but never used to settle a score, since graders never see them.
+# Blinding: I did not see Claude's scores, the answer thread or PR #16 before this file was written. One exception:
+# the project memory this session loaded at start (grading-check-plan) names a planned regression case, an
+# arg-0025.weaken answer "Not every restaurant that failed did so all four times" scoring 0. That is wea07; my score
+# for it is reasoned below from the key, but it was not blind. See the review file for this finding.
+# `unclear` appears only where the key does not settle the score: `quote` is the deciding key text, `other_score` the
+# other score a careful grader could defend.
+- id: fla01
+  score: 1
+  reason: >-
+    Names an open alternative cause (a reading push at schools near the five branches), so criterion 2 is met, but it
+    never mentions the extended hours or the director's conclusion that they caused the rise, so criterion 1 is missed.
+- id: fla02
+  score: 2
+  reason: >-
+    Names the 30 percent rise at the five branches and the director's crediting of the later hours (criterion 1), and
+    an open alternative: interest may already have been growing where teens most wanted later hours (criterion 2).
+- id: str01
+  score: 0
+  reason: >-
+    The steady borrowing at the other seven branches is already in the stimulus, which the accept text says is not
+    new (criterion 1 missed); the explanation only re-describes that premise and overclaims that it rules out every
+    other cause, so it does not explain how a new fact strengthens the argument (criterion 2 missed).
+  unclear:
+    quote: >-
+      "Facts the stimulus already gives, such as the unchanged collections and staff, the steady borrowing at other
+      branches or the records showing no transfer, are not new." with rubric 2, "Explains how the fact strengthens the
+      argument"
+    other_score: 1
+    why: >-
+      The key does not say whether criterion 2 can be earned by explaining a fact that fails criterion 1; a grader
+      applying each criterion separately could credit the control-group explanation.
+- id: str02
+  score: 2
+  reason: >-
+    A new fact tying the extra borrowing to the added hours (teens with jobs or sports who could not come before 6),
+    with an explanation of why that makes the hours the likelier cause; both criteria met.
+- id: asm01
+  score: 1
+  reason: >-
+    Gives the right bridge, that the rise is not an artifact of unhappy customers leaving before the survey
+    (criterion 1), but states it outright ("not because the unhappy customers quit") rather than "not entirely", so it
+    is stronger than the argument needs (criterion 2 missed).
+  unclear:
+    quote: >-
+      "The claim must not be stronger than the argument needs: requiring that exactly the same kinds of customers
+      answered in both periods ... earns 1, because a partial effect of those would not undo the argument."
+    other_score: 2
+    why: >-
+      "Went up because people were happier, not because unhappy customers quit" can be read as naming the main
+      explanation rather than excluding any partial effect; the key has no anchor for an unhedged contrast like this.
+- id: asm02
+  score: 2
+  reason: >-
+    States the who-answered bridge with the needed scope ("isn't wholly a matter of who ended up answering"; the
+    argument survives if "at least some of the rise" is real satisfaction); both criteria met, and the aside about the
+    time window does no harm.
+- id: fla03
+  score: 2
+  reason: >-
+    Names the water requirement, Kessel Ridge's spring and the "probably large" conclusion (criterion 1), and says
+    nothing shows sites with that water and soil tended to grow big rather than stay small, applied to likelihood
+    rather than guarantee (criterion 2).
+- id: fla04
+  score: 1
+  reason: >-
+    States the move from the water requirement to "probably a big settlement" (criterion 1), but its reason ends at
+    "doesn't mean it was big", the guarantee objection the key says is not enough (criterion 2 missed).
+  unclear:
+    quote: >-
+      "'Necessary but not sufficient' wording earns the point only when the answer applies it to the claimed
+      likelihood, not when it says only that the conditions fail to guarantee a large settlement."
+    other_score: 2
+    why: >-
+      "A lot of places with springs and good soil could've just stayed small villages" points at how often such sites
+      stayed small, which a grader could take as the likelihood point despite the guarantee wording that follows.
+- id: str03
+  score: 1
+  reason: >-
+    No other safety changes on the eight streets is a qualifying new fact that removes a rival cause (criterion 1),
+    but the answer never says how it supports the council's conclusion (criterion 2 missed).
+- id: str04
+  score: 1
+  reason: >-
+    Crashes falling mostly on the camera blocks and barely on the same streets' camera-free stretches is a qualifying
+    new fact (criterion 1), but "i think that helps the council's case" asserts its bearing without explaining it
+    (criterion 2 missed).
+  unclear:
+    quote: '"A qualifying new fact whose bearing is not explained earns 1."'
+    other_score: 2
+    why: >-
+      The within-street contrast makes the bearing nearly self-evident, so a grader judging "the reasoning, not the
+      wording" could treat the comparison plus "that helps" as an explanation.
+- id: wea01
+  score: 2
+  reason: >-
+    A new fact about the year before installation (66 crashes against a five-year average of about 40), consistent
+    with the premises (criterion 1), explained as a likely return toward normal that could produce much of the drop
+    without cameras (criterion 2).
+- id: wea02
+  score: 1
+  reason: >-
+    A decline already under way for five years before the cameras is a qualifying pre-installation fact (criterion 1),
+    but the answer does not explain why it means the drop might have come anyway (criterion 2 missed).
+- id: asm03
+  score: 1
+  reason: >-
+    Links the granted distortion to the recommendation by assuming a better recording is available (criterion 1), but
+    requires one played at exactly the marked tempos, which the accept text names as too strong (criterion 2 missed).
+- id: asm04
+  score: 0
+  reason: >-
+    A claim that Beethoven's markings are the right guide supports the distortion claim the prompt grants, not the
+    step to the recommendation; the accept text says such claims do not answer the task, so neither criterion is met.
+- id: con01
+  score: 1
+  reason: >-
+    "The Ardent recording isn't a good one to start out on" says newcomers should not begin with it: the main
+    conclusion.
+- id: con02
+  score: 1
+  reason: >-
+    States the main conclusion and labels it as such; the supporting reasons and the note on the critics leave it
+    unambiguous.
+- id: con03
+  score: 0
+  reason: >-
+    "The recording is a poor one" is the critics' broader view, which the accept text says is not the author's
+    conclusion.
+- id: con04
+  score: 1
+  reason: >-
+    Says a first-time listener should not begin with the Ardent recording and should pick another: the main
+    conclusion.
+- id: con05
+  score: 0
+  reason: >-
+    States the opposite recommendation (newcomers should start with the Ardent recording), which is a disqualifier.
+- id: fla05
+  score: 0
+  reason: >-
+    Patients who cannot get booked at all is the "patients who never book" objection the accept text says misses the
+    error; it names neither the fall in the share nor the conclusion about missed appointments.
+- id: fla06
+  score: 2
+  reason: >-
+    Names the move from the missed share falling (15 to 9 percent) to fewer missed appointments (criterion 1), and
+    says bookings rose so much that a smaller slice of a bigger total can be as big or bigger (criterion 2).
+- id: wea03
+  score: 0
+  reason: >-
+    Bookings up by half is less than the two-thirds growth needed, so the fact confirms the conclusion (the answer's
+    own figures give 54 missed against 60); criterion 1 fails, and "missing more" contradicts its own arithmetic, so
+    criterion 2 fails too.
+- id: wea04
+  score: 2
+  reason: >-
+    Tripled bookings is consistent with "far more" and is enough growth (criterion 1); the answer shows 9 percent of
+    triple is 27 percent of the old total, above the old 15 (criterion 2).
+- id: asm05
+  score: 0
+  reason: >-
+    Saying the saltbush will grow back once the goats are gone restates the conclusion, with no distinct unstated
+    claim (disqualifier).
+- id: asm06
+  score: 2
+  reason: >-
+    States that the goats' removal is at least part of why saltbush recovered on the three islands, scoped to "at
+    least part", with an example of the denial; both criteria met.
+- id: str05
+  score: 2
+  reason: >-
+    A new fact that live seed and seedlings exist on the four islands but goats eat them (criterion 1), explained as
+    showing grazing is the barrier that removing the goats would end (criterion 2).
+- id: str06
+  score: 0
+  reason: >-
+    Recovery that began fifteen years after the removal, in the year replanting began, points to the replanting
+    rather than the goats, so the fact weakens; criterion 1 fails ("a fact pointing the other way does not count") and
+    the explanation is wrong.
+- id: wea05
+  score: 2
+  reason: >-
+    Components competing for processor and memory and running four times slower together, with the map at 0.3 s alone
+    (consistent with the premises), puts the screen near 1.2 s; both criteria met, and the aside about integration
+    testing does no harm.
+- id: wea06
+  score: 0
+  reason: >-
+    A component taking almost a second on its own on a supported phone denies the premise that every component
+    finished in under half a second (disqualifier).
+- id: con06
+  score: 0
+  reason: >-
+    Offers the intermediate claim (the finding cannot be trusted) as the main conclusion and reverses the support.
+- id: con07
+  score: 1
+  reason: >-
+    Says the council should leave the study out of the case for the lanes however the vote goes: the main conclusion.
+- id: con08
+  score: 1
+  reason: >-
+    "The study shouldn't be trusted as evidence for the bike lanes" recommends against using the study as support for
+    the lanes, which is the main conclusion's content, though its verb echoes the intermediate claim.
+  unclear:
+    quote: >-
+      "Any wording that says the council should not count the study (or give it weight) as support for the bike lanes"
+      against "Saying that the study's finding cannot be trusted is the intermediate claim offered as the reason"
+    other_score: 0
+    why: >-
+      The answer blends the intermediate claim's "trusted" with the main conclusion's "as evidence for the bike lanes"
+      and names no council or decision, so a grader could read it as the intermediate claim.
+- id: con09
+  score: 1
+  reason: >-
+    Says the study should get no weight on the yes side when the council decides, whatever happens: the main
+    conclusion.
+- id: con10
+  score: 0
+  reason: >-
+    Says the council should vote against the lanes, which the accept text says goes beyond the author.
+- id: asm07
+  score: 1
+  reason: >-
+    Links the extra rise to the cover crops by ruling out other differences (criterion 1), but requires "everything
+    else in common" so that the cover crops were "the only difference", which is stronger than needed (criterion 2
+    missed).
+- id: asm08
+  score: 0
+  reason: >-
+    States the denial of the needed assumption: another change accounting for all of the extra rise would cut the
+    link to the cover crops, so neither criterion is met.
+- id: fla11
+  score: 1
+  reason: >-
+    Names the move from the streak holders' higher scores to the streak making them better (criterion 1), but the
+    alternative offered, longer use of the app, is one the stimulus rules out (about a year each, similar hours), so
+    criterion 2 is missed.
+- id: fla12
+  score: 2
+  reason: >-
+    Names the inference (criterion 1) and an open common cause, a Spanish-speaking partner giving both a daily reason
+    to open the app and real conversation practice (criterion 2).
+- id: fla13
+  score: 0
+  reason: >-
+    Attacks Lingora as the source instead of describing the inference from the test scores to the causal claim;
+    neither criterion is met.
+- id: fla14
+  score: 0
+  reason: >-
+    Misdescribes the ad's reasoning (says the ad assumes better speakers kept the streaks) and asserts that the streaks
+    did cause the higher scores, so it neither ties the error to the argument nor names an open alternative.
+- id: wea11
+  score: 0
+  reason: >-
+    Streak holders who started as beginners, behind the other group, make the later gap more impressive, so the fact
+    strengthens rather than weakens (criterion 1 missed), and "the comparison isn't fair" does not show the gap
+    reflects where the groups started (criterion 2 missed).
+- id: wea12
+  score: 0
+  reason: >-
+    Streak holders taking Spanish classes at school denies the premise that no one in either group was taking classes
+    outside the app (disqualifier).
+- id: wea13
+  score: 2
+  reason: >-
+    A placement-level fact showing users who began with more Spanish were far likelier to keep streaks, while most of
+    the other group began as beginners (criterion 1), explained as a head start that also makes streaks easier to
+    keep (criterion 2).
+- id: wea14
+  score: 1
+  reason: >-
+    Future streak holders rated two levels higher in their first week is the right starting-level fact (criterion 1),
+    but the answer does not explain how it undercuts the conclusion (criterion 2 missed).
+- id: fla07
+  score: 2
+  reason: >-
+    Names the policy's condition and the director's assurance of renewal (criterion 1), and says a rise is required
+    but no guarantee, so the council could refuse for other reasons (criterion 2); the side note is accurate.
+- id: fla08
+  score: 0
+  reason: >-
+    A bare label not applied to the attendance rise and the renewal, which the accept text says earns 0.
+- id: str07
+  score: 0
+  reason: >-
+    Ardley's larger population says nothing about whether it has the after-work shoppers who made the move work in
+    Pell or would keep its Saturday shoppers, so it is not a material strengthener (criterion 1 missed), and the
+    explanation concerns the size of a rise it takes for granted (criterion 2 missed).
+  unclear:
+    quote: >-
+      Rubric 1, "makes it materially more likely that moving Ardley's market to Thursday evenings would raise its
+      sales"; the key has no rule for population or size facts
+    other_score: 1
+    why: >-
+      A grader could count "way more potential customers" as a weak but real reason to expect a rise, with its bearing
+      poorly explained.
+- id: str08
+  score: 2
+  reason: >-
+    Pell's Saturday sales had also been flat for years is a fact the accept text lists (Pell before the move was like
+    Ardley now), and the answer explains that this likeness makes the same jump more likely; both criteria met.
+- id: asm09
+  score: 2
+  reason: >-
+    Rules out a shift of the lynx's ranges away from the cameras large enough on its own to explain 120 to 58, which
+    addresses both size and the comparison between the years; both criteria met.
+- id: asm10
+  score: 1
+  reason: >-
+    Ruling out repeat photos of one or two lynx is the right kind of link (criterion 1), but it concerns 2020 alone
+    without regard to 2025, which the accept text names as stronger than needed (criterion 2 missed).
+- id: asm11
+  score: 0
+  reason: >-
+    Offers the intermediate conclusion (the conversion keeps what makes the silo important) with a premise and the
+    main conclusion, and no distinct unstated claim (disqualifier).
+- id: asm12
+  score: 2
+  reason: >-
+    States that the interior parts the conversion removes are not essential to the silo's importance, scoped
+    correctly ("they might add some detail" but the importance does not hinge on them); both criteria met.
+- id: con11
+  score: 1
+  reason: Says the society should not object to the conversion, which is the main conclusion.
+- id: con12
+  score: 0
+  reason: >-
+    Says the society should actively support the plan, which the accept text says goes beyond the author.
+- id: con13
+  score: 1
+  reason: >-
+    Says the society ought not to stand in the way of the conversion; the members' view appears only as a concession
+    clause.
+- id: con14
+  score: 0
+  reason: >-
+    States the opposite recommendation (the society should oppose the conversion and keep the silo as it is), which is
+    a disqualifier.
+- id: fla09
+  score: 1
+  reason: >-
+    Names the move from one inspection in ten to one restaurant in ten (criterion 1), but says the real share could be
+    lower, the wrong direction per the accept text (criterion 2 missed).
+- id: fla10
+  score: 1
+  reason: >-
+    Names the inspections-to-restaurants move and the four inspections each (criterion 1), but says only that the two
+    numbers need not match, without saying the restaurant share could be higher, which the accept text sets at 1.
+- id: wea07
+  score: 0
+  reason: >-
+    It only rules out the extreme case of exactly 100 failing restaurants and is consistent with about one in ten, so
+    it does not point to "clearly more than one restaurant in ten" (criterion 1 missed), and nothing is explained.
+- id: wea08
+  score: 2
+  reason: >-
+    A list of 340 restaurants with at least one serious violation fits 400 failed inspections and points to 34
+    percent (criterion 1); the answer explains that this is far above one in ten and names the rate mix-up
+    (criterion 2).
+- id: str09
+  score: 2
+  reason: >-
+    Thick checkout bags that were the largest single item by weight of household plastic is a qualifying fact about
+    the bags' share (criterion 1), explained as an 80 percent cut removing a big slice of that weight, which bridges
+    the count-to-weight gap (criterion 2).
+- id: str10
+  score: 1
+  reason: >-
+    Nearby towns without a fee handing out as many bags as before makes a cause other than the fee less likely, a kind
+    the accept text lists (criterion 1), but the answer gives no explanation (criterion 2 missed).
+- id: asm13
+  score: 2
+  reason: >-
+    States that the letter's paper is Holt's, the reference's bridge, which is what lets Holt's records date the
+    sheet; concise, unstated in the argument and no stronger than needed.
+- id: asm14
+  score: 1
+  reason: >-
+    Rules out earlier hare marks among every papermaker selling paper in Tarrant, which the accept text names as
+    stronger than needed (criterion 1 met, criterion 2 missed).
+- id: str11
+  score: 2
+  reason: >-
+    The letter's address to "Judge Amos Ferris", first appointed in 1803, is separate evidence of a later date
+    (criterion 1), explained as a title no 1788 writer would use (criterion 2).
+- id: str12
+  score: 1
+  reason: >-
+    Tarrant getting all its paper from Holt before 1801 closes off other sources of hare-marked paper (criterion 1),
+    but the answer does not explain how that dates the letter (criterion 2 missed).
+- id: str13
+  score: 0
+  reason: >-
+    Another mill supplying Tarrant with hare-marked paper in the 1770s gives the sheet a possible earlier source, so
+    the fact weakens the argument (criterion 1 missed) and the explanation is wrong.
+- id: str14
+  score: 0
+  reason: >-
+    Ink in common use from the 1770s to the 1820s fits 1788 as well as 1801 or later, so it is no evidence of a later
+    date (criterion 1 missed), and the explanation's "separate evidence of a later date" is wrong.
+- id: wea09
+  score: 1
+  reason: >-
+    A free public auditor's report on the same wrongdoing is a qualifying fact (criterion 1), but the answer then
+    concludes the Ledger "shouldn't publish it" under its code, the inference criterion 2 excludes.
+- id: wea10
+  score: 1
+  reason: >-
+    The fire marshal's written approval of the delay is a plausible justification that makes wrongdoing less likely
+    (criterion 1), but the answer does not explain how it bears on the rule (criterion 2 missed).
+
+# Key text that looked wrong or unclear (notes for the key owners; not part of any score)
+# 1. Strengthen and weaken keys: criterion 2 after a failed criterion 1. Every strengthen key in this set says "A
+#    qualifying new fact whose bearing is not explained earns 1", but only some say what a non-qualifying fact earns
+#    when it comes with a confident explanation. arg-0009, -0012, -0015, -0022, -0026 and -0027 strengthen rely on
+#    rubric 1's "(a fact pointing the other way does not count)" and "not already stated in them" alone; arg-0014.weaken
+#    says "Smaller growth does not weaken the argument; it confirms it" without a score. Under protocol §3's "Apply each
+#    rubric criterion separately", a grader can give 1 for the explanation (str01, str06, str13, str14, wea03, wea11).
+#    Suggested sentence: "A fact that is not new, points the other way or denies a premise earns 0, whatever the
+#    explanation."
+# 2. arg-0020.weaken: the direction rule ("the streak holders starting ahead, not behind") is only in difficulty_note,
+#    which never reaches a grader. Nothing grader-visible says a starting gap with the streak holders behind earns 0
+#    (wea11).
+# 3. arg-0022.strengthen: the weaken key says "a fact suggesting only a smaller rise than Pell's ... does not weaken",
+#    but the strengthen key has no mirror rule for a fact that only suggests a bigger rise, such as Ardley's population
+#    (str07).
+# 4. arg-0017.conclusion: "Saying that the study's finding cannot be trusted is the intermediate claim" does not cover
+#    a blend such as "the study shouldn't be trusted as evidence for the bike lanes" (con08).
+# 5. arg-0010.assumption: the "not entirely" scope is clear, but the key does not say how to read an unhedged
+#    contrast, "the rise is because of X and not because of Y" (asm01).
+# 6. arg-0011.flaw: "fail to guarantee" versus "the claimed likelihood" does not settle an answer that cites how often
+#    such sites stayed small and then concludes only "doesn't mean it was big" (fla04).
+# 7. All strengthen and weaken keys: "whose bearing is not explained" does not say whether a bare assertion of bearing
+#    ("that helps the council's case") counts as an explanation (str04).

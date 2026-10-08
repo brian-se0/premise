@@ -1,0 +1,26 @@
+BEGIN FEEDBACK request=954c1c55-7f84-4260-ad41-02b4aa63072c
+I01: 2/2
+
+* Criterion 1: met — The state auditor's report is a new fact showing the public can learn the same wrongdoing from another source.
+* Criterion 2: met — It explicitly explains that the memo is not the only way to learn of the wrongdoing, so a condition of the code's rule is not met.
+* Tip: When weakening a conditional rule, identify which condition may fail and explain exactly why your new fact affects that condition.
+  I02: 0/2
+* Criterion 1: not met — The answer names a general error but does not apply it to the director's inference from the attendance increase to renewal.
+* Criterion 2: not met — It does not explain that the attendance rise is necessary but not sufficient, so the council could still refuse the grant.
+* Tip: Apply the logical label directly to the facts and state what the policy does and does not guarantee.
+  I03: 0/2
+* Criterion 1: not met — The new fact actually gives an alternative explanation for the recovery: the replanting program, rather than goat removal.
+* Criterion 2: not met — The explanation incorrectly says the fact ties recovery to goat removal, even though the stated timing points toward replanting as a competing cause.
+* Tip: A strengthening fact should make goat removal itself more clearly responsible for recovery, not introduce a stronger alternative explanation.
+  I04: 2/2
+* Criterion 1: met — The answer states an unstated bridge that the rating increase is not wholly caused by who answered the survey.
+* Criterion 2: met — It appropriately requires only that some of the rise reflect greater satisfaction, rather than requiring identical respondents or no other differences.
+* Tip: For necessary assumptions, ask what must be true for the observed evidence to retain any support for the conclusion.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=954c1c55-7f84-4260-ad41-02b4aa63072c
+I01 | 2/2 | -
+I02 | 0/2 | no-reasoning,incomplete
+I03 | 0/2 | misread-stimulus
+I04 | 2/2 | -
+END SCORES

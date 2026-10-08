@@ -1,0 +1,216 @@
+# Grading-check answer set: weaken (docs/GRADING_PROTOCOL.md §9). Written by Claude in a student's voice on
+# 2026-10-06; `gold` is Claude's score, fixed before the second scorer started (digest of [id, task, answer, gold]
+# over all five files, as `npm run pilot:score` prints it: ae78dd71f7ef4b8824d9919aba1fcc4b2e0f1de6a5f551b5db0db87744aeb59f).
+# `second` is the blind score of an independent Claude Opus 5.5 session at maximum effort (pilot/second-scores.yaml).
+# `acceptable` marks an answer where a scorer recorded another score as defensible under the key; `settlement` says why.
+# `type` is the §9 answer type; `why` is Claude's reasoning for `gold`. Held-out answers: arg-0020, arg-0024, arg-0027.
+# Blinding note: wea07 was not blind. The second scorer's session loaded project memory naming it as a planned
+# regression case with score 0; it scored it 0 from the key.
+- id: wea01
+  task: arg-0012.weaken
+  holdout: false
+  type: reference-like
+  answer: >-
+    In the twelve months before the cameras went up, those eight streets had 66 injury crashes, when the five
+    years before that had averaged about 40 a year. A year that far out of line usually isn't repeated, so the
+    next two years would probably have come in well under 66 even with no cameras at all. A good chunk of the
+    40 percent drop could just be those streets settling back toward their normal level.
+  gold: 2
+  second: 2
+  why: >-
+    Criterion 1: a new fact about the eight streets before installation (an unusual spike), consistent with
+    every premise. Criterion 2: explains that a spike tends to fall back on its own, so much of the decline
+    could have happened without the cameras; it needs no further fact about the period after installation.
+- id: wea02
+  task: arg-0012.weaken
+  holdout: false
+  type: partial
+  answer: >-
+    crashes on those 8 streets were already going down every year for like 5 years before the cameras got put
+    in
+  gold: 1
+  second: 1
+  why: >-
+    Criterion 1 is met: a decline already under way before installation is one of the accept text's main
+    kinds. Criterion 2 is not: nothing says why the trend means the drop would have happened anyway, and the
+    accept text says "a qualifying fact whose effect is not explained earns 1".
+- id: wea03
+  task: arg-0014.weaken
+  holdout: false
+  type: keyword-contradiction
+  answer: >-
+    Since the evening hours started, monthly bookings have gone up by about half, from around 400 to 600. A
+    smaller share of a bigger total can still be a bigger number: 9 percent of 600 is 54 missed appointments,
+    compared with 15 percent of 400, which is 60. So the clinic is actually missing more appointments now than
+    before, which weakens the director's conclusion.
+  gold: 0
+  second: 0
+  why: >-
+    It uses the key's idea (a lower share of a larger total) but its own figures show 54 missed against 60,
+    fewer, and then claims more. Growth of a half is below two-thirds, and the accept text says "smaller
+    growth does not weaken the argument; it confirms it", so neither criterion is met.
+- id: wea04
+  task: arg-0014.weaken
+  holdout: false
+  type: concise-correct
+  answer: >-
+    Monthly bookings tripled. 9% of triple is 27% of the old monthly total, more than the 15% missed before,
+    so more appointments are missed now.
+  gold: 2
+  second: 2
+  why: >-
+    Criterion 1: a specific growth figure (tripled, above the two-thirds threshold in the accept text), new
+    and consistent with both shares. Criterion 2: works out that 9 percent of the new total exceeds 15 percent
+    of the old, so the number missed rose.
+- id: wea05
+  task: arg-0016.weaken
+  holdout: false
+  type: extra-explanation
+  answer: >-
+    When all forty components update at once they fight over the phone's processor and memory, and Corvane's
+    own profiling shows each one runs about four times slower than it does alone. The map took about 0.3
+    seconds by itself in the standard tests, so with everything running it would need around 1.2 seconds, and
+    the screen isn't done until the map is. That's more than twice the limit even though every piece passed
+    separately. This is the classic gap between unit tests and integration tests, which is why a lot of app
+    teams also time the whole screen end to end before a release.
+  gold: 2
+  second: 2
+  why: >-
+    Criterion 1: a new fact (components slow each other down when run together; the map at 0.3 seconds alone
+    is consistent with the premises) that gives real doubt the screen meets the rule. Criterion 2: shows the
+    whole screen would take about 1.2 seconds even granting each part passed alone; the testing tangent
+    neither adds nor costs credit.
+- id: wea06
+  task: arg-0016.weaken
+  holdout: false
+  type: disqualifier
+  answer: >-
+    on one of the older phones they support, the arrival time piece took almost a full second to update when
+    the testers ran it on its own. so theres no way the whole screen finishes in half a second on that phone
+  gold: 0
+  second: 0
+  why: >-
+    The stimulus says every component, run on its own on every supported phone, finished in under half a
+    second each time; this answer contradicts that, which is the listed disqualifier (denies a stated
+    premise), so it scores 0.
+- id: wea07
+  task: arg-0025.weaken
+  holdout: false
+  type: confidently-wrong
+  answer: >-
+    Not every restaurant that failed did so all four times.
+  gold: 0
+  second: 0
+  why: >-
+    Consistent with the premises, but it only rules out the case where every failing restaurant failed all
+    four inspections: the 400 failures could still sit at 101 restaurants (99 failing all four times, two
+    failing twice), about one in ten. The accept text requires a fact giving "a real reason to think the
+    failed inspections were spread across clearly more than one restaurant in ten", so criterion 1 fails, and
+    there is no explanation for criterion 2.
+- id: wea08
+  task: arg-0025.weaken
+  holdout: false
+  type: valid-unlike-reference
+  answer: >-
+    the health dept's list of restaurants that had at least one serious violation last year has 340 names on
+    it. thats 34% of the 1000 restaurants, way more than 1 in 10. the writer basically took the inspection
+    rate and treated it like it was the restaurant rate
+  gold: 2
+  second: 2
+  why: >-
+    A direct count instead of the reference's "few failed more than once": 340 restaurants is consistent with
+    400 failed inspections (between 100 and 400) and shows the failures spread across clearly more than one
+    restaurant in ten (criterion 1); the 34 percent versus 10 percent comparison explains how it undercuts the
+    conclusion (criterion 2).
+- id: wea09
+  task: arg-0028.weaken
+  holdout: false
+  type: ambiguous
+  answer: >-
+    In April the state auditor posted a report online, free for anyone to read, saying that city officials
+    knew the Elm Street alarms were faulty and let the repairs slide for six months while the school stayed
+    open. The public could already learn about the wrongdoing from that report, so the memo isn't the only way
+    to find out, and the code's condition isn't met. So under its own code the Ledger shouldn't publish it.
+  gold: 1
+  second: 1
+  acceptable: [ 1, 2 ]
+  settlement: >-
+    Both scorers gave 1; Claude's note names 2 as defensible: "under its own code the Ledger shouldn't publish
+    it" may be the inference criterion 2 excludes or only a denial of the editor's "should publish".
+  why: >-
+    Criterion 1 is clearly met (another public way to learn of the same wrongdoing). Criterion 2 turns on the
+    last sentence: read as "the code tells the Ledger not to publish", it makes the inference the rubric
+    excludes ("without inferring that because this rule does not apply the code forbids publishing") and
+    scores 1; read loosely as only denying the editor's "should publish", it scores 2. Gold 1, because
+    "shouldn't publish under its own code" asserts a verdict against publishing.
+- id: wea10
+  task: arg-0028.weaken
+  holdout: false
+  type: partial
+  answer: >-
+    The county fire marshal inspected the alarms back in the fall and approved, in writing, the district's
+    plan to hold off on repairs until the replacement system it had already ordered arrived.
+  gold: 1
+  second: 1
+  why: >-
+    Criterion 1 is met: a plausible justification for the delay, consistent with the premises, that makes it
+    less likely the delay was wrongdoing. Criterion 2 is not: the answer never links the fact to the rule's
+    wrongdoing condition, and the accept text gives an unexplained qualifying fact 1.
+- id: wea11
+  task: arg-0020.weaken
+  holdout: true
+  type: confidently-wrong
+  answer: >-
+    When they signed up, the people who went on to keep 100-day streaks were mostly complete beginners, while
+    a lot of the people in the other group had studied Spanish before. So the two groups didn't start from the
+    same place, the comparison isn't fair, and you can't credit the streaks for the higher scores.
+  gold: 0
+  second: 0
+  why: >-
+    The starting difference runs the wrong way: if the streak holders began behind and ended far ahead, the
+    streaks look more effective, not less. It gives no material reason to doubt the streaks account for the
+    gap (criterion 1) and cannot make it more plausible that the gap reflects starting level (criterion 2).
+- id: wea12
+  task: arg-0020.weaken
+  holdout: true
+  type: disqualifier
+  answer: >-
+    most of the streak people were high schoolers who were taking spanish class at school the whole year too,
+    so they knew more spanish going in and kept getting taught on top of the app. thats why they scored higher
+    not bc of the streak
+  gold: 0
+  second: 0
+  why: >-
+    The stimulus says no one in either group was taking Spanish classes or lessons outside the app; this
+    answer rests on exactly that, which is the listed disqualifier (and the accept text's own example of a
+    fact that earns 0), so the item scores 0 despite the mention of a head start.
+- id: wea13
+  task: arg-0020.weaken
+  holdout: true
+  type: valid-unlike-reference
+  answer: >-
+    when you sign up lingora places you in a spanish level, and people who placed intermediate or higher were
+    like 4 times more likely to end up keeping a 100 day streak than people who placed as total beginners.
+    most of the never-past-a-week group had placed as beginners. so it could be backwards, if you already know
+    some spanish practicing every day is easier and more fun so you keep the streak, and you'd score higher on
+    a speaking test anyway
+  gold: 2
+  second: 2
+  why: >-
+    Criterion 1: a new fact about starting level that puts stronger starters disproportionately in the streak
+    group, the accept text's "users who began with more Spanish were the ones who went on to keep long
+    streaks" kind. Criterion 2: explains that starting ability may drive the streaks and would raise the later
+    scores anyway, so the gap may reflect where users started.
+- id: wea14
+  task: arg-0020.weaken
+  holdout: true
+  type: partial
+  answer: >-
+    In the speaking check-in during their first week on the app, the users who later kept 100-day streaks were
+    rated two levels higher, on average, than the users who never practiced more than seven days in a row.
+  gold: 1
+  second: 1
+  why: >-
+    Criterion 1 is met: a new fact that the streak holders already spoke better when they began. Criterion 2
+    is not: the answer does not say how the starting gap bears on last month's gap, and the accept text gives
+    an unexplained qualifying fact 1.

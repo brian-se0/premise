@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=165fe0d2-7e16-44fc-97e8-49be419cd5dc
+I01: 2/2
+- Criterion 1 met: the pre-fee waste audit is a new fact, and bags being the largest single share of household plastic weight makes a large drop in thrown-away plastic more likely if bag numbers fell 80 percent.
+- Criterion 2 met: the answer ties that share to the missing step from bag count to weight, so fewer bags going home removes a big slice of the weight.
+- Tip: Keep the new fact and the “how it helps” sentence adjacent so the bridge from count to weight is explicit.
+I02: 2/2
+- Criterion 1 met: live seed and spring seedlings on the four goat islands that goats then eat is new evidence from those islands that saltbush can still establish there.
+- Criterion 2 met: it explains that grazing, not missing seed or unsuitable conditions, is what holds the shrub back, so ending that grazing is what removal would do.
+- Tip: Prefer a fact about the islands the conclusion is about, then say what that fact rules out.
+I03: 2/2
+- Criterion 1 met: the year before installation had 66 injury crashes against a prior five-year average of about 40, a pre-camera fact about those streets that does not deny any premise.
+- Criterion 2 met: it explains regression toward that lower baseline, so much of the later 40 percent drop could have happened without the cameras.
+- Tip: Anchor the weakener in the years before the change, then say why the later drop would still be expected.
+I04: 2/2
+- Criterion 1 met: the unstated claim is that the rise from 3.6 to 4.3 is not wholly due to who still stayed to answer the survey.
+- Criterion 2 met: it is stated at the needed strength—the argument only needs some of the rise to reflect real satisfaction, not identical respondents or no other changes.
+- Tip: Phrase the assumption as “not entirely due to X,” so denying it removes all support rather than merely weakening it.
+END FEEDBACK
+
+BEGIN SCORES v2 request=165fe0d2-7e16-44fc-97e8-49be419cd5dc
+I01 | 2/2 | -
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 2/2 | -
+END SCORES

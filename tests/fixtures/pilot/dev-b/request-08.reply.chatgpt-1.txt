@@ -1,0 +1,26 @@
+BEGIN FEEDBACK request=d4348993-ca70-4dee-9b04-b5ccdf025dcd
+I01: 1/2
+
+* Criterion 1: met — it gives an unstated claim connecting the distortion to the recommendation by saying a less-distorting alternative recording is available.
+* Criterion 2: not met — requiring exact adherence to Beethoven's marked tempos is stronger than necessary; a recording merely less distorting than the Ardent recording would suffice.
+* Tip: State only that a better alternative is available, without requiring it to be perfect or distortion-free.
+  I02: 2/2
+* Criterion 1: met — it gives a new fact that Pell's market had also experienced flat sales before the move.
+* Criterion 2: met — it explains that this makes Pell's situation more comparable to Ardley's and therefore makes a similar increase more plausible.
+* Tip: When giving a strengthener, explicitly connect the new fact to why the proposed result is more likely.
+  I03: 2/2
+* Criterion 1: met — it states that goat removal was at least partly responsible for the recovery on the three islands, an unstated causal link needed for the inference.
+* Criterion 2: met — it does not overstate the claim; it only requires goat removal to be part of the explanation rather than the sole cause.
+* Tip: For necessary-assumption questions, test whether denying your proposed assumption would undermine the evidence's relevance to the conclusion.
+  I04: 1/2
+* Criterion 1: met — it gives a relevant pre-camera fact: crashes had already been declining for about five years.
+* Criterion 2: not met — it does not explain that the existing downward trend makes it plausible that much of the later decline would have occurred without the cameras.
+* Tip: After stating a weakening fact, add one sentence explaining the alternative cause it makes more plausible.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=d4348993-ca70-4dee-9b04-b5ccdf025dcd
+I01 | 1/2 | overstated
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 1/2 | no-reasoning
+END SCORES

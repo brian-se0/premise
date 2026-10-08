@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=5eb00edc-eda9-4ebc-9894-4c2110360cb7
+I01: 0/2
+- Criterion 1 (new fact about how well users spoke at sign-up that undercuts the streak explanation): Not met. The answer says the streak holders knew more Spanish going in, which is the right kind of fact, but it pairs this with the claim that they were taking Spanish classes at school all year. The stimulus says no one in either group took classes or lessons outside the app, so this denies a premise, which is a disqualifier.
+- Criterion 2 (explains how the fact weakens the argument): Not met. The explanation leans on the outside classes ("kept getting taught on top of the app") as the real cause of the higher scores, which the premises rule out. The disqualifier sets the score to 0.
+- Tip: Check each fact you propose against every stated premise, and keep the "already knew more at the start" idea without adding anything the stimulus excludes, like outside classes.
+I02: 0/2
+- Criterion 1 (ties the error to the streak holders' higher scores and the conclusion that streaks make better speakers): Not met. The answer attacks the source (an ad for the company's own product) and never links the test scores to the causal claim about streaks.
+- Criterion 2 (names an open alternative explanation for the higher scores): Not met. Distrusting the company is not an alternative explanation. The student never says the streak holders may have spoken better from the start, or that better speakers keep streaks more easily.
+- Tip: Look at the inference itself, from "streak holders scored higher" to "streaks cause better speaking," and name another way the scores could have come about.
+I03: 0/2
+- Criterion 1 (an unstated claim that bridges one of the argument's steps): Not met. The student's "assumption" is the argument's intermediate conclusion, that the conversion would preserve what makes the silo historically important, supported by the stated premise about the walls and machinery. No distinct unstated claim is offered, so the disqualifier applies.
+- Criterion 2 (no stronger than the argument needs): Not met. With nothing distinct offered, this cannot be judged, and the disqualifier gives 0.
+- Tip: Ask what must be true for the premises to lead to the conclusion, such as that the interior being removed is not essential to the silo's historical importance, rather than repeating the argument's own steps.
+I04: 0/1
+- Criterion (identifies the main conclusion, that the society should not oppose the plan): Not met. The student says the society should "actively support" the plan. The author only says the society should not oppose it, so this overstates the conclusion and goes beyond what the argument claims.
+- Tip: Match the strength of the author's wording, since "should not oppose" is weaker than "should support."
+END FEEDBACK
+
+BEGIN SCORES v2 request=5eb00edc-eda9-4ebc-9894-4c2110360cb7
+I01 | 0/2 | contradicts-premise
+I02 | 0/2 | irrelevant
+I03 | 0/2 | restates-conclusion
+I04 | 0/1 | overstated
+END SCORES

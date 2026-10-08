@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=99f69b08-6e6f-4707-b0f0-f51397a7dbf3
+I01: 2/2
+
+* Criterion 1: met — identifies the required dry-season water and Kessel Ridge's spring, then connects them to the conclusion that the settlement was probably large.
+* Criterion 2: met — explains that necessary conditions do not establish likelihood and notes the missing evidence about how often such sites grew large.
+* Tip: When criticizing a probability claim, distinguish a condition being necessary from evidence that the condition makes the outcome likely.
+  I02: 0/1
+* Criterion 1: not met — states the opposite of the author's conclusion, saying newcomers should start with the Ardent recording rather than a different recording.
+* Tip: Separate the author's recommendation from concessions and criticisms when identifying the main conclusion.
+  I03: 1/2
+* Criterion 1: met — gives a new fact that could make higher Thursday sales more likely by identifying a larger potential customer base.
+* Criterion 2: not met — does not adequately explain why having twice as many people would make the Pell-style effect transfer to Ardley; population size alone does not establish that Ardley has the relevant after-work shoppers.
+* Tip: Explain the causal connection between your new fact and the specific mechanism that produced Pell's sales increase.
+  I04: 2/2
+* Criterion 1: met — states a new fact, that monthly bookings tripled, which is consistent with the stated premises and materially weakens the conclusion.
+* Criterion 2: met — correctly calculates that 9% of triple the old bookings is 27% of the old total, exceeding the previous 15% missed.
+* Tip: When rates and totals both change, convert the percentages into comparable absolute counts to test the conclusion.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=99f69b08-6e6f-4707-b0f0-f51397a7dbf3
+I01 | 2/2 | -
+I02 | 0/1 | misread-stimulus
+I03 | 1/2 | incomplete
+I04 | 2/2 | -
+END SCORES

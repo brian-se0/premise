@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=7ef74f63-fd47-42f0-8029-42f128e64925
+I01: 2/2
+- Criterion by criterion: met — the new fact (components contend for processor and memory and run about four times slower together, so a 0.3-second map becomes about 1.2 seconds) is consistent with every component finishing under half a second on its own. Met — the answer shows why that still puts the whole screen over the half-second limit.
+- Tip: Keep pairing a premise-consistent integration fact with an explicit comparison to the half-second screen rule.
+I02: 1/2
+- Criterion by criterion: met — the answer names the jump from one inspection in ten finding a violation to one restaurant in ten having one. Not met — the direction is reversed: four inspections each means the failed inspections can be spread across far more restaurants (up to about four in ten), not that the restaurant share must be lower than one in ten.
+- Tip: When multiple inspections fall on each unit, check whether failures can be spread out (raising the unit share) as well as concentrated.
+I03: 1/2
+- Criterion by criterion: met — nearby towns without a fee still handing out about the same number of bags is a new fact that makes the fee a more plausible cause of Brannock’s drop. Not met — the answer never says how that comparison makes a large fall in household plastic waste more likely.
+- Tip: After stating the new fact, add one sentence on the alternative it rules out and how that supports the conclusion.
+I04: 1/2
+- Criterion by criterion: met — the drop being concentrated on blocks in camera range, with little change outside that range on the same streets, is a new fact that favors the cameras. Not met — saying it “helps the council’s case” does not explain why that pattern makes the cameras the cause of most of the decline rather than some other change on those streets.
+- Tip: Spell out the link: the pattern matches where the cameras operate, so a street-wide factor is less likely.
+END FEEDBACK
+
+BEGIN SCORES v2 request=7ef74f63-fd47-42f0-8029-42f128e64925
+I01 | 2/2 | -
+I02 | 1/2 | wrong-gap
+I03 | 1/2 | no-reasoning
+I04 | 1/2 | incomplete
+END SCORES

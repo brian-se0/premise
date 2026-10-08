@@ -1,0 +1,23 @@
+BEGIN FEEDBACK request=30fc6ab2-6f09-411c-aa60-6287c5346d20
+I01: 1/2
+- Criterion 1 met: the answer names the move from one inspection in ten finding a serious violation to one restaurant in ten having one.
+- Criterion 2 not met: the direction is reversed. Four inspections per restaurant means the failed inspections could be spread across more restaurants than one in ten (up to four in ten), not that the restaurant share could be lower.
+- Tip: When one unit is measured several times, ask whether the failures could be spread out, which raises the share of units affected, rather than piled on the same ones.
+I02: 1/1
+- Criterion met: the answer states that the council should give the paid study no weight in favor of the lanes, whatever it decides.
+- Tip: Keep the main recommendation separate from the reason offered for it, as you did here.
+I03: 0/1
+- Criterion not met: the answer treats the recording as a poor one because slow movements are rushed, which is broader than the author’s conclusion that newcomers should start with a different recording.
+- Tip: Match the conclusion to the recommendation the author actually issues, not to a stronger judgment the reasons might also support.
+I04: 2/2
+- Criterion 1 met: competition for processor and memory that makes each component about four times slower is a new fact consistent with every component finishing under half a second alone.
+- Criterion 2 met: the answer explains that a 0.3-second map alone would then take about 1.2 seconds, so the whole screen misses the half-second rule.
+- Tip: A weakener should stay compatible with the stated tests and show why the combined screen can still miss the limit.
+END FEEDBACK
+
+BEGIN SCORES v2 request=30fc6ab2-6f09-411c-aa60-6287c5346d20
+I01 | 1/2 | wrong-gap
+I02 | 1/1 | -
+I03 | 0/1 | overstated
+I04 | 2/2 | -
+END SCORES

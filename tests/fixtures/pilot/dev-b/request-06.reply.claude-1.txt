@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=99f69b08-6e6f-4707-b0f0-f51397a7dbf3
+I01: 2/2
+- Criterion 1 (ties error to this argument): Met. The answer names the dry-season water requirement, Kessel Ridge's spring and soil, and the conclusion that a big settlement is "probably" there.
+- Criterion 2 (why the inference fails): Met. It says necessary is not the same as likely and that nothing shows sites with such water and soil tended to grow big rather than stay small, which applies the necessary-but-not-sufficient point to the claimed likelihood.
+- Tip: Keep tying "necessary but not sufficient" to the strength of the claim (here, "probably"), as you did.
+I02: 0/1
+- Criterion 1 (identifies main conclusion): Not met. The answer says newcomers should start with the Ardent recording, which is the opposite of the author's recommendation. It also treats the concession that the playing is flawless as a reason for that recommendation.
+- Tip: Look for the author's "Still, I would not..." pivot and the final recommendation sentence, since the concession ("technically flawless") comes before the author's actual point.
+I03: 0/2
+- Criterion 1 (new fact that makes the move's success in Ardley more likely): Not met. Ardley being twice as large is a new fact, but it does not materially help. Pell's one-third rise is the effect of the move there, not a rate that scales with population, and nothing shows that Ardley's extra residents would shop at the market on Thursday evenings.
+- Criterion 2 (explains how it strengthens): Not met. The explanation assumes sales gains scale with town population, which is unsupported. It also does not show Ardley has the kind of shopper (commuters passing the market on their way home) who made the move work in Pell.
+- Tip: Choose a fact that shows Ardley resembles Pell in the way that mattered (for example, many Ardley workers pass the market on their way home), rather than just a bigger number.
+I04: 2/2
+- Criterion 1 (new fact consistent with premises): Met. Bookings tripling is a new, specific figure, consistent with "far more appointments" and with both shares, and it is above the two-thirds growth threshold.
+- Criterion 2 (explains how it weakens): Met. You computed 9% of triple as 27% of the old total, compared it with the old 15%, and concluded more appointments are missed now, which is exactly the needed reasoning.
+- Tip: Keep showing the arithmetic that turns a lower share into a higher count, as you did here.
+END FEEDBACK
+
+BEGIN SCORES v2 request=99f69b08-6e6f-4707-b0f0-f51397a7dbf3
+I01 | 2/2 | -
+I02 | 0/1 | premise-as-conclusion
+I03 | 0/2 | irrelevant
+I04 | 2/2 | -
+END SCORES

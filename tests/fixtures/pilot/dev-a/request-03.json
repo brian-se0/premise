@@ -1,0 +1,36 @@
+{
+  "id": "89fb1714-0df9-48c7-b806-a91034e4b299",
+  "fence": "YWG1H0",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "con03",
+      "taskId": "arg-0013.conclusion",
+      "snapshotHash": "837020b094efbf9c46f24efe2af1c0481bea3118fbebf395c43c7f33dfd33593",
+      "answer": "The conclusion is that the Ardent Quartet's new recording of the late quartets is a poor one, because the players rush nearly every slow movement and those movements are the emotional heart of the music."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "fla10",
+      "taskId": "arg-0025.flaw",
+      "snapshotHash": "360bdc48b2eda1e8e624434e61911d327ff82e4d3c7334bbf5b006d3512394c2",
+      "answer": "i think theyre mixing up inspections and restaurants. 1 in 10 inspections found a violation but thats not the same as 1 in 10 restaurants since every restaurant got checked 4 times, so the two numbers dont have to be the same"
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "con07",
+      "taskId": "arg-0017.conclusion",
+      "snapshotHash": "d329e18d41fb8f8fe4e4a00941e9230388300b6eddbeb14f5275fa1bba5250e7",
+      "answer": "However its vote on the Harbor Street lanes turns out, the Dunmore council should leave the bicycle makers' study out of the case for them."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "str07",
+      "taskId": "arg-0022.strengthen",
+      "snapshotHash": "0bec2ed71823e6bf39b0b7c7ef93d08fe167894fd93d1b9419acf59aae3d237e",
+      "answer": "ardley has about twice as many people as pell. so if pell's market went up by a third, ardley's should go up even more since theres way more potential customers to come on thursday nights"
+    }
+  ],
+  "selfGradeOnly": false
+}

@@ -1,0 +1,36 @@
+{
+  "id": "0fffd33d-b12d-40f1-a7c9-53f0d9920777",
+  "fence": "JQRSK6",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "wea03",
+      "taskId": "arg-0014.weaken",
+      "snapshotHash": "77f5b9f14cbed520161efbebe6390832360aa78008339acceb1274aa1eaa3636",
+      "answer": "Since the evening hours started, monthly bookings have gone up by about half, from around 400 to 600. A smaller share of a bigger total can still be a bigger number: 9 percent of 600 is 54 missed appointments, compared with 15 percent of 400, which is 60. So the clinic is actually missing more appointments now than before, which weakens the director's conclusion."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "con09",
+      "taskId": "arg-0017.conclusion",
+      "snapshotHash": "d329e18d41fb8f8fe4e4a00941e9230388300b6eddbeb14f5275fa1bba5250e7",
+      "answer": "basically whatever happens with the lanes, the study the bike industry paid for shouldnt get any weight on the yes side when the council decides"
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "con01",
+      "taskId": "arg-0013.conclusion",
+      "snapshotHash": "837020b094efbf9c46f24efe2af1c0481bea3118fbebf395c43c7f33dfd33593",
+      "answer": "i think the main point is basically that the ardent recording isnt a good one to start out on"
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "wea04",
+      "taskId": "arg-0014.weaken",
+      "snapshotHash": "77f5b9f14cbed520161efbebe6390832360aa78008339acceb1274aa1eaa3636",
+      "answer": "Monthly bookings tripled. 9% of triple is 27% of the old monthly total, more than the 15% missed before, so more appointments are missed now."
+    }
+  ],
+  "selfGradeOnly": false
+}

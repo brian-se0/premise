@@ -1,0 +1,216 @@
+# Grading-check answer set: flaw (docs/GRADING_PROTOCOL.md §9). Written by Claude in a student's voice on
+# 2026-10-06; `gold` is Claude's score, fixed before the second scorer started (digest of [id, task, answer, gold]
+# over all five files, as `npm run pilot:score` prints it: ae78dd71f7ef4b8824d9919aba1fcc4b2e0f1de6a5f551b5db0db87744aeb59f).
+# `second` is the blind score of an independent Claude Opus 5.5 session at maximum effort (pilot/second-scores.yaml).
+# `acceptable` marks an answer where a scorer recorded another score as defensible under the key; `settlement` says why.
+# `type` is the §9 answer type; `why` is Claude's reasoning for `gold`. Held-out answers: arg-0020, arg-0024, arg-0027.
+- id: fla01
+  task: arg-0009.flaw
+  holdout: false
+  type: partial
+  answer: >-
+    i think maybe the schools near those 5 branches started some kind of reading challenge or assigned way
+    more books that year, which could be why teens there were checking out more
+  gold: 1
+  second: 1
+  why: >-
+    Criterion 2 met: a new school reading program near those branches is "something else that changed there at
+    the same time", offered as a possibility and not ruled out by the stimulus. Criterion 1 not met: the
+    answer never states the director's inference that the longer hours caused the rise.
+- id: fla02
+  task: arg-0009.flaw
+  holdout: false
+  type: reference-like
+  answer: >-
+    The director credits the later closing time for the 30 percent jump in teen borrowing at the five
+    branches, but those branches weren't chosen at random: they were the ones where teens had asked most often
+    for later hours. Teens there may already have been getting more into the library, so borrowing could have
+    climbed even if the hours had stayed the same.
+  gold: 2
+  second: 2
+  why: >-
+    Criterion 1 met: names the rise in teen borrowing at the five branches and the conclusion that the later
+    hours caused it. Criterion 2 met: offers, as a possibility, a cause the stimulus leaves open (growing teen
+    interest at the branches selected for that interest), which the accept text names as one route.
+- id: fla03
+  task: arg-0011.flaw
+  holdout: false
+  type: valid-unlike-reference
+  answer: >-
+    Water through the dry season was necessary for a big settlement, but the argument uses Kessel Ridge's
+    spring (and its rich soil) as if that made a big settlement likely. Necessary isn't the same as likely:
+    for "probably large" to follow we'd need to know that sites with that kind of water and soil tended to
+    grow big rather than stay small, and nothing in the passage tells us that.
+  gold: 2
+  second: 2
+  why: >-
+    Criterion 1 met: names the water requirement, that Kessel Ridge had it, and the "probably large"
+    conclusion. Criterion 2 met: uses the necessary-condition framing but applies it to the claimed
+    likelihood, as the accept text requires, saying nothing shows such sites usually grew large; it does not
+    claim water and soil are no evidence.
+- id: fla04
+  task: arg-0011.flaw
+  holdout: false
+  type: ambiguous
+  answer: >-
+    ok so the argument is basically big settlements needed a reliable water source in the dry season, kessel
+    ridge had one, so the ruins were probably a big settlement. but a lot of places with springs and good soil
+    couldve just stayed small villages, so meeting the water requirement doesnt mean it was big.
+  gold: 1
+  second: 1
+  acceptable: [ 1, 2 ]
+  settlement: >-
+    Both scorers gave 1 and both name 2 as defensible: "a lot of places with springs and good soil could've
+    just stayed small" can be read as the likelihood point, though the answer concludes only that the
+    conditions don't guarantee a large settlement.
+  why: >-
+    Criterion 1 is clearly met. Criterion 2 is borderline: the answer's stated point ("doesnt mean it was
+    big") is that the conditions fail to guarantee a large settlement, which the accept text says does not
+    earn the point, giving 1; but "a lot of places with springs and good soil couldve just stayed small" can
+    be read as the point that nothing shows such sites usually grew large, giving 2. Gold 1 because the answer
+    never addresses the "probably". Acceptable {1, 2}.
+- id: fla05
+  task: arg-0014.flaw
+  holdout: false
+  type: confidently-wrong
+  answer: >-
+    the real problem is the director only counts ppl who actually got booked. if the evening slots are that
+    popular theyre probably full, so lots of patients who need care cant get in at all and they dont show up
+    in the numbers anywhere
+  gold: 0
+  second: 0
+  why: >-
+    The accept text says answers about patients who never book miss the error, so criterion 2 is not met; the
+    answer also never names the fall in the share missed or the conclusion that fewer appointments are missed,
+    so criterion 1 is not met.
+- id: fla06
+  task: arg-0014.flaw
+  holdout: false
+  type: concise-correct
+  answer: >-
+    The director goes from the share missed dropping (15% to 9%) to fewer missed appointments, but bookings
+    went way up, and a smaller slice of a much bigger pie can be just as big or bigger.
+  gold: 2
+  second: 2
+  why: >-
+    Criterion 1 met: names the fall in the share missed and the conclusion that fewer are missed. Criterion 2
+    met: says that because bookings grew a lot, a smaller share of the larger total can be as large a number
+    or larger.
+- id: fla07
+  task: arg-0021.flaw
+  holdout: false
+  type: extra-explanation
+  answer: >-
+    The policy says a grant is renewed only if attendance rose, so a rise is something the museum needs, not
+    something that guarantees renewal. The director treats it as a guarantee, but nothing in the policy stops
+    the council from refusing on other grounds, say budget cuts or a poor review. As an if-then, the policy is
+    "renewed → attendance rose", and the director is reading it backwards as "attendance rose → renewed". Side
+    note: having the biggest rise in the city doesn't help either, since the policy only cares whether
+    attendance rose, not by how much.
+  gold: 2
+  second: 2
+  why: >-
+    Criterion 1 met: names the inference from the museum's rise, which the policy requires, to renewal.
+    Criterion 2 met: the rise is required but not a guarantee, so the council could refuse for another reason
+    (offered as possibilities). The if-then restatement and the remark about the size of the rise are accurate
+    extras that neither add nor lose credit.
+- id: fla08
+  task: arg-0021.flaw
+  holdout: false
+  type: confidently-wrong
+  answer: >-
+    Necessary vs. sufficient condition error.
+  gold: 0
+  second: 0
+  why: >-
+    A bare flaw label that is not applied to the attendance requirement or the renewal; the accept text says
+    such a label earns 0. It names neither the inference (criterion 1) nor why it fails in this argument
+    (criterion 2).
+- id: fla09
+  task: arg-0025.flaw
+  holdout: false
+  type: keyword-contradiction
+  answer: >-
+    The writer jumps from one inspection in ten finding a violation to one restaurant in ten having one. But
+    each restaurant was inspected four times, so the same bad restaurant could account for several of the
+    failed inspections, which means the real share of restaurants with a violation could be lower than one in
+    ten.
+  gold: 1
+  second: 1
+  why: >-
+    Criterion 1 met: names the share of inspections and the conclusion about the share of restaurants.
+    Criterion 2 not met: it uses the four-inspections point but draws the wrong direction; the accept text
+    says an answer that the share of restaurants could be lower than one in ten "has the direction wrong ...
+    so it does not say why the inference fails".
+- id: fla10
+  task: arg-0025.flaw
+  holdout: false
+  type: partial
+  answer: >-
+    i think theyre mixing up inspections and restaurants. 1 in 10 inspections found a violation but thats not
+    the same as 1 in 10 restaurants since every restaurant got checked 4 times, so the two numbers dont have
+    to be the same
+  gold: 1
+  second: 1
+  why: >-
+    Names the inference (criterion 1) and says only that the two shares need not match, never that the share
+    of restaurants could be higher; the accept text says such an answer earns 1, so criterion 2 is not met.
+- id: fla11
+  task: arg-0020.flaw
+  holdout: true
+  type: partial
+  answer: >-
+    the ad says keeping a 100 day streak is what made people better speakers just because the streak people
+    scored higher on the test. but maybe the streak people had just been using the app longer than the others
+    so they had more time to learn
+  gold: 1
+  second: 1
+  why: >-
+    Criterion 1 met: names the streak holders' higher test scores and the conclusion that the streak made them
+    better speakers. Criterion 2 not met: the only alternative offered, longer use of the app, is one the
+    stimulus rules out (both groups had used the app for about a year), and the accept text says such an
+    alternative does not earn the point.
+- id: fla12
+  task: arg-0020.flaw
+  holdout: true
+  type: valid-unlike-reference
+  answer: >-
+    The ad reads the streak holders' much higher speaking scores as proof that keeping a streak is what made
+    them better. But something else could be behind both: users with a roommate or girlfriend who speaks
+    Spanish, say, have a daily reason to open the app and also get lots of real conversation practice, which
+    could explain the better speaking whether or not the streak itself did anything.
+  gold: 2
+  second: 2
+  why: >-
+    Criterion 1 met: names the higher speaking scores and the conclusion that the streak made them better.
+    Criterion 2 met: offers, as a possibility, a third factor the stimulus leaves open (a Spanish speaker at
+    home and informal practice outside the app), a route the accept text credits; it differs from the
+    reference's starting-ability alternative.
+- id: fla13
+  task: arg-0020.flaw
+  holdout: true
+  type: confidently-wrong
+  answer: >-
+    The flaw is that Lingora is the one making the claim. It's an ad for their own app, so obviously they want
+    their streak feature to look good, and you can't trust what a company says about its own product.
+  gold: 0
+  second: 0
+  why: >-
+    A different flaw (attacking the source rather than the reasoning): it names neither the higher scores nor
+    the inference to the causal conclusion (criterion 1), and it offers no other explanation of the higher
+    scores (criterion 2).
+- id: fla14
+  task: arg-0020.flaw
+  holdout: true
+  type: keyword-contradiction
+  answer: >-
+    The ad gets cause and effect backwards. It assumes the users who already spoke Spanish better were the
+    ones who kept 100-day streaks, when really it's keeping the streak that made them score higher on the
+    speaking test.
+  gold: 0
+  second: 0
+  why: >-
+    Uses the key's words (already spoke better, streaks, higher scores) but reverses the logic: it
+    misdescribes the ad's inference and endorses the ad's conclusion as true, so it does not identify the
+    error in the move from scores to the causal claim (criterion 1), and it rejects the open alternative
+    rather than offering it as a possible explanation (criterion 2).

@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=9609701c-36e2-4c8f-8afd-a5dc664c0fdf
+I01: 2/2
+- Criterion 1 (new fact): Met. The waste audit finding that checkout bags were the largest single item by weight of household plastic rubbish is new, consistent with the premises, and makes a large weight reduction more likely.
+- Criterion 2 (explains how): Met. The answer links the 80 percent fall in bags to a large drop in weight, and it notes that the officer's argument jumps from bag count to plastic weight, so a fact about weight fills the gap.
+- Tip: Keep naming the specific gap in the argument that your new fact closes, as you did here.
+I02: 2/2
+- Criterion 1 (unstated claim linking photos to population): Met. The assumption that lynx did not shift into camera-free areas is a distinct unstated claim, not a premise or a restatement of the conclusion.
+- Criterion 2 (not stronger than needed): Met. It is limited to a shift large enough to cut the photos from 120 to 58 on its own, so it does not require that the lynx's habits stayed exactly the same. Its denial would stop the drop from showing a population fall.
+- Tip: Keep qualifying the assumption by size, "enough to explain the drop", so it stays necessary without becoming too strong.
+I03: 2/2
+- Criterion 1 (new fact): Met. Live seed in the soil and seedlings that come up each spring on the four goat islands is new, consistent with the premises, and points toward recovery being possible there.
+- Criterion 2 (explains how): Met. The answer explains that grazing is what holds the shrub back there, and that removing the goats would end it. That shows regrowth on the four islands is likely.
+- Tip: Tying the fact directly to the action in the conclusion, here removing the goats, makes the strengthening link clear.
+I04: 2/2
+- Criterion 1 (ties error to argument): Met. The answer names the 30 percent jump in teen borrowing at the five branches and the director's credit of the later closing time as its cause.
+- Criterion 2 (names an open alternative): Met. The branches were chosen because teens there had asked most for later hours, so interest may already have been growing and borrowing could have climbed anyway. This alternative is not ruled out by the stimulus.
+- Tip: Using how the sample was selected to suggest an alternative cause is a strong move for causal-flaw questions.
+END FEEDBACK
+
+BEGIN SCORES v2 request=9609701c-36e2-4c8f-8afd-a5dc664c0fdf
+I01 | 2/2 | -
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 2/2 | -
+END SCORES

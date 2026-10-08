@@ -1,0 +1,31 @@
+BEGIN FEEDBACK request=44f8afbe-2d89-4791-ada7-8f22740b47fa
+I01: 2/2
+
+* Criterion 1: Met. The student provides a fact about the users' starting proficiency (that streak holders were beginners while the other group had studied Spanish before).
+* Criterion 2: Met. The student explains how this fact weakens the argument by showing the groups didn't start from the same place, making the post-streak comparison unfair.
+* Tip: Make sure the directional difference in initial proficiency matches common sense when setting up counter-explanations.
+
+I02: 2/2
+
+* Criterion 1: Met. The student clearly states the unstated assumption that the letter is written on paper from the Holt mill.
+* Criterion 2: Met. The claim is stated with minimal necessary strength (specifically regarding the letter's paper source).
+* Tip: Keep assumption statements focused directly on the missing logical bridge between the evidence and the conclusion.
+
+I03: 1/1
+
+* Criterion 1: Met. The student accurately identifies the main conclusion that the society should not oppose converting the silo into apartments.
+* Tip: Stating the main conclusion concisely in a single sentence ensures clarity and direct alignment with the prompt.
+
+I04: 0/2
+
+* Criterion 1: Not met. The student misidentifies the direction of the error, arguing that the ad mistakenly assumed starting proficiency led to streaks when it actually assumed streaks caused better proficiency.
+* Criterion 2: Not met. The student fails to name a valid alternative explanation that the argument left open, instead endorsing the ad's flawed conclusion as the "real" truth.
+* Tip: When identifying a causal reasoning flaw, point out alternative explanations or reverse causality that the argument fails to rule out.
+END FEEDBACK
+
+BEGIN SCORES v2 request=44f8afbe-2d89-4791-ada7-8f22740b47fa
+I01 | 2/2 | -
+I02 | 2/2 | -
+I03 | 1/1 | -
+I04 | 0/2 | correlation-causation, misread-stimulus
+END SCORES

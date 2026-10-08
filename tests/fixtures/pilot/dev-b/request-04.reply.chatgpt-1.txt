@@ -1,0 +1,26 @@
+BEGIN FEEDBACK request=165fe0d2-7e16-44fc-97e8-49be419cd5dc
+I01: 2/2
+
+* Criterion 1: met — identifies new facts showing checkout bags were a large share of household plastic waste by weight and were unusually thick.
+* Criterion 2: met — explains that an 80% reduction in bags would therefore remove a large amount of plastic weight.
+* Tip: When strengthening a causal argument, connect the new fact directly to the size of the claimed effect.
+  I02: 2/2
+* Criterion 1: met — gives new evidence that saltbush seeds and seedlings exist on the goat islands but are consumed by goats.
+* Criterion 2: met — explains that grazing is what prevents regrowth, so removing the goats would allow recovery.
+* Tip: Look for evidence that the proposed intervention removes the specific obstacle preventing the desired outcome.
+  I03: 2/2
+* Criterion 1: met — gives a pre-installation fact that crashes were unusually high relative to the preceding five-year average.
+* Criterion 2: met — explains regression toward the normal level could account for much of the subsequent decline without the cameras.
+* Tip: For causal arguments based on a before-and-after drop, check whether the starting level was unusually high or already trending downward.
+  I04: 2/2
+* Criterion 1: met — states that the rating increase was not wholly caused by who answered the survey, a distinct unstated bridge assumption.
+* Criterion 2: met — appropriately requires only that some of the increase reflect greater satisfaction rather than requiring identical respondents or no other changes.
+* Tip: State the weakest necessary bridge: rule out an alternative explanation only to the extent needed to leave some support for the conclusion.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=165fe0d2-7e16-44fc-97e8-49be419cd5dc
+I01 | 2/2 | -
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 2/2 | -
+END SCORES

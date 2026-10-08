@@ -1,0 +1,44 @@
+BEGIN FEEDBACK request=9609701c-36e2-4c8f-8afd-a5dc664c0fdf
+I01: 2/2
+
+* Criterion by criterion:
+* Gives a new fact: Met. Provides a new fact about bags being unusually thick and taking up the largest weight share.
+* Explains how it strengthens: Met. Explains that a large reduction in bag count would remove a significant portion of household plastic weight.
+
+
+* Tip: Keep highlighting the connection between the missing link (weight vs. count) and your new fact for maximum clarity.
+
+I02: 2/2
+
+* Criterion by criterion:
+* States an unstated claim: Met. Addresses the shift in lynx ranges to areas without cameras.
+* States no more strongly than needed: Met. Properly limits the condition to whether range shift alone could account for the drop.
+
+
+* Tip: Stating the necessary assumption using the negation technique as you did ensures you don't overstate the requirement.
+
+I03: 2/2
+
+* Criterion by criterion:
+* Gives a new fact: Met. Provides a new fact that live seeds and seedlings exist on the four islands.
+* Explains how it strengthens: Met. Explains that seedling loss is caused by goat grazing, showing that removing goats would enable recovery.
+
+
+* Tip: Continuing to focus on direct causal evidence on the target locations strengthens your application of evidence.
+
+I04: 2/2
+
+* Criterion by criterion:
+* Ties error to the argument: Met. Identifies the causal jump from extended hours to increased teen borrowing at the five branches.
+* Says why inference fails: Met. Points out selection bias (branches chosen where teen demand was highest) as an alternative cause for the increase.
+
+
+* Tip: Specifying how selection bias introduces potential confounding factors is an excellent way to critique causal arguments.
+END FEEDBACK
+
+BEGIN SCORES v2 request=9609701c-36e2-4c8f-8afd-a5dc664c0fdf
+I01 | 2/2 | -
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 2/2 | -
+END SCORES

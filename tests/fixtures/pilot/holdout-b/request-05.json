@@ -1,0 +1,36 @@
+{
+  "id": "88a31d2f-e845-4b05-8c13-2d1336e0bbe1",
+  "fence": "SC2YK5",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "con14",
+      "taskId": "arg-0024.conclusion",
+      "snapshotHash": "28724fcca95f57247818dd0ccba2b39264faabf11b3e2e1ac09516b27af9f98f",
+      "answer": "the conclusion is the society should oppose turning the silo into apartments bc its the last wooden silo in the county and has to stay exactly how it is"
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "wea13",
+      "taskId": "arg-0020.weaken",
+      "snapshotHash": "429a6fce8fbec4bed3b3686bbbe2a563881a42cf481795460c34643ebe4b188e",
+      "answer": "when you sign up lingora places you in a spanish level, and people who placed intermediate or higher were like 4 times more likely to end up keeping a 100 day streak than people who placed as total beginners. most of the never-past-a-week group had placed as beginners. so it could be backwards, if you already know some spanish practicing every day is easier and more fun so you keep the streak, and you'd score higher on a speaking test anyway"
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "asm12",
+      "taskId": "arg-0024.assumption",
+      "snapshotHash": "171cfbdd8623334eeeb19ac30611bfcc9869bbc94d8990d2c5ae679cbf0e203e",
+      "answer": "Keeping the walls and the loading machinery only saves the silo's historical value if the inside isn't doing any essential work in showing how people lived and worked there. So the argument assumes the interior parts that get gutted aren't essential to its importance. They might add some detail, but the silo's importance doesn't hinge on them."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "str14",
+      "taskId": "arg-0027.strengthen",
+      "snapshotHash": "198269e7d33a4153198a796b6acc7a50fc4f111d2a4178ba99c7ab9d10cb0fe1",
+      "answer": "The ink used on the letter was a type first sold in the 1770s and still common into the 1820s. Since that ink was still being used after 1801, it gives separate evidence of a later date and backs up the curator."
+    }
+  ],
+  "selfGradeOnly": false
+}

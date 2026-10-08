@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=bb129f9d-fc94-4168-b1bc-076018e12ba0
+I01: 2/2
+
+* Criterion 1: met; identifies the move from the water requirement and Kessel Ridge's spring to the conclusion that it was probably a large settlement.
+* Criterion 2: met; explains that having the conditions does not establish that a large settlement was likely, since sites with springs and fertile soil could remain small.
+* Tip: When criticizing a likelihood claim, explain why the stated evidence does not make the conclusion probable rather than merely saying it is not guaranteed.
+  I02: 1/1
+* Criterion 1: met; correctly identifies the recommendation that newcomers should start with a recording other than the Ardent Quartet's, rather than confusing it with a supporting claim.
+* Tip: For conclusion questions, state the author's main recommendation or claim first, then use the supporting reasons only if helpful.
+  I03: 2/2
+* Criterion 1: met; identifies the inference from the required attendance rise to the conclusion that the grant will be renewed.
+* Criterion 2: met; correctly explains that the rise is necessary but not sufficient and that the council could refuse for another reason.
+* Tip: When a rule says something is required for an outcome, check whether it also says that requirement guarantees the outcome.
+  I04: 0/2
+* Criterion 1: not met; the answer does not identify the move from a lower percentage of missed appointments to the conclusion that fewer appointments were missed.
+* Criterion 2: not met; it discusses unbooked patients, which does not address how the larger number of booked appointments could make 9 percent represent more missed appointments than 15 percent of the old total.
+* Tip: Distinguish a change in a percentage from a change in the underlying number, especially when the total has changed substantially.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=bb129f9d-fc94-4168-b1bc-076018e12ba0
+I01 | 2/2 | -
+I02 | 1/1 | -
+I03 | 2/2 | -
+I04 | 0/2 | wrong-gap,irrelevant
+END SCORES

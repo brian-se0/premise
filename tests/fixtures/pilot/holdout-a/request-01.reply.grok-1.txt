@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=cbb2a198-4002-4b54-8f2c-6acbcec7119e
+I01: 1/2
+- Criterion 1 met: the answer ties the error to this ad, linking the streak group's higher speaking-test scores to the claim that a 100-day streak made learners better speakers.
+- Criterion 2 not met: the alternative offered (streak holders had used the app longer and so had more time to learn) is ruled out by the stimulus, which matches both groups on time learning Spanish and total practice hours.
+- Tip: Name an explanation the premises leave open, such as better speakers finding a long streak easier to keep, not one the stimulus already matches or excludes.
+I02: 2/2
+- Criterion 1 met: "written on Holt paper" is an unstated claim that lets Holt's 1801 start date apply to this sheet.
+- Criterion 2 met: it is no stronger than needed; if the sheet were not Holt paper, Holt's records would no longer set a lower bound for this letter.
+- Tip: Keep the assumption scoped to this sheet, as you did, rather than to every papermaker or every supplier.
+I03: 2/2
+- Criterion 1 met: addressing the letter to Judge Amos Ferris, first appointed in 1803, is a new fact consistent with the premises and points to a date of 1803 or later.
+- Criterion 2 met: the answer explains that a 1788 writer would not have called him a judge, so the address supports the curator's later date independently of the watermark.
+- Tip: When you add a dated title or event, state that the letter treats it as already true, as you did here.
+I04: 2/2
+- Criterion 1 met: the answer states the unstated bridge that the interior parts removed by the conversion are not essential to the silo's historical importance under the charter.
+- Criterion 2 met: it is no stronger than needed; it allows the interior to add detail while denying that importance hinges on it, so denial would break the preservation step.
+- Tip: Phrase the assumption as "not essential to importance," not as "shows nothing at all," so it stays as strong as the argument requires.
+END FEEDBACK
+
+BEGIN SCORES v2 request=cbb2a198-4002-4b54-8f2c-6acbcec7119e
+I01 | 1/2 | contradicts-premise
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 2/2 | -
+END SCORES

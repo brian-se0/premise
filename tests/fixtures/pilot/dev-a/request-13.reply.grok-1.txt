@@ -1,0 +1,13 @@
+BEGIN FEEDBACK request=6667e0ad-d733-4433-b855-30341b20fb03
+I01: 2/2
+- Criterion by criterion: met — the fact that Pell’s Saturday sales had also been flat for years is new and not already in the premises, and it makes Ardley’s case more like the case in which the move raised sales. Met — the answer explains that this likeness makes the same sales jump more likely.
+- Tip: A new likeness between the source case and the target case is a valid strengthener when you say why that likeness matters.
+I02: 1/2
+- Criterion by criterion: met — requiring that the groups shared seed, fertilizer, irrigation, and weather is an unstated link from the yield gap to cover crops, not a stated premise or a restatement of the conclusion. Not met — “everything else in common” and “the only difference” is stronger than needed; small other changes that do not account for the whole extra rise would still leave the argument standing.
+- Tip: State only what must be true for the gap not to be fully explained by something else, not that the groups were identical in every other respect.
+END FEEDBACK
+
+BEGIN SCORES v2 request=6667e0ad-d733-4433-b855-30341b20fb03
+I01 | 2/2 | -
+I02 | 1/2 | overstated
+END SCORES

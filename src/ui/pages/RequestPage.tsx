@@ -44,10 +44,12 @@ import { NotFoundPage } from './NotFoundPage.tsx';
 export const DISCLOSURE =
   'Premise does not upload your answers or progress; it only downloads its own app files. When you paste a grading prompt into another service, that service receives your answers under its own terms and privacy settings. Avoid personal information in answers.';
 
+// `checked`: passed the grading check (docs/GRADING_PROTOCOL.md §9, docs/DECISIONS.md 2026-10-08).
 const CHATBOTS = [
-  { name: 'ChatGPT', url: 'https://chatgpt.com/' },
-  { name: 'Claude', url: 'https://claude.ai/new' },
-  { name: 'Gemini', url: 'https://gemini.google.com/app' },
+  { name: 'ChatGPT', url: 'https://chatgpt.com/', checked: false },
+  { name: 'Claude', url: 'https://claude.ai/new', checked: false },
+  { name: 'Gemini', url: 'https://gemini.google.com/app', checked: false },
+  { name: 'Grok', url: 'https://grok.com/', checked: true },
 ];
 
 interface Row {
@@ -288,9 +290,11 @@ function CopySection({
             <a href={c.url} target="_blank" rel="noopener noreferrer">
               {c.name}
             </a>
+            {c.checked && ' (checked)'}
           </span>
         ))}
-        . The links never carry your answers.
+        . The links never carry your answers. A checked chatbot&apos;s free version graded Premise&apos;s test answers
+        in line with the answer keys.
       </p>
     </section>
   );

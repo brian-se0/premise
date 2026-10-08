@@ -1,0 +1,23 @@
+BEGIN FEEDBACK request=89fb1714-0df9-48c7-b806-a91034e4b299
+I01: 0/1
+- Main conclusion criterion: not met. The student says the recording "is a poor one," which is the critics' broader dismissal that the author explicitly rejects. The author's actual conclusion is the narrower recommendation that newcomers should begin with a different recording. The student also folds in the slow-movement reasoning as support for a verdict the author never reaches.
+- Tip: Look for the recommendation the author commits to after the concessions ("Still, I would not give this..."), and distinguish it from the broader view the author rejects.
+I02: 2/2
+- Ties error to this argument: met. The student names 1 in 10 inspections versus 1 in 10 restaurants and says the two are being confused.
+- Says why the inference fails: met, though only partly developed. The student gives the key reason, that every restaurant was checked 4 times, so the two shares need not match. The answer does not say the restaurant share could be higher, up to 4 in 10, but it does not state a wrong direction either, and the stated reason is the core of the error.
+- Tip: To make this airtight, add the direction and a number, for example that 400 failures could fall on up to 400 different restaurants, which is 40 percent.
+I03: 1/1
+- Main conclusion criterion: met. The student states that the council should leave the bicycle makers' study out of the case for the lanes, whatever the vote's outcome. This matches the author's conclusion and avoids the intermediate claim about trust, the concession, and any recommendation against the lanes.
+- Tip: Keep separating the final recommendation from the reason offered for it, as you did here.
+I04: 0/2
+- New fact that strengthens the argument: not met. Ardley having about twice Pell's population is a new fact, but it does not make a rise in Ardley's sales after the move more likely. The success in Pell came from a specific kind of shopper (people stopping on their way home from work), and a larger population says nothing about whether Ardley has such shoppers. Population size also does not show that the move would keep Ardley's current shoppers.
+- Explains how it strengthens: not met. The explanation assumes that a bigger town means a bigger percentage gain, which does not follow (a gain of a third in Pell does not scale with population) and does not address why the move caused the rise.
+- Tip: Choose a fact that links back to the mechanism in the stimulus, such as Ardley having commuters who pass the market on their way home, and say how it makes the Pell effect likely to repeat.
+END FEEDBACK
+
+BEGIN SCORES v2 request=89fb1714-0df9-48c7-b806-a91034e4b299
+I01 | 0/1 | counterpoint-as-conclusion
+I02 | 2/2 | -
+I03 | 1/1 | -
+I04 | 0/2 | irrelevant
+END SCORES

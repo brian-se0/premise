@@ -1,0 +1,44 @@
+BEGIN FEEDBACK request=165fe0d2-7e16-44fc-97e8-49be419cd5dc
+I01: 2/2
+
+* Criterion by criterion:
+* First criterion met: Provides a valid new fact that checkout bags made up more weight of household plastic rubbish than any other single item before the fee.
+* Second criterion met: Clearly explains how this strengthens the argument by connecting the reduction in bag count to a large reduction in total thrown-away weight.
+
+
+* Tip: Keep maintaining this clear connection between the introduced factual premise and the specific metric in the conclusion.
+
+I02: 2/2
+
+* Criterion by criterion:
+* First criterion met: Provides a valid new fact that live saltbush seed remains in the soil and seedlings are constantly eaten by goats.
+* Second criterion met: Clearly explains that removing goats would eliminate the primary barrier preventing the saltbush from recovering on those islands.
+
+
+* Tip: Excellent job explaining the mechanism by which the proposed action would produce the desired result.
+
+I03: 2/2
+
+* Criterion by criterion:
+* First criterion met: Provides a valid new fact that the year prior to installation was an anomaly with 66 crashes compared to a historical 5-year average of 40.
+* Second criterion met: Clearly explains how regression to the mean accounts for the drop, weakening the claim that cameras caused it.
+
+
+* Tip: Stating statistical concepts like regression to the mean in plain language makes your weakness explanations very effective.
+
+I04: 2/2
+
+* Criterion by criterion:
+* First criterion met: Identifies a valid unstated assumption regarding potential selection bias in who completed the survey.
+* Second criterion met: Accurately frames the assumption at the precise required strength (that the rise isn't *wholly* due to who answered).
+
+
+* Tip: Precise scoping (e.g., "not wholly") is crucial for necessary assumptions, and you nailed it here.
+END FEEDBACK
+
+BEGIN SCORES v2 request=165fe0d2-7e16-44fc-97e8-49be419cd5dc
+I01 | 2/2 | -
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 2/2 | -
+END SCORES

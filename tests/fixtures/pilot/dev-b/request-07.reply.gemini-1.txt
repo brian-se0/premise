@@ -1,0 +1,30 @@
+BEGIN FEEDBACK request=30fc6ab2-6f09-411c-aa60-6287c5346d20
+I01: 1/2
+
+* Ties the error to this argument (met): Identifies the move from one in ten inspections having a violation to one in ten restaurants having one.
+* Says why the inference fails (not met): Claims the share of restaurants could be lower than one in ten, which gets the direction of the error wrong.
+* Tip: Remember that four inspections per restaurant spread the violations across more restaurants (up to four in ten), making the share of restaurants higher, not lower.
+
+I02: 1/1
+
+* Identifies the main conclusion (met): Correctly states that the council should not give weight to the study when deciding on the bike lanes.
+* Tip: Keep up the clear identification of the author's primary recommendation.
+
+I03: 0/1
+
+* Identifies the main conclusion (not met): States that the recording is poor rather than identifying the specific conclusion that first-time listeners should start with a different recording.
+* Tip: Distinguish between general judgments or supporting reasons and the author's specific final recommendation.
+
+I04: 2/2
+
+* Gives a new fact (met): Introduces the idea that components run significantly slower when updating simultaneously due to resource competition.
+* Explains how the fact weakens the argument (met): Clearly calculates how this resource contention pushes total update time well past the half-second limit.
+* Tip: Excellent job providing both a consistent new fact and a clear step-by-step explanation of its impact.
+END FEEDBACK
+
+BEGIN SCORES v2 request=30fc6ab2-6f09-411c-aa60-6287c5346d20
+I01 | 1/2 | wrong-gap
+I02 | 1/1 | -
+I03 | 0/1 | premise-as-conclusion
+I04 | 2/2 | -
+END SCORES

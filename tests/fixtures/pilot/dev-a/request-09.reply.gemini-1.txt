@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=55f04aa4-b163-4c36-853f-5b0619212bb8
+I01: 1/1
+
+* Main conclusion criterion: met. The answer correctly identifies the author's main conclusion that newcomers should not begin with the Ardent Quartet's recording and should pick a different one instead.
+* Tip: Keep up the clear identification of main conclusions without getting distracted by supporting evidence.
+I02: 1/2
+* Bridge claim criterion: met. The student states an unstated claim that bridges the gap between the granted distortion and the recommendation.
+* Not-too-strong criterion: not met. The assumption stated requires that the slow movements are played at "exactly" the marked tempos, which is stronger than necessary (a recording with less distortion or closer tempos would suffice).
+* Tip: Make sure your stated assumption isn't too strict or extreme—the argument only requires a less distorted alternative, not absolute perfection.
+I03: 2/2
+* Pre-installation fact criterion: met. The student provides a plausible pre-camera spike in injury crashes on those specific streets.
+* Explanation criterion: met. The answer clearly explains regression to the mean—that the drop could be attributed to the streets returning to their normal baseline rather than the impact of the cameras.
+* Tip: Excellent job clearly explaining how a historical baseline anomaly creates an alternative explanation for the drop.
+I04: 0/2
+* Fact criterion: not met. The student's answer claims that a component took almost a full second when run on its own, directly contradicting the premise that every component updated in under half a second.
+* Explanation criterion: not met. Because the premise is contradicted, the argument fails to provide a valid weakener consistent with the prompt.
+* Tip: Always accept the stated premises as given and avoid introducing facts that contradict them.
+END FEEDBACK
+
+BEGIN SCORES v2 request=55f04aa4-b163-4c36-853f-5b0619212bb8
+I01 | 1/1 | -
+I02 | 1/2 | overstated
+I03 | 2/2 | -
+I04 | 0/2 | contradicts-premise
+END SCORES

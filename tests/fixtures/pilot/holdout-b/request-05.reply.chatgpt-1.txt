@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=88a31d2f-e845-4b05-8c13-2d1336e0bbe1
+I01: 0/1
+
+* Criterion: not met. The answer states the opposite of the argument's main conclusion: it says the society should oppose the conversion, rather than not oppose it.
+* Tip: Distinguish the author's recommendation from the view of the society members that the author is arguing against.
+  I02: 2/2
+* Criterion 1: met. The answer gives a new fact about the groups' Spanish ability at the start: future streak holders were much more likely to begin at intermediate level or higher.
+* Criterion 2: met. It explains that preexisting Spanish ability could have made daily practice easier and led to the streaks, while also explaining the later speaking-score gap.
+* Tip: For causal arguments, check whether the proposed cause might instead be an effect of an earlier difference between the groups.
+  I03: 2/2
+* Criterion 1: met. The answer identifies the unstated bridge that the interior features being removed are not essential to the silo's historical importance.
+* Criterion 2: met. It states the assumption at the needed strength: the interior may add detail, but the silo's importance does not depend on it.
+* Tip: A strong necessary-assumption answer should identify the missing bridge that connects the stated premises to the conclusion without making the assumption broader than necessary.
+  I04: 0/2
+* Criterion 1: not met. The proposed ink fact does not materially favor a date of 1801 or later because ink first sold in the 1770s and still common in the 1820s could also have been used before 1801.
+* Criterion 2: not met. Saying that the ink was still used after 1801 does not provide separate evidence that this particular letter was written after 1801.
+* Tip: A strengthening fact should rule out or make less likely an earlier date, rather than merely being compatible with a later one.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=88a31d2f-e845-4b05-8c13-2d1336e0bbe1
+I01 | 0/1 | counterpoint-as-conclusion
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 0/2 | irrelevant
+END SCORES

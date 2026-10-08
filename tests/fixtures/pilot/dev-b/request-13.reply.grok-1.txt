@@ -1,0 +1,15 @@
+BEGIN FEEDBACK request=91f61859-2550-4260-958e-bdfc13c4cfc9
+I01: 2/2
+- Criterion 1 met: The new fact (340 restaurants had at least one serious violation) is consistent with 1,000 restaurants and four inspections each, with one inspection in ten failing, and it places the failures on far more than one restaurant in ten.
+- Criterion 2 met: The answer explains that 340 names is 34 percent of the restaurants, so the column treated the inspection failure rate as if it were the restaurant rate.
+- Tip: When you give a count of restaurants with at least one failure, also note that it is still compatible with 400 failed inspections so the fact does not deny a premise.
+I02: 1/2
+- Criterion 1 met: The answer states an unstated claim that the extra yield rise is due to cover crops because the groups otherwise matched on seed, fertilizer, irrigation, and weather.
+- Criterion 2 not met: Requiring that the groups had everything else in common, and that cover crops were the only difference, is stronger than the argument needs; small other differences that do not account for the whole gap would still leave the conclusion standing.
+- Tip: State only that no other change or setback by itself accounts for all of the extra rise, not that the groups were identical in every other respect.
+END FEEDBACK
+
+BEGIN SCORES v2 request=91f61859-2550-4260-958e-bdfc13c4cfc9
+I01 | 2/2 | -
+I02 | 1/2 | overstated
+END SCORES

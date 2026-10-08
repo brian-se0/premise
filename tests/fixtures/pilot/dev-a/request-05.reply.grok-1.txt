@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=bb129f9d-fc94-4168-b1bc-076018e12ba0
+I01: 2/2
+- Criterion 1 met: the answer names the water requirement for a large settlement, notes that Kessel Ridge met it, and ties that to the conclusion that the ruins were probably a large settlement.
+- Criterion 2 met: it explains the failure by saying sites with a spring and good soil could still have stayed small villages, so the conditions do not make a large settlement likely.
+- Tip: Keep pairing the stated requirement with the unsupported leap to likelihood, as you did here.
+I02: 1/1
+- Criterion 1 met: the answer states the main conclusion that newcomers should start with a recording other than the Ardent Quartet’s, and treats the tempo and distortion points as support rather than as the conclusion.
+- Tip: Lead with the recommendation itself when the task asks only for the main conclusion.
+I03: 2/2
+- Criterion 1 met: the answer ties the error to the move from the museum’s rise in attendance, which the policy requires, to the director’s claim that the grant will be renewed.
+- Criterion 2 met: it says a rise is necessary but not sufficient, so the council could still refuse for other reasons, and correctly reads the policy as renewed only if attendance rose.
+- Tip: When a policy uses “only if,” check whether the answer treats the condition as a guarantee of the outcome.
+I04: 0/2
+- Criterion 1 not met: the answer does not name the fall in the share of missed booked appointments or the conclusion that fewer appointments are being missed.
+- Criterion 2 not met: it discusses patients who never get booked, which is not why a lower no-show rate fails to show a smaller number of missed appointments when bookings have increased.
+- Tip: Check whether a drop in a rate still implies a drop in the count once the total number of cases has grown.
+END FEEDBACK
+
+BEGIN SCORES v2 request=bb129f9d-fc94-4168-b1bc-076018e12ba0
+I01 | 2/2 | -
+I02 | 1/1 | -
+I03 | 2/2 | -
+I04 | 0/2 | wrong-gap
+END SCORES
