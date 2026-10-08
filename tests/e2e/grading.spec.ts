@@ -115,6 +115,13 @@ test('answer, autosave, resume after reload, grade by paste, results', async ({ 
   await page.getByRole('button', { name: 'Submit', exact: true }).click();
 
   await toRequest(page);
+  // A two-answer v4 request is in the setup the grading check covered, so Grok is marked checked.
+  await expect(
+    page.getByText(/Grok \(checked\)\. The links never carry your answers\. Checked means that/),
+  ).toBeVisible();
+  await expect(
+    page.getByText('Any chatbot can misgrade, so read the feedback before you confirm.', { exact: false }),
+  ).toBeVisible();
   const prompt = await promptText(page);
   expect(prompt).toContain('BEGIN SCORES v2 request=');
   // Markup in a reply is shown as literal text, never rendered.
