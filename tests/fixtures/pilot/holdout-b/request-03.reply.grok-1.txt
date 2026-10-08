@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=faa2557b-b994-42db-b496-42d6a6eabacb
+I01: 0/1
+- Criterion by criterion: not met — the author only concludes that the society should not oppose the conversion; saying it should actively support the plan goes beyond the stated recommendation.
+- Tip: Match the recommendation’s strength: “should not oppose” is not the same as “should support.”
+I02: 2/2
+- Criterion by criterion: met — addressing the letter to someone who became a judge only in 1803 is a new fact, consistent with the premises, that makes a date of 1801 or later more likely; met — the explanation shows why a 1788 writer would not have used that title, so the letter itself supports the curator independently of the watermark.
+- Tip: Keep using independent dating evidence that the letter treats a later fact as already true.
+I03: 1/2
+- Criterion by criterion: met — the first-week ratings show the future streak holders already spoke better when they began, which gives a reason to doubt that the streaks produced the later gap; not met — the answer never says why that starting gap undercuts the claim that the streaks made them better speakers.
+- Tip: After stating the new fact, add one sentence on how it offers an alternative to the advertised causal claim.
+I04: 0/2
+- Criterion by criterion: not met — the answer never ties the error to the move from higher speaking scores among streak holders to the claim that streaks make learners better speakers; not met — distrust of an advertiser is not an unruled-out explanation of the score gap.
+- Tip: Name the inference and a possible non-streak explanation the stimulus leaves open, such as better speakers at the start finding streaks easier to keep.
+END FEEDBACK
+
+BEGIN SCORES v2 request=faa2557b-b994-42db-b496-42d6a6eabacb
+I01 | 0/1 | overstated
+I02 | 2/2 | -
+I03 | 1/2 | no-reasoning
+I04 | 0/2 | irrelevant
+END SCORES

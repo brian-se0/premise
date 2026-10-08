@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=55f04aa4-b163-4c36-853f-5b0619212bb8
+I01: 1/1
+- Criterion by criterion: met. The answer identifies the author's recommendation that first-time listeners should start with a recording other than the Ardent Quartet's, not the intermediate distortion claim or the critics' dismissal.
+- Tip: Keep the conclusion as the recommendation itself, and leave the supporting reasons out of that sentence.
+I02: 1/2
+- Criterion by criterion: met, because an available recording that does not distort the tempos is an unstated bridge from the granted distortion to starting elsewhere. Not met, because requiring tempos exactly as Beethoven marked is stronger than the argument needs; a less distorting recording would be enough.
+- Tip: State the weakest unstated claim that still makes the recommendation follow, not a stronger version of it.
+I03: 2/2
+- Criterion by criterion: met. The pre-installation spike on those eight streets is a new fact consistent with the premises and gives a real reason to doubt the cameras. Met. The explanation shows why much of the later drop could be a return toward the earlier average even without the cameras.
+- Tip: When weakening a before-after claim, tie the earlier fact directly to why the later change could have happened anyway.
+I04: 0/2
+- Criterion by criterion: not met. The new fact says a component took almost a second when run on its own, which denies the premise that every component finished in under half a second in those tests. Not met. The explanation depends on that denied premise, so it does not weaken the argument while treating the premises as true.
+- Tip: A weakener must stay consistent with every stated premise; look for how the parts can still be slow together even if each is fast alone.
+END FEEDBACK
+
+BEGIN SCORES v2 request=55f04aa4-b163-4c36-853f-5b0619212bb8
+I01 | 1/1 | -
+I02 | 1/2 | overstated
+I03 | 2/2 | -
+I04 | 0/2 | contradicts-premise
+END SCORES

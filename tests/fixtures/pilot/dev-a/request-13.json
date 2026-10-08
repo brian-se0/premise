@@ -1,0 +1,22 @@
+{
+  "id": "6667e0ad-d733-4433-b855-30341b20fb03",
+  "fence": "24HH00",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "str08",
+      "taskId": "arg-0022.strengthen",
+      "snapshotHash": "0bec2ed71823e6bf39b0b7c7ef93d08fe167894fd93d1b9419acf59aae3d237e",
+      "answer": "Pell's Saturday market had also had flat sales for years before it moved, so Pell was where Ardley is now, which makes the same jump more likely."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "asm07",
+      "taskId": "arg-0019.assumption",
+      "snapshotHash": "cc89fe651806fcfd5f93965c013ac369a577eb54aafc55c16c28b1d793c9728d",
+      "answer": "The hidden assumption is that the two groups of farms had everything else in common over the last five years: same seed, same fertilizer, same irrigation, same weather, so that the cover crops were the only difference. That is the only way the 12 percent versus 3 percent comparison can be pinned on the cover crops."
+    }
+  ],
+  "selfGradeOnly": false
+}

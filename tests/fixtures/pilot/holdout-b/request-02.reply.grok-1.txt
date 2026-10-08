@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=44f8afbe-2d89-4791-ada7-8f22740b47fa
+I01: 0/2
+- Criterion 1: not met. The fact is about initial Spanish ability, but it runs the wrong way: streak holders starting as beginners while the other group had already studied Spanish would make the later score gap more, not less, attributable to the streaks.
+- Criterion 2: not met. The explanation treats any starting difference as unfair, but this difference does not make it more plausible that the later gap was already there before the streaks.
+- Tip: A weakener about starting ability has to put the eventual streak holders ahead at sign-up, or at least no further behind than they were later.
+I02: 2/2
+- Criterion 1: met. “The letter is written on Holt paper” is an unstated bridge that lets Holt’s 1801 mark date this sheet, not a restated premise or the conclusion.
+- Criterion 2: met. It is no stronger than needed: if this sheet was not Holt paper, Holt’s start date would not set a lower bound for it.
+- Tip: Keep necessary assumptions tied to this sheet, as you did, rather than to every papermaker who ever used a hare mark.
+I03: 1/1
+- Criterion 1: met. The sentence states the author’s recommendation that the society should not oppose converting the silo into apartments, not the intermediate preservation claim or the members’ view.
+- Tip: When a passage opens with the recommendation, that opening claim is usually the main conclusion even if a later sentence sounds conclusive.
+I04: 0/2
+- Criterion 1: not met. The ad concludes that streaks made learners better speakers; the answer says the ad assumes the reverse, so it does not correctly tie the error to this inference.
+- Criterion 2: not met. It then endorses the ad’s causal claim instead of naming an explanation the argument leaves open, such as better speakers finding streaks easier to keep.
+- Tip: State the author’s actual inference first, then name a rival explanation the premises do not rule out.
+END FEEDBACK
+
+BEGIN SCORES v2 request=44f8afbe-2d89-4791-ada7-8f22740b47fa
+I01 | 0/2 | misread-stimulus
+I02 | 2/2 | -
+I03 | 1/1 | -
+I04 | 0/2 | misread-stimulus
+END SCORES

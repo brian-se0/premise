@@ -1,0 +1,32 @@
+BEGIN FEEDBACK request=d1d72bb3-a7b7-4ba9-989a-ccbccf3c5c11
+I01: 2/2
+
+* Criterion 1: Met. The student identifies the shift from the drop in percentage missed (15% to 9%) to fewer missed appointments.
+* Criterion 2: Met. The student explains that because total bookings increased significantly, a smaller percentage can still equal or exceed the original number.
+* Tip: Keep using clear analogies to explain mathematical proportions concisely.
+
+I02: 1/2
+
+* Criterion 1: Met. The student gives a valid new fact that is consistent with the premises.
+* Criterion 2: Not met. The student does not explain how this fact undermines the column's conclusion.
+* Tip: Always include the full chain of reasoning showing how a new fact alters the final conclusion.
+
+I03: 2/2
+
+* Criterion 1: Met. The student clearly connects the error to the argument regarding the rise in attendance and grant renewal.
+* Criterion 2: Met. The student correctly explains that a rise in attendance is a necessary condition rather than a sufficient guarantee of renewal.
+* Tip: Excellent analysis of necessary versus sufficient conditions.
+
+I04: 0/2
+
+* Criterion 1: Not met. The student states the denial of the required assumption (that an alternative cause *does* account for the rise) rather than stating the assumption itself.
+* Criterion 2: Not met. Because the student presents a claim that refutes the argument rather than an assumption required to support it, the criterion fails.
+* Tip: Be careful to state the assumption that must be true for the argument to hold, rather than the alternative explanation that undermines it.
+END FEEDBACK
+
+BEGIN SCORES v2 request=d1d72bb3-a7b7-4ba9-989a-ccbccf3c5c11
+I01 | 2/2 | -
+I02 | 1/2 | incomplete
+I03 | 2/2 | -
+I04 | 0/2 | wrong-gap
+END SCORES

@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=a2f892e7-8a19-41cf-88cc-3c686c3e5d3d
+I01: 1/2
+- Criterion by criterion: met — the new fact (no other safety work on those eight streets) is consistent with the premises and rules out a local alternative the argument leaves open, so it makes the cameras a more likely cause of most of the drop. Not met — the answer states the fact but never explains why ruling out other safety changes makes it more likely that the cameras caused most of the decline.
+- Tip: After the new fact, add one sentence that says what rival explanation it blocks and why that leaves the cameras as the main cause.
+I02: 0/1
+- Criterion by criterion: not met — the answer states the opposite recommendation (newcomers should start with the Ardent recording) and treats the critics’ concession and the flawless playing as the author’s conclusion.
+- Tip: The main conclusion is the recommendation the reasons are offered to support; here that is that first-time listeners should begin with a different recording.
+I03: 1/2
+- Criterion by criterion: met — “not every restaurant that failed did so all four times,” with 400 failed inspections and only four inspections each, implies the failures cannot all sit in 100 restaurants, so more than one restaurant in ten was affected. Not met — the answer does not explain that arithmetic or why it undercuts the claim of only about one restaurant in ten.
+- Tip: Spell out how the fact spreads the same 400 failed inspections across clearly more than 100 restaurants.
+I04: 0/1
+- Criterion by criterion: not met — the answer treats the intermediate claim (the sales finding cannot be trusted) as the main conclusion and reverses the support relation; the author’s conclusion is that the council should not count the study in favor of the lanes.
+- Tip: Separate the claim the author wants accepted from the reason given for it; the council recommendation is the conclusion, not a premise.
+END FEEDBACK
+
+BEGIN SCORES v2 request=a2f892e7-8a19-41cf-88cc-3c686c3e5d3d
+I01 | 1/2 | incomplete
+I02 | 0/1 | misread-stimulus
+I03 | 1/2 | incomplete, understated
+I04 | 0/1 | premise-as-conclusion
+END SCORES

@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=99f69b08-6e6f-4707-b0f0-f51397a7dbf3
+I01: 2/2
+- Criterion 1 met: the answer ties the error to this argument by naming the dry-season water requirement that Kessel Ridge met and the conclusion that the ruins are probably a large settlement.
+- Criterion 2 met: it says the inference fails because necessary conditions do not make a large settlement likely unless sites with that water and soil tended to grow large, which the passage does not show.
+- Tip: Keep pairing the stated requirement with the claimed likelihood, and say what frequency evidence would be needed for “probably” to follow.
+I02: 0/1
+- Criterion 1 not met: the answer states the opposite recommendation, that newcomers should start with the Ardent recording, rather than that they should begin with a different one.
+- Tip: Separate the author’s final recommendation from concessions and from the critics’ view, and check that you have not reversed the advice.
+I03: 0/2
+- Criterion 1 not met: a larger population is a new fact, but it does not materially make a Thursday-evening sales rise more likely, because it does not show Ardley has the commuter shoppers who drove Pell’s increase or that current shoppers would be kept.
+- Criterion 2 not met: the explanation that sales should rise even more does not show why the move itself would raise Ardley’s sales.
+- Tip: Add a fact that transfers Pell’s mechanism (passers-by on the way home) or protects Ardley’s current shoppers, and say how that raises the chance of a sales increase.
+I04: 2/2
+- Criterion 1 met: tripling of monthly bookings is new, consistent with the lower miss rate and with “far more” bookings, and gives a real reason to doubt that fewer appointments are missed.
+- Criterion 2 met: it explains that 9 percent of a tripled total is 27 percent of the old total, above the old 15 percent miss share, so the number missed has risen.
+- Tip: When a rate falls but volume rises, compare the new rate times the new volume with the old rate times the old volume before accepting a claim about counts.
+END FEEDBACK
+
+BEGIN SCORES v2 request=99f69b08-6e6f-4707-b0f0-f51397a7dbf3
+I01 | 2/2 | -
+I02 | 0/1 | misread-stimulus
+I03 | 0/2 | irrelevant, incomplete
+I04 | 2/2 | -
+END SCORES

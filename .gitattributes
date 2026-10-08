@@ -1,1 +1,4 @@
 * text=auto eol=lf
+
+# Pilot replies are kept byte for byte as copied (docs/GRADING_PROTOCOL.md §9).
+tests/fixtures/pilot/**/*.reply.*.txt -text

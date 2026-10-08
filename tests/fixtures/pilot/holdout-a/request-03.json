@@ -1,0 +1,36 @@
+{
+  "id": "5eb00edc-eda9-4ebc-9894-4c2110360cb7",
+  "fence": "4WXFQS",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "wea12",
+      "taskId": "arg-0020.weaken",
+      "snapshotHash": "429a6fce8fbec4bed3b3686bbbe2a563881a42cf481795460c34643ebe4b188e",
+      "answer": "most of the streak people were high schoolers who were taking spanish class at school the whole year too, so they knew more spanish going in and kept getting taught on top of the app. thats why they scored higher not bc of the streak"
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "fla13",
+      "taskId": "arg-0020.flaw",
+      "snapshotHash": "14527d8e350cc40c01833387421f6f32ba61f7f9b784b82da1cc70eaacc525d1",
+      "answer": "The flaw is that Lingora is the one making the claim. It's an ad for their own app, so obviously they want their streak feature to look good, and you can't trust what a company says about its own product."
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "asm11",
+      "taskId": "arg-0024.assumption",
+      "snapshotHash": "171cfbdd8623334eeeb19ac30611bfcc9869bbc94d8990d2c5ae679cbf0e203e",
+      "answer": "the assumption is that turning the silo into apartments still keeps whatever makes it historically important, since the walls and the loading machinery stay. so the society shouldnt fight it"
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "con12",
+      "taskId": "arg-0024.conclusion",
+      "snapshotHash": "28724fcca95f57247818dd0ccba2b39264faabf11b3e2e1ac09516b27af9f98f",
+      "answer": "The author is arguing that the Varden Historical Society should actively support the apartment plan for the silo, since the conversion keeps the walls and loading machinery."
+    }
+  ],
+  "selfGradeOnly": false
+}

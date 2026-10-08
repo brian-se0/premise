@@ -1,0 +1,31 @@
+BEGIN FEEDBACK request=3662d56b-0760-465a-85f3-607348a79c62
+I01: 1/2
+
+* Fact criterion: met. The student provides a valid new fact (no other safety changes were made on those streets) that is not in the stimulus.
+* Explanation criterion: not met. The student simply states the fact without explaining how it strengthens the argument (i.e., by ruling out alternative explanations for the drop in crashes).
+* Tip: Always include an explicit explanation connecting your new fact back to the conclusion to show why it strengthens the argument.
+
+I02: 1/2
+
+* Inference/Error identification criterion: not met. The student offers an alternative cause without directly identifying the argument's flawed inference or tying it explicitly to the specific premise/conclusion.
+* Alternative cause criterion: met. The student suggests a plausible external alternative cause (nearby school reading challenges) that the argument leaves open.
+* Tip: Be sure to explicitly identify the argument's premise-to-conclusion inference before giving your alternative explanation.
+
+I03: 0/2
+
+* Inference identification criterion: not met. The student gives a generic, unapplied label without tying it to the museum's attendance rise or grant renewal.
+* Reason inference fails criterion: not met. Simply naming the formal fallacy without explaining how it applies to the specific facts does not earn credit.
+* Tip: Always explain how the logical error applies directly to the specific facts given in the stimulus rather than just providing a name or label.
+
+I04: 0/1
+
+* Main conclusion criterion: not met. The student incorrectly states that the author concludes the council should vote against the bike lanes, whereas the author explicitly leaves the final decision open and only argues against using the study.
+* Tip: Pay close attention to concessions where the author explicitly leaves a decision open rather than taking an opposing stance.
+END FEEDBACK
+
+BEGIN SCORES v2 request=3662d56b-0760-465a-85f3-607348a79c62
+I01 | 1/2 | incomplete
+I02 | 1/2 | incomplete
+I03 | 0/2 | no-reasoning
+I04 | 0/1 | overstated, misread-stimulus
+END SCORES

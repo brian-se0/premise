@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=a525ee24-445d-400d-b8d8-4551f583620c
+I01: 0/2
+- Criterion 1 not met: the claimed fact says a component took almost a full second when run on its own, which denies the premise that every component finished in under half a second in those tests.
+- Criterion 2 not met: the explanation depends on that denied premise, so it does not show why the whole screen could still miss the limit if each component was fast alone.
+- Tip: Keep every stated test result true and weaken the leap from separate component times to the full screen.
+I02: 0/2
+- Criterion 1 not met: steady teenage borrowing at the other seven branches is already given in the stimulus, so it is not a new fact.
+- Criterion 2 not met: the control-group explanation only restates a premise the argument already uses, rather than adding a further reason the hours caused the rise.
+- Tip: Add a fact the stimulus does not already state, such as borrowing happening after 6 p.m. or no earlier upward trend.
+I03: 1/2
+- Criterion 1 met: a public auditor report already stating the same knowledge and six-month delay is consistent with the premises and gives a real other way to learn of the wrongdoing.
+- Criterion 2 not met: the answer correctly says the “no other way” condition fails, but then infers that the code therefore forbids publishing, which the rule does not say.
+- Tip: Stop at why a condition of the “publish whenever” rule is not met; do not treat non-application as a ban.
+I04: 1/2
+- Criterion 1 met: concentrating the drop on blocks in camera range, with little change outside that range on the same streets, is a new fact that makes the cameras a likelier cause.
+- Criterion 2 not met: saying it “helps the council’s case” does not explain why a local drop, rather than a streetwide one, ties the decline to the cameras.
+- Tip: Spell out the link, for example that an effect limited to camera range is what the cameras would produce and a streetwide change would not.
+END FEEDBACK
+
+BEGIN SCORES v2 request=a525ee24-445d-400d-b8d8-4551f583620c
+I01 | 0/2 | contradicts-premise
+I02 | 0/2 | misread-stimulus
+I03 | 1/2 | misread-stimulus
+I04 | 1/2 | no-reasoning
+END SCORES

@@ -1,0 +1,18 @@
+BEGIN FEEDBACK request=6667e0ad-d733-4433-b855-30341b20fb03
+I01: 2/2
+
+* Criterion 1: Met. The student provides a new, plausible fact (that Pell's Saturday market also had flat sales prior to its move) that makes the situation in Pell comparable to Ardley.
+* Criterion 2: Met. The student explicitly explains that establishing this similarity ("Pell was where Ardley is now") makes a similar increase in sales for Ardley more likely.
+* Tip: Keep up the clear link between the new evidence and how it directly strengthens the conclusion.
+
+I02: 1/2
+
+* Criterion 1: Met. The student identifies an unstated claim regarding alternative factors (seed, fertilizer, weather, etc.) rather than repeating a stated premise or conclusion.
+* Criterion 2: Not met. The response overstates the required assumption by demanding that cover crops were the "only difference" and that the two groups had "everything else in common," which is stronger than necessary for the argument to hold.
+* Tip: State assumptions narrowly so they require only that alternative factors do not explain the entire difference, rather than ruling out all other differences entirely.
+END FEEDBACK
+
+BEGIN SCORES v2 request=6667e0ad-d733-4433-b855-30341b20fb03
+I01 | 2/2 | -
+I02 | 1/2 | overstated
+END SCORES

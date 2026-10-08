@@ -1,0 +1,36 @@
+{
+  "id": "df19cff8-1f96-42e6-b7ff-7f7c4666abc9",
+  "fence": "9WWP2T",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "str02",
+      "taskId": "arg-0009.strengthen",
+      "snapshotHash": "c4e2f22e01051fd00f4d594415863cbffa3d057ffbab2b1c76cd2565b789d696",
+      "answer": "i think a good one would be that most of the extra books were checked out by teens who have jobs or sports after school and basically couldnt get to the library before 6. so the new hours are literally what let them borrow at all, which makes it way more likely the hours are what caused the jump."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "con08",
+      "taskId": "arg-0017.conclusion",
+      "snapshotHash": "d329e18d41fb8f8fe4e4a00941e9230388300b6eddbeb14f5275fa1bba5250e7",
+      "answer": "that the study shouldnt be trusted as evidence for the bike lanes"
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "str01",
+      "taskId": "arg-0009.strengthen",
+      "snapshotHash": "c4e2f22e01051fd00f4d594415863cbffa3d057ffbab2b1c76cd2565b789d696",
+      "answer": "At the seven branches that kept closing at 6, teenage borrowing stayed flat over the same year. Those branches work like a control group, so this shows it was the extra hours, not something else, that made the difference."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "fla06",
+      "taskId": "arg-0014.flaw",
+      "snapshotHash": "36296f9521eec33093f3ecda7bdb75c11597725022bf33ec4409c3c8de1bf63c",
+      "answer": "The director goes from the share missed dropping (15% to 9%) to fewer missed appointments, but bookings went way up, and a smaller slice of a much bigger pie can be just as big or bigger."
+    }
+  ],
+  "selfGradeOnly": false
+}

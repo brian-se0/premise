@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=3662d56b-0760-465a-85f3-607348a79c62
+I01: 1/2
+- Criterion 1 met: the claim that those eight streets got no other safety changes (lights, bumps, crosswalks, lower limits) is a new fact the premises do not already state, and it makes the cameras a more likely cause of most of the crash drop by closing off concurrent local safety work.
+- Criterion 2 not met: the answer states the fact and stops; it never says why that fact makes it more likely the cameras caused most of the decline.
+- Tip: After the new fact, add one sentence that says how it blocks an open alternative or shows the camera mechanism.
+I02: 1/2
+- Criterion 1 not met: the answer never names the director’s move from the rise in teenage borrowing at the five later-hour branches to the claim that the longer hours caused that rise.
+- Criterion 2 met: a reading challenge or heavier school assignments near only those five branches is an open alternative the stimulus does not rule out, and it could raise checkouts without the hours change.
+- Tip: State the faulty inference in one clause, then name the unruled-out cause that shows why it fails.
+I03: 0/2
+- Criterion 1 not met: the label never ties the error to this argument’s move from the museum’s 8 percent attendance rise to the assurance that the grant will be renewed.
+- Criterion 2 not met: “necessary vs. sufficient” is only a bare label; it is not applied to the policy, so it does not say the rise is required but not enough and the council could still refuse for another reason.
+- Tip: Apply the label in one sentence to the attendance condition and the renewal conclusion, and say the council could still say no.
+I04: 0/1
+- Criterion 1 not met: the answer makes the conclusion a vote against building the Harbor Street lanes, which the author leaves open; the main conclusion is only that the council should not count the cited study in the lanes’ favor.
+- Tip: Separate the recommendation about how to treat the study from any decision about whether to build the lanes.
+END FEEDBACK
+
+BEGIN SCORES v2 request=3662d56b-0760-465a-85f3-607348a79c62
+I01 | 1/2 | incomplete
+I02 | 1/2 | incomplete
+I03 | 0/2 | incomplete
+I04 | 0/1 | overstated
+END SCORES

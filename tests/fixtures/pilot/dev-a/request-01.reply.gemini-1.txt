@@ -1,0 +1,43 @@
+BEGIN FEEDBACK request=72e77090-69d3-452b-9a19-047a210ece12
+I01: 0/2
+
+* Criterion by criterion:
+* Criterion 1 (not met): The student's answer simply restates the conclusion of the argument rather than providing a distinct unstated claim; this triggers the disqualifier.
+* Criterion 2 (not met): Because no distinct unstated assumption was provided, the requirement of not overstating the assumption is not met.
+
+
+* Tip: Make sure to identify an unstated underlying assumption rather than summarizing or restating the argument's conclusion.
+
+I02: 2/2
+
+* Criterion by criterion:
+* Criterion 1 (met): Correctly identifies an unstated claim that links the recovery on the three islands to the goats' removal (that removing goats was at least part of the reason for recovery).
+* Criterion 2 (met): States the assumption at the appropriate necessary strength without overstating it.
+
+
+* Tip: Keep up the great work in clearly framing necessary assumptions.
+
+I03: 0/1
+
+* Criterion by criterion:
+* Criterion 1 (not met): Incorrectly identifies the main conclusion as a recommendation that the council vote against building the bike lanes, whereas the author explicitly leaves the decision open and only concludes that the study should not be counted.
+
+
+* Tip: Be careful not to attribute a stronger recommendation to the author than what is actually stated in the text.
+
+I04: 1/2
+
+* Criterion by criterion:
+* Criterion 1 (not met): Does not explicitly describe the argument's inference or tie the error to the structure of concluding causation from the observed timing/correlation.
+* Criterion 2 (met): Successfully identifies a plausible alternative cause (nearby schools starting reading challenges or assigning more books) that is not ruled out by the stimulus.
+
+
+* Tip: Always clearly state the argument's causal error itself in addition to proposing an alternative explanation.
+END FEEDBACK
+
+BEGIN SCORES v2 request=72e77090-69d3-452b-9a19-047a210ece12
+I01 | 0/2 | restates-conclusion
+I02 | 2/2 | -
+I03 | 0/1 | overstated
+I04 | 1/2 | incomplete
+END SCORES

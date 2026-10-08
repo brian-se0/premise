@@ -1,0 +1,26 @@
+BEGIN FEEDBACK request=4f33402e-ab9f-48ee-be5c-3c89b5eb4aa2
+I01: 1/2
+
+* Criterion 1: met — identifies the shift from one in ten inspections finding violations to one in ten restaurants being found with violations.
+* Criterion 2: not met — notes that the shares need not match because each restaurant was inspected four times, but does not explain that failures could be spread across more restaurants, potentially up to four in ten.
+* Tip: When identifying a mismatch between two percentages, explain the mechanism that makes the second percentage potentially higher or lower.
+  I02: 1/2
+* Criterion 1: met — the stability of bag use in nearby towns without a fee is a new fact that supports the fee as the cause of Brannock's decline.
+* Criterion 2: not met — the answer does not explain that the comparison makes it less likely that some other cause produced the 80% decline in Brannock.
+* Tip: After giving a comparison fact, explicitly state what alternative explanation that comparison makes less likely.
+  I03: 2/2
+* Criterion 1: met — the fire marshal's approval provides a plausible justification for delaying repairs, creating doubt that the delay was wrongdoing.
+* Criterion 2: met — explains that this makes the editor's claim that the memo reveals wrongdoing weaker under the code.
+* Tip: For a weakening fact, connect it directly to one of the conditions the argument's rule requires.
+  I04: 0/2
+* Criterion 1: not met — the fact that recovery began only with a replanting program points toward an alternative explanation rather than making goat removal more likely to cause recovery.
+* Criterion 2: not met — the explanation incorrectly says the timing ties recovery to goat removal, even though the simultaneous replanting program weakens that causal connection.
+* Tip: Check whether your new fact rules out an alternative cause rather than introducing or strengthening one.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=4f33402e-ab9f-48ee-be5c-3c89b5eb4aa2
+I01 | 1/2 | incomplete
+I02 | 1/2 | incomplete
+I03 | 2/2 | -
+I04 | 0/2 | irrelevant
+END SCORES

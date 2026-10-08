@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=df19cff8-1f96-42e6-b7ff-7f7c4666abc9
+I01: 2/2
+
+* Criterion 1: met — gives a new fact that teens with jobs or sports could not reach the library before 6.
+* Criterion 2: met — explains that the added hours enabled those teens to borrow, directly linking the rise to the longer hours.
+* Tip: When strengthening a causal argument, connect the new outcome directly to the proposed cause or rule out a plausible alternative.
+  I02: 0/1
+* Criterion 1: not met — says the study should not be trusted, which is the intermediate claim supporting the main conclusion; the main conclusion is that the council should not count the study in favor of the bike lanes.
+* Tip: Distinguish the author's recommendation from the reason given for that recommendation.
+  I03: 2/2
+* Criterion 1: met — gives a new fact that borrowing stayed flat at the seven branches that did not get longer hours.
+* Criterion 2: met — correctly explains that the other branches provide a comparison suggesting the extra hours, rather than a broader change, caused the increase.
+* Tip: A comparison group can strengthen a causal argument by showing that the outcome changed where the proposed cause was introduced but not elsewhere.
+  I04: 2/2
+* Criterion 1: met — identifies the move from a lower percentage of missed appointments to the conclusion that fewer appointments were missed.
+* Criterion 2: met — explains that far more total bookings mean 9% of the larger total could equal or exceed 15% of the old total.
+* Tip: Whenever an argument shifts from a percentage or rate to an absolute number, check whether the underlying total has changed.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=df19cff8-1f96-42e6-b7ff-7f7c4666abc9
+I01 | 2/2 | -
+I02 | 0/1 | premise-as-conclusion
+I03 | 2/2 | -
+I04 | 2/2 | -
+END SCORES

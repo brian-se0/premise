@@ -1,0 +1,32 @@
+BEGIN FEEDBACK request=d1d72bb3-a7b7-4ba9-989a-ccbccf3c5c11
+I01: 2/2
+
+* Criterion 1: met — identifies the move from a 15% to 9% missed-appointment share to the conclusion that fewer appointments were missed.
+* Criterion 2: met — explains that bookings increased substantially, so 9% of a much larger total can be as large or larger than 15% of the old total.
+* Tip: When a percentage falls, always check whether the underlying total changed before concluding that the absolute number fell.
+
+I02: 0/2
+
+* Criterion 1: not met — saying not every restaurant failed all four times does not establish that the 400 failed inspections were spread across clearly more than 100 restaurants; the failures could still be concentrated in relatively few restaurants.
+* Criterion 2: not met — the answer does not explain why the fact would make violations occur at more than one restaurant in ten.
+* Tip: Give a fact that specifically forces the failures to be distributed across many different restaurants, and explain how that distribution weakens the conclusion.
+
+I03: 2/2
+
+* Criterion 1: met — correctly identifies the inference from the required attendance increase to guaranteed grant renewal.
+* Criterion 2: met — clearly explains that the attendance increase is necessary but not sufficient, so the council could refuse for another reason; the conditional-direction explanation is also correct.
+* Tip: When a policy says something happens only if a condition holds, treat that condition as necessary, not automatically sufficient.
+
+I04: 0/2
+
+* Criterion 1: not met — the answer describes another change as accounting for all the extra rise, but presents that as something the adviser is assuming rather than the needed assumption that no such alternative fully explains the rise.
+* Criterion 2: not met — the proposed claim points in the opposite direction from the necessary bridge: if another change fully explained the extra rise, the cover-crop conclusion would be undermined.
+* Tip: For a necessary-assumption question, state the claim whose falsity would destroy the conclusion, such as “no other change fully explains the adopters’ extra yield increase.”
+  END FEEDBACK
+
+BEGIN SCORES v2 request=d1d72bb3-a7b7-4ba9-989a-ccbccf3c5c11
+I01 | 2/2 | -
+I02 | 0/2 | incomplete
+I03 | 2/2 | -
+I04 | 0/2 | wrong-gap, missed-alternative
+END SCORES

@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=55f04aa4-b163-4c36-853f-5b0619212bb8
+I01: 1/1
+- Main conclusion identified: met. The student states that first-time listeners should not begin with the Ardent recording and should pick a different one. This matches the reference and is neither the intermediate claim nor the critics' view.
+- Tip: Keep separating the final recommendation from the claims that support it, as you did here.
+I02: 0/2
+- States an unstated claim linking the granted distortion to the recommendation: not met. The student's assumption, that newcomers can get a recording played at exactly Beethoven's marked tempos, does not bridge from "distorted" to "start elsewhere". It is also about tempo markings rather than whether a less distorting recording exists or whether distortion matters.
+- States it no more strongly than needed: not met. Requiring a recording that follows the markings exactly is the overstated version the task says to reject, since the argument only needs some recording that distorts less.
+- Tip: Ask what minimal claim makes the recommendation follow from the distortion, such as "at least one other recording distorts less", and avoid requiring perfection.
+I03: 2/2
+- New fact about the eight streets in the years before installation that gives real reason to doubt the cameras caused most of the decline: met. The fact is that the year before installation had 66 crashes against a prior average of about 40, and it is consistent with every premise.
+- Explains how it weakens the argument: met. The student says an unusually high year is unlikely to repeat, so crashes would have fallen back toward normal without cameras, accounting for a good chunk of the 40 percent drop.
+- Tip: Your fact-plus-mechanism structure is exactly what earns full credit, so keep doing it.
+I04: 0/2
+- New fact consistent with the premises: not met. The student says the arrival-time component took almost a full second when run on its own on an older supported phone. That contradicts the premise that every component, run on its own on every supported phone, finished in under half a second, which is a disqualifier.
+- Explains how it weakens the argument: not met. The reasoning is sound only if the premise is denied, and the explanation therefore does not work under the stated premises.
+- Tip: Check each new fact against the stated premises, and look for ways the whole screen can be slow even when each part is fast, such as parts updating in sequence or waiting on one another.
+END FEEDBACK
+
+BEGIN SCORES v2 request=55f04aa4-b163-4c36-853f-5b0619212bb8
+I01 | 1/1 | -
+I02 | 0/2 | overstated, wrong-gap
+I03 | 2/2 | -
+I04 | 0/2 | contradicts-premise
+END SCORES

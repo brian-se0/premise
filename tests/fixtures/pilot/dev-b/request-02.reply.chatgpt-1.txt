@@ -1,0 +1,26 @@
+BEGIN FEEDBACK request=f6f30331-2fe2-4993-99ef-725a8574db64
+I01: 0/2
+
+* Criterion 1: Not met; the answer focuses on patients who cannot get booked, rather than the fall in the share of booked appointments missed and the conclusion about the number missed.
+* Criterion 2: Not met; it does not address that far more bookings can make 9% of the new total as large as or larger than 15% of the old total.
+* Tip: Compare the percentages with the total number of bookings before and after the change, not with patients who were never booked.
+  I02: 2/2
+* Criterion 1: Met; it identifies an unstated link between the drop in photographs and the lynx population by considering lynx moving into areas without cameras.
+* Criterion 2: Met; it appropriately limits the assumption to a change large enough to account for the photographic drop, rather than requiring that lynx movements never changed at all.
+* Tip: For necessary-assumption questions, state the alternative explanation that would have to be large enough to account for the evidence by itself.
+  I03: 2/2
+* Criterion 1: Met; it identifies a distinct survey-selection explanation that could account for the higher ratings without increased satisfaction from the script.
+* Criterion 2: Met; it says the unhappy customers would have to leave before receiving the survey, so the alternative would need to account for the observed rise rather than requiring identical respondents.
+* Tip: Focus on whether a change in who supplies the evidence could fully explain the observed improvement.
+  I04: 0/2
+* Criterion 1: Not met; a 50% increase in bookings is not enough to materially weaken the conclusion, because 9% of 600 is 54, which is less than 15% of 400, or 60.
+* Criterion 2: Not met; the calculation actually shows fewer missed appointments, contrary to the claimed weakening.
+* Tip: Check the two percentage calculations before concluding that a new fact weakens the argument; the new total must be at least large enough to offset the lower percentage.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=f6f30331-2fe2-4993-99ef-725a8574db64
+I01 | 0/2 | misread-stimulus
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 0/2 | incomplete
+END SCORES

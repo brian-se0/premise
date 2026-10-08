@@ -1,0 +1,36 @@
+{
+  "id": "bb129f9d-fc94-4168-b1bc-076018e12ba0",
+  "fence": "VWYMXR",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "fla04",
+      "taskId": "arg-0011.flaw",
+      "snapshotHash": "c27186b0b32050ef2ed66267e92491b495fdb3cebbd513f3d46eaeaf75653662",
+      "answer": "ok so the argument is basically big settlements needed a reliable water source in the dry season, kessel ridge had one, so the ruins were probably a big settlement. but a lot of places with springs and good soil couldve just stayed small villages, so meeting the water requirement doesnt mean it was big."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "con02",
+      "taskId": "arg-0013.conclusion",
+      "snapshotHash": "837020b094efbf9c46f24efe2af1c0481bea3118fbebf395c43c7f33dfd33593",
+      "answer": "If you're new to Beethoven's late quartets, you should start with some recording other than the Ardent Quartet's. That's the conclusion, and the rest backs it up: the playing is flawless, but the slow movements are taken much faster than marked, and since those movements carry the emotional weight, a first-timer would get a distorted picture. The pop band thing is the critics' argument, which the author actually throws out."
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "fla07",
+      "taskId": "arg-0021.flaw",
+      "snapshotHash": "ec841b58e2a745d8cc3f643f981ea47b57ac40989e2ccc25a16f0df8d99439de",
+      "answer": "The policy says a grant is renewed only if attendance rose, so a rise is something the museum needs, not something that guarantees renewal. The director treats it as a guarantee, but nothing in the policy stops the council from refusing on other grounds, say budget cuts or a poor review. As an if-then, the policy is \"renewed → attendance rose\", and the director is reading it backwards as \"attendance rose → renewed\". Side note: having the biggest rise in the city doesn't help either, since the policy only cares whether attendance rose, not by how much."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "fla05",
+      "taskId": "arg-0014.flaw",
+      "snapshotHash": "36296f9521eec33093f3ecda7bdb75c11597725022bf33ec4409c3c8de1bf63c",
+      "answer": "the real problem is the director only counts ppl who actually got booked. if the evening slots are that popular theyre probably full, so lots of patients who need care cant get in at all and they dont show up in the numbers anywhere"
+    }
+  ],
+  "selfGradeOnly": false
+}

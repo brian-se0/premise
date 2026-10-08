@@ -1,0 +1,32 @@
+BEGIN FEEDBACK request=d4348993-ca70-4dee-9b04-b5ccdf025dcd
+I01: 1/2
+
+* [1 pt] Met: The answer states an unstated claim (tempos matching Beethoven's markings) that links the distortion to the recommendation.
+* [1 pt] Not met: The answer is too strong by requiring an exact match to Beethoven's marked tempos rather than simply a less distorted recording.
+* Tip: Aim for the minimal assumption needed to support the argument rather than requiring an ideal or exact match.
+
+I02: 2/2
+
+* [1 pt] Met: Gives a new relevant fact showing Pell had flat sales prior to the move, making it relevantly similar to Ardley.
+* [1 pt] Met: Explains that this similarity makes a similar jump in sales more likely for Ardley.
+* Tip: Keep providing both the relevant new fact and a clear explanation of how it impacts the argument.
+
+I03: 2/2
+
+* [1 pt] Met: States the unstated assumption that the removal of goats contributed to the saltbush recovery on the three islands.
+* [1 pt] Met: States the claim no more strongly than needed, explaining that if another factor caused all of the recovery, the conclusion would fail.
+* Tip: Great job articulating why the argument relies on this necessary link without overstating the condition.
+
+I04: 1/2
+
+* [1 pt] Met: Provides a valid pre-installation fact (a preexisting downward trend in crashes on those streets).
+* [1 pt] Not met: Does not explain how this fact weakens the conclusion (i.e., that the decline might have continued regardless of the cameras).
+* Tip: Always explicitly explain the logical link showing how your new fact weakens or undermines the argument's conclusion.
+END FEEDBACK
+
+BEGIN SCORES v2 request=d4348993-ca70-4dee-9b04-b5ccdf025dcd
+I01 | 1/2 | overstated
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 1/2 | no-reasoning
+END SCORES

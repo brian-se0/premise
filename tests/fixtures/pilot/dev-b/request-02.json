@@ -1,0 +1,36 @@
+{
+  "id": "f6f30331-2fe2-4993-99ef-725a8574db64",
+  "fence": "ZBHDYM",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "fla05",
+      "taskId": "arg-0014.flaw",
+      "snapshotHash": "36296f9521eec33093f3ecda7bdb75c11597725022bf33ec4409c3c8de1bf63c",
+      "answer": "the real problem is the director only counts ppl who actually got booked. if the evening slots are that popular theyre probably full, so lots of patients who need care cant get in at all and they dont show up in the numbers anywhere"
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "asm09",
+      "taskId": "arg-0023.assumption",
+      "snapshotHash": "11ee666fa05b933dabb57e11cf05585c4b249a47905d62d898693769076d2a35",
+      "answer": "It assumes the lynx didn't shift their ranges into parts of Corrin Forest that have no cameras by so much that this alone could cut the photos from 120 to 58. If they had, the drop would reflect where the lynx go, not how many there are."
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "asm01",
+      "taskId": "arg-0010.assumption",
+      "snapshotHash": "855af9b8f30409549fc0f33b47076693014f6b62bf061fe789ddaee89bcc12b2",
+      "answer": "i think it assumes the ratings went up because people were actually happier with the help they got, and not because the unhappy customers quit the chat before the end so they never got the survey"
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "wea03",
+      "taskId": "arg-0014.weaken",
+      "snapshotHash": "77f5b9f14cbed520161efbebe6390832360aa78008339acceb1274aa1eaa3636",
+      "answer": "Since the evening hours started, monthly bookings have gone up by about half, from around 400 to 600. A smaller share of a bigger total can still be a bigger number: 9 percent of 600 is 54 missed appointments, compared with 15 percent of 400, which is 60. So the clinic is actually missing more appointments now than before, which weakens the director's conclusion."
+    }
+  ],
+  "selfGradeOnly": false
+}

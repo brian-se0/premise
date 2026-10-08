@@ -1,0 +1,36 @@
+{
+  "id": "4f33402e-ab9f-48ee-be5c-3c89b5eb4aa2",
+  "fence": "Q70Z7E",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "fla10",
+      "taskId": "arg-0025.flaw",
+      "snapshotHash": "360bdc48b2eda1e8e624434e61911d327ff82e4d3c7334bbf5b006d3512394c2",
+      "answer": "i think theyre mixing up inspections and restaurants. 1 in 10 inspections found a violation but thats not the same as 1 in 10 restaurants since every restaurant got checked 4 times, so the two numbers dont have to be the same"
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "str10",
+      "taskId": "arg-0026.strengthen",
+      "snapshotHash": "66ac558852bdbb84f94276160fe20732fdfa69d07be6cf0278c54c7d8920084e",
+      "answer": "the towns right next to brannock that dont have a bag fee are still handing out about the same number of bags as before"
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "wea10",
+      "taskId": "arg-0028.weaken",
+      "snapshotHash": "2d88e386587d83e88a80d98c0b440d313024ef3bcb0adff521f4678ccd7f62ec",
+      "answer": "The county fire marshal inspected the alarms back in the fall and approved, in writing, the district's plan to hold off on repairs until the replacement system it had already ordered arrived."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "str06",
+      "taskId": "arg-0015.strengthen",
+      "snapshotHash": "bd4b45d1c7b55e2d69d5f8d83f40b25d9ffc78a5cae38ee80bc717eb717e7496",
+      "answer": "On the three goat-free islands, the saltbush only started coming back about fifteen years after the goats were taken off, in the same year a replanting program started there. This ties the recovery to the goats' removal, so it makes it more likely that removing the goats from the other four would work too."
+    }
+  ],
+  "selfGradeOnly": false
+}

@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=64c66b35-06ea-44f3-a78e-bcd7e7ed658b
+I01: 0/2
+- Criterion by criterion: not met — the claim is only a restatement of the conclusion that saltbush would recover if goats were removed, not a distinct unstated link. not met — because it restates the conclusion, it does not state a necessary assumption at the right strength.
+- Tip: Name an unstated claim whose denial would block recovery even if every stated premise stayed true, rather than repeating what the argument concludes.
+I02: 1/1
+- Criterion by criterion: met — the answer identifies the recommendation that newcomers start with a recording other than the Ardent Quartet’s, and treats the tempo and distortion points as support.
+- Tip: Keep the one-sentence conclusion separate from the reasons that back it, as you did here.
+I03: 0/1
+- Criterion by criterion: not met — the answer treats the intermediate claim that the sales finding cannot be trusted as the main conclusion, and mislabels the council recommendation as a reason for that claim.
+- Tip: Check which sentence the other claims are offered to support; that supported recommendation is the main conclusion.
+I04: 2/2
+- Criterion by criterion: met — it ties the error to crediting the later hours for the 30 percent rise at the five branches. met — it explains the failure by an open alternative: teens at the chosen branches may already have been becoming more interested, so borrowing could have risen without the hour change.
+- Tip: When you name a selection bias, spell out the alternative cause it leaves open, as you did with rising interest.
+END FEEDBACK
+
+BEGIN SCORES v2 request=64c66b35-06ea-44f3-a78e-bcd7e7ed658b
+I01 | 0/2 | restates-conclusion
+I02 | 1/1 | -
+I03 | 0/1 | premise-as-conclusion
+I04 | 2/2 | -
+END SCORES

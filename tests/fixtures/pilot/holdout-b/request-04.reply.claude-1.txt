@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=053afdfe-4a4a-4494-8fdf-75eecf2b09af
+I01: 0/2
+- Criterion 1: Not met. The student's "assumption" is the argument's own intermediate conclusion (that the conversion keeps whatever makes the silo historically important), supported by the stated premise about the walls and machinery. It is not a distinct unstated claim, so the disqualifier applies.
+- Criterion 2: Not met. Since no distinct assumption is given, there is nothing to judge for strength.
+- Tip: Look for the missing link between the premises and the intermediate conclusion (for example, that what the conversion removes is not essential), rather than repeating the intermediate conclusion.
+I02: 2/2
+- Criterion 1: Met. It ties the error to the streak holders' higher speaking scores and the ad's claim that the streak made them better.
+- Criterion 2: Met. It names an open alternative (a Spanish-speaking roommate or partner who gives both a reason to use the app daily and real conversation practice), which the stimulus does not rule out.
+- Tip: Keep naming a specific alternative explanation, as you did here, when you point out a causal leap.
+I03: 1/2
+- Criterion 1: Met. The new fact (no paper came from outside the region before 1801, so all of it came from Holt) is consistent with the premises and makes a date of 1801 or later more likely.
+- Criterion 2: Not met. The student does not explain how the fact helps. The missing step is that Holt used no hare mark before 1801, so a hare-marked letter must be from 1801 or later.
+- Tip: After stating your new fact, add a "because" sentence connecting it to the conclusion.
+I04: 0/2
+- Criterion 1: Not met. The fact that the streak holders were taking Spanish class at school contradicts the premise that no one in either group was taking classes or lessons outside the app. This triggers the disqualifier.
+- Criterion 2: Not met. The disqualifier applies, so the explanation earns no credit, though it is on the right track about the streak holders starting with more Spanish.
+- Tip: Check any new fact against every stated premise, and use something like "the streak holders already spoke better at sign-up" that doesn't bring in outside instruction.
+END FEEDBACK
+
+BEGIN SCORES v2 request=053afdfe-4a4a-4494-8fdf-75eecf2b09af
+I01 | 0/2 | restates-conclusion
+I02 | 2/2 | -
+I03 | 1/2 | incomplete
+I04 | 0/2 | contradicts-premise
+END SCORES

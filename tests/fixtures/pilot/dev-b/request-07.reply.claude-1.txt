@@ -1,0 +1,23 @@
+BEGIN FEEDBACK request=30fc6ab2-6f09-411c-aa60-6287c5346d20
+I01: 1/2
+- Criterion 1 (ties the error to this argument): Met. The answer names the jump from one inspection in ten finding a violation to one restaurant in ten having one.
+- Criterion 2 (says why the inference fails): Not met. The answer notes that each restaurant was inspected four times, but it draws the conclusion in the wrong direction. It says the share of restaurants could be lower than one in ten. In fact at least 100 restaurants (one in ten) must account for 400 failed inspections, so the share could be as high as four in ten but cannot be lower than one in ten. It never says the failures could be spread across more restaurants.
+- Tip: Test the direction by asking how many restaurants could have produced 400 failed inspections at four inspections each, then state the range (at least 100, up to 400).
+I02: 1/1
+- Criterion 1 (main conclusion): Met. The answer says the council should give no weight to the bike-industry-funded study on the "yes" side whatever happens with the lanes. That matches the main conclusion and avoids the intermediate claim about trust and the recommendation against building.
+- Tip: Keep stating the recommendation the author actually makes rather than the reason for it.
+I03: 0/1
+- Criterion 1 (main conclusion): Not met. The answer gives "the recording is a poor one", which overstates the author's view and is closer to the critics' dismissal. It also rests on the intermediate claim about rushed slow movements. The author's actual conclusion is the recommendation that newcomers should begin with a different recording. The author explicitly says the playing is technically flawless and that dismissing the recording is not warranted.
+- Tip: Look for the recommendation the author builds toward, often signaled by "Still, I would not..." or "should", and give that rather than a general verdict.
+I04: 2/2
+- Criterion 1 (new fact, consistent with premises): Met. The fact is that when all forty components run together they compete for the processor and memory and each runs about four times slower. This is consistent with each component passing alone in the standard tests, and it is not stated in the premises. It gives material reason to doubt that the whole screen finishes in half a second.
+- Criterion 2 (explains how it weakens): Met. The answer works through the numbers: the map takes 0.3 seconds alone, so about 1.2 seconds under load, and the screen isn't done until the map is. That is more than twice the limit even though every piece passed separately.
+- Tip: This is a strong answer; keep pairing a concrete fact with a worked explanation of why the whole exceeds the sum of its tested parts.
+END FEEDBACK
+
+BEGIN SCORES v2 request=30fc6ab2-6f09-411c-aa60-6287c5346d20
+I01 | 1/2 | wrong-gap
+I02 | 1/1 | -
+I03 | 0/1 | counterpoint-as-conclusion, premise-as-conclusion
+I04 | 2/2 | -
+END SCORES

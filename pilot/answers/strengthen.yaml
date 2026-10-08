@@ -1,0 +1,215 @@
+# Grading-check answer set: strengthen (docs/GRADING_PROTOCOL.md §9). Written by Claude in a student's voice on
+# 2026-10-06; `gold` is Claude's score, fixed before the second scorer started (digest of [id, task, answer, gold]
+# over all five files, as `npm run pilot:score` prints it: ae78dd71f7ef4b8824d9919aba1fcc4b2e0f1de6a5f551b5db0db87744aeb59f).
+# `second` is the blind score of an independent Claude Opus 5.5 session at maximum effort (pilot/second-scores.yaml).
+# `acceptable` marks an answer where a scorer recorded another score as defensible under the key; `settlement` says why.
+# `type` is the §9 answer type; `why` is Claude's reasoning for `gold`. Held-out answers: arg-0020, arg-0024, arg-0027.
+- id: str01
+  task: arg-0009.strengthen
+  holdout: false
+  type: confidently-wrong
+  answer: >-
+    At the seven branches that kept closing at 6, teenage borrowing stayed flat over the same year. Those
+    branches work like a control group, so this shows it was the extra hours, not something else, that made
+    the difference.
+  gold: 0
+  second: 0
+  acceptable: [ 0, 1 ]
+  settlement: >-
+    Both scorers gave 0; the second scorer names 1 as defensible: under "apply each rubric criterion
+    separately" a grader could credit the control-group explanation even though the fact is a restated
+    premise.
+  why: >-
+    A restated premise offered as new: the stimulus already says teenage borrowing at the other seven branches
+    held steady, and the accept text says the steady borrowing at other branches is not new, so criterion 1
+    fails and the explanation has no new fact to explain.
+- id: str02
+  task: arg-0009.strengthen
+  holdout: false
+  type: reference-like
+  answer: >-
+    i think a good one would be that most of the extra books were checked out by teens who have jobs or sports
+    after school and basically couldnt get to the library before 6. so the new hours are literally what let
+    them borrow at all, which makes it way more likely the hours are what caused the jump.
+  gold: 2
+  second: 2
+  why: >-
+    Criterion 1 met: a new fact, consistent with the premises, tying the extra borrowing to teenagers who
+    could only come in the added hours. Criterion 2 met: it says why this points to the hours as the cause
+    (they are what made borrowing possible for these teenagers).
+- id: str03
+  task: arg-0012.strengthen
+  holdout: false
+  type: partial
+  answer: >-
+    In the two years since the cameras went in, the city made no other safety changes on those eight streets:
+    no new traffic lights, speed bumps, crosswalks or lower speed limits.
+  gold: 1
+  second: 1
+  why: >-
+    Criterion 1 met: no other safety work on those streets is a new fact that removes a rival the stimulus
+    leaves open (an accept example). Criterion 2 not met: it never says how this strengthens the argument, and
+    the accept text says a qualifying fact whose bearing is not explained earns 1.
+- id: str04
+  task: arg-0012.strengthen
+  holdout: false
+  type: ambiguous
+  answer: >-
+    most of the drop was on the blocks right where the cameras are. on the parts of those same streets that
+    are out of the cameras range, the number of crashes barely moved. i think that helps the council's case
+  gold: 1
+  second: 1
+  acceptable: [ 1, 2 ]
+  settlement: >-
+    Both scorers gave 1 and both name 2 as defensible: the key does not say whether a bare "that helps the
+    council's case" explains a fact whose bearing is nearly self-evident from the within-street contrast.
+  why: >-
+    Criterion 1 is clearly met (crashes fell where cameras operate, an accept example of mechanism evidence).
+    Criterion 2 is the borderline: read strictly, "helps the council's case" only asserts support without
+    saying why (no mention of drivers slowing for the cameras), giving 1; read charitably, the near-versus-
+    out-of-range contrast carries the reasoning itself, giving 2. Gold 1 because the rubric asks the answer to
+    explain why, and it does not.
+- id: str05
+  task: arg-0015.strengthen
+  holdout: false
+  type: valid-unlike-reference
+  answer: >-
+    Surveys on the four goat islands find plenty of live saltbush seed in the soil, and seedlings come up
+    every spring, but the goats eat nearly all of them within a few weeks. So the shrub can still regrow
+    there; what holds it back is the grazing, which is exactly what removing the goats would end.
+  gold: 2
+  second: 2
+  why: >-
+    Criterion 1 met: a new fact, consistent with the premises, showing the four islands have something to
+    regrow from and that goats are what stops it (the accept's shared-conditions and surviving-seed kinds).
+    Criterion 2 met: it explains that the obstacle is the grazing, so removing the goats makes recovery there
+    more likely.
+- id: str06
+  task: arg-0015.strengthen
+  holdout: false
+  type: keyword-contradiction
+  answer: >-
+    On the three goat-free islands, the saltbush only started coming back about fifteen years after the goats
+    were taken off, in the same year a replanting program started there. This ties the recovery to the goats'
+    removal, so it makes it more likely that removing the goats from the other four would work too.
+  gold: 0
+  second: 0
+  why: >-
+    Criterion 1 fails: a long lag that ends when replanting began points the other way, suggesting replanting
+    rather than the goats' removal drove the recovery, and the rubric says a fact pointing the other way does
+    not count. Criterion 2 fails: the claim that it "ties the recovery to the goats' removal" reverses what
+    the fact shows.
+- id: str07
+  task: arg-0022.strengthen
+  holdout: false
+  type: confidently-wrong
+  answer: >-
+    ardley has about twice as many people as pell. so if pell's market went up by a third, ardley's should go
+    up even more since theres way more potential customers to come on thursday nights
+  gold: 0
+  second: 0
+  acceptable: [ 0, 1 ]
+  settlement: >-
+    Both scorers gave 0; the second scorer names 1 as defensible: the key has no rule for a fact about the
+    town's size, which a grader could count as a weak reason to expect a rise.
+  why: >-
+    A fact too weak to be material: Ardley's Saturday market already draws on the same population and has flat
+    sales, and town size says nothing about whether Ardley has the after-work shoppers who made the move work
+    in Pell or would keep its current shoppers, so criterion 1 fails; the explanation is about the size of a
+    rise and does not show a rise is more likely, so criterion 2 fails.
+- id: str08
+  task: arg-0022.strengthen
+  holdout: false
+  type: concise-correct
+  answer: >-
+    Pell's Saturday market had also had flat sales for years before it moved, so Pell was where Ardley is now,
+    which makes the same jump more likely.
+  gold: 2
+  second: 2
+  why: >-
+    Criterion 1 met: a new fact that Pell before the move was like Ardley now, a kind the accept text names.
+    Criterion 2 met, briefly: it explains that the closer likeness makes a similar rise in Ardley more likely.
+- id: str09
+  task: arg-0026.strengthen
+  holdout: false
+  type: extra-explanation
+  answer: >-
+    Brannock's shops used to hand out unusually thick bags, and the town's last waste audit before the fee
+    found that checkout bags made up more of the weight of household plastic rubbish than any other single
+    item. If 80 percent fewer of them are going home, a big slice of that weight should be gone. The officer's
+    argument really jumps from a count of bags to a weight of plastic, so a fact about weight is what it was
+    missing. (Kind of surprising that 25 cents was enough to change people's habits that much.)
+  gold: 2
+  second: 2
+  why: >-
+    Criterion 1 met: a new fact that checkout bags were the largest single item, by weight, in household
+    plastic, which makes a large share by weight likely. Criterion 2 met: it explains that cutting them
+    sharply removes much of that weight. The remark about count versus weight and the aside about the fee
+    neither add nor lose credit.
+- id: str10
+  task: arg-0026.strengthen
+  holdout: false
+  type: partial
+  answer: >-
+    the towns right next to brannock that dont have a bag fee are still handing out about the same number of
+    bags as before
+  gold: 1
+  second: 1
+  why: >-
+    Criterion 1 met: a new fact making a cause other than the fee less likely, which the accept text lists
+    (nearby towns without a fee held steady). Criterion 2 not met: there is no explanation of how it
+    strengthens the argument, so per the accept text it earns 1.
+- id: str11
+  task: arg-0027.strengthen
+  holdout: true
+  type: valid-unlike-reference
+  answer: >-
+    The letter is addressed to "Judge Amos Ferris", and the county court's records show Ferris was first
+    appointed a judge in 1803. Someone writing in 1788 would not have called him a judge, so the letter itself
+    points to a date of 1803 or later, which backs the curator independently of the watermark.
+  gold: 2
+  second: 2
+  why: >-
+    Criterion 1 met: a new fact, consistent with the premises, that gives separate evidence of a later date
+    (the letter presupposes a dated event after 1800). Criterion 2 met: it explains why the title places the
+    letter in 1803 or later, apart from the paper.
+- id: str12
+  task: arg-0027.strengthen
+  holdout: true
+  type: partial
+  answer: >-
+    maybe that tarrant didnt get any paper from outside the region before 1801, it all came from the holt mill
+  gold: 1
+  second: 1
+  why: >-
+    Criterion 1 met: a new fact (the premises say Holt was the region's only mill, not that no paper came in
+    from outside) that closes off other sources of hare-marked paper in Tarrant before 1801. Criterion 2 not
+    met: it does not say how this ties the letter's paper to Holt or supports the later date, so per the
+    accept text it earns 1.
+- id: str13
+  task: arg-0027.strengthen
+  holdout: true
+  type: confidently-wrong
+  answer: >-
+    A mill across the border was already putting a running hare on its paper in the 1770s, and Tarrant
+    merchants regularly bought paper from it. That shows the hare watermark was a well-known mark, which backs
+    up the curator's reading of the watermark.
+  gold: 0
+  second: 0
+  why: >-
+    A fact that weakens instead: an earlier source of running-hare paper sold in Tarrant means the sheet could
+    predate 1801, so the fact points the other way and criterion 1 fails; the explanation does not show why a
+    date of 1801 or later is more likely, so criterion 2 fails.
+- id: str14
+  task: arg-0027.strengthen
+  holdout: true
+  type: keyword-contradiction
+  answer: >-
+    The ink used on the letter was a type first sold in the 1770s and still common into the 1820s. Since that
+    ink was still being used after 1801, it gives separate evidence of a later date and backs up the curator.
+  gold: 0
+  second: 0
+  why: >-
+    Uses the key's "separate evidence of a later date" but the fact fits 1788 as well as 1801 or later (the
+    ink was available in both), so it makes neither date more likely and criterion 1 fails; the explanation
+    draws a later date from a fact that does not favor one, so criterion 2 fails.

@@ -1,0 +1,22 @@
+BEGIN FEEDBACK request=3b4a07b6-62de-47b9-b4a7-3e9148a0fa51
+I01: 2/2
+
+* Criterion by criterion: met — gives a new fact that ties the extra borrowing to teens who could not visit before 6; met — explains that the added hours enabled borrowing that otherwise could not occur, strengthening the causal link.
+* Tip: Look for a new fact that connects the observed change directly to the proposed cause or rules out a plausible alternative.
+  I02: 0/2
+* Criterion by criterion: not met — the answer addresses whether Beethoven's markings justify calling the performance distorted, rather than the unstated bridge from distortion to the recommendation to choose another recording; not met — because it does not establish that a distorted first impression is a drawback or that a less-distorting alternative is available.
+* Tip: Focus on the gap between the granted conclusion that the recording is distorted for newcomers and the recommendation to choose a different recording.
+  I03: 0/1
+* Criterion by criterion: not met — saying the study should not be trusted as evidence is the intermediate conclusion/reason given for the main recommendation, not the recommendation that the council should not count the study in favor of the lanes.
+* Tip: Distinguish the author's main recommendation from the reason offered to support that recommendation.
+  I04: 1/2
+* Criterion by criterion: met — identifies a new claim connecting the photograph count to the population by ruling out repeated photographs from a few lynx as the explanation; not met — it does not address whether the repeated-photograph issue was large enough to account for the substantial drop, so it is weaker than the necessary assumption required.
+* Tip: When ruling out an alternative explanation, state that it could not account for enough of the observed difference to undermine the conclusion.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=3b4a07b6-62de-47b9-b4a7-3e9148a0fa51
+I01 | 2/2 | -
+I02 | 0/2 | wrong-gap
+I03 | 0/1 | premise-as-conclusion
+I04 | 1/2 | incomplete
+END SCORES

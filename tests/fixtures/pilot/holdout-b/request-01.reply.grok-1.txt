@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=cf7ad594-5b10-4640-aeab-89addf1f2881
+I01: 0/2
+- Criterion by criterion: not met — the new fact (a border mill already used a running hare in the 1770s and Tarrant merchants bought that paper) makes a pre-1801 date more plausible, so it weakens the curator rather than strengthening the claim that the letter was written in 1801 or later. Not met — the explanation treats that fact as support for the curator’s reading, which is the opposite of how it bears on the dating.
+- Tip: A strengthener must make the later date more likely, for example by tying this sheet to Holt or by giving independent evidence that the letter describes something that happened after 1800.
+I02: 1/2
+- Criterion by criterion: met — the claim that no papermaker who sold paper in Tarrant used a running-hare mark before 1801 is unstated and, if false, would stop Holt’s 1801 start date from dating this sheet. Not met — it is stronger than needed, covering every seller in Tarrant rather than only this sheet’s origin.
+- Tip: Limit the assumption to this sheet (it came from Holt, or it was not made before 1801 by another maker using a hare mark), not to every supplier in town.
+I03: 1/1
+- Criterion by criterion: met — the sentence states the author’s recommendation that the society should not object to the apartment conversion, not the intermediate claim about preserving historical importance.
+- Tip: Keep the main conclusion as the author’s “should not oppose” recommendation rather than the supporting claim about what the conversion preserves.
+I04: 1/2
+- Criterion by criterion: met — the answer ties the error to the ad’s move from the streak group’s higher speaking scores to the claim that a 100-day streak made them better speakers. Not met — the alternative that streak users had used the app longer is already ruled out, since both groups had been learning for about a year and logged about the same total hours.
+- Tip: Name an open alternative the stimulus does not close, such as the streak holders already speaking better at the start or finding streaks easier because they were better speakers.
+END FEEDBACK
+
+BEGIN SCORES v2 request=cf7ad594-5b10-4640-aeab-89addf1f2881
+I01 | 0/2 | misread-stimulus
+I02 | 1/2 | overstated
+I03 | 1/1 | -
+I04 | 1/2 | contradicts-premise
+END SCORES

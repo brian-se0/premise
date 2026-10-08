@@ -1,0 +1,22 @@
+BEGIN FEEDBACK request=cbb2a198-4002-4b54-8f2c-6acbcec7119e
+I01: 1/2
+
+* Criterion by criterion: met—the answer ties the error to the higher scores of the 100-day streak group and the causal conclusion. Not met—the proposed alternative that they had been using the app longer is ruled out by the stimulus, which says the groups had been learning for about a year and had the same total practice hours.
+* Tip: When giving an alternative explanation, make sure it is one the stimulus does not already rule out.
+  I02: 2/2
+* Criterion by criterion: met—the answer states the unstated bridge that the letter's paper was made by Holt. Met—the claim is appropriately limited to this letter's paper, so if false, Holt's 1801 records could not date the sheet. 
+* Tip: For necessary-assumption questions, identify the specific unstated link that connects the evidence to the conclusion.
+  I03: 2/2
+* Criterion by criterion: met—the answer gives a new fact about Ferris's appointment that is not in the stimulus and is consistent with it. Met—it clearly explains that the title "judge" would place the letter in 1803 or later, independently supporting the curator's conclusion.
+* Tip: For a strengthener, give a new fact and explicitly explain how it increases the likelihood of the conclusion.
+  I04: 2/2
+* Criterion by criterion: met—the answer identifies the unstated assumption that the interior being removed is not essential to the silo's historical importance. Met—it appropriately limits the claim to what is essential rather than claiming the interior has no historical value at all. 
+* Tip: State the weakest necessary assumption that makes the argument's reasoning work.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=cbb2a198-4002-4b54-8f2c-6acbcec7119e
+I01 | 1/2 | contradicts-premise
+I02 | 2/2 | -
+I03 | 2/2 | -
+I04 | 2/2 | -
+END SCORES

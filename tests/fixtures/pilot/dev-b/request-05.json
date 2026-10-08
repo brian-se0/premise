@@ -1,0 +1,36 @@
+{
+  "id": "a525ee24-445d-400d-b8d8-4551f583620c",
+  "fence": "T9TRJC",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "wea06",
+      "taskId": "arg-0016.weaken",
+      "snapshotHash": "33dd30bd51484d7593275ab76ec88de51a6af414a43adc2f0682a90c6f576d89",
+      "answer": "on one of the older phones they support, the arrival time piece took almost a full second to update when the testers ran it on its own. so theres no way the whole screen finishes in half a second on that phone"
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "str01",
+      "taskId": "arg-0009.strengthen",
+      "snapshotHash": "c4e2f22e01051fd00f4d594415863cbffa3d057ffbab2b1c76cd2565b789d696",
+      "answer": "At the seven branches that kept closing at 6, teenage borrowing stayed flat over the same year. Those branches work like a control group, so this shows it was the extra hours, not something else, that made the difference."
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "wea09",
+      "taskId": "arg-0028.weaken",
+      "snapshotHash": "2d88e386587d83e88a80d98c0b440d313024ef3bcb0adff521f4678ccd7f62ec",
+      "answer": "In April the state auditor posted a report online, free for anyone to read, saying that city officials knew the Elm Street alarms were faulty and let the repairs slide for six months while the school stayed open. The public could already learn about the wrongdoing from that report, so the memo isn't the only way to find out, and the code's condition isn't met. So under its own code the Ledger shouldn't publish it."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "str04",
+      "taskId": "arg-0012.strengthen",
+      "snapshotHash": "dfea401269e5c12430a40dec1356f060ce1775ab06d8a3bb9d7dc2345633b6c9",
+      "answer": "most of the drop was on the blocks right where the cameras are. on the parts of those same streets that are out of the cameras range, the number of crashes barely moved. i think that helps the council's case"
+    }
+  ],
+  "selfGradeOnly": false
+}

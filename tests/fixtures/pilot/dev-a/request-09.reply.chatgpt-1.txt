@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=55f04aa4-b163-4c36-853f-5b0619212bb8
+I01: 1/1
+
+* Criterion: met — identifies the main conclusion that first-time listeners should choose a recording other than the Ardent Quartet's.
+* Tip: Distinguish the author's recommendation from the supporting claim that the recording would give newcomers a distorted sense of the quartets.
+  I02: 1/2
+* Criterion 1: met — states an unstated bridge by proposing that a less-distorting recording is available.
+* Criterion 2: not met — requiring a recording that follows Beethoven's markings exactly is stronger than necessary; the argument only needs some alternative that avoids the relevant problem sufficiently.
+* Tip: State the weakest assumption needed, such as that at least one available recording would give newcomers a less distorted sense of the quartets.
+  I03: 2/2
+* Criterion 1: met — gives a pre-installation fact that crashes were unusually high immediately before the cameras were installed, creating a plausible alternative explanation for the later decline.
+* Criterion 2: met — explains that crashes could naturally regress toward their prior average even without the cameras, so the cameras need not account for most of the drop.
+* Tip: For causal weakening questions, identify a pre-existing trend or unusually high baseline and explicitly explain how it could produce the observed change without the proposed cause.
+  I04: 0/2
+* Criterion 1: not met — the claim that a component took almost a full second directly contradicts the stated premise that every component finished in under half a second when tested on its own.
+* Criterion 2: not met — although the answer correctly connects a slow component to failure of the whole-screen timing rule, it relies on a fact that cannot be true given the stipulated premises.
+* Tip: Preserve all stated premises and instead add a fact about interactions among components, such as components running sequentially or slowing each other down.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=55f04aa4-b163-4c36-853f-5b0619212bb8
+I01 | 1/1 | -
+I02 | 1/2 | overstated
+I03 | 2/2 | -
+I04 | 0/2 | contradicts-premise
+END SCORES

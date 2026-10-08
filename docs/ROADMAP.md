@@ -1,25 +1,25 @@
 # Roadmap
 
-Status: draft v0.6 (2026-10-06, selective formal method). Milestones are ordered. Each ends with a peer review (`PEER_REVIEW.md`) before it is considered done.
+Status: draft v0.7 (2026-10-06, reviewer change; Claude writes the grading check answers). Milestones are ordered. Each ends with a peer review (`PEER_REVIEW.md`) before it is considered done.
 
 ## M0. Content validity, then grading feasibility
 No app UI or storage yet. Two parts, in order.
 
 **M0a. Content validity.** Answer keys are right before anyone measures agreement with them.
 - Draft exercises covering `conclusion`, `flaw`, `assumption`, `strengthen` and `weaken`, most at medium or hard difficulty, written to `CONTENT_GUIDELINES.md` §3.1–3.2.
-- Each key is checked by the owner and by a second model (GPT-6 Pro); disputed keys are fixed or dropped.
+- Each key is checked by the owner and by a peer reviewer (GPT-6 Pro until 2026-10-06, then an independent Claude Opus 5.5 reviewer; `PEER_REVIEW.md`); disputed keys are fixed or dropped.
 - **Done when** at least 12 exercises pass the approval checklist.
 
 **M0b. Grading feasibility.** Can a chatbot grade written answers well enough for the owner's own study, and is the copy-paste loop tolerable?
 - At least two whole approved exercises, together covering every skill in scope, are set aside as the holdout.
-- The owner answers them, then deliberately writes the answer types in `GRADING_PROTOCOL.md` §9: at least 12 answers per skill, with acceptable-score sets for genuinely ambiguous ones.
-- The pure prompt builder (`src/domain/prompt.ts`) and snapshot hashing are written now, with unit tests, and run from a small script; there is no second builder. The owner pastes the prompts into two or three chatbots, on phone and PC, twice each with different row orders.
+- Claude writes the answer set, covering the answer types in `GRADING_PROTOCOL.md` §9: at least 12 answers per skill, with acceptable-score sets for genuinely ambiguous ones. A blind second scorer checks every gold score (§9).
+- The pure prompt builder (`src/domain/prompt.ts`) and snapshot hashing are written now, with unit tests, and run from a small script; there is no second builder. The prompts go into the free versions of the frontier chatbots (ChatGPT, Claude, Gemini, Grok), twice each with different row orders: Claude pastes them in the owner's browser on their PC, and the owner pastes a few on their phone. Local models are tested later.
 - Prompt wording, rubrics and the candidate chatbot configuration are frozen on the development exercises before the holdout run. A prompt change bumps the prompt version.
 - The check runs on frozen grading payloads, which contain no form lines and use the current taxonomy (`METHOD.md` §5). Adding error tags afterwards needs a recheck on the revised payloads before tags route anything.
 - Every input, prompt, raw reply and hand-checked parse result is saved under `tests/fixtures/pilot/`. Grades, disagreements, feedback matches and every moment of friction go in `pilot/LOG.md`.
 - Before the holdout run: the expected parse and feedback results for the development replies are frozen as fixtures.
 - **Done when** the §9 metrics are reported with counts and denominators, and one outcome is recorded in `DECISIONS.md`:
-  1. **Proceed with chatbot**: name the chatbot, client, prompt version and batch size. Requires the §9 screening targets on the holdout.
+  1. **Proceed with chatbot**: name each chatbot that passed, with client, prompt version and batch size. Requires every held-out run of that chatbot to meet the §9 screening targets, and at least one passing chatbot other than Claude (§9).
   2. **Proceed with self-grading only**: the app is built with chatbot grading as an optional extra.
   3. **Revise and repeat**: change the prompt or rubrics; the old holdout becomes regression material; repeat on fresh held-out exercises.
   4. **Stop chatbot grading**: results are inconclusive or poor; rethink before building.

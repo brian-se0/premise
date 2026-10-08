@@ -1,0 +1,36 @@
+{
+  "id": "cf7ad594-5b10-4640-aeab-89addf1f2881",
+  "fence": "HN7XEX",
+  "promptVersion": "v4",
+  "rows": [
+    {
+      "rowId": "I01",
+      "attemptId": "str13",
+      "taskId": "arg-0027.strengthen",
+      "snapshotHash": "198269e7d33a4153198a796b6acc7a50fc4f111d2a4178ba99c7ab9d10cb0fe1",
+      "answer": "A mill across the border was already putting a running hare on its paper in the 1770s, and Tarrant merchants regularly bought paper from it. That shows the hare watermark was a well-known mark, which backs up the curator's reading of the watermark."
+    },
+    {
+      "rowId": "I02",
+      "attemptId": "asm14",
+      "taskId": "arg-0027.assumption",
+      "snapshotHash": "6dc447a7d8bac114e064e5211de1d483274ce1c47ea3554c77e50abb441ec1c7",
+      "answer": "i think the curator is assuming none of the paper makers who sold paper in Tarrant back then were using a running hare watermark before 1801"
+    },
+    {
+      "rowId": "I03",
+      "attemptId": "con11",
+      "taskId": "arg-0024.conclusion",
+      "snapshotHash": "28724fcca95f57247818dd0ccba2b39264faabf11b3e2e1ac09516b27af9f98f",
+      "answer": "The society should not object to the apartment conversion."
+    },
+    {
+      "rowId": "I04",
+      "attemptId": "fla11",
+      "taskId": "arg-0020.flaw",
+      "snapshotHash": "14527d8e350cc40c01833387421f6f32ba61f7f9b784b82da1cc70eaacc525d1",
+      "answer": "the ad says keeping a 100 day streak is what made people better speakers just because the streak people scored higher on the test. but maybe the streak people had just been using the app longer than the others so they had more time to learn"
+    }
+  ],
+  "selfGradeOnly": false
+}

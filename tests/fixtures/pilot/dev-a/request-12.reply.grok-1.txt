@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=df19cff8-1f96-42e6-b7ff-7f7c4666abc9
+I01: 2/2
+- Criterion 1 met: the new fact is that most of the extra checkouts came from teens who could not reach the library before 6 because of jobs or sports, which is not already in the premises and ties the rise to the added hours.
+- Criterion 2 met: the explanation shows those teens could not borrow under the old hours, so the longer hours themselves are the likelier cause of the jump.
+- Tip: Keep pairing a new causal fact with a sentence that says which rival explanation it rules out.
+I02: 1/1
+- Criterion 1 met: the answer states that the study should not be trusted as evidence for the bike lanes, which is the recommendation not to count it, rather than only the funding reason, the safety concession, or a ban on building the lanes.
+- Tip: Name the actor and the action in one line, such as that the council should not count the study as support.
+I03: 0/2
+- Criterion 1 not met: steady teenage borrowing at the other seven branches is already given in the stimulus, so it is not a new fact.
+- Criterion 2 not met: calling those branches a control group only restates a premise already used; it does not add a new reason the hours caused the rise.
+- Tip: Before offering a strengthener, check that the fact is not already stated, then add something the argument still leaves open.
+I04: 2/2
+- Criterion 1 met: the answer names the drop in the share missed from 15% to 9% and the conclusion that fewer appointments are being missed.
+- Criterion 2 met: it explains that bookings rose a lot, so a smaller share of a larger total can be the same size or larger.
+- Tip: When a rate falls but the base grows, say explicitly that the count need not fall.
+END FEEDBACK
+
+BEGIN SCORES v2 request=df19cff8-1f96-42e6-b7ff-7f7c4666abc9
+I01 | 2/2 | -
+I02 | 1/1 | -
+I03 | 0/2 | misread-stimulus
+I04 | 2/2 | -
+END SCORES

@@ -1,0 +1,21 @@
+BEGIN FEEDBACK request=a525ee24-445d-400d-b8d8-4551f583620c
+I01: 0/2
+- Criterion by criterion: Not met. The fact says the arrival-time component took almost a full second when the testers ran it on its own on a supported phone. That denies the stated premise that every component finished in under half a second each time on every supported phone. Not met. The explanation (one component over the limit means the screen is over) depends entirely on the denied premise, so it cannot earn credit. The disqualifier applies, so the item scores 0.
+- Tip: Keep every premise true and look for a gap between the parts and the whole, such as components updating one after another or waiting on each other, so their times add up.
+I02: 2/2
+- Criterion by criterion: Met. Teenage borrowing at the seven branches that kept the 6 p.m. closing stayed flat. However, the stimulus already says borrowing at the other seven branches held steady, so this is not a new fact. Under a strict reading this criterion fails. Not met. The "control group" reasoning is sound, but it only restates the comparison already in the stimulus.
+- Tip: Before answering, check each fact against the stimulus; offer something not already given, such as borrowing at those branches having been flat for years before, or the extra checkouts happening mostly after 6 p.m.
+I03: 0/2
+- Criterion by criterion: Not met. The fact is a public report available to anyone, which is the right kind of weakener. But it states that the report says officials knew the alarms were faulty and delayed repairs for six months. That is consistent with the premises, and it gives a way for the public to learn the same wrongdoing. Met on the fact. Met on the explanation: it says the public already has another way to learn, so the condition is not met. However, the answer ends by concluding "the Ledger shouldn't publish it", which infers that the code forbids publishing because this rule's condition fails. That is exactly the inference the rubric says not to make, and it is the second criterion's exclusion, so the explanation is not credited.
+- Tip: Stop at "the rule's condition is not met, so the code does not call for publishing"; do not go on to say the paper should not publish.
+I04: 2/2
+- Criterion by criterion: Met. The new fact is that the drop was concentrated on the blocks in range of the cameras, while the parts of the same streets out of range barely changed. This was not stated in the stimulus and it makes the cameras the likelier cause. Met. The explanation links the pattern of the decline to where the cameras operate, which fits the "crashes fell most where cameras operate" kind and it is stated as helping the council's case.
+- Tip: Spell out a bit more why the in-range versus out-of-range split rules out street-wide causes, to make the explanation fully explicit.
+END FEEDBACK
+
+BEGIN SCORES v2 request=a525ee24-445d-400d-b8d8-4551f583620c
+I01 | 0/2 | contradicts-premise
+I02 | 0/2 | irrelevant
+I03 | 1/2 | incomplete
+I04 | 2/2 | -
+END SCORES

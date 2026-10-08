@@ -1,0 +1,43 @@
+BEGIN FEEDBACK request=bb129f9d-fc94-4168-b1bc-076018e12ba0
+I01: 2/2
+
+* Criterion by criterion:
+* Criterion 1 (Ties error to argument): Met. The student identifies the requirement (water source) and the conclusion that it was a big settlement.
+* Criterion 2 (Says why inference fails): Met. The student explicitly points out that many places meeting these requirements could have stayed small villages, meaning the condition does not establish that it was likely large.
+
+
+* Tip: Keep up the clear explanation of why meeting a necessary condition does not guarantee or make the outcome likely.
+
+I02: 1/1
+
+* Criterion by criterion:
+* Criterion 1 (Identifies main conclusion): Met. The student correctly identifies that newcomers should start with a different recording, distinguishing it from the intermediate reasoning and the critics' argument.
+
+
+* Tip: State the main conclusion concisely upfront before adding context to ensure clarity.
+
+I03: 2/2
+
+* Criterion by criterion:
+* Criterion 1 (Ties error to argument): Met. The student clearly identifies the inference from attendance rising to grant renewal.
+* Criterion 2 (Says why inference fails): Met. The student explains that the policy makes the rise necessary but not sufficient, as the council could still refuse on other grounds.
+
+
+* Tip: Your formal logic explanation ("renewed → attendance rose") was spot-on and helped make your point crystal clear.
+
+I04: 0/2
+
+* Criterion by criterion:
+* Criterion 1 (Ties error to argument): Not met. The student focuses on unbooked patients needing care rather than pointing out the premise (percentage drop from 15% to 9%) vs. conclusion (fewer absolute missed appointments).
+* Criterion 2 (Says why inference fails): Not met. The student addresses an external issue (people who couldn't get appointments) rather than explaining how a smaller percentage of a much larger total can equal a larger absolute number.
+
+
+* Tip: When evaluating statistical reasoning, watch out for the difference between percentages/rates and total absolute numbers.
+END FEEDBACK
+
+BEGIN SCORES v2 request=bb129f9d-fc94-4168-b1bc-076018e12ba0
+I01 | 2/2 | -
+I02 | 1/1 | -
+I03 | 2/2 | -
+I04 | 0/2 | wrong-gap, misread-stimulus
+END SCORES

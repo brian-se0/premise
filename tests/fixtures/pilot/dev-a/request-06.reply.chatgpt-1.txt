@@ -1,0 +1,24 @@
+BEGIN FEEDBACK request=0fffd33d-b12d-40f1-a7c9-53f0d9920777
+I01: 0/2
+
+* Criterion 1: not met; the proposed 50% increase in bookings is not a material weakener because 9% of 600 (54) is less than 15% of 400 (60).
+* Criterion 2: not met; the calculation actually shows that fewer appointments are missed, contrary to the claimed weakening.
+* Tip: Check whether your numerical example actually reverses the conclusion before using it as a weakener.
+  I02: 1/1
+* Criterion 1: met; the answer correctly identifies that the council should not give the study weight in deciding whether to support the lanes.
+* Tip: For main-conclusion questions, distinguish the author's recommendation from the reason offered to support it.
+  I03: 1/1
+* Criterion 1: met; saying the Ardent recording is not a good one to start with correctly captures the recommendation for newcomers.
+* Tip: State the recommendation directed at the target audience rather than one of the supporting reasons.
+  I04: 2/2
+* Criterion 1: met; tripling the bookings is a new fact consistent with the stated premises and materially weakens the conclusion.
+* Criterion 2: met; 9% of three times the old bookings is 27% of the old total, exceeding the previous 15%, so the number missed is higher.
+* Tip: When weakening a percentage argument, compare the resulting absolute counts using the same baseline.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=0fffd33d-b12d-40f1-a7c9-53f0d9920777
+I01 | 0/2 | misread-stimulus
+I02 | 1/1 | -
+I03 | 1/1 | -
+I04 | 2/2 | -
+END SCORES

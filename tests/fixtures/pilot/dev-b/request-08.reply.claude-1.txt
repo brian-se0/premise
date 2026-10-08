@@ -1,0 +1,25 @@
+BEGIN FEEDBACK request=d4348993-ca70-4dee-9b04-b5ccdf025dcd
+I01: 0/2
+- Criterion 1 (states an unstated claim linking the granted distortion to the recommendation): Not met. The student says newcomers can get a recording with the slow movements played at exactly Beethoven's marked tempos. That is a bridge of the right kind (a better recording is available), but it requires a recording that follows the markings exactly, which is not what the argument needs to link distortion to the recommendation.
+- Criterion 2 (no stronger than the argument needs): Not met. The claim requires exact adherence to the markings. The argument only needs some recording that gives a less distorted sense of the quartets. If exact-tempo recordings did not exist, a recording that was merely less distorted would still support the recommendation, so the claim is too strong. No credit on criterion 1 means the overall score is 0.
+- Tip: State the weakest bridge the argument needs, such as "at least one other recording would distort less," rather than a perfect or exact standard.
+I02: 1/2
+- Criterion 1 (new fact, consistent with the premises, that makes a sales rise in Ardley more likely): Met. Pell's Saturday sales had also been flat for years before the move. This is not stated in the premises and it makes Pell more like Ardley.
+- Criterion 2 (explains how the fact strengthens the argument): Not met. The student says Pell was where Ardley is now, so the same jump is more likely. The likeness is the right idea, but the explanation never shows why a shared flat-sales history means the move would work in Ardley. It mostly restates the conclusion that the same jump is likely.
+- Tip: After giving your fact, spell out the link: say what it shows about Ardley that would make it respond to the move the way Pell did.
+I03: 2/2
+- Criterion 1 (unstated claim linking recovery on the three islands to the four): Met. The student assumes the removal of goats accounts for at least part of the saltbush recovery on the three islands. That is a distinct unstated claim and it is one of the accepted bridges.
+- Criterion 2 (no stronger than needed): Met. "At least part" is exactly as strong as needed. The student also correctly shows how denying it, with recovery wholly caused by something else on the three islands such as another grazer dying out, would make the comparison tell us nothing about the four.
+- Tip: Keep doing this: say what the assumption is and show how its denial breaks the inference.
+I04: 1/2
+- Criterion 1 (new fact about the years before installation, consistent with the premises, that gives a material reason to doubt the cameras caused most of the decline): Met. A steady yearly decline on those streets for about five years before the cameras is a pre-installation fact that is consistent with the premises and is an accepted weakener.
+- Criterion 2 (explains how the fact weakens the argument): Not met. The student states the fact but never explains why it matters, that is, that a decline already under way could have continued and produced much of the 40 percent drop without the cameras.
+- Tip: Add one sentence saying what would have happened without the cameras, for example that the existing downward trend would have continued and accounted for much of the drop.
+END FEEDBACK
+
+BEGIN SCORES v2 request=d4348993-ca70-4dee-9b04-b5ccdf025dcd
+I01 | 0/2 | overstated
+I02 | 1/2 | incomplete
+I03 | 2/2 | -
+I04 | 1/2 | incomplete
+END SCORES

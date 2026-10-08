@@ -1,0 +1,26 @@
+BEGIN FEEDBACK request=a525ee24-445d-400d-b8d8-4551f583620c
+I01: 0/2
+
+* Criterion 1: not met; the answer says a component took almost a second on its own, which contradicts the stated premise that every component finished in under half a second in the standard tests.
+* Criterion 2: not met; although the answer explains why its claimed fact would weaken the conclusion, that fact is disallowed because it denies a premise.
+* Tip: Give a fact about how the components interact or about the whole screen's timing without changing the stated individual-component test results.
+  I02: 0/2
+* Criterion 1: not met; the answer repeats a fact already stated in the stimulus: borrowing at the other seven branches held steady.
+* Criterion 2: not met; because the proposed fact is not new, it does not provide a new reason that the longer hours caused the rise.
+* Tip: Add evidence that links the extra borrowing specifically to the new evening hours or rules out a remaining alternative explanation.
+  I03: 1/2
+* Criterion 1: met; the state auditor's publicly available report is a new fact showing that the public could learn the same wrongdoing another way.
+* Criterion 2: not met; the explanation correctly shows that the memo is not the only way to learn the wrongdoing, but the final claim that the Ledger therefore should not publish goes beyond what the code's stated rule establishes.
+* Tip: Stop at the conclusion that the code's condition for requiring publication is not satisfied, rather than inferring that the code prohibits publication.
+  I04: 1/2
+* Criterion 1: met; finding that crashes barely changed outside the cameras' range while the drop was concentrated near the cameras materially supports a camera-related cause.
+* Criterion 2: not met; the answer says the fact helps the council's case but does not explain why this location-specific pattern makes the cameras more likely to have caused the decline.
+* Tip: Explicitly connect the comparison to causation by saying that the sharp decline where cameras operate, but not nearby where they do not, makes the cameras a more plausible cause.
+  END FEEDBACK
+
+BEGIN SCORES v2 request=a525ee24-445d-400d-b8d8-4551f583620c
+I01 | 0/2 | contradicts-premise
+I02 | 0/2 | misread-stimulus
+I03 | 1/2 | misread-stimulus
+I04 | 1/2 | no-reasoning
+END SCORES

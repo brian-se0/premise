@@ -1,0 +1,34 @@
+BEGIN FEEDBACK request=8c7374a7-e26d-43f4-a74f-1c5b7dc83039
+I01: 0/2
+- Criterion 1 (states an unstated claim linking the extra rise to cover crops): Not met. The student says the adviser assumes that another change, such as a higher-yielding seed, accounts for all of the extra rise. That is the opposite of what the argument needs. It would undermine the conclusion, not support it.
+- Criterion 2 (not stronger than needed): Not met. The claim is reversed, so it cannot serve as a necessary assumption, and the point for strength cannot be earned.
+- Tip: After writing an assumption, test it by asking whether the argument still works if it is true; a necessary assumption should help the conclusion, so state that no other change accounts for the extra rise.
+I02: 2/2
+- Criterion 1 (ties the error to this argument): Met. The student names the dry-season water requirement, Kessel Ridge's spring (and soil), and the conclusion of "probably large."
+- Criterion 2 (says why the inference fails): Met. The student explains that necessary does not mean likely, and that the passage never shows that sites with this water and soil tended to grow big rather than stay small.
+- Tip: Keep linking the flaw to the likelihood of the conclusion, as you did here, rather than only to a lack of guarantee.
+I03: 1/2
+- Criterion 1 (new fact giving a material reason to doubt wrongdoing or the lack of another way to learn of it): Met. A written fire marshal approval of delaying repairs until a replacement system arrived gives a plausible justification, so it is less clear the delay was wrongdoing. It is consistent with the premises, since officials still knew and put off repairs.
+- Criterion 2 (explains how it weakens the editor's use of the rule): Not met. The student gives only the fact and never says why it means the rule's wrongdoing condition may not be met.
+- Tip: After stating your new fact, add a sentence saying which condition of the rule it puts in doubt and why.
+I04: 1/2
+- Criterion 1 (states an unstated claim linking the higher rating to satisfaction caused by the script): Met. The student identifies that the rise is not due to unhappy customers leaving before the survey, a distinct unstated claim about who answered. This ties the higher average to real satisfaction.
+- Criterion 2 (no stronger than needed): Not met. The student says the ratings went up because people were happier and not because of the dropout effect. That reads as the rise being entirely explained by satisfaction, which is stronger than the argument needs. A partial change in who answered would not undo the argument. The answer also partly restates the conclusion.
+- Tip: Phrase assumptions as "not entirely due to X" so that a small effect of X would not break the argument.
+END FEEDBACK
+
+BEGIN SCORES v2 request=8c7374a7-e26d-43f4-a74f-1c5b7dc83039
+I01 | 0/2 | reversed-logic
+I02 | 2/2 | -
+I03 | 1/2 | incomplete
+I04 | 1/2 | overstated
+END SCORES
+
+Wait: I must correct the tag in I01, which is not in that item's allowed list.
+
+BEGIN SCORES v2 request=8c7374a7-e26d-43f4-a74f-1c5b7dc83039
+I01 | 0/2 | wrong-gap
+I02 | 2/2 | -
+I03 | 1/2 | incomplete
+I04 | 1/2 | overstated
+END SCORES

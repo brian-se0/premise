@@ -15,7 +15,8 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "check": "npm run content && npm run typecheck && npm run lint && npm run test",
-    "pilot:prompt": "tsx pilot/build-prompt.ts"
+    "pilot:prompt": "tsx pilot/build-prompt.ts",
+    "pilot:score": "tsx pilot/score.ts"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",

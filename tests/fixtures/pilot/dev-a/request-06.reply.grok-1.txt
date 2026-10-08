@@ -1,0 +1,23 @@
+BEGIN FEEDBACK request=0fffd33d-b12d-40f1-a7c9-53f0d9920777
+I01: 0/2
+- Criterion 1 (new fact that materially weakens): not met. A rise of about half (400 to 600) is below the two-thirds growth needed for 9 percent of the new total to match or exceed 15 percent of the old total, so the fact confirms that fewer appointments are missed rather than casting doubt on that claim.
+- Criterion 2 (explains how the fact weakens): not met. The arithmetic shows 54 missed now versus 60 before, which is fewer, not more, so the explanation inverts the comparison and does not show why the number failed to fall.
+- Tip: Before claiming a booking increase weakens the conclusion, check that 9 percent of the new total is at least 15 percent of the old total.
+I02: 1/1
+- Criterion 1 (main conclusion): met. The answer states that, whatever the council decides about the lanes, the industry-funded study should not be given weight on the side of building them.
+- Tip: Keep the recommendation aimed at not counting the study, as you did, rather than at the funding reason alone.
+I03: 1/1
+- Criterion 1 (main conclusion): met. The answer identifies the author’s point that the Ardent recording is not a good one to start with, which is the recommendation about newcomers.
+- Tip: State that recommendation in one sentence and leave the tempo and distortion claims as support.
+I04: 2/2
+- Criterion 1 (new fact that materially weakens): met. Tripling monthly bookings is a new figure consistent with the premises, and it is large enough that the lower share need not mean fewer misses.
+- Criterion 2 (explains how the fact weakens): met. It shows that 9 percent of triple the old total is 27 percent of that total, above the old 15 percent miss rate, so more appointments are missed now.
+- Tip: Pair the growth figure with the percent-of-old-total comparison, as you did, so the numerical gap is explicit.
+END FEEDBACK
+
+BEGIN SCORES v2 request=0fffd33d-b12d-40f1-a7c9-53f0d9920777
+I01 | 0/2 | misread-stimulus
+I02 | 1/1 | -
+I03 | 1/1 | -
+I04 | 2/2 | -
+END SCORES
