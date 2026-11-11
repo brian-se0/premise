@@ -3,7 +3,13 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { parse } from 'yaml';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { checkRegistration, loadAnswers, loadSnapshots } from '../../pilot/load.ts';
+import {
+  checkRegistration,
+  FROZEN_SNAPSHOTS,
+  loadAnswers,
+  loadFrozenSnapshots,
+  loadSnapshots,
+} from '../../pilot/load.ts';
 import type { AnswerEntry } from '../../pilot/metrics.ts';
 import { REGISTRATION } from '../../pilot/registration.ts';
 import { buildReport } from '../../pilot/report.ts';
@@ -40,6 +46,21 @@ describe('pilot registration', () => {
     expect(() => checkRegistration(answers, snapshots, { ...REGISTRATION, tasks })).toThrow(
       new RegExp(`key of ${held.task.replace('.', '\\.')}`),
     );
+  });
+});
+
+describe('pilot snapshots', () => {
+  it('keeps every registered task as it was scored and refuses an altered or missing one', async () => {
+    const saved = await loadFrozenSnapshots();
+    expect(saved.map((s) => s.taskId).sort()).toEqual(Object.keys(REGISTRATION.tasks).sort());
+    for (const s of saved) expect(snapshots.get(s.taskId)).toEqual(s);
+    const raw = JSON.parse(readFileSync(FROZEN_SNAPSHOTS, 'utf8')) as Snapshot[];
+    const altered = join(dir, 'altered.json');
+    writeFileSync(altered, JSON.stringify(raw.map((s, i) => (i === 0 ? { ...s, reference: `${s.reference} ` } : s))));
+    await expect(loadFrozenSnapshots(altered)).rejects.toThrow(/no longer hashes to its saved hash/);
+    const short = join(dir, 'short.json');
+    writeFileSync(short, JSON.stringify(raw.slice(1)));
+    await expect(loadFrozenSnapshots(short)).rejects.toThrow(new RegExp(`no saved snapshot for ${raw[0]!.taskId}`));
   });
 });
 

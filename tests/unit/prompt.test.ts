@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
+import { loadSnapshots } from '../../pilot/load.ts';
 import { loadExercises } from '../../scripts/content.ts';
 import {
   chooseFence,
@@ -205,7 +206,8 @@ const pilotPrompts = existsSync(pilotRoot)
 describe.skipIf(pilotPrompts.length === 0)('pilot fixtures', () => {
   const root = pilotRoot;
   it.each(pilotPrompts)('reproduces %s byte for byte', async (file) => {
-    const snaps = await allSnapshots();
+    // The grading check's tasks keep the snapshots they were scored under (pilot/load.ts).
+    const snaps = await loadSnapshots();
     const meta = JSON.parse(readFileSync(join(root, file.replace('.prompt.txt', '.json')), 'utf8')) as {
       id: string;
       fence: string;
@@ -214,7 +216,7 @@ describe.skipIf(pilotPrompts.length === 0)('pilot fixtures', () => {
     };
     const rows = meta.rows.map((r) => {
       const snapshot = snaps.get(r.taskId)!;
-      expect(snapshot.hash, `content of ${r.taskId} changed since the fixture was made`).toBe(r.snapshotHash);
+      expect(snapshot.hash, `snapshot of ${r.taskId} differs from the fixture's`).toBe(r.snapshotHash);
       return { rowId: r.rowId, attemptId: r.attemptId, snapshot, answer: r.answer };
     });
     expect(renderPromptForVersion(meta.promptVersion, meta.id, meta.fence, rows)).toBe(

@@ -17,7 +17,7 @@ npm run test:e2e # browser tests
 
 1. **Practice.** Answer tasks like "state the main conclusion", "state the assumption" or "describe the flaw".
 2. **Copy for grading.** One button copies a prompt with each exercise, its reference answer, a rubric and your answers.
-3. **Paste into your chatbot.** The free version of ChatGPT, Claude, Gemini or Grok works, and so can a model running on your own computer. Read the feedback there.
+3. **Paste into a chatbot.** Any chatbot takes it, but so far only Grok's free website has passed Premise's grading check (October 2026). Read the feedback there.
 4. **Paste the reply back.** Premise reads the score block at the end, records your grades and schedules reviews.
 
 Or grade yourself against the same rubric, no chatbot needed.

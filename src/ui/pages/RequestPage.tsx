@@ -37,20 +37,13 @@ import {
   type RowState,
 } from '../../storage/ops.ts';
 import { openMisses } from '../../domain/planner.ts';
+import { CHATBOTS, checkedFor } from '../../domain/chatbots.ts';
 import { formLineFor } from '../../domain/snapshot.ts';
 import { ctx, db, loadPlannerState, newOpId, saveSetting, useLive, useSettings } from '../runtime.ts';
 import { NotFoundPage } from './NotFoundPage.tsx';
 
 export const DISCLOSURE =
   'Premise does not upload your answers or progress; it only downloads its own app files. When you paste a grading prompt into another service, that service receives your answers under its own terms and privacy settings. Avoid personal information in answers.';
-
-// `checked`: passed the grading check (docs/GRADING_PROTOCOL.md §9, docs/DECISIONS.md 2026-10-08).
-const CHATBOTS = [
-  { name: 'ChatGPT', url: 'https://chatgpt.com/', checked: false },
-  { name: 'Claude', url: 'https://claude.ai/new', checked: false },
-  { name: 'Gemini', url: 'https://gemini.google.com/app', checked: false },
-  { name: 'Grok', url: 'https://grok.com/', checked: true },
-];
 
 interface Row {
   rowId: string;
@@ -216,6 +209,8 @@ function CopySection({
     return <p className="notice">This item is too long to grade by chatbot. Grade it yourself below.</p>;
   }
   const prompt = request.promptText;
+  const rowCount = Object.keys(request.rows).length;
+  const checked = CHATBOTS.filter((c) => checkedFor(c, request.promptVersion, rowCount));
 
   const copy = async () => {
     try {
@@ -290,11 +285,17 @@ function CopySection({
             <a href={c.url} target="_blank" rel="noopener noreferrer">
               {c.name}
             </a>
-            {c.checked && ' (checked)'}
+            {checked.includes(c) && ' (checked)'}
           </span>
         ))}
-        . The links never carry your answers. A checked chatbot&apos;s free version graded Premise&apos;s test answers
-        in line with the answer keys.
+        . The links never carry your answers.{' '}
+        {checked.map((c) => (
+          <span key={c.name}>
+            Checked means that in a small test in October 2026, {c.checked!.setup} gave sample answers the same scores
+            as Premise&apos;s answer keys.{' '}
+          </span>
+        ))}
+        Any chatbot can misgrade, so read the feedback before you confirm.
       </p>
     </section>
   );

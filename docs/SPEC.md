@@ -55,7 +55,7 @@ It does not simulate the official test. Students keep taking official practice t
 
 1. The Grade screen lists the submitted answers and offers **Copy for grading** and **Grade it myself**. Either one first saves the frozen grading request (more than one if the answers don't fit in one prompt). Each answer belongs to one request only.
 2. Copying puts the request's prompt on the clipboard; copying again gives the same prompt. If the clipboard write fails, the prompt appears in a selectable box. Requests with any row still waiting for a grade, including "needs review" rows, appear in an **Awaiting grading** list on Home and can be resumed any time.
-3. Links open the four frontier chatbots (ChatGPT, Claude, Gemini, Grok) in a new tab. Links never carry the prompt. A chatbot that passed the grading check is marked checked; so far that is Grok (`DECISIONS.md`, 2026-10-08).
+3. Links open the four frontier chatbots (ChatGPT, Claude, Gemini, Grok) in a new tab. Links never carry the prompt. A chatbot that passed the grading check is marked checked, for the setup it was checked in; so far that is Grok (`DECISIONS.md`, 2026-10-08).
 4. The student pastes the chatbot's whole reply. The app shows, per row: the score or the reason it is invalid, the tags, and the matched feedback. Warnings and the full raw reply are one tap away.
 5. Before confirming, a full-credit row can be marked "That was hard" or "Too easy".
 6. **Confirm** saves valid rows exactly once and schedules them. Invalid, missing or "needs review" rows stay unresolved; the student can re-paste, enter a score manually, or self-grade them. Confirming twice, from two tabs, or after the grade was undone never schedules a task twice.

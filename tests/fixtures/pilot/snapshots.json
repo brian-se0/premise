@@ -1,0 +1,1290 @@
+[
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0009.flaw",
+    "exerciseId": "arg-0009",
+    "kind": "argument",
+    "skill": "flaw",
+    "difficulty": 3,
+    "stimulus": "Last year the Fenwick city library kept five of its twelve branches open until 9 p.m. instead of 6 p.m. It chose the five branches where teenagers had most often asked for later hours. Over the following year, the number of books checked out by teenagers at those five branches rose by 30 percent. Their collections and staff were otherwise unchanged, and teenage borrowing at the other seven branches held steady. An analysis of individual borrowing records also showed that the rise did not come from teenagers moving their borrowing from other branches. The library's director concludes that the longer hours caused the rise in teenage borrowing at the five branches.",
+    "credit": null,
+    "prompt": "Describe the main reasoning error in one or two sentences.",
+    "max": 2,
+    "reference": "The director concludes that the longer hours caused the rise because borrowing rose at the five branches while holding steady at the other seven, without ruling out other differences between the two groups; since those branches were picked because their teenagers most wanted later hours, teenage interest there may already have been growing and could have raised borrowing even without the change.",
+    "accept": "Any answer that identifies the move from \"teenage borrowing rose at the five branches after their hours were extended\" to \"the longer hours caused the rise\", and says why that does not follow by naming a possible cause the argument leaves open: something else that differs between the five branches (or their neighborhoods) and the other seven, or something else that changed there at the same time. The way the branches were chosen (where teenagers most wanted later hours) suggests one, but any open alternative, offered as a possibility, earns the point. Alternatives the stimulus rules out do not: changes to the five branches' collections or staff, and teenagers moving their borrowing from the other branches.",
+    "disqualifiers": [],
+    "rubric": [
+      "Ties the error to this argument, naming the rise in teenage borrowing at the five branches after their hours were extended and the conclusion that the longer hours caused it.",
+      "Says why the inference fails by naming a possible other cause of the rise that the argument does not rule out (for example, something else about the five branches or their neighborhoods, such as their teenagers already wanting more library time), not one the stimulus rules out."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "The five branches were the ones where teenagers had asked most for later hours, but borrowing there could have risen anyway, say because more teenagers moved into those areas from outside Fenwick. The rise after the hours changed doesn't show the hours caused it."
+      },
+      {
+        "points": 1,
+        "answer": "The director assumes that because teenage borrowing went up after the hours changed, the hours must be the reason.",
+        "note": "describes the inference but names no other possible cause, so it does not say why it fails"
+      },
+      {
+        "points": 0,
+        "answer": "Teenagers probably just switched from the other branches to these ones.",
+        "note": "near miss: an alternative the stimulus rules out (the borrowing records show no transfer between branches), and it does not describe the inference"
+      }
+    ],
+    "allowedTags": [
+      "correlation-causation",
+      "missed-alternative",
+      "contradicts-premise",
+      "understated",
+      "incomplete",
+      "misread-stimulus",
+      "irrelevant",
+      "no-reasoning"
+    ],
+    "hash": "99089536385814080f5e0a6d9f3d251766ffcfd5c2a104120dfb80bd6cd649a5"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0009.strengthen",
+    "exerciseId": "arg-0009",
+    "kind": "argument",
+    "skill": "strengthen",
+    "difficulty": 3,
+    "stimulus": "Last year the Fenwick city library kept five of its twelve branches open until 9 p.m. instead of 6 p.m. It chose the five branches where teenagers had most often asked for later hours. Over the following year, the number of books checked out by teenagers at those five branches rose by 30 percent. Their collections and staff were otherwise unchanged, and teenage borrowing at the other seven branches held steady. An analysis of individual borrowing records also showed that the rise did not come from teenagers moving their borrowing from other branches. The library's director concludes that the longer hours caused the rise in teenage borrowing at the five branches.",
+    "credit": null,
+    "prompt": "Give a new fact that, if true, would materially strengthen the argument, and explain how. Treat the stated premises as true.",
+    "max": 2,
+    "reference": "Most of the extra borrowing came from teenagers who could not get to the branches during the old opening hours and started borrowing in the added evening hours. The longer hours gave them a chance to borrow that they did not have before, which makes the hours themselves the likelier cause of the rise.",
+    "accept": "Any new fact, consistent with the premises and not already stated in them, that makes it more likely that the longer hours themselves caused the rise in teenage borrowing, with an explanation of how. Two main kinds count: facts that tie the extra borrowing to the added hours (for example, it happened mostly after 6 p.m., or came from teenagers who could not visit before 6), and facts that remove a rival explanation the stimulus leaves open (for example, teenage borrowing at those branches had been flat for years before the change, the number of teenagers living nearby did not grow, or no new reading program began near those branches). Facts the stimulus already gives, such as the unchanged collections and staff, the steady borrowing at other branches or the records showing no transfer, are not new. A qualifying new fact whose bearing is not explained earns 1.",
+    "disqualifiers": [],
+    "rubric": [
+      "Gives a new fact, consistent with the stated premises and not already stated in them, that makes it materially more likely that the longer hours caused the rise in teenage borrowing (a fact pointing the other way does not count).",
+      "Explains how the fact strengthens the argument, namely why it makes the longer hours more likely to be the cause (for example, by tying the extra borrowing to the added hours or by ruling out another explanation the argument leaves open)."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "In the three years before the change, teenage borrowing at those five branches had been flat, just like at the others. So the jump wasn't a trend that was already under way there, which makes the new hours the likelier cause.",
+        "note": "a different strengthener from the reference (ruling out an earlier trend)"
+      },
+      {
+        "points": 1,
+        "answer": "Most of the extra teenage checkouts happened after 6 p.m.",
+        "note": "the right kind of fact, but the answer does not explain how it supports the argument"
+      },
+      {
+        "points": 0,
+        "answer": "The five branches did not add any books or staff during the year.",
+        "note": "already stated in the stimulus, so not a new fact"
+      }
+    ],
+    "allowedTags": [
+      "no-reasoning",
+      "irrelevant",
+      "missed-alternative",
+      "understated",
+      "incomplete",
+      "misread-stimulus"
+    ],
+    "hash": "c4e2f22e01051fd00f4d594415863cbffa3d057ffbab2b1c76cd2565b789d696"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0010.assumption",
+    "exerciseId": "arg-0010",
+    "kind": "argument",
+    "skill": "assumption",
+    "difficulty": 3,
+    "stimulus": "Halvorsen Software began requiring its support agents to follow a written script in live chats with customers. In the six months before the change, customers rated their chats an average of 3.6 out of 5; in the six months after, the average was 4.3. The ratings come from a short survey offered at the end of every chat in which the customer stays connected until the agent closes it. Customers wrote in about much the same kinds of problems in both periods. The head of support concludes that the script has made customers more satisfied with the help they get.",
+    "credit": null,
+    "prompt": "State an assumption the argument needs: a claim that, if false, would make the argument fall apart. (A necessary assumption; it need not make the argument airtight.)",
+    "max": 2,
+    "reference": "The rise in the average rating is not entirely the result of a change in which customers answered the survey or in how the ratings were collected; at least part of it reflects customers being more satisfied with the help they got.",
+    "accept": "The inference under test is from \"the average rating from customers offered the survey rose from 3.6 to 4.3 after the script\" to \"the script has made customers more satisfied with the help they get\". Any unstated claim counts whose denial, with every premise kept, leaves the rise with no support for that conclusion, not merely one whose denial makes another explanation possible or the argument less persuasive. Main bridges: (a) the rise is not entirely due to a change in who answered the survey or how ratings were collected; (b) the rise is not entirely due to changes unrelated to the script (the kinds of problems are already given as much the same). The claim must not be stronger than the argument needs: requiring that exactly the same kinds of customers answered in both periods, that agents never asked for good ratings, or that nothing else at all changed earns 1, because a partial effect of those would not undo the argument. Repeating a premise or restating the conclusion earns 0.",
+    "disqualifiers": [
+      "Offers only a stated premise (such as that the kinds of problems were much the same, or the two average ratings) or a version of the conclusion (that the script made customers more satisfied) as the assumption, with no distinct unstated claim. Mentioning a stated claim while also giving a distinct assumption does not trigger this."
+    ],
+    "rubric": [
+      "States a claim the argument does not state that links the higher average rating to customers being more satisfied because of the script (for example, that the rise is not entirely due to a change in who answered or how ratings were collected, or not entirely due to unrelated changes).",
+      "States it no more strongly than the argument needs, so that if it were false the rise would no longer support the conclusion, rather than requiring that nothing at all differed between the periods (the same customers answering, no requests for good ratings, no other changes)."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "The rise in ratings wasn't caused entirely by changes that had nothing to do with the script, such as shorter waits that happened to start at the same time.",
+        "note": "a different bridge from the reference (other causes, not who answered); if it were false, the whole rise would come from unrelated changes and say nothing about the script"
+      },
+      {
+        "points": 1,
+        "answer": "Exactly the same kinds of customers filled in the survey before and after the change.",
+        "note": "near miss, too strong: a shift in who answered would undo the argument only if it accounted for the whole rise, so the groups need not match exactly"
+      },
+      {
+        "points": 0,
+        "answer": "Customers wrote in about much the same kinds of problems before and after the change.",
+        "note": "a stated premise, not an assumption (disqualifier)"
+      }
+    ],
+    "allowedTags": [
+      "overstated",
+      "wrong-gap",
+      "irrelevant",
+      "restates-conclusion",
+      "incomplete",
+      "misread-stimulus",
+      "no-reasoning"
+    ],
+    "hash": "855af9b8f30409549fc0f33b47076693014f6b62bf061fe789ddaee89bcc12b2"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0011.flaw",
+    "exerciseId": "arg-0011",
+    "kind": "argument",
+    "skill": "flaw",
+    "difficulty": 4,
+    "stimulus": "Archaeologists agree that a settlement in the Varn valley could have grown large only if it had a reliable source of fresh water through the dry season. Mineral deposits show that Kessel Ridge had a year-round fresh-water spring while the settlement there was occupied, and its soils were then as fertile as any in the valley. So the ruins at Kessel Ridge, whose extent has never been mapped, are probably those of a large settlement.",
+    "credit": null,
+    "prompt": "Describe the main reasoning error in one or two sentences.",
+    "max": 2,
+    "reference": "The argument goes from conditions that a large settlement needed or that favored one to the claim that this settlement probably was large, but it gives no reason to think that sites with Kessel Ridge's water and soil usually grew large rather than staying small.",
+    "accept": "Any answer that identifies the move from \"a large settlement needed a reliable dry-season water source, and Kessel Ridge had one along with fertile soil\" to \"the settlement was probably large\", and says why that does not follow: nothing in the argument shows that sites meeting these conditions were more likely to grow large than to stay small (for example, it gives no information about how often such sites grew large). \"Necessary but not sufficient\" wording earns the point only when the answer applies it to the claimed likelihood, not when it says only that the conditions fail to guarantee a large settlement. The answer need not, and should not, claim that water and soil are no evidence at all. Objections that the ruins have never been mapped miss the reasoning error.",
+    "disqualifiers": [],
+    "rubric": [
+      "Ties the error to this argument, naming the requirement (a large settlement needed a reliable dry-season water source, which Kessel Ridge had) and the conclusion that the ruins are probably those of a large settlement.",
+      "Says why the inference fails, namely that the conditions do not establish that a large settlement was likely (nothing shows that sites meeting them usually grew large), rather than only that they fail to guarantee one."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "Large settlements needed year-round water, and Kessel Ridge had it, but the argument doesn't show how often sites with that water and such fertile soil actually grew large. So those conditions alone don't justify calling this one probably large."
+      },
+      {
+        "points": 1,
+        "answer": "The argument uses the fact that a large settlement needed year-round water, and that Kessel Ridge had it, to conclude that the settlement was probably large.",
+        "note": "identifies the inference but does not say why the claim of likelihood lacks support"
+      },
+      {
+        "points": 0,
+        "answer": "It wrongly assumes that a large settlement needed fertile soil.",
+        "note": "misreads the argument, which relies on the water requirement and does not claim that soil was needed"
+      }
+    ],
+    "allowedTags": [
+      "reversed-logic",
+      "wrong-gap",
+      "misread-stimulus",
+      "understated",
+      "incomplete",
+      "irrelevant",
+      "no-reasoning"
+    ],
+    "hash": "c27186b0b32050ef2ed66267e92491b495fdb3cebbd513f3d46eaeaf75653662"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0012.strengthen",
+    "exerciseId": "arg-0012",
+    "kind": "argument",
+    "skill": "strengthen",
+    "difficulty": 3,
+    "stimulus": "Two years ago the city of Marrow installed speed cameras on eight streets where residents had complained about speeding. Since then, injury crashes on those eight streets have fallen by 40 percent. Over the same period, injury crashes on Marrow's other streets fell by only 5 percent, and a separate analysis ruled out citywide changes, such as safer cars or milder weather, as the main cause of the decline on the eight streets. The city council concludes that the cameras are responsible for most of the decline in injury crashes on the eight streets.",
+    "credit": null,
+    "prompt": "Give a new fact that, if true, would materially strengthen the argument, and explain how. Treat the stated premises as true.",
+    "max": 2,
+    "reference": "Average driving speeds on the eight streets fell sharply in the month the cameras went live and have stayed lower since, while speeds on similar streets without cameras did not change. That links the drop in crashes to drivers slowing down for the cameras.",
+    "accept": "Any new fact, consistent with the premises and not already stated in them, that makes it more likely that the cameras caused most of the drop in injury crashes on the eight streets, with an explanation of how. Main kinds: evidence of the mechanism (speeds fell on those streets when the cameras started, or crashes fell most where and when cameras operate); evidence that rules out an explanation the stimulus leaves open (crash numbers on those streets had been steady for years before, so the fall is not a return from an unusually bad year; no other safety work was done on those streets). Repeating the stated citywide comparison or the exclusion of citywide changes as the main cause is not new; further evidence limiting their contribution can qualify. A qualifying new fact whose bearing is not explained earns 1.",
+    "disqualifiers": [],
+    "rubric": [
+      "Gives a new fact, consistent with the stated premises and not already stated in them, that makes it materially more likely that the cameras caused most of the drop in injury crashes on the eight streets (a fact pointing the other way does not count).",
+      "Explains how the fact strengthens the argument, namely why it makes it more likely that the cameras caused most of the decline (for example, by showing drivers slowed down for them or by ruling out another explanation the argument leaves open)."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "Crash numbers on those eight streets had been about the same every year for a decade before the cameras went in, so the 40 percent fall isn't just a bad year evening out.",
+        "note": "a different strengthener from the reference (ruling out a return to normal after a spike)"
+      },
+      {
+        "points": 1,
+        "answer": "Drivers on those eight streets now go slower than they used to.",
+        "note": "the right kind of fact, but the answer does not explain how it supports the argument"
+      },
+      {
+        "points": 0,
+        "answer": "Injury crashes on Marrow's other streets fell by only 5 percent.",
+        "note": "already stated in the stimulus, so not a new fact"
+      }
+    ],
+    "allowedTags": [
+      "no-reasoning",
+      "irrelevant",
+      "missed-alternative",
+      "understated",
+      "incomplete",
+      "misread-stimulus"
+    ],
+    "hash": "dfea401269e5c12430a40dec1356f060ce1775ab06d8a3bb9d7dc2345633b6c9"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0012.weaken",
+    "exerciseId": "arg-0012",
+    "kind": "argument",
+    "skill": "weaken",
+    "difficulty": 3,
+    "stimulus": "Two years ago the city of Marrow installed speed cameras on eight streets where residents had complained about speeding. Since then, injury crashes on those eight streets have fallen by 40 percent. Over the same period, injury crashes on Marrow's other streets fell by only 5 percent, and a separate analysis ruled out citywide changes, such as safer cars or milder weather, as the main cause of the decline on the eight streets. The city council concludes that the cameras are responsible for most of the decline in injury crashes on the eight streets.",
+    "credit": null,
+    "prompt": "Give a new fact about the eight streets in the years before the cameras were installed that, if true, would materially weaken the argument, and explain how. Treat the stated premises as true.",
+    "max": 2,
+    "reference": "The residents' complaints followed an unusually bad year in which injury crashes on the eight streets were about double their normal level. Streets picked right after a spike tend to drift back toward their usual numbers anyway, so much of the 40 percent drop could have happened without the cameras.",
+    "accept": "Any new fact about the eight streets in the years before the cameras were installed, consistent with every premise, that gives a real reason to doubt that the cameras account for most of the decline, plus an explanation of how. Main kinds: crashes on those streets were unusually high just before they were chosen, so a fall back toward normal was likely anyway; crashes there were already falling steadily; an earlier change to those streets had effects that were still growing. The weakener must work from the pre-installation fact; an answer that also needs a further fact about what happened after installation does not answer the task as asked. A qualifying fact whose effect is not explained earns 1. An answer whose only new fact is about another period earns 0, and so does a fact that denies a premise.",
+    "disqualifiers": [
+      "Denies a stated premise, for example that crashes on the city's other streets fell by only 5 percent."
+    ],
+    "rubric": [
+      "Gives a new fact about the eight streets in the years before the cameras were installed, consistent with the stated premises, that gives a material reason to doubt that the cameras caused most of the decline.",
+      "Explains how that fact weakens the argument, namely why it makes it more plausible that much of the decline would have happened without the cameras."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "For four years before the cameras went in, injury crashes on those streets had been falling by about 25 percent a year. If that had simply continued, crashes would have fallen by about 44 percent over two years, so the 40 percent drop needn't be the cameras' doing.",
+        "note": "a different weakener from the reference (a decline already under way rather than a return to normal after a spike)"
+      },
+      {
+        "points": 1,
+        "answer": "In the year before the cameras, crashes on those eight streets had been unusually high.",
+        "note": "the right fact, but the answer does not explain why that matters"
+      },
+      {
+        "points": 0,
+        "answer": "When the cameras went live, the city also banned heavy trucks from those streets, which could account for much of the drop.",
+        "note": "near miss: it would weaken an unconstrained version of the argument, but its new fact is about the time of installation, not the years before, so it does not answer the task as asked"
+      }
+    ],
+    "allowedTags": [
+      "missed-alternative",
+      "no-reasoning",
+      "contradicts-premise",
+      "irrelevant",
+      "incomplete",
+      "misread-stimulus"
+    ],
+    "hash": "00e7718a795953cc21294b2bd6918f370ea9905d2473b15f03b794468a613b08"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0013.assumption",
+    "exerciseId": "arg-0013",
+    "kind": "argument",
+    "skill": "assumption",
+    "difficulty": 3,
+    "stimulus": "Several critics have dismissed the Ardent Quartet's new recording of Beethoven's late string quartets on the grounds that its cellist spent ten years in a pop band. That is no reason to dismiss anything. Still, I would not give this recording to someone hearing these quartets for the first time. Its playing is technically flawless, but the players take almost every slow movement much faster than Beethoven's markings indicate, and in these works the slow movements carry the music's emotional weight. A listener who learned the quartets from this recording would come away with a distorted sense of what they are. Newcomers to the late quartets should begin with a different recording.",
+    "credit": null,
+    "prompt": "Take as given the author's claim that the Ardent recording would give a newcomer a distorted sense of the quartets. State an assumption the argument needs to get from that claim to its recommendation to begin with a different recording: a claim that, if false, would remove the reason for the recommendation.",
+    "max": 2,
+    "reference": "At least one other available recording would give newcomers a less distorted sense of the quartets than the Ardent recording would.",
+    "accept": "The inference under test is from \"this recording would give a newcomer a distorted sense of the quartets\" (granted by the prompt) to \"newcomers should begin with a different recording\". Any unstated claim counts whose denial removes the reason for the recommendation. Main bridges: (a) some available recording would give a less distorted sense of the quartets; (b) a distorted first impression is a real drawback when choosing a first recording. The claim must not be stronger than the argument needs: requiring a recording with no distortion at all, one that follows Beethoven's markings exactly, or that every other recording is better earns 1. Claims about whether Beethoven's markings are a fair guide concern the claim the prompt grants, not the step being tested, and do not answer the task. Repeating a premise or the recommendation earns 0.",
+    "disqualifiers": [
+      "Offers only a stated premise (such as that the slow movements carry the music's emotional weight, or that this recording takes them faster than marked), the claim the prompt grants (that the Ardent recording would give a newcomer a distorted sense of the quartets) or the recommendation (to begin with a different recording) as the assumption, with no distinct unstated claim. Mentioning a stated claim while also giving a distinct assumption does not trigger this."
+    ],
+    "rubric": [
+      "States a claim the argument does not state that links the granted distortion to the recommendation to start with a different recording (for example, that a less distorting recording is available, or that a distorted first impression is a drawback when choosing one).",
+      "States it no more strongly than the argument needs, so that if it were false the reason for the recommendation would disappear, rather than requiring a distortion-free recording, exact adherence to the markings or that every other recording is better."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "Giving a newcomer a distorted first impression of the quartets is a real drawback when choosing their first recording.",
+        "note": "a different bridge from the reference (why the distortion matters, not whether a better recording exists)"
+      },
+      {
+        "points": 1,
+        "answer": "Every other available recording would give newcomers a less distorted sense of the quartets than the Ardent one.",
+        "note": "near miss, too strong; one better recording is enough for the recommendation"
+      },
+      {
+        "points": 0,
+        "answer": "The cellist's years in a pop band have no effect on how well the quartet plays.",
+        "note": "near miss: about the critics' reasoning, which the author already rejects; it does not link the distortion to the recommendation"
+      }
+    ],
+    "allowedTags": [
+      "overstated",
+      "wrong-gap",
+      "irrelevant",
+      "contradicts-premise",
+      "incomplete",
+      "misread-stimulus",
+      "no-reasoning"
+    ],
+    "hash": "94f0bdbc60efe40cd0565f1d244063da348358c55b6dcf537bbe27e2a78bb55c"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0013.conclusion",
+    "exerciseId": "arg-0013",
+    "kind": "argument",
+    "skill": "conclusion",
+    "difficulty": 3,
+    "stimulus": "Several critics have dismissed the Ardent Quartet's new recording of Beethoven's late string quartets on the grounds that its cellist spent ten years in a pop band. That is no reason to dismiss anything. Still, I would not give this recording to someone hearing these quartets for the first time. Its playing is technically flawless, but the players take almost every slow movement much faster than Beethoven's markings indicate, and in these works the slow movements carry the music's emotional weight. A listener who learned the quartets from this recording would come away with a distorted sense of what they are. Newcomers to the late quartets should begin with a different recording.",
+    "credit": null,
+    "prompt": "State the argument's main conclusion in one sentence.",
+    "max": 1,
+    "reference": "People hearing Beethoven's late quartets for the first time should start with a recording other than the Ardent Quartet's.",
+    "accept": "Any wording that says newcomers to the late quartets should not start with (or be given) the Ardent Quartet's recording, or should begin with a different one. Extra supporting reasons do not lose credit unless they make the identified conclusion ambiguous. Saying that the recording is bad, should be dismissed or should not be taken seriously is the critics' broader view, not the author's conclusion, and saying that a listener would come away with a distorted sense of the quartets is the intermediate claim that supports the conclusion.",
+    "disqualifiers": [
+      "States the opposite recommendation (that newcomers should start with the Ardent recording)."
+    ],
+    "rubric": [
+      "Identifies the main conclusion (that newcomers to the late quartets should start with a different recording, not the Ardent Quartet's), not the intermediate claim that a listener would get a distorted sense of the quartets, the critics' view, or the concession that the playing is flawless."
+    ],
+    "anchors": [
+      {
+        "points": 1,
+        "answer": "First-time listeners shouldn't learn the late quartets from the Ardent recording."
+      },
+      {
+        "points": 0,
+        "answer": "Someone who learns the quartets from this recording will get a distorted idea of what they are.",
+        "note": "near miss, the intermediate conclusion offered as the reason for the recommendation"
+      }
+    ],
+    "allowedTags": [
+      "premise-as-conclusion",
+      "counterpoint-as-conclusion",
+      "overstated",
+      "incomplete",
+      "misread-stimulus",
+      "irrelevant",
+      "no-reasoning"
+    ],
+    "hash": "837020b094efbf9c46f24efe2af1c0481bea3118fbebf395c43c7f33dfd33593"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0014.flaw",
+    "exerciseId": "arg-0014",
+    "kind": "argument",
+    "skill": "flaw",
+    "difficulty": 2,
+    "stimulus": "Last year the Riverside clinic began offering appointments on weekday evenings. Since then, the share of booked appointments that patients fail to show up for has dropped from 15 percent to 9 percent. The evening slots have been popular, and the clinic now books far more appointments each month than it did before the change. The clinic's director concludes that fewer appointments are being missed now than before evening hours began.",
+    "credit": null,
+    "prompt": "Describe the main reasoning error in one or two sentences.",
+    "max": 2,
+    "reference": "The director moves from a smaller share of booked appointments being missed to fewer appointments being missed, but the clinic now books far more appointments, and 9 percent of a much larger total can be as many missed appointments as 15 percent of the old one, or more.",
+    "accept": "Any answer that identifies the move from \"the share of booked appointments that are missed fell from 15 to 9 percent\" to \"fewer appointments are being missed\", and says why that does not follow: the clinic now books far more appointments, so a smaller share of a larger total need not be a smaller number. A worked example is welcome but not required. Answers about patients who never book, or about whether evening patients differ from daytime ones, miss the error.",
+    "disqualifiers": [],
+    "rubric": [
+      "Ties the error to this argument, naming the fall in the share of booked appointments that are missed and the conclusion that fewer appointments are being missed.",
+      "Says why the inference fails, namely that because the clinic now books far more appointments, a smaller share of the total need not mean a smaller number (for example, 9 percent of nearly twice as many is more than 15 percent of the original)."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "A lower no-show rate doesn't mean fewer no-shows when the clinic is booking far more appointments; 9 percent of a lot more can easily be more than 15 percent of the old number."
+      },
+      {
+        "points": 1,
+        "answer": "The director concludes that fewer appointments are being missed because the share missed fell from 15 to 9 percent.",
+        "note": "identifies the inference but does not say why the larger number of bookings undermines it"
+      },
+      {
+        "points": 0,
+        "answer": "Patients who miss evening appointments might be different from those who missed daytime ones.",
+        "note": "does not bear on whether the number of missed appointments fell"
+      }
+    ],
+    "allowedTags": [
+      "scope-shift",
+      "misread-stimulus",
+      "wrong-gap",
+      "understated",
+      "incomplete",
+      "irrelevant",
+      "no-reasoning"
+    ],
+    "hash": "36296f9521eec33093f3ecda7bdb75c11597725022bf33ec4409c3c8de1bf63c"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0014.weaken",
+    "exerciseId": "arg-0014",
+    "kind": "argument",
+    "skill": "weaken",
+    "difficulty": 2,
+    "stimulus": "Last year the Riverside clinic began offering appointments on weekday evenings. Since then, the share of booked appointments that patients fail to show up for has dropped from 15 percent to 9 percent. The evening slots have been popular, and the clinic now books far more appointments each month than it did before the change. The clinic's director concludes that fewer appointments are being missed now than before evening hours began.",
+    "credit": null,
+    "prompt": "Give a new fact that, if true, would materially weaken the argument, and explain how. Treat the stated premises as true.",
+    "max": 2,
+    "reference": "The clinic now books about twice as many appointments a month as it did before the change. Nine percent of twice as many is about 18 percent of the old monthly total, more than the 15 percent it used to miss, so the number of missed appointments has gone up, not down.",
+    "accept": "Any new fact, consistent with every premise (the shares of 15 and 9 percent, and far more appointments booked than before), that gives a real reason to doubt that fewer appointments are now being missed, plus an explanation of how. The main kind is how much bookings grew: growth of at least two-thirds means the new total is at least five-thirds of the old, so 9 percent of it is at least 15 percent of the old total and as many appointments or more are missed. Smaller growth does not weaken the argument; it confirms it. A direct count showing as many missed appointments as before, or more, over a comparable period also counts, explained as showing the number did not fall. Saying only that bookings rose a lot repeats the stimulus and earns 0; a qualifying figure without the explanation earns 1. A fact that disputes either share denies a premise and earns 0.",
+    "disqualifiers": [
+      "Denies a stated premise, for example that the share of missed appointments fell to 9 percent."
+    ],
+    "rubric": [
+      "Gives a new fact, consistent with the stated premises and not already stated in them, that gives a material reason to doubt that fewer appointments are being missed than before.",
+      "Explains how the fact weakens the argument, namely why, even granting the lower share, it gives reason to think the number of missed appointments did not fall (for example, because bookings grew enough that 9 percent of the new total is at least 15 percent of the old one)."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "Last month the clinic logged 300 missed appointments, against about 200 a month before evening hours began. So more appointments are being missed than before, even though the share is lower.",
+        "note": "a different weakener from the reference (a direct count rather than the growth in bookings)"
+      },
+      {
+        "points": 1,
+        "answer": "Monthly bookings at the clinic have doubled since evening hours began.",
+        "note": "the right fact, but the answer does not explain how it undercuts the conclusion"
+      },
+      {
+        "points": 0,
+        "answer": "Bookings have gone up a lot since evening hours began.",
+        "note": "already stated in the stimulus, so not a new fact"
+      }
+    ],
+    "allowedTags": [
+      "no-reasoning",
+      "scope-shift",
+      "contradicts-premise",
+      "understated",
+      "incomplete",
+      "misread-stimulus",
+      "irrelevant"
+    ],
+    "hash": "77f5b9f14cbed520161efbebe6390832360aa78008339acceb1274aa1eaa3636"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0015.assumption",
+    "exerciseId": "arg-0015",
+    "kind": "argument",
+    "skill": "assumption",
+    "difficulty": 3,
+    "stimulus": "Twenty years ago, feral goats were removed from three of the seven Lisle Islands. Before the removal, the native shrub Lisle saltbush covered only a small fraction of the ground on all seven islands. Today it covers about half the ground on the three goat-free islands, while on the four islands that still have goats it covers less than a tenth. Biologists studying the islands conclude that removing the goats from the other four islands would allow saltbush to recover there as well.",
+    "credit": null,
+    "prompt": "State an assumption the argument needs: a claim that, if false, would make the argument fall apart. (A necessary assumption; it need not make the argument airtight.)",
+    "max": 2,
+    "reference": "Nothing besides the goats, such as another plant-eating animal living only on those islands, would keep saltbush from regrowing on the four islands once the goats were gone.",
+    "accept": "The inference under test is from \"saltbush recovered on the three islands where goats were removed, from cover as low as on the other four\" to \"removing the goats from the other four islands would let saltbush recover there too\". Any unstated claim counts whose denial, with every premise kept, would either stop saltbush recovering on at least one of the four islands once the goats are gone or leave the recovery on the three islands owing nothing to the goats' removal. Main bridges: (a) nothing else there (another grazing animal, much poorer soil, too little rain) would keep saltbush from recovering, where the obstacle must be bad enough to stop recovery, not merely slow it; (b) there is something to regrow from, whether plants or seeds that survive on those islands or that can reach them later (plants surviving there now is not, on its own, necessary); (c) the goats' removal accounts for at least part of the recovery on the three islands, so that recovery is not wholly the work of some other change on those islands alone (such as replanting). The claim must not be stronger than the argument needs: requiring the islands to match the three in soil and rain, or the recovery to match the three islands', earns 1. Saying that saltbush could recover once the goats are gone restates the conclusion.",
+    "disqualifiers": [
+      "Offers only a stated premise (such as that saltbush cover was similarly low on all seven islands before the removal) or a version of the conclusion (that removing the goats would let saltbush recover on the four islands) as the assumption, with no distinct unstated claim. Mentioning a stated claim while also giving a distinct assumption does not trigger this."
+    ],
+    "rubric": [
+      "States a claim the argument does not state that links the recovery on the three goat-free islands to recovery on the four goat islands (for example, that nothing else on the four would keep saltbush down, or that there would be saltbush plants or seeds there to regrow from).",
+      "States it no more strongly than the argument needs, so that if it were false saltbush could not recover on at least one of the four islands once the goats are gone, or the recovery on the three would owe nothing to the goats' removal, rather than requiring the islands to match the three in soil and rain or the recovery to match theirs."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "On each of the four islands there would be saltbush plants or seeds to regrow from after the goats are gone, either surviving there or arriving later.",
+        "note": "a different bridge from the reference (something to regrow from); it does not require the plants or seeds to be there now"
+      },
+      {
+        "points": 1,
+        "answer": "The four goat islands have exactly the same soil and get exactly the same rain as the three goat-free islands.",
+        "note": "near miss, too strong: the islands can differ in soil or rain and saltbush can still recover"
+      },
+      {
+        "points": 0,
+        "answer": "Before the goats were removed, saltbush cover was similarly low on all seven islands.",
+        "note": "a stated premise, not an assumption (disqualifier)"
+      }
+    ],
+    "allowedTags": [
+      "overstated",
+      "wrong-gap",
+      "restates-conclusion",
+      "irrelevant",
+      "incomplete",
+      "misread-stimulus",
+      "no-reasoning"
+    ],
+    "hash": "88c1ac972a38cbd97e4e94ec89e8196b18185ab034c22c4a4464b7b61ca161db"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0015.strengthen",
+    "exerciseId": "arg-0015",
+    "kind": "argument",
+    "skill": "strengthen",
+    "difficulty": 3,
+    "stimulus": "Twenty years ago, feral goats were removed from three of the seven Lisle Islands. Before the removal, the native shrub Lisle saltbush covered only a small fraction of the ground on all seven islands. Today it covers about half the ground on the three goat-free islands, while on the four islands that still have goats it covers less than a tenth. Biologists studying the islands conclude that removing the goats from the other four islands would allow saltbush to recover there as well.",
+    "credit": null,
+    "prompt": "Give a new fact that, if true, would materially strengthen the argument, and explain how. Treat the stated premises as true.",
+    "max": 2,
+    "reference": "On one of the four goat islands, a plot fenced against goats ten years ago now has saltbush covering about half its ground, while the land around it is still mostly bare. That is evidence from one of the four islands that saltbush can recover there once goats are kept off, which makes recovery on the four more likely.",
+    "accept": "Any new fact, consistent with the premises and not already stated in them, that makes it more likely that removing the goats would let saltbush recover on the four islands, with an explanation of how. Main kinds: evidence from the four islands themselves (saltbush regrowing where goats cannot reach); evidence that the four share the conditions that allowed recovery on the three (similar soil and rain, no other saltbush-eating animals, surviving plants or seeds); evidence that the goats' removal explains at least part of the recovery on the three (it began soon after the removal). A qualifying new fact whose bearing is not explained earns 1.",
+    "disqualifiers": [],
+    "rubric": [
+      "Gives a new fact, consistent with the stated premises and not already stated in them, that makes it materially more likely that removing the goats would let saltbush recover on the four islands (a fact pointing the other way does not count).",
+      "Explains how the fact strengthens the argument, namely why it makes recovery on the four islands after the goats are removed more likely (for example, by showing saltbush regrows there when goats are kept off, or that those islands share the conditions that allowed recovery on the three)."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "The four goat islands have the same soils and rainfall as the three goat-free ones and no other animals that eat saltbush, so the conditions that let it come back on the three are there on the four as well.",
+        "note": "a different strengthener from the reference (shared conditions)"
+      },
+      {
+        "points": 1,
+        "answer": "On the goat-free islands, saltbush started spreading within two years of the goats' removal.",
+        "note": "the right kind of fact, but the answer does not explain how it supports the argument"
+      },
+      {
+        "points": 0,
+        "answer": "Saltbush now covers about half the ground on the three islands without goats.",
+        "note": "already stated in the stimulus, so not a new fact"
+      }
+    ],
+    "allowedTags": [
+      "no-reasoning",
+      "irrelevant",
+      "scope-shift",
+      "understated",
+      "incomplete",
+      "misread-stimulus"
+    ],
+    "hash": "bd4b45d1c7b55e2d69d5f8d83f40b25d9ffc78a5cae38ee80bc717eb717e7496"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0016.weaken",
+    "exerciseId": "arg-0016",
+    "kind": "argument",
+    "skill": "weaken",
+    "difficulty": 2,
+    "stimulus": "Corvane is about to release a new version of its delivery-tracking app. The company's release rule is that, in its standard tests on every phone the app supports, the map screen must finish updating within half a second of a driver's new location arriving. The screen is built from forty separate components, among them the map itself, the driver's marker and the estimated arrival time. In the standard tests, testers ran each component on its own on every supported phone, and every component finished updating in under half a second each time. The release manager concludes that the new version's map screen meets the half-second rule.",
+    "credit": null,
+    "prompt": "Give a new fact that, if true, would materially weaken the argument, and explain how. Treat the stated premises as true.",
+    "max": 2,
+    "reference": "When a new location arrives, all forty components update one after another, and each takes about 0.1 seconds. That alone adds up to four seconds, far beyond the half-second rule, even though each component on its own is well within it.",
+    "accept": "Any new fact, consistent with every premise (in the standard tests, each component run on its own on every supported phone finished updating in under half a second), that gives a real reason to doubt that the whole map screen finishes within half a second in those tests, plus an explanation of how. Main kinds: the components update one after another, so their times add up; some components must wait for others to finish before they can start; when they run together they compete for the phone's processor or memory and slow down; there is a delay before updating starts or extra work before the screen is done; a timing of the whole screen came out over half a second. A qualifying fact whose effect is not explained earns 1. A fact that denies a premise, such as a component taking longer than half a second in the tests on its own, earns 0.",
+    "disqualifiers": [
+      "Denies a stated premise, for example that some component took longer than half a second when tested on its own."
+    ],
+    "rubric": [
+      "Gives a new fact, consistent with the stated premises and not already stated in them, that gives a material reason to doubt that the whole map screen finishes updating within half a second.",
+      "Explains how the fact weakens the argument, namely why, even granting that each component is fast on its own, it gives reason to think the screen as a whole takes longer than half a second (for example, because the components' times add up, they slow each other down, or other work comes before or after them)."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "The arrival-time estimate can't start updating until the map has finished, which takes 0.4 seconds, and the estimate itself takes 0.3 seconds. So the screen needs at least 0.7 seconds, over the limit.",
+        "note": "a different weakener from the reference (one component waiting on another)"
+      },
+      {
+        "points": 1,
+        "answer": "The components update one after another, not all at once.",
+        "note": "the right fact, but the answer does not explain how it undercuts the conclusion"
+      },
+      {
+        "points": 0,
+        "answer": "In the standard tests, the map component took 0.7 seconds when run on its own.",
+        "note": "denies the premise that every component finished in under half a second in those tests (disqualifier)"
+      }
+    ],
+    "allowedTags": [
+      "contradicts-premise",
+      "no-reasoning",
+      "irrelevant",
+      "understated",
+      "incomplete",
+      "misread-stimulus"
+    ],
+    "hash": "33dd30bd51484d7593275ab76ec88de51a6af414a43adc2f0682a90c6f576d89"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0017.conclusion",
+    "exerciseId": "arg-0017",
+    "kind": "argument",
+    "skill": "conclusion",
+    "difficulty": 4,
+    "stimulus": "Whatever the Dunmore city council decides about the proposed protected bike lanes on Harbor Street, it should not count the study that the lanes' supporters keep citing in their favor. That study found that, in six other cities, shops on streets that gained protected lanes saw their sales rise over the next three years. The lanes may well be worth building for other reasons, such as cyclists' safety. But the study was paid for by the Association of Bicycle Makers, whose members profit whenever more people take up cycling, so its finding about shop sales cannot be trusted.",
+    "credit": null,
+    "prompt": "State the argument's main conclusion in one sentence.",
+    "max": 1,
+    "reference": "The Dunmore council should not count the bicycle makers' study in favor of the Harbor Street bike lanes, whatever it decides about them.",
+    "accept": "Any wording that says the council should not count the study (or give it weight) as support for the bike lanes. Repeating \"whatever it decides\" is not required. Saying that the study's finding cannot be trusted is the intermediate claim offered as the reason; saying that the lanes may be worth building for other reasons is a concession; saying that the lanes would raise shop sales is the supporters' view; saying that the council should not build the lanes goes beyond the author, who leaves that decision open.",
+    "disqualifiers": [
+      "States the opposite recommendation (that the council should count the study in the lanes' favor)."
+    ],
+    "rubric": [
+      "Identifies the main conclusion (that the council should not count the study in favor of the bike lanes), not the intermediate claim that the study's finding cannot be trusted, the concession that the lanes may be worth building, the supporters' view, or a recommendation against building the lanes."
+    ],
+    "anchors": [
+      {
+        "points": 1,
+        "answer": "The council shouldn't treat the bike makers' study as a reason to build the lanes."
+      },
+      {
+        "points": 0,
+        "answer": "The study's finding about shop sales can't be trusted, because bicycle makers paid for it.",
+        "note": "near miss, the intermediate conclusion offered as the reason for the recommendation"
+      }
+    ],
+    "allowedTags": [
+      "premise-as-conclusion",
+      "counterpoint-as-conclusion",
+      "overstated",
+      "incomplete",
+      "misread-stimulus",
+      "irrelevant",
+      "no-reasoning"
+    ],
+    "hash": "d329e18d41fb8f8fe4e4a00941e9230388300b6eddbeb14f5275fa1bba5250e7"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0019.assumption",
+    "exerciseId": "arg-0019",
+    "kind": "argument",
+    "skill": "assumption",
+    "difficulty": 3,
+    "stimulus": "Five years ago, about half of the corn farms in Dunlow County began planting cover crops, such as rye and clover, on their fields each winter. Over the five years before that, average corn yields on the farms that later adopted cover crops and on the county's other corn farms had risen at about the same rate. Since the change, average yields on the adopting farms have risen by 12 percent, while on the other farms they have risen by only 3 percent. A county agricultural adviser concludes that planting cover crops raised corn yields on the farms that adopted them.",
+    "credit": null,
+    "prompt": "State an assumption the argument needs: a claim that, if false, would make the argument fall apart. (A necessary assumption; it need not make the argument airtight.)",
+    "max": 2,
+    "reference": "The farms that planted cover crops did not, over the same five years, make some other change, such as switching to a higher-yielding seed, that by itself accounts for all of their extra rise in yields.",
+    "accept": "The inference under test is from \"yields rose 12 percent on the farms that adopted cover crops and 3 percent on the others, after rising at the same rate before\" to \"planting cover crops raised yields on the adopting farms\". Any unstated claim counts whose denial, with every premise kept, would leave the adopters' extra rise fully explained by something other than the cover crops, so that it no longer supports the conclusion. Main bridges: (a) nothing else that changed for the adopting farms at about the same time, whether something they did (a new seed, more fertilizer, new irrigation) or something that happened to them (better rain in their part of the county), by itself accounts for all of the extra rise; (b) the extra rise in average yield does not come entirely from how the average is made up, for example from the adopters no longer planting corn on their poorest fields; (c) nothing that happened only to the other farms, such as a pest confined to their fields, by itself accounts for the whole gap. The claim must not be stronger than the argument needs: requiring that the adopting farms changed nothing else at all, or that nothing at all affected the other farms that did not also affect the adopting farms, earns 1. Repeating that yields on the two groups had risen at the same rate before, or saying that cover crops raised yields (on these farms or on every farm), earns 0.",
+    "disqualifiers": [
+      "Offers only a stated premise (such as that yields on the two groups of farms had risen at about the same rate before the change) or a version of the conclusion (that the cover crops raised yields) as the assumption, with no distinct unstated claim. Mentioning a stated claim while also giving a distinct assumption does not trigger this."
+    ],
+    "rubric": [
+      "States a claim the argument does not state that links the adopting farms' extra rise in yields to the cover crops (for example, that no other change on those farms, or setback on the other farms, accounts for it), not a premise or a version of the conclusion.",
+      "States it no more strongly than the argument needs, so that if it were false the adopting farms' extra rise would be fully explained by something other than the cover crops, rather than requiring that those farms changed nothing else at all or that nothing at all affected only one group."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "The farms with cover crops didn't get their higher average yields simply by no longer planting corn on their worst fields.",
+        "note": "a different bridge from the reference (how the average is made up); if it were false, the extra rise would come from dropping poor fields, not from the cover crops"
+      },
+      {
+        "points": 1,
+        "answer": "The farms that planted cover crops made no other changes to how they farmed during those five years.",
+        "note": "near miss, too strong: the farms could have made small changes that do not account for the extra rise, and the argument would still stand"
+      },
+      {
+        "points": 0,
+        "answer": "Before the change, yields on the two groups of farms had been rising at about the same rate.",
+        "note": "a stated premise, not an assumption (disqualifier)"
+      }
+    ],
+    "allowedTags": [
+      "overstated",
+      "missed-alternative",
+      "restates-conclusion",
+      "wrong-gap",
+      "incomplete",
+      "misread-stimulus",
+      "irrelevant",
+      "no-reasoning"
+    ],
+    "hash": "cc89fe651806fcfd5f93965c013ac369a577eb54aafc55c16c28b1d793c9728d"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0020.flaw",
+    "exerciseId": "arg-0020",
+    "kind": "argument",
+    "skill": "flaw",
+    "difficulty": 2,
+    "stimulus": "Lingora, a language-learning app, compared two groups of its users who had all been learning Spanish on the app for about a year: those who had kept up a practice streak of at least 100 days in a row, and those who had never practiced more than seven days in a row. The two groups had spent about the same total number of hours practicing on the app, and none of the users in either group was taking Spanish classes or lessons outside the app. On a speaking test given through the app last month, the streak holders scored far higher on average. Lingora's new advertisement therefore claims that keeping up a 100-day streak makes learners far better speakers.",
+    "credit": null,
+    "prompt": "Describe the main reasoning error in one or two sentences.",
+    "max": 2,
+    "reference": "The advertisement infers from the streak holders' higher scores that keeping a streak makes learners better speakers, without ruling out that the two groups differed in other ways; for example, users who already spoke Spanish better when they started may have found it easier to keep a long streak.",
+    "accept": "Any answer that identifies the move from \"users with 100-day streaks scored far higher on the speaking test than users who never practiced more than seven days in a row\" to \"keeping up a streak makes learners far better speakers\", and says why that does not follow by naming a possible explanation the argument leaves open: the streak holders may have spoken better from the start; being a better speaker may make a long streak easier or more rewarding to keep; or something else may lead some users both to keep streaks and to speak better (for example, a Spanish-speaking partner, time spent where Spanish is spoken, or more informal practice outside the app). Any open alternative, offered as a possibility, earns the point. Lessons or classes outside the app do not, since the stimulus rules them out, and neither does a difference in how long the groups had used the app or in their total hours practicing on it, both of which the stimulus matches. A bare label such as \"correlation is not causation\", not applied to the streaks and the scores, earns 0.",
+    "disqualifiers": [],
+    "rubric": [
+      "Ties the error to this argument, naming the streak holders' higher scores on the speaking test and the conclusion that keeping a streak makes learners far better speakers.",
+      "Says why the inference fails by naming a possible explanation of the higher scores that the argument does not rule out (for example, that the streak holders already spoke better when they started, or that better speakers find a streak easier to keep), not one the stimulus rules out."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "Maybe the people who kept 100-day streaks already knew some Spanish when they started, so practicing felt easy and they stuck with it. Their higher test scores don't show the streak made them better; being better may have kept them going."
+      },
+      {
+        "points": 1,
+        "answer": "The ad assumes that because the users with long streaks scored higher, the streaks are what made them better speakers.",
+        "note": "describes the inference but names no other possible explanation, so it does not say why it fails"
+      },
+      {
+        "points": 0,
+        "answer": "The streak holders were probably also taking Spanish classes, which would explain their scores.",
+        "note": "near miss: an alternative the stimulus rules out (no one in either group was taking classes or lessons outside the app), and it does not describe the inference"
+      }
+    ],
+    "allowedTags": [
+      "correlation-causation",
+      "missed-alternative",
+      "contradicts-premise",
+      "understated",
+      "incomplete",
+      "misread-stimulus",
+      "irrelevant",
+      "no-reasoning"
+    ],
+    "hash": "14527d8e350cc40c01833387421f6f32ba61f7f9b784b82da1cc70eaacc525d1"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0020.weaken",
+    "exerciseId": "arg-0020",
+    "kind": "argument",
+    "skill": "weaken",
+    "difficulty": 2,
+    "stimulus": "Lingora, a language-learning app, compared two groups of its users who had all been learning Spanish on the app for about a year: those who had kept up a practice streak of at least 100 days in a row, and those who had never practiced more than seven days in a row. The two groups had spent about the same total number of hours practicing on the app, and none of the users in either group was taking Spanish classes or lessons outside the app. On a speaking test given through the app last month, the streak holders scored far higher on average. Lingora's new advertisement therefore claims that keeping up a 100-day streak makes learners far better speakers.",
+    "credit": null,
+    "prompt": "Give a new fact about how well the users in the two groups spoke Spanish when they began using Lingora that, if true, would materially weaken the argument, and explain how. Treat the stated premises as true.",
+    "max": 2,
+    "reference": "When they first signed up, the users who went on to keep 100-day streaks already spoke Spanish much better than the other group did. The gap in last month's test scores may then simply reflect where the two groups started, not anything the streaks did.",
+    "accept": "Any new fact about how well the users spoke Spanish when they began using Lingora, consistent with every premise, that gives a real reason to doubt that the streaks account for the gap in scores, plus an explanation of how. Main kinds: the streak holders already spoke better at the start, so the gap may have been there before any streak; the gap at the start was as large as the later gap, which makes the later comparison weaker evidence that the streaks produced the advantage; users who began with more Spanish were the ones who went on to keep long streaks, so speaking better may have led to the streaks rather than the reverse. A qualifying fact whose effect is not explained earns 1. A fact about some other difference between the groups (time abroad, a Spanish-speaking family) earns 0 because it does not answer the task as asked, and so does a fact that denies a premise, such as some users taking classes outside the app.",
+    "disqualifiers": [
+      "Denies a stated premise, for example that no one in either group was taking Spanish classes or lessons outside the app."
+    ],
+    "rubric": [
+      "Gives a new fact about how well the users in the two groups spoke Spanish when they began using Lingora, consistent with the stated premises, that gives a material reason to doubt that the streaks account for the later gap in test scores.",
+      "Explains how that fact weakens the argument, namely why it makes it more plausible that the gap reflects how well the users spoke from the start, not what the streaks did."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "Lingora gives every user a comparable speaking test at sign-up, and on it the future streak holders were ahead of the other group by the same average amount as on last month's test. Since the gap didn't grow, last month's scores give little reason to think the streaks produced it.",
+        "note": "a different weakener from the reference (a sign-up gap as large as the later one); it weakens the case that the streaks caused the advantage without showing that they had no effect"
+      },
+      {
+        "points": 1,
+        "answer": "The streak holders already spoke more Spanish than the other users when they started on the app.",
+        "note": "the right fact, but the answer does not explain how it undercuts the conclusion"
+      },
+      {
+        "points": 0,
+        "answer": "Many of the streak holders spent a month in Spain during the year.",
+        "note": "near miss: it would weaken an unconstrained version of the argument, but it is about time abroad, not about how well the users spoke Spanish when they began, so it does not answer the task as asked"
+      }
+    ],
+    "allowedTags": [
+      "missed-alternative",
+      "no-reasoning",
+      "contradicts-premise",
+      "irrelevant",
+      "incomplete",
+      "misread-stimulus"
+    ],
+    "hash": "429a6fce8fbec4bed3b3686bbbe2a563881a42cf481795460c34643ebe4b188e"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0021.flaw",
+    "exerciseId": "arg-0021",
+    "kind": "argument",
+    "skill": "flaw",
+    "difficulty": 2,
+    "stimulus": "Under the city of Brask's arts policy, the city council renews a museum's yearly operating grant only if the museum's attendance rose over the previous year. Last year, attendance at the Brask Museum of Craft rose by 8 percent, more than at any other museum in the city. The museum's director has therefore assured the staff that the council will renew the museum's grant this year.",
+    "credit": null,
+    "prompt": "Describe the main reasoning error in one or two sentences.",
+    "max": 2,
+    "reference": "The director treats a rise in attendance, which the policy requires for renewal, as if it guaranteed renewal; the policy says only that without a rise there is no renewal, so the council could still refuse the grant for some other reason.",
+    "accept": "Any answer that identifies the move from \"the council renews a grant only if attendance rose, and the museum's attendance rose\" to \"the council will renew the museum's grant\", and says why that does not follow: the policy makes a rise necessary, not sufficient, so meeting it leaves the council free to refuse the grant for some other reason. \"Necessary but not sufficient\" wording earns the point when the answer applies it to the attendance requirement and the renewal; a bare label that is not applied earns 0. Answers claiming the policy itself demands a larger rise or a top ranking misread it; an answer that the council could still refuse despite the rise, for example because it also wants a larger rise, applies the necessary-not-sufficient point and earns it.",
+    "disqualifiers": [],
+    "rubric": [
+      "Ties the error to this argument, naming the inference from the museum's rise in attendance, which the policy requires for renewal, to the conclusion that its grant will be renewed.",
+      "Says why the inference fails, namely that the policy makes a rise in attendance necessary for renewal but not enough to guarantee it, so the council could still refuse the grant for another reason."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "Under the policy, a museum whose attendance didn't rise can't get its grant, but that doesn't mean every museum whose attendance did rise will. The director takes a requirement for renewal as a promise of it, and the council could still say no for other reasons."
+      },
+      {
+        "points": 1,
+        "answer": "The director concludes the grant will be renewed because the museum's attendance went up.",
+        "note": "identifies the inference but does not say why the rise falls short of guaranteeing renewal"
+      },
+      {
+        "points": 0,
+        "answer": "Attendance might fall this year, so the director can't be sure it will keep rising.",
+        "note": "misses the inference: the policy's condition is the rise over the previous year, which the stimulus gives; the answer is about whether attendance will keep rising, not about why that rise does not guarantee renewal"
+      }
+    ],
+    "allowedTags": [
+      "reversed-logic",
+      "misread-stimulus",
+      "wrong-gap",
+      "understated",
+      "incomplete",
+      "irrelevant",
+      "no-reasoning"
+    ],
+    "hash": "ec841b58e2a745d8cc3f643f981ea47b57ac40989e2ccc25a16f0df8d99439de"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0022.strengthen",
+    "exerciseId": "arg-0022",
+    "kind": "argument",
+    "skill": "strengthen",
+    "difficulty": 2,
+    "stimulus": "Two years ago, the town of Pell moved its weekly farmers' market from Saturday mornings to Thursday evenings. The market's sales then rose by a third, and a careful study showed that the move itself caused the rise, chiefly by drawing people who stopped at the market on their way home from work. The nearby town of Ardley, whose Saturday-morning market has had flat sales for years, is considering the same move. An Ardley council member argues that moving its market to Thursday evenings would raise its sales as well.",
+    "credit": null,
+    "prompt": "Give a new fact that, if true, would materially strengthen the argument, and explain how. Treat the stated premises as true.",
+    "max": 2,
+    "reference": "Many people in Ardley work in town and pass the market site on their way home, much as in Pell. So the kind of shopper who made the move pay off in Pell is there in Ardley too.",
+    "accept": "Any new fact, consistent with the premises and not already stated in them, that makes it more likely that moving Ardley's market to Thursday evenings would raise its sales, with an explanation of how. Main kinds: Ardley has the kind of shopper who made the move work in Pell (people who pass the market on their way home from work); facts making it less likely that the move would cost Ardley's market its current shoppers (most are free on Thursday evenings too); facts removing a reason evening shoppers would stay away (no other evening market nearby); Pell before the move was like Ardley now (its Saturday sales had also been flat for years). Facts about Pell that do not bear on its likeness to Ardley add little, since the move's effect there is given. A qualifying new fact whose bearing is not explained earns 1.",
+    "disqualifiers": [],
+    "rubric": [
+      "Gives a new fact, consistent with the stated premises and not already stated in them, that makes it materially more likely that moving Ardley's market to Thursday evenings would raise its sales (a fact pointing the other way does not count).",
+      "Explains how the fact strengthens the argument, namely why it makes a rise in Ardley's sales after the move more likely (for example, by showing that Ardley has the kind of shopper who made the move work in Pell, or that the move would not drive away its current shoppers)."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "Nearly all of the Ardley market's regular Saturday shoppers are free on Thursday evenings. That makes it more likely the market could keep the customers it already has, so new evening shoppers could add to its sales rather than just replace lost Saturday trade.",
+        "note": "a different strengthener from the reference (it reduces a reason to expect losing current shoppers); being free on Thursdays makes keeping them likelier but does not guarantee it"
+      },
+      {
+        "points": 1,
+        "answer": "Lots of Ardley residents drive past the market site on their way home from work.",
+        "note": "the right kind of fact, but the answer does not explain how it supports the argument"
+      },
+      {
+        "points": 0,
+        "answer": "After Pell moved its market to Thursday evenings, its sales rose by a third.",
+        "note": "already stated in the stimulus, so not a new fact"
+      }
+    ],
+    "allowedTags": [
+      "no-reasoning",
+      "irrelevant",
+      "scope-shift",
+      "understated",
+      "incomplete",
+      "misread-stimulus"
+    ],
+    "hash": "0bec2ed71823e6bf39b0b7c7ef93d08fe167894fd93d1b9419acf59aae3d237e"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0023.assumption",
+    "exerciseId": "arg-0023",
+    "kind": "argument",
+    "skill": "assumption",
+    "difficulty": 3,
+    "stimulus": "Wildlife officers keep forty motion-triggered cameras at fixed spots along trails in Corrin Forest, and the cameras stood at the same forty spots in 2020 and 2025. Monthly checks showed every camera working reliably, with unchanged settings and a clear view of its trail, throughout both years. In 2020 the cameras photographed a lynx on 120 occasions; in 2025 they did so on only 58. The forest's chief wildlife officer concludes that the number of lynx living in Corrin Forest has fallen substantially since 2020.",
+    "credit": null,
+    "prompt": "State an assumption the argument needs: a claim that, if false, would make the argument fall apart. (A necessary assumption; it need not make the argument airtight.)",
+    "max": 2,
+    "reference": "Changes in how the lynx use the camera trails did not cut the number of photographs per animal enough to explain the drop from 120 to 58 without a substantial fall in the forest's lynx population.",
+    "accept": "The inference under test is from \"the same forty working cameras photographed a lynx on 120 occasions in 2020 and on 58 in 2025\" to \"the number of lynx in the forest has fallen substantially\". Any unstated claim counts whose denial, with every premise kept, would let the drop in photographs be explained without a substantial fall in the number of lynx. The bridges concern a large enough fall in photographs per animal, whether from changed use of the trails, movement to parts of the forest without cameras, or a few repeatedly photographed animals making up a much larger share of the 2020 count than of the 2025 count. A claim ruling out one of these must address its size and its effect on the comparison between the years. Claims stronger than needed earn 1: requiring that the lynx's habits or ranges did not change at all, or that each lynx was photographed exactly as often, or ruling out a family that supplied most of the 2020 photographs without regard to 2025. Repeating that the cameras worked, or saying that there are fewer lynx, earns 0.",
+    "disqualifiers": [
+      "Offers only a stated premise (such as that the cameras worked reliably in both years) or a version of the conclusion (that there are fewer lynx in the forest) as the assumption, with no distinct unstated claim. Mentioning a stated claim while also giving a distinct assumption does not trigger this."
+    ],
+    "rubric": [
+      "States a claim the argument does not state that links the drop in photographs to the number of lynx (for example, that photographs per animal did not fall far enough to explain the drop), not a premise or a version of the conclusion.",
+      "States it no more strongly than the argument needs, so that if it were false the drop in photographs would no longer show a substantial fall in the number of lynx, rather than requiring that the lynx's habits did not change at all or ruling out repeat photographs in 2020 without regard to 2025."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "Repeat photos of a lynx family denning beside a camera didn't swell the 2020 count, compared with 2025's, by enough to explain the drop without a substantial fall in the number of lynx.",
+        "note": "a different case from the reference (repeat photographs rather than changed use of the trails); if it were false, the comparison between the years would be distorted enough that the drop would no longer show a substantial fall in the population"
+      },
+      {
+        "points": 1,
+        "answer": "The lynx in Corrin Forest move around exactly as they did in 2020, using the same trails just as often.",
+        "note": "near miss, too strong: the lynx's habits could change a little without explaining a drop of more than half in photographs"
+      },
+      {
+        "points": 0,
+        "answer": "The cameras worked properly in both years.",
+        "note": "a stated premise, not an assumption (disqualifier)"
+      }
+    ],
+    "allowedTags": [
+      "overstated",
+      "missed-alternative",
+      "restates-conclusion",
+      "wrong-gap",
+      "incomplete",
+      "misread-stimulus",
+      "irrelevant",
+      "no-reasoning"
+    ],
+    "hash": "11ee666fa05b933dabb57e11cf05585c4b249a47905d62d898693769076d2a35"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0024.assumption",
+    "exerciseId": "arg-0024",
+    "kind": "argument",
+    "skill": "assumption",
+    "difficulty": 3,
+    "stimulus": "The Varden Historical Society should not oppose the plan to turn the old Varden grain silo into apartments. Some of the society's members argue that the silo must be kept exactly as it stands, because it is the last wooden silo in the county. Admittedly, the conversion would replace much of the silo's interior. But the society's charter commits it to protecting buildings that show how the county's people lived and worked, and the conversion would keep the silo's outer walls and its loading machinery, which are what show how grain was handled there. So the conversion would preserve what makes the silo historically important.",
+    "credit": null,
+    "prompt": "State an assumption the argument needs: a claim that, if false, would make the argument fall apart. (A necessary assumption; it need not make the argument airtight.)",
+    "max": 2,
+    "reference": "Nothing in the interior that the conversion would remove is essential to what makes the silo historically important under the society's charter.",
+    "accept": "The inference under test runs from \"the charter commits the society to protecting buildings that show how the county's people lived and worked; the conversion keeps the outer walls and loading machinery, which show how grain was handled\" through \"the conversion would preserve what makes the silo historically important\" to \"the society should not oppose the conversion\". Any unstated claim counts whose denial, with every premise kept, would break either step. Main bridges: (a) the interior features the conversion would remove are not essential to the silo's historical importance under the charter; (b) the society has no overriding duty to keep this particular silo unaltered, such as a binding rule to keep the county's last wooden silo exactly as it stands, even when its historical importance would be preserved. Claims stronger than needed earn 1, such as that the interior shows nothing at all about how the county's people lived and worked, that it has no value of any kind, that converting old buildings always preserves their historical importance, or that the society has no competing consideration of any kind (a duty that can be outweighed does not defeat the recommendation). A stated premise, the intermediate conclusion or the recommendation offered as the assumption earns 0.",
+    "disqualifiers": [
+      "Offers only a stated premise (such as that the conversion would keep the outer walls and loading machinery), the intermediate conclusion (that the conversion would preserve what makes the silo historically important) or the main conclusion (that the society should not oppose the plan) as the assumption, with no distinct unstated claim. Mentioning a stated claim while also giving a distinct assumption does not trigger this."
+    ],
+    "rubric": [
+      "States a claim the argument does not state that bridges one of the argument's two steps (for example, that the features the conversion removes are not essential to the silo's historical importance, or that no overriding duty bears on opposing the plan), not a premise or either stated conclusion.",
+      "States it no more strongly than the argument needs, so that if it were false the conversion would remove something essential to the silo's historical importance or the society would have an overriding duty to oppose the plan, rather than merely some lost detail or a consideration that could be outweighed."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "The society isn't bound by any overriding duty to keep the county's last wooden silo exactly as it stands.",
+        "note": "a different bridge from the reference (the society's other commitments rather than the interior); if it were false, an overriding duty to keep the silo unaltered would defeat the recommendation even if the conversion preserved its historical importance. A duty that could be outweighed would not defeat it."
+      },
+      {
+        "points": 1,
+        "answer": "Turning an old building into apartments always keeps whatever makes it historically important.",
+        "note": "near miss, too strong: the argument needs this to hold for the silo, not for every conversion"
+      },
+      {
+        "points": 0,
+        "answer": "The conversion would keep the silo's outer walls and its loading machinery.",
+        "note": "a stated premise, not an assumption (disqualifier)"
+      }
+    ],
+    "allowedTags": [
+      "overstated",
+      "restates-conclusion",
+      "wrong-gap",
+      "irrelevant",
+      "incomplete",
+      "misread-stimulus",
+      "no-reasoning"
+    ],
+    "hash": "171cfbdd8623334eeeb19ac30611bfcc9869bbc94d8990d2c5ae679cbf0e203e"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0024.conclusion",
+    "exerciseId": "arg-0024",
+    "kind": "argument",
+    "skill": "conclusion",
+    "difficulty": 3,
+    "stimulus": "The Varden Historical Society should not oppose the plan to turn the old Varden grain silo into apartments. Some of the society's members argue that the silo must be kept exactly as it stands, because it is the last wooden silo in the county. Admittedly, the conversion would replace much of the silo's interior. But the society's charter commits it to protecting buildings that show how the county's people lived and worked, and the conversion would keep the silo's outer walls and its loading machinery, which are what show how grain was handled there. So the conversion would preserve what makes the silo historically important.",
+    "credit": null,
+    "prompt": "State the argument's main conclusion in one sentence.",
+    "max": 1,
+    "reference": "The Varden Historical Society should not oppose the plan to turn the old grain silo into apartments.",
+    "accept": "Any wording that says the historical society should not oppose (or should not fight or object to) the plan to convert the silo into apartments. Saying that the conversion would preserve what makes the silo historically important is the intermediate claim offered as the reason; saying that the conversion would replace much of the interior is a concession; saying that the silo must be kept exactly as it stands is the members' view the author argues against; saying that the society should support or campaign for the conversion goes beyond the author, who says only that it should not oppose it.",
+    "disqualifiers": [
+      "States the opposite recommendation (that the society should oppose the conversion, or that the silo must be kept exactly as it stands)."
+    ],
+    "rubric": [
+      "Identifies the main conclusion (that the historical society should not oppose the plan to convert the silo into apartments), not the intermediate claim that the conversion would preserve what makes the silo historically important, the concession about the interior, the members' view, or a call for the society to support the plan."
+    ],
+    "anchors": [
+      {
+        "points": 1,
+        "answer": "The historical society shouldn't fight the plan to turn the silo into apartments."
+      },
+      {
+        "points": 0,
+        "answer": "Turning the silo into apartments would keep what makes it historically important.",
+        "note": "near miss, the intermediate conclusion offered as the reason for the recommendation"
+      }
+    ],
+    "allowedTags": [
+      "premise-as-conclusion",
+      "counterpoint-as-conclusion",
+      "overstated",
+      "incomplete",
+      "misread-stimulus",
+      "irrelevant",
+      "no-reasoning"
+    ],
+    "hash": "28724fcca95f57247818dd0ccba2b39264faabf11b3e2e1ac09516b27af9f98f"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0025.flaw",
+    "exerciseId": "arg-0025",
+    "kind": "argument",
+    "skill": "flaw",
+    "difficulty": 3,
+    "stimulus": "Halden's health department inspected each of the city's 1,000 restaurants four times last year, without warning, and recorded whether each inspection found a serious violation, such as food stored at unsafe temperatures. One inspection in ten found such a violation. In a newspaper column praising the city's restaurants, a food writer concludes that only about one Halden restaurant in ten was found to have a serious violation last year.",
+    "credit": null,
+    "prompt": "Describe the main reasoning error in one or two sentences.",
+    "max": 2,
+    "reference": "The writer treats the share of inspections that found a serious violation as the share of restaurants found to have one; since each restaurant was inspected four times, the 400 failed inspections could have been at as many as 400 different restaurants, four in ten, and the share is as low as one in ten only if every restaurant that failed did so in all four of its inspections.",
+    "accept": "Any answer that identifies the move from \"one inspection in ten found a serious violation\" to \"about one restaurant in ten was found to have one\", and says why that does not follow: each restaurant was inspected four times, so the failed inspections could have been spread across many more restaurants than one in ten (up to four in ten). Exact numbers are not required. An answer that says the share of restaurants could be lower than one in ten has the direction wrong (at least 100 restaurants, one in ten, must account for the 400 failed inspections), so it does not say why the inference fails. An answer that says only that the two shares need not match, without saying that the share of restaurants could be higher, earns 1. Objections that inspectors may have missed violations miss the error, since the conclusion concerns violations that were found.",
+    "disqualifiers": [],
+    "rubric": [
+      "Ties the error to this argument, naming the share of inspections that found a serious violation (one in ten) and the conclusion about the share of restaurants found to have one.",
+      "Says why the inference fails, namely that because each restaurant was inspected four times, the failed inspections could have been spread across far more restaurants than one in ten (up to four in ten)."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "One in ten inspections isn't one in ten restaurants. With four inspections each, the 400 failures could have hit up to 400 different restaurants, which would be 40 percent of them, not 10."
+      },
+      {
+        "points": 1,
+        "answer": "The writer goes from one inspection in ten finding a serious violation to one restaurant in ten having been found with one.",
+        "note": "identifies the inference but does not say why the share of inspections need not match the share of restaurants"
+      },
+      {
+        "points": 0,
+        "answer": "The inspectors may have missed some violations, so more restaurants may have had them than the figures show.",
+        "note": "near miss: the conclusion is about violations that were found, so violations the inspectors missed do not bear on it"
+      }
+    ],
+    "allowedTags": [
+      "scope-shift",
+      "misread-stimulus",
+      "wrong-gap",
+      "understated",
+      "incomplete",
+      "irrelevant",
+      "no-reasoning"
+    ],
+    "hash": "360bdc48b2eda1e8e624434e61911d327ff82e4d3c7334bbf5b006d3512394c2"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0025.weaken",
+    "exerciseId": "arg-0025",
+    "kind": "argument",
+    "skill": "weaken",
+    "difficulty": 2,
+    "stimulus": "Halden's health department inspected each of the city's 1,000 restaurants four times last year, without warning, and recorded whether each inspection found a serious violation, such as food stored at unsafe temperatures. One inspection in ten found such a violation. In a newspaper column praising the city's restaurants, a food writer concludes that only about one Halden restaurant in ten was found to have a serious violation last year.",
+    "credit": null,
+    "prompt": "Give a new fact that, if true, would materially weaken the argument, and explain how. Treat the stated premises as true.",
+    "max": 2,
+    "reference": "Almost no restaurant was found with a serious violation in more than one of its four inspections. The 400 failed inspections were then at nearly 400 different restaurants, close to four in ten, far more than one in ten.",
+    "accept": "Any new fact, consistent with every premise (1,000 restaurants, four inspections each, one inspection in ten finding a serious violation), that gives a real reason to think the failed inspections were spread across clearly more than one restaurant in ten, plus an explanation of how. Main kinds: few restaurants failed more than one inspection; restaurants found with a violation usually passed their later inspections; the failures were scattered across many different restaurants. A fact suggesting the failures were concentrated in a few restaurants supports the conclusion and earns 0. A qualifying fact whose effect is not explained earns 1. A fact that denies a premise, such as some restaurants being inspected only once, earns 0.",
+    "disqualifiers": [
+      "Denies a stated premise, for example that every restaurant was inspected four times."
+    ],
+    "rubric": [
+      "Gives a new fact, consistent with the stated premises and not already stated in them, that points to the failed inspections being spread across clearly more than one restaurant in ten.",
+      "Explains how the fact weakens the argument, namely why it makes it more plausible that the failed inspections were spread across clearly more than one restaurant in ten."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "Restaurants found with a serious violation had to fix it within a week, and very few were caught with one again later in the year. So the 400 failed inspections were spread over hundreds of restaurants, far more than one in ten.",
+        "note": "a different weakener from the reference (a reason the failures were spread out, rather than the spread itself)"
+      },
+      {
+        "points": 1,
+        "answer": "Very few restaurants failed more than one of their inspections.",
+        "note": "the right fact, but the answer does not explain how it undercuts the conclusion"
+      },
+      {
+        "points": 0,
+        "answer": "Many restaurants were inspected only once last year.",
+        "note": "denies the premise that every restaurant was inspected four times (disqualifier)"
+      }
+    ],
+    "allowedTags": [
+      "contradicts-premise",
+      "no-reasoning",
+      "scope-shift",
+      "understated",
+      "incomplete",
+      "misread-stimulus",
+      "irrelevant"
+    ],
+    "hash": "4f7c64ed97b81d5634f5a0941a1e3c054bbfd1839bc5847caff4ae9ca60424e9"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0026.strengthen",
+    "exerciseId": "arg-0026",
+    "kind": "argument",
+    "skill": "strengthen",
+    "difficulty": 2,
+    "stimulus": "A year ago, the town of Brannock began requiring its shops to charge 25 cents for each plastic bag a shopper takes at the checkout. Since then, the number of plastic checkout bags handed out by Brannock's shops has fallen by 80 percent. The town's environmental officer concludes that the fee has greatly reduced the total weight of plastic that Brannock's households throw away each year.",
+    "credit": null,
+    "prompt": "Give a new fact that, if true, would materially strengthen the argument, and explain how. Treat the stated premises as true.",
+    "max": 2,
+    "reference": "Before the fee, checkout bags made up about a third, by weight, of the plastic Brannock's households threw away. If bag waste fell roughly in line with the 80 percent drop in bags handed out, and nothing replaced it, household plastic waste would fall by about 27 percent, a great reduction.",
+    "accept": "Any new fact, consistent with the premises and not already stated in them, that makes it more likely that the fee greatly reduced the weight of plastic Brannock's households throw away each year, with an explanation of how. Main kinds: checkout bags were a large share, by weight, of that plastic; fewer bags handed out meant less bag waste (households were not getting bags elsewhere); facts making replacement with other plastic less likely (sales of plastic bin liners held steady, shoppers switched to cloth bags); facts making a cause other than the fee less likely (in nearby towns without a fee, the number held steady). A strengthener need not prove a great reduction. A qualifying new fact whose bearing is not explained earns 1.",
+    "disqualifiers": [],
+    "rubric": [
+      "Gives a new fact, consistent with the stated premises and not already stated in them, that makes it materially more likely that the fee greatly reduced the weight of plastic Brannock's households throw away (a fact pointing the other way does not count).",
+      "Explains how the fact strengthens the argument, namely why it makes a large fall in that plastic, brought about by the fee, more likely (for example, because checkout bags were a large share of it, or because households did not replace them with other plastic)."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "Most Brannock shoppers now bring cloth bags, and the town's sales of plastic bin liners and food bags haven't gone up. That makes it less likely that people simply swapped checkout bags for other plastic, which strengthens the case that fewer bags meant less plastic thrown away.",
+        "note": "a different strengthener from the reference (it reduces the chance of replacement plastic rather than showing the bags' share of the waste); it does not claim every possible replacement is ruled out"
+      },
+      {
+        "points": 1,
+        "answer": "Plastic checkout bags used to make up about a third, by weight, of the plastic Brannock households threw away.",
+        "note": "the right kind of fact, but the answer does not explain how it supports the argument"
+      },
+      {
+        "points": 0,
+        "answer": "Brannock's shops now hand out 80 percent fewer plastic bags than before the fee.",
+        "note": "already stated in the stimulus, so not a new fact"
+      }
+    ],
+    "allowedTags": [
+      "no-reasoning",
+      "scope-shift",
+      "irrelevant",
+      "understated",
+      "incomplete",
+      "misread-stimulus"
+    ],
+    "hash": "66ac558852bdbb84f94276160fe20732fdfa69d07be6cf0278c54c7d8920084e"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0027.assumption",
+    "exerciseId": "arg-0027",
+    "kind": "argument",
+    "skill": "assumption",
+    "difficulty": 3,
+    "stimulus": "The Tarrant town archive holds a letter dated 1788 and signed with the name of the town's first mayor. Its paper bears a watermark of a running hare. The Holt mill, the only paper mill in the region at the time, began marking its paper with a running hare in 1801, and its records, which survive complete from the mill's founding, show that it never used the mark before then. The archive's curator concludes that the letter was written in 1801 or later, at least thirteen years after the year on it.",
+    "credit": null,
+    "prompt": "State an assumption the argument needs: a claim that, if false, would make the argument fall apart. (A necessary assumption; it need not make the argument airtight.)",
+    "max": 2,
+    "reference": "The letter's paper was made at the Holt mill, not by some other papermaker who also used a running-hare mark.",
+    "accept": "The inference under test is from \"the letter's paper bears a running-hare watermark, and Holt, the region's only mill at the time, first used such a mark in 1801\" to \"the letter was written in 1801 or later, at least thirteen years after the year on it\". Any unstated claim counts whose denial, with every premise kept, would defeat the use of Holt's records to date this sheet, and so the letter, to 1801 or later. The denial need not show that the letter really was written in 1788. Main bridges: (a) this sheet came from the Holt mill, not from another papermaker (outside the region) whose mark was also a running hare; (b) this sheet was not made before 1801 by another papermaker using a running-hare mark. Claims stronger than needed earn 1, such as that no supplier to Tarrant used a running-hare mark before 1801 (including suppliers that did not make this sheet), that no papermaker anywhere ever used a hare mark, or that all the paper in the archive came from Holt. Repeating what Holt's records show, or saying that the letter was written in 1801 or later, earns 0.",
+    "disqualifiers": [
+      "Offers only a stated premise (such as that the Holt mill never used the running-hare mark before 1801) or a version of the conclusion (that the letter was written in 1801 or later) as the assumption, with no distinct unstated claim. Mentioning a stated claim while also giving a distinct assumption does not trigger this."
+    ],
+    "rubric": [
+      "States a claim the argument does not state that lets Holt's records date the letter's sheet (for example, that the sheet came from Holt, or that it was not made before 1801 by another papermaker using a running-hare mark), not a premise or a version of the conclusion.",
+      "States it no more strongly than the argument needs, so that if it were false Holt's 1801 start date would no longer set a lower bound for this sheet (it could have been made before 1801), rather than a claim about every supplier to Tarrant or every papermaker that used a hare mark."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "The letter's sheet isn't paper made before 1801 by some other papermaker who also used a running hare.",
+        "note": "a different bridge from the reference: it does not require the sheet to be Holt's, only rules out an earlier origin elsewhere. If it were false, Holt's start date would not apply to this sheet; the letter could still have been written later on older paper, but this way of dating it would fail"
+      },
+      {
+        "points": 1,
+        "answer": "Holt is the only papermaker in history ever to have used a hare as its watermark.",
+        "note": "near miss, too strong: other makers could have used a hare mark later, or far from Tarrant, without affecting how this sheet is dated"
+      },
+      {
+        "points": 0,
+        "answer": "The Holt mill did not use the running-hare mark before 1801.",
+        "note": "a stated premise, not an assumption (disqualifier)"
+      }
+    ],
+    "allowedTags": [
+      "overstated",
+      "wrong-gap",
+      "restates-conclusion",
+      "missed-alternative",
+      "incomplete",
+      "misread-stimulus",
+      "irrelevant",
+      "no-reasoning"
+    ],
+    "hash": "6dc447a7d8bac114e064e5211de1d483274ce1c47ea3554c77e50abb441ec1c7"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0027.strengthen",
+    "exerciseId": "arg-0027",
+    "kind": "argument",
+    "skill": "strengthen",
+    "difficulty": 2,
+    "stimulus": "The Tarrant town archive holds a letter dated 1788 and signed with the name of the town's first mayor. Its paper bears a watermark of a running hare. The Holt mill, the only paper mill in the region at the time, began marking its paper with a running hare in 1801, and its records, which survive complete from the mill's founding, show that it never used the mark before then. The archive's curator concludes that the letter was written in 1801 or later, at least thirteen years after the year on it.",
+    "credit": null,
+    "prompt": "Give a new fact that, if true, would materially strengthen the argument, and explain how. Treat the stated premises as true.",
+    "max": 2,
+    "reference": "The hare in the letter's watermark has the same small bend in its tail as the hare on dated sheets of Holt paper from 1802. That ties the letter's paper to the Holt mill, whose records show it made such paper only from 1801 on.",
+    "accept": "Any new fact, consistent with the premises and not already stated in them, that makes it more likely that the letter was written in 1801 or later, with an explanation of how. Main kinds: facts tying the letter's paper to Holt (its watermark matches Holt's in small details; no other maker's hare mark looks like it); facts closing off other sources of hare-marked paper (no mill that supplied the region used a hare mark before 1801); separate evidence of a later date (the letter describes a dated event after 1800 as having already happened, or the ink of its text was first made after 1800). Merely mentioning a project that was finished later does not show the letter postdates its completion. A qualifying new fact whose bearing is not explained earns 1.",
+    "disqualifiers": [],
+    "rubric": [
+      "Gives a new fact, consistent with the stated premises and not already stated in them, that makes it materially more likely that the letter was written in 1801 or later (a fact pointing the other way does not count).",
+      "Explains how the fact strengthens the argument, namely why it makes a date of 1801 or later more likely (for example, by tying the paper to the Holt mill or by giving separate evidence of a later date)."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "The letter describes the public opening of the bridge over the Tarrant river as something that has already happened, and the town's records date that opening to 1806. That is separate evidence the letter was written in 1806 or later, which supports the curator's conclusion without the watermark.",
+        "note": "a different strengthener from the reference (separate evidence of a later date rather than tying the paper to Holt); what counts is the letter treating a dated event as past, not merely mentioning a bridge that opened later"
+      },
+      {
+        "points": 1,
+        "answer": "No other mill's hare watermark from that period looks like the one on the letter.",
+        "note": "the right kind of fact, but the answer does not explain how it supports the argument"
+      },
+      {
+        "points": 0,
+        "answer": "The Holt mill's records show it first used the running hare in 1801.",
+        "note": "already stated in the stimulus, so not a new fact"
+      }
+    ],
+    "allowedTags": [
+      "no-reasoning",
+      "irrelevant",
+      "missed-alternative",
+      "understated",
+      "incomplete",
+      "misread-stimulus"
+    ],
+    "hash": "198269e7d33a4153198a796b6acc7a50fc4f111d2a4178ba99c7ab9d10cb0fe1"
+  },
+  {
+    "snapshotFormat": 1,
+    "taskId": "arg-0028.weaken",
+    "exerciseId": "arg-0028",
+    "kind": "argument",
+    "skill": "weaken",
+    "difficulty": 2,
+    "stimulus": "The Eastfield Ledger's code of practice says that the paper should publish a leaked document whenever the document reveals wrongdoing by public officials that the public has no other way to learn about. Last week the Ledger was given a leaked city memo showing that officials knew for six months that the fire alarms at Elm Street School were faulty and put off repairing them. The paper's editor concludes that, under its own code, the Ledger should publish the memo.",
+    "credit": null,
+    "prompt": "Give a new fact that, if true, would materially weaken the argument, and explain how. Treat the stated premises as true.",
+    "max": 2,
+    "reference": "A city report that anyone can read already gives the same facts as the memo about what the officials knew, the six-month delay and the circumstances that made it wrongful. The public already has another way to learn of the wrongdoing, so the rule the editor cites does not call for publishing the memo.",
+    "accept": "Any new fact, consistent with every premise (the code's rule, and that the memo shows officials knew the alarms were faulty and put off repairing them), that gives a real reason to doubt that the memo meets the rule's conditions, plus an explanation of how. Main kinds: the public can already learn of the same wrongdoing another way (a published report, a court filing); there is a plausible justification that makes it less likely the delay was wrongdoing (the school was closed and unused for those months, or the repairs were put off on the fire service's advice while a fire watch covered the building). A public announcement of the repair schedule alone need not reveal the wrongdoing, and a justification weakens without having to prove innocence. Facts about harm that publishing might do, or about the paper's other interests, do not bear on the rule's conditions. The answer need not show that publishing is forbidden. A qualifying fact whose effect is not explained earns 1. A fact that denies a premise, such as the memo being a forgery, earns 0.",
+    "disqualifiers": [
+      "Denies a stated premise, for example that the memo shows officials knew the alarms were faulty and put off repairing them."
+    ],
+    "rubric": [
+      "Gives a new fact, consistent with the stated premises, that gives a material reason to doubt that the memo reveals wrongdoing which the public has no other way to learn about.",
+      "Explains how that fact weakens the editor's use of the rule, namely why it means one of the rule's conditions may not be met, without inferring that because this rule does not apply the code forbids publishing."
+    ],
+    "anchors": [
+      {
+        "points": 2,
+        "answer": "The school was closed for rebuilding and empty for all six months, and the alarms were repaired before it reopened. That gives a possible innocent reason for the timing, which makes it less clear the delay was wrongdoing and weakens the editor's case under the rule.",
+        "note": "a different weakener from the reference (doubt about wrongdoing rather than another way to learn); it weakens without treating the closure as proof of innocence"
+      },
+      {
+        "points": 1,
+        "answer": "A council report that anyone can read already gives the same account of the officials' knowledge, the delay and the wrongdoing as the memo does.",
+        "note": "the right fact, but the answer does not explain how it undercuts the editor's use of the rule"
+      },
+      {
+        "points": 0,
+        "answer": "Publishing the memo would embarrass the officials named in it.",
+        "note": "near miss: harm to the officials is not one of the rule's conditions, so it does not bear on what the rule calls for"
+      }
+    ],
+    "allowedTags": [
+      "irrelevant",
+      "no-reasoning",
+      "contradicts-premise",
+      "understated",
+      "incomplete",
+      "misread-stimulus"
+    ],
+    "hash": "2d88e386587d83e88a80d98c0b440d313024ef3bcb0adff521f4678ccd7f62ec"
+  }
+]

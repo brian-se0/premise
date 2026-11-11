@@ -7,9 +7,11 @@ import { PARSER_VERSION, parseReply } from '../../src/domain/scoreParser.ts';
 import type { Snapshot } from '../../src/domain/types.ts';
 
 // The pilot's saved replies (docs/GRADING_PROTOCOL.md §10): the parser must reproduce the hand-checked results in
-// each run's expected.json. tests/unit/prompt.test.ts checks the saved prompts.
+// each run's expected.json, which every run with saved replies must have. tests/unit/prompt.test.ts checks the
+// saved prompts.
 const root = join('tests', 'fixtures', 'pilot');
-const runs = readdirSync(root).filter((f) => existsSync(join(root, f, 'expected.json')));
+const runs = readdirSync(root).filter((f) => existsSync(join(root, f, 'request-01.json')));
+const repliesOf = (run: string) => readdirSync(join(root, run)).filter((f) => /^request-\d{2}\.reply\./.test(f));
 
 interface RequestFixture {
   id: string;
@@ -32,12 +34,15 @@ const requestsOf = (run: string) =>
 
 describe.each(runs)('pilot run %s', (run) => {
   it('parses every saved reply as expected', () => {
+    // A run with saved replies needs its hand-checked results, so no run is skipped unnoticed.
+    if (repliesOf(run).length === 0) return;
+    expect(existsSync(join(root, run, 'expected.json')), `${run}/expected.json`).toBe(true);
     const expected = JSON.parse(readFileSync(join(root, run, 'expected.json'), 'utf8')) as {
       parserVersion: number;
       replies: Record<string, unknown>;
     };
     expect(expected.parserVersion).toBe(PARSER_VERSION);
-    const replies = readdirSync(join(root, run)).filter((f) => /^request-\d{2}\.reply\./.test(f));
+    const replies = repliesOf(run);
     expect(Object.keys(expected.replies).sort()).toEqual(replies.sort());
     const requests = new Map(requestsOf(run).map((r) => [r.name, r.fixture]));
     for (const file of replies) {

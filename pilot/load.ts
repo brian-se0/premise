@@ -1,11 +1,11 @@
-// Shared loaders for the pilot scripts: the answer set and the current task snapshots.
+// Shared loaders for the pilot scripts: the answer set and the task snapshots it was scored under.
 
 import { createHash } from 'node:crypto';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { parse } from 'yaml';
 import { loadExercises } from '../scripts/content.ts';
-import { buildSnapshot } from '../src/domain/snapshot.ts';
+import { buildSnapshot, canonicalJson, sha256Hex } from '../src/domain/snapshot.ts';
 import type { Snapshot } from '../src/domain/types.ts';
 import type { AnswerEntry } from './metrics.ts';
 import { REGISTRATION, type Registration } from './registration.ts';
@@ -14,7 +14,14 @@ export const ANSWERS_DIR = join('pilot', 'answers');
 /** The owner's first answers to draft exercises: not part of the check (pilot/README.md). */
 const NOT_IN_CHECK = new Set(['walkthrough.yaml']);
 
-export async function loadSnapshots(): Promise<Map<string, Snapshot>> {
+/** The snapshots of the tasks registered for the grading check, as they were scored (pilot/README.md). */
+export const FROZEN_SNAPSHOTS = join('tests', 'fixtures', 'pilot', 'snapshots.json');
+
+/**
+ * Every task's current snapshot, except that each task registered for the grading check keeps the snapshot
+ * its answers were scored under, so a later key fix leaves the check's prompts and results reproducible.
+ */
+export async function loadSnapshots(frozen = FROZEN_SNAPSHOTS): Promise<Map<string, Snapshot>> {
   const snapshots = new Map<string, Snapshot>();
   for (const exercise of await loadExercises()) {
     for (const task of exercise.tasks) {
@@ -22,7 +29,27 @@ export async function loadSnapshots(): Promise<Map<string, Snapshot>> {
       snapshots.set(snap.taskId, snap);
     }
   }
+  for (const snap of await loadFrozenSnapshots(frozen)) snapshots.set(snap.taskId, snap);
   return snapshots;
+}
+
+/** Reads the saved snapshots, refusing any that no longer hashes to its saved hash or isn't the registered key. */
+export async function loadFrozenSnapshots(
+  path = FROZEN_SNAPSHOTS,
+  registered: Registration = REGISTRATION,
+): Promise<Snapshot[]> {
+  const saved = JSON.parse(readFileSync(path, 'utf8')) as Snapshot[];
+  const problems: string[] = [];
+  for (const snap of saved) {
+    const { hash, ...payload } = snap;
+    if ((await sha256Hex(canonicalJson(payload))) !== hash) problems.push(`${snap.taskId} no longer hashes to its saved hash`);
+    if (registered.tasks[snap.taskId] !== hash) problems.push(`${snap.taskId} is not the registered key`);
+  }
+  const savedIds = new Set(saved.map((s) => s.taskId));
+  const missing = Object.keys(registered.tasks).filter((t) => !savedIds.has(t));
+  if (missing.length) problems.push(`no saved snapshot for ${missing.join(', ')}`);
+  if (problems.length) throw new Error(`${path} does not hold the registered snapshots: ${problems.join('; ')}.`);
+  return saved;
 }
 
 const isScore = (v: unknown, max: number): v is number => Number.isInteger(v) && (v as number) >= 0 && (v as number) <= max;
